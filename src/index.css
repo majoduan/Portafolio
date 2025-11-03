@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Configuración para Spline */
+@layer utilities {
+  .spline-container {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 600px;
+  }
+  
+  /* Ocultar elementos adicionales que puedan aparecer */
+  .spline-container a[href*="spline"],
+  .spline-container div[class*="logo"],
+  .spline-container div[id*="logo"] {
+    display: none !important;
+  }
+
+  /* Asegurar que el canvas capture los eventos del mouse */
+  .spline-container canvas {
+    pointer-events: auto !important;
+    cursor: crosshair !important;
+  }
+}
+
+/* Animación para el modal */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Animación para las barras de progreso */
+@keyframes progressBarFill {
+  0% {
+    width: 0%;
+  }
+}
+
+.progress-bar-animate {
+  animation: progressBarFill 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Animaciones para las transiciones de tecnologías */
+/* Estados de las cards */
+.tech-cards-container {
+  position: relative;
+  min-height: 900px; /* Altura mínima aumentada para evitar saltos con cualquier cantidad de cards */
+  height: 900px; /* Altura fija para prevenir cambios durante transiciones */
+}
+
+.tech-cards-grid {
+  transition: none;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+/* Las transiciones ahora se manejan directamente en los componentes con transition-all */
+
+/* Ocultar scrollbar del carrusel de certificados */
+.overflow-x-hidden {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.overflow-x-hidden::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+/* Optimización de videos en las cards de proyectos */
+.project-card video {
+  /* Mejorar rendimiento del video */
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  /* Prevenir lag durante la reproducción */
+  image-rendering: auto;
+}
+
+/* Smooth transition para el hover del video */
+.project-card:hover video {
+  transition: opacity 0.3s ease-in-out;
+}
