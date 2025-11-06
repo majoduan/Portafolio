@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Scroll suave para toda la página */
+html {
+  scroll-behavior: smooth;
+}
+
 /* Configuración para Spline */
 @layer utilities {
   .spline-container {

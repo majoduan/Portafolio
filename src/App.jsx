@@ -212,6 +212,46 @@ const UnityIcon = () => (
 
 );
 
+const OracleIcon = () => (
+
+  <svg viewBox="0 0 128 128">
+    <path fill="#EA1B22" d="M55.387 66.469h8.333l-4.407-7.09-8.088 12.819h-3.681L57.382 56.8a2.324 2.324 0 011.931-.998c.765 0 1.478.363 1.892.972l9.876 15.424H67.4l-1.736-2.865h-8.438l-1.839-2.864zm38.235 2.864V55.958h-3.123v14.685c0 .402.156.791.454 1.089.298.298.7.466 1.141.466h14.244l1.841-2.865H93.622zm-51.677-2.397c3.033 0 5.496-2.449 5.496-5.482s-2.462-5.496-5.496-5.496H28.28v16.241h3.123V58.822h10.335c1.452 0 2.618 1.18 2.618 2.631s-1.167 2.631-2.618 2.631l-8.806-.013 9.324 8.127h4.538l-6.274-5.263h1.425zM9.059 72.198c-4.483 0-8.122-3.629-8.122-8.114s3.638-8.127 8.122-8.127h9.439c4.485 0 8.121 3.643 8.121 8.127s-3.636 8.114-8.121 8.114H9.059zm9.229-2.865a5.25 5.25 0 005.258-5.249 5.262 5.262 0 00-5.258-5.263H9.267a5.262 5.262 0 00-5.256 5.263 5.25 5.25 0 005.256 5.249h9.021zm59.314 2.865c-4.484 0-8.126-3.629-8.126-8.114s3.642-8.127 8.126-8.127h11.212l-1.829 2.864H77.81a5.267 5.267 0 00-5.264 5.263c0 2.903 2.36 5.249 5.264 5.249h11.263l-1.84 2.865h-9.631zm38.197-2.865a5.25 5.25 0 01-5.055-3.824h13.35l1.84-2.864h-15.19a5.266 5.266 0 015.055-3.824h9.163l1.854-2.864h-11.225c-4.484 0-8.126 3.643-8.126 8.127s3.642 8.114 8.126 8.114h9.631l1.841-2.865h-11.264"></path>
+  </svg>
+
+);
+
+const SqliteIcon = () => (
+
+  <svg viewBox="0 0 128 128">
+    <defs><linearGradient id="sqlite-original-a" x1="-15.615" x2="-6.741" y1="-9.108" y2="-9.108" gradientTransform="rotate(90 -90.486 64.634) scale(9.2712)" gradientUnits="userSpaceOnUse"><stop stop-color="#95d7f4" offset="0"></stop><stop stop-color="#0f7fcc" offset=".92"></stop><stop stop-color="#0f7fcc" offset="1"></stop></linearGradient></defs><path d="M69.5 99.176c-.059-.73-.094-1.2-.094-1.2S67.2 83.087 64.57 78.642c-.414-.707.043-3.594 1.207-7.88.68 1.169 3.54 6.192 4.118 7.81.648 1.824.78 2.347.78 2.347s-1.57-8.082-4.144-12.797a162.286 162.286 0 012.004-6.265c.973 1.71 3.313 5.859 3.828 7.3.102.293.192.543.27.774.023-.137.05-.274.074-.414-.59-2.504-1.75-6.86-3.336-10.082 3.52-18.328 15.531-42.824 27.84-53.754H16.9c-5.387 0-9.789 4.406-9.789 9.789v88.57c0 5.383 4.406 9.789 9.79 9.789h52.897a118.657 118.657 0 01-.297-14.652" fill="#0b7fcc"></path><path d="M65.777 70.762c.68 1.168 3.54 6.188 4.117 7.809.649 1.824.781 2.347.781 2.347s-1.57-8.082-4.144-12.797a164.535 164.535 0 012.004-6.27c.887 1.567 2.922 5.169 3.652 6.872l.082-.961c-.648-2.496-1.633-5.766-2.898-8.328 3.242-16.871 13.68-38.97 24.926-50.898H16.899a6.94 6.94 0 00-6.934 6.933v82.11c17.527-6.731 38.664-12.88 56.855-12.614-.672-2.605-1.441-4.96-2.25-6.324-.414-.707.043-3.597 1.207-7.879" fill="url(#sqlite-original-a)"></path><path d="M115.95 2.781c-5.5-4.906-12.164-2.933-18.734 2.899a44.347 44.347 0 00-2.914 2.859c-11.25 11.926-21.684 34.023-24.926 50.895 1.262 2.563 2.25 5.832 2.894 8.328.168.64.32 1.242.442 1.754.285 1.207.437 1.996.437 1.996s-.101-.383-.515-1.582c-.078-.23-.168-.484-.27-.773-.043-.125-.105-.274-.172-.434-.734-1.703-2.765-5.305-3.656-6.867-.762 2.25-1.437 4.36-2.004 6.265 2.578 4.715 4.149 12.797 4.149 12.797s-.137-.523-.782-2.347c-.578-1.621-3.441-6.64-4.117-7.809-1.164 4.281-1.625 7.172-1.207 7.88.809 1.362 1.574 3.722 2.25 6.323 1.524 5.867 2.586 13.012 2.586 13.012s.031.469.094 1.2a118.653 118.653 0 00.297 14.651c.504 6.11 1.453 11.363 2.664 14.172l.828-.449c-1.781-5.535-2.504-12.793-2.188-21.156.48-12.793 3.422-28.215 8.856-44.289 9.191-24.27 21.938-43.738 33.602-53.035-10.633 9.602-25.023 40.684-29.332 52.195-4.82 12.891-8.238 24.984-10.301 36.574 3.55-10.863 15.047-15.53 15.047-15.53s5.637-6.958 12.227-16.888c-3.95.903-10.43 2.442-12.598 3.352-3.2 1.344-4.067 1.8-4.067 1.8s10.371-6.312 19.27-9.171c12.234-19.27 25.562-46.648 12.141-58.621" fill="#003956"></path>
+  </svg>
+
+);
+
+const FirebirdIcon = () => (
+
+  <svg viewBox="0 0 128 128">
+    <defs><linearGradient id="a" x1="86.364" x2="86.364" y1="337.96" y2="7.121" gradientTransform="translate(-2.427 -1.8) scale(.37233)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#f40a0b"></stop><stop offset="1" stop-color="#f5e710"></stop></linearGradient><linearGradient id="b" x1="216.108" x2="216.108" y1="348.988" y2="7.277" gradientTransform="translate(-2.427 -1.8) scale(.37233)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#f40a0b"></stop><stop offset="1" stop-color="#f5e710"></stop></linearGradient></defs><path fill="#111" fill-rule="evenodd" d="M27.62 99.429c1.207 9.57 6.408 16.781 14.37 23.858l-2.869-1.447C16.496 112.109.68 89.617.68 63.453.68 30.212 26.334 2.573 59.522.107 26.334 2.574.679 30.212.679 63.453.68 30.212 26.334 2.573 59.522.107 21.509 7.613-14.923 51.524 27.62 99.43" clip-rule="evenodd"></path><path fill="#111" fill-rule="evenodd" d="M114.397 43.214C111.528 22.652 95.739 8.257 66.974 0c33.938 1.501 60.719 29.488 60.719 63.453 0 35.091-26.432 62.22-60.772 63.775-3.244.161-6.488-.402-9.651-1.394V54.258q1.568-2.372 0-4.745V34.287h3.512c-1.368-.912-2.52-1.609-3.512-2.038v-4.396c18.417 7.023 26.968 7.828 25.681 2.332 1.609 4.53.215 6.595-4.182 6.14-5.066-.778-8.203-.43-9.436 1.071q13.632 6.756 14.557 13.11c.857 7.13-2.52 14.985-10.134 23.59-4.798 5.978-2.305 12.331 5.442 13.35 24.047-1.18 35.788-15.95 35.199-44.232m-57.127 82.62c-7.345-2.278-13.94-6.863-17.157-10.053-5.683-5.897-9.543-15.334-10.964-28.952 0-.08-.027-.16-.027-.241v-4.61c.885-10.938 8.176-18.632 21.929-23.055 3.11-1.528 5.2-3.083 6.219-4.665zm0-76.32c-.43-.698-1.1-1.395-1.93-2.118-.75-.751-2.36-1.502-4.799-2.225-5.576-.161-8.605 1.233-9.088 4.208-9.463-4.208-9.73-9.007-.83-14.368 1.742-.67 4.289-.912 7.666-.778-1.394-6.166.965-8.551 7.104-7.104.644.241 1.26.483 1.877.724v4.396c-2.815-1.313-3.914-.643-3.324 2.038h3.324z" clip-rule="evenodd"></path><path fill="url(#a)" fill-rule="evenodd" d="M27.248 100.173c1.207 9.57 6.407 16.782 14.37 23.86l-2.87-1.449C16.124 112.854.308 90.362.308 64.198.308 30.957 25.963 3.318 59.15.852 25.962 3.318.307 30.957.307 64.198c0-33.241 25.655-60.88 58.842-63.346-38.013 7.506-74.444 51.417-31.9 99.321" clip-rule="evenodd"></path><path fill="url(#b)" fill-rule="evenodd" d="M114.024 43.958C111.156 23.397 95.366 9.001 66.602.745c33.938 1.5 60.719 29.488 60.719 63.453 0 35.09-26.432 62.22-60.773 63.775-3.244.16-6.487-.402-9.65-1.394V55.003q1.568-2.373 0-4.745V35.031h3.511c-1.367-.911-2.52-1.608-3.511-2.037v-4.396c18.416 7.023 26.968 7.827 25.681 2.332 1.608 4.53.215 6.594-4.182 6.139-5.067-.778-8.203-.43-9.436 1.072q13.631 6.756 14.556 13.109c.858 7.13-2.52 14.985-10.133 23.59-4.798 5.978-2.305 12.332 5.442 13.35 24.046-1.179 35.788-15.95 35.198-44.232m-57.126 82.62c-7.346-2.278-13.94-6.862-17.157-10.052-5.683-5.898-9.544-15.334-10.964-28.952 0-.08-.027-.16-.027-.241v-4.611c.884-10.938 8.176-18.631 21.928-23.055 3.11-1.528 5.2-3.082 6.22-4.664zm0-76.32c-.43-.697-1.1-1.394-1.93-2.118-.751-.75-2.36-1.501-4.8-2.225-5.575-.16-8.604 1.233-9.087 4.209-9.463-4.209-9.731-9.007-.83-14.369 1.742-.67 4.288-.911 7.666-.777-1.394-6.166.965-8.552 7.104-7.104.643.241 1.26.482 1.877.724v4.396c-2.815-1.314-3.914-.643-3.325 2.037h3.325z" clip-rule="evenodd"></path>
+  </svg>
+
+);
+
+const VercelIcon = () => (
+
+  <svg viewBox="0 0 128 128">
+    <path d="M64.002 8.576 128 119.424H0Zm0 0"></path>
+  </svg>
+
+);
+
+const RedhatIcon = () => (
+
+  <svg viewBox="0 0 128 128">
+    <path fill="#fff" d="M116.4 97.9c-2.4-.5-5-.9-7.5-.9-4.4 0-8.4.8-11.4 2-.3.2-.6.5-.6.9 0 .1 0 .3.1.4.3 1-.2 2.1-3.1 2.7-4.3.9-6.9 5.3-8.5 6.8-1.8 1.7-6.9 2.8-6.1 1.7.6-.8 2.9-3.3 4.3-6 1.3-2.4 2.4-3.1 3.9-5.4.5-.7 2.2-3 2.7-4.9.6-1.8.4-4.1.6-5.1.3-1.4 1.6-4.3 1.7-6 .1-.9-3.9 1.4-5.8 1.4s-3.7-1.1-5.4-1.2c-2.1-.1-3.4 1.6-5.3 1.3-1.1-.2-2-1.1-3.9-1.2-2.7-.1-6 1.5-12.2 1.3-6.1-.2-11.7-7.7-12.5-8.9-.9-1.4-2-1.4-3.2-.3-1.2 1.1-2.7.2-3.1-.5-.8-1.4-2.9-5.5-6.2-6.3-4.6-1.2-6.9 2.5-6.6 5.5.3 3 2.2 3.8 3.1 5.4.9 1.6 1.4 2.6 3 3.3 1.2.5 1.6 1.2 1.3 2.2-.3.9-1.6 1.1-2.4 1.1-1.7.1-3-.4-3.8-1-1-.7-1.9-1.6-2.8-3.1-1-1.7-2.7-2.5-4.6-2.5-.9 0-1.8.2-2.5.6-3 1.6-6.6 2.5-10.4 2.5H4.9c8.3 24.7 31.7 42.4 59.2 42.4 21.9.3 41.2-11 52.3-28.2"></path><path d="M116.4 97.9c-2.4-.6-5-.9-7.5-.9-4.4 0-8.4.8-11.4 2-.3.2-.6.5-.6.9 0 .1 0 .3.1.4.3 1-.2 2.1-3.1 2.8-4.3.9-6.9 5.3-8.5 6.8-1.8 1.7-6.9 2.8-6.1 1.7.6-.8 2.9-3.3 4.3-6 1.3-2.4 2.4-3.1 3.9-5.4.5-.7 2.2-3 2.7-4.9.6-1.8.4-4.1.6-5.1.3-1.4 1.6-4.3 1.7-6 .1-.9-3.9 1.3-5.8 1.3s-3.7-1.1-5.4-1.2c-2.1-.1-3.4 1.6-5.3 1.3-1.1-.2-2-1.1-3.9-1.2-2.7-.1-6 1.5-12.2 1.3-6.1-.2-11.7-7.7-12.5-8.9-.9-1.4-2-1.4-3.2-.3-1.2 1.1-2.7.2-3.1-.5-.8-1.4-2.9-5.5-6.2-6.3-4.6-1.2-6.9 2.5-6.6 5.5.3 3 2.2 3.8 3.1 5.4.9 1.6 1.4 2.6 3 3.3 1.2.5 1.6 1.2 1.3 2.2-.3.9-1.6 1.1-2.4 1.1-1.7.1-3-.4-3.8-1-1-.7-1.9-1.6-2.8-3.1-1-1.7-2.7-2.5-4.6-2.5-.9 0-1.8.2-2.5.6-3 1.6-6.6 2.5-10.4 2.5H4.8C2.7 77.7 1.6 71 1.6 64 1.6 29.5 29.5 1.6 64 1.6s62.4 27.9 62.4 62.4c0 12.5-3.7 24.1-10 33.9m-38.7-5.7c.3.3.9 1.4.2 2.7-.4.7-.8 1.2-1.5 1.8-.9.7-2.6 1.5-4.9 0-1.3-.8-1.3-1.1-3.1-.8-1.2.2-1.7-1.1-1.3-2.1.5-1 2.3-1.9 4.6-.5 1 .6 2.6 1.9 4 .7.6-.5.9-.8 1.7-1.7l.1-.1c.2-.1.2 0 .2 0"></path><path fill="#E93442" d="M59.1 31.3c-7.2.5-8 1.3-9.3 2.7-1.9 2-4.4-2.6-4.4-2.6-1.5-.3-3.3-2.7-2.3-5 1-2.2 2.8-1.6 3.3-.9.7.8 2.1 2.2 4 2.2 1.9-.1 4.1-.4 7.1-.4 3.1 0 5.2 1.1 5.3 2.1.1.9-.2 1.7-3.7 1.9m7.6-11.9c-.1 0-.2-.1-.2-.2s0-.1.1-.2c1.4-.7 3.5-1.3 5.9-1.6.7-.1 1.4-.1 2.1-.1h.4c4 .1 7.2 1.7 7.2 3.6-.1 1.9-3.3 3.3-7.3 3.2-1.3 0-2.5-.2-3.6-.5-.1 0-.2-.1-.2-.3 0-.1.1-.2.2-.3 2.5-.6 4.2-1.5 4.1-2.4-.2-1.2-3.4-1.8-7.3-1.4-.6.1-1 .2-1.4.2m32.5 28c-.6 2.1-1.5 4.7-5.4 6.7-.6.3-.8-.2-.5-.6 1.5-2.5 1.7-3.1 2.2-4.1.6-1.4.9-3.5-.3-7.8-2.3-8.4-7.2-19.7-10.8-23.4-3.4-3.5-9.7-4.5-15.3-3.1-2.1.5-6.1 2.6-13.6.9-13-2.9-14.9 3.6-15.7 6.4-.8 2.8-2.5 10.9-2.5 10.9-.6 3.3-1.4 9 18.8 12.8 9.4 1.8 9.9 4.2 10.3 6 .7 3.1 1.9 4.9 3.3 5.8 1.3.9 0 1.6-1.5 1.8-4 .4-18.8-3.8-27.6-8.8-7.2-4.4-7.3-8.3-5.6-11.7-10.8-1.2-19 1-20.4 6.1-2.6 9 19.2 24 44.1 31.5 26.1 7.9 53 2.4 56-14 1.4-7.5-4.9-13-15.5-15.4"></path>
+  </svg>
+
+);
+
 // Componente para animar números
 const AnimatedCounter = ({ value, duration = 1800, isTransitioning }) => {
   const [count, setCount] = useState(0);
@@ -228,7 +268,7 @@ const AnimatedCounter = ({ value, duration = 1800, isTransitioning }) => {
     const animate = (currentTime) => {
       if (!startTime) startTime = currentTime;
       const progress = Math.min((currentTime - startTime) / duration, 1);
-      
+
       // Easing function para suavidad
       const easeOutQuart = 1 - Math.pow(1 - progress, 4);
       setCount(Math.floor(easeOutQuart * value));
@@ -252,7 +292,7 @@ const TechCard = ({ tech, index, animationState, onMouseEnter, onMouseLeave }) =
   const IconComponent = tech.icon;
   const experienceYears = parseFloat(tech.experience);
   const dots = Math.min(5, Math.ceil(experienceYears));
-  
+
   const shapes = [
     { clipPath: 'none', rounded: 'rounded-xl' },
     { clipPath: 'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)', rounded: '' },
@@ -285,9 +325,8 @@ const TechCard = ({ tech, index, animationState, onMouseEnter, onMouseLeave }) =
 
   return (
     <div
-      className={`tech-card group bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 hover:border-purple-500/30 transition-all duration-1000 rounded-lg shadow-sm hover:shadow-xl backdrop-blur-sm ${
-        isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-      }`}
+      className={`tech-card group bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 hover:border-purple-500/30 transition-all duration-1000 rounded-lg shadow-sm hover:shadow-xl backdrop-blur-sm ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+        }`}
       style={{
         transitionDelay: `${index * 80}ms`
       }}
@@ -297,14 +336,14 @@ const TechCard = ({ tech, index, animationState, onMouseEnter, onMouseLeave }) =
       <div className="p-6">
         <div className="flex items-center gap-4 mb-4">
           <div className="relative">
-            <div 
+            <div
               className={`w-20 h-20 bg-gradient-to-r ${tech.color} ${shapeStyle.rounded} flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:rotate-6 group-hover:scale-110 p-3`}
               style={{ clipPath: shapeStyle.clipPath }}
             >
               <div className="absolute inset-0 bg-white/10" style={{ clipPath: shapeStyle.clipPath }} />
               <IconComponent className="w-full h-full text-white relative z-10" />
             </div>
-            <div 
+            <div
               className={`absolute inset-0 bg-gradient-to-r ${tech.color} ${shapeStyle.rounded} opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur-sm`}
               style={{ clipPath: shapeStyle.clipPath }}
             />
@@ -339,7 +378,7 @@ const TechCard = ({ tech, index, animationState, onMouseEnter, onMouseLeave }) =
           <div className="w-full bg-slate-700 rounded-full h-2.5 overflow-hidden">
             <div
               className={`h-full bg-gradient-to-r ${tech.color} rounded-full relative ${shouldAnimate ? 'progress-bar-animate' : ''}`}
-              style={{ 
+              style={{
                 width: shouldAnimate ? `${tech.level}%` : '0%'
               }}
             >
@@ -356,9 +395,8 @@ const TechCard = ({ tech, index, animationState, onMouseEnter, onMouseLeave }) =
             {[...Array(5)].map((_, i) => (
               <div
                 key={i}
-                className={`w-2 h-2 rounded-full transition-colors duration-300 ${
-                  i < dots ? `bg-gradient-to-r ${tech.color}` : 'bg-slate-600'
-                }`}
+                className={`w-2 h-2 rounded-full transition-colors duration-300 ${i < dots ? `bg-gradient-to-r ${tech.color}` : 'bg-slate-600'
+                  }`}
               />
             ))}
           </div>
@@ -381,12 +419,13 @@ const Portfolio = () => {
   const [isCertificateCarouselPaused, setIsCertificateCarouselPaused] = useState(false);
   const [isTechCardHovered, setIsTechCardHovered] = useState(false); // Nuevo estado para detectar hover en cards
   const [lastManualChange, setLastManualChange] = useState(0); // Timestamp del último cambio manual
-  
+  const [activeSection, setActiveSection] = useState('home'); // Estado para la sección activa
+
   // Estados para manejar la transición de tecnologías
   const [currentTechTab, setCurrentTechTab] = useState(0);
   const [previousTechTab, setPreviousTechTab] = useState(null);
   const [techTransitionState, setTechTransitionState] = useState('idle'); // 'idle', 'exiting', 'entering'
-  
+
   const canvasRef = useRef(null);
   const particles = useRef([]);
   const splineRef = useRef(null);
@@ -443,61 +482,66 @@ const Portfolio = () => {
   const techCategories = [
     {
       id: "backend",
-      title: "Desarrollo Backend",
-      description: "Stack tecnológico que domino para crear soluciones completas y escalables"
+      title: "Backend Development",
+      description: "Technology stack I master to create complete and scalable solutions"
     },
     {
       id: "frontend",
-      title: "Desarrollo Frontend",
-      description: "Tecnologías para crear interfaces de usuario modernas y responsivas"
+      title: "Frontend Development",
+      description: "Technologies to create modern and responsive user interfaces"
     },
     {
       id: "databases",
-      title: "Bases de Datos",
-      description: "Sistemas de gestión de datos relacionales y NoSQL"
+      title: "Databases",
+      description: "Relational and NoSQL data management systems"
     },
     {
       id: "devops",
-      title: "DevOps & Herramientas",
-      description: "Herramientas para desarrollo, despliegue y colaboración"
+      title: "DevOps & Tools",
+      description: "Tools for development, deployment and collaboration"
     }
   ];
 
   // Detailed technology skills
   const technologies = {
     backend: [
-      { name: "Java", description: "Desarrollo backend robusto", level: 40, experience: "1/2 años", icon: JavaIcon, color: "from-orange-300 to-orange-400" },
-      { name: "Python", description: "Scripting y análisis de datos", level: 50, experience: "1+ años", icon: PythonIcon, color: "from-blue-400 to-blue-500" },
-      { name: "C#", description: "Desarrollo .NET", level: 40, experience: "1/2 años", icon: CSharpIcon, color: "from-purple-500 to-purple-700" },
-      { name: "C++", description: "Programación de sistemas", level: 40, experience: "1/2 años", icon: CplusplusIcon, color: "from-blue-500 to-blue-700" },
-      { name: ".NET", description: "Framework empresarial", level: 40, experience: "1/2 años", icon: DotNetIcon, color: "from-indigo-300 to-indigo-400" },
-      { name: "Node.js", description: "Backend con JavaScript", level: 50, experience: "1+ años", icon: NodeIcon, color: "from-green-400 to-green-500" },
-      { name: "Express", description: "Framework minimalista", level: 40, experience: "1/2 años", icon: ExpressIcon, color: "from-gray-500 to-gray-700" },
-      { name: "NestJS", description: "Framework escalable", level: 40, experience: "1/2 años", icon: NestIcon, color: "from-red-700 to-red-900" },
-      { name: "FastAPI", description: "API modernas con Python", level: 40, experience: "1/2 años", icon: FastAPIIcon, color: "from-teal-700 to-teal-900" }
+      { name: "Java", description: "Robust backend development", level: 80, experience: "3+ years", icon: JavaIcon, color: "from-orange-300 to-orange-400" },
+      { name: "Python", description: "Scripting and data analysis", level: 80, experience: "3+ years", icon: PythonIcon, color: "from-blue-400 to-blue-500" },
+      { name: "C#", description: ".NET development", level: 80, experience: "3+ years", icon: CSharpIcon, color: "from-purple-500 to-purple-700" },
+      { name: "C++", description: "Systems programming", level: 80, experience: "3+ years", icon: CplusplusIcon, color: "from-blue-500 to-blue-700" },
+      { name: ".NET", description: "Enterprise framework", level: 70, experience: "2+ years", icon: DotNetIcon, color: "from-indigo-300 to-indigo-400" },
+      { name: "Node.js", description: "JavaScript backend", level: 70, experience: "2+ years", icon: NodeIcon, color: "from-green-400 to-green-500" },
+      { name: "Express", description: "Minimalist framework", level: 40, experience: "1/2 years", icon: ExpressIcon, color: "from-gray-500 to-gray-700" },
+      { name: "NestJS", description: "Scalable framework", level: 40, experience: "1/2 years", icon: NestIcon, color: "from-red-700 to-red-900" },
+      { name: "FastAPI", description: "Modern Python APIs", level: 80, experience: "2+ years", icon: FastAPIIcon, color: "from-teal-700 to-teal-900" }
     ],
     frontend: [
-      { name: "React", description: "Biblioteca UI componentes", level: 40, experience: "1/2 años", icon: ReactIcon, color: "from-cyan-500 to-cyan-700" },
-      { name: "Vue.js", description: "Framework progresivo", level: 40, experience: "1/2 años", icon: VueIcon, color: "from-green-600 to-green-800" },
-      { name: "JavaScript", description: "Desarrollo web dinámico", level: 50, experience: "1+ años", icon: JSIcon, color: "from-yellow-400 to-yellow-600" },
-      { name: "TypeScript", description: "JavaScript con tipos", level: 40, experience: "1/2 años", icon: TSIcon, color: "from-blue-500 to-blue-700" },
-      { name: "HTML5", description: "Estructura web moderna", level: 50, experience: "1+ años", icon: HTMLIcon, color: "from-orange-400 to-orange-500" },
-      { name: "CSS3", description: "Estilos y animaciones", level: 50, experience: "1+ años", icon: CSSIcon, color: "from-blue-400 to-blue-500" },
-      { name: "Tailwind", description: "Framework CSS utility-first", level: 50, experience: "1+ años", icon: TailwindIcon, color: "from-cyan-700 to-cyan-800" }
+      { name: "React", description: "UI component library", level: 90, experience: "2+ years", icon: ReactIcon, color: "from-cyan-500 to-cyan-700" },
+      { name: "Vue.js", description: "Progressive framework", level: 80, experience: "2+ years", icon: VueIcon, color: "from-green-600 to-green-800" },
+      { name: "JavaScript", description: "Dynamic web development", level: 80, experience: "3+ years", icon: JSIcon, color: "from-yellow-400 to-yellow-600" },
+      { name: "TypeScript", description: "Typed JavaScript", level: 85, experience: "2+ years", icon: TSIcon, color: "from-blue-500 to-blue-700" },
+      { name: "HTML5", description: "Modern web structure", level: 85, experience: "3+ years", icon: HTMLIcon, color: "from-orange-400 to-orange-500" },
+      { name: "CSS3", description: "Styles and animations", level: 70, experience: "3+ years", icon: CSSIcon, color: "from-blue-400 to-blue-500" },
+      { name: "Tailwind", description: "Utility-first CSS framework", level: 70, experience: "1+ years", icon: TailwindIcon, color: "from-cyan-700 to-cyan-800" }
     ],
     databases: [
-      { name: "PostgreSQL", description: "Base de datos relacional", level: 70, experience: "2+ años", icon: PostgreSQLIcon, color: "from-blue-500 to-blue-700" },
-      { name: "MySQL", description: "Base de datos relacional", level: 70, experience: "2+ años", icon: MySQLIcon, color: "from-blue-900 to-blue-1000" },
-      { name: "SQL Server", description: "Base de datos empresarial", level: 60, experience: "1+ años", icon: SQLServerIcon, color: "from-red-500 to-orange-600" },
-      { name: "MongoDB", description: "Base de datos NoSQL", level: 70, experience: "1+ años", icon: MongoDBIcon, color: "from-green-700 to-green-900" }
+      { name: "PostgreSQL", description: "Relational database", level: 90, experience: "3+ years", icon: PostgreSQLIcon, color: "from-blue-500 to-blue-700" },
+      { name: "MySQL", description: "Relational database", level: 75, experience: "3+ years", icon: MySQLIcon, color: "from-blue-900 to-blue-1000" },
+      { name: "SQL Server", description: "Enterprise database", level: 75, experience: "3+ years", icon: SQLServerIcon, color: "from-red-500 to-orange-600" },
+      { name: "MongoDB", description: "NoSQL database", level: 40, experience: "1/2 years", icon: MongoDBIcon, color: "from-green-700 to-green-900" },
+      { name: "Oracle", description: "Enterprise database", level: 75, experience: "1+ years", icon: OracleIcon, color: "from-slate-100 to-slate-300" },
+      { name: "SQLite", description: "Embedded database", level: 75, experience: "3+ years", icon: SqliteIcon, color: "from-sky-400 to-blue-600" },
+      { name: "Firebird", description: "SQL database", level: 40, experience: "1/2 years", icon: FirebirdIcon, color: "from-orange-500 to-red-600" }
     ],
     devops: [
-      { name: "Docker", description: "Contenedorización", level: 60, experience: "1+ años", icon: DockerIcon, color: "from-blue-500 to-blue-700" },
-      { name: "Git", description: "Control de versiones", level: 70, experience: "2+ años", icon: GitIcon, color: "from-orange-700 to-orange-900" },
-      { name: "AWS", description: "Servicios en la nube", level: 40, experience: "1/2 años", icon: AWSIcon, color: "from-orange-300 to-yellow-400" },
-      { name: "Figma", description: "Diseño de interfaces", level: 50, experience: "1+ años", icon: FigmaIcon, color: "from-purple-700 to-pink-800" },
-      { name: "Godot", description: "Motor de videojuegos", level: 40, experience: "1/2 años", icon: GodotIcon, color: "from-blue-800 to-blue-900" },
-      { name: "Unity", description: "Desarrollo de juegos", level: 40, experience: "1/2 años", icon: UnityIcon, color: "from-gray-600 to-gray-800" }
+      { name: "Docker", description: "Containerization", level: 75, experience: "2+ years", icon: DockerIcon, color: "from-blue-500 to-blue-700" },
+      { name: "Git", description: "Version control", level: 85, experience: "3+ years", icon: GitIcon, color: "from-orange-700 to-orange-900" },
+      { name: "Red Hat", description: "Enterprise Linux", level: 70, experience: "2+ years", icon: RedhatIcon, color: "from-red-600 to-red-800" },
+      { name: "Vercel", description: "Cloud-based platform", level: 80, experience: "2+ years", icon: VercelIcon, color: "from-slate-100 to-slate-300" },
+      { name: "Figma", description: "Interface design", level: 90, experience: "3+ years", icon: FigmaIcon, color: "from-purple-700 to-pink-800" },
+      { name: "AWS", description: "Cloud services", level: 40, experience: "1/2 years", icon: AWSIcon, color: "from-orange-300 to-yellow-400" },
+      { name: "Godot", description: "Game engine", level: 90, experience: "2+ years", icon: GodotIcon, color: "from-blue-800 to-blue-900" },
+      { name: "Unity", description: "Game development", level: 40, experience: "1/2 years", icon: UnityIcon, color: "from-gray-600 to-gray-800" }
     ]
   };
 
@@ -604,10 +648,10 @@ const Portfolio = () => {
   // Typewriter effect for hero description
   useEffect(() => {
     if (loading) return;
-    
+
     let currentIndex = 0;
     const typingSpeed = 30; // Velocidad de escritura en ms
-    
+
     const typeInterval = setInterval(() => {
       if (currentIndex <= fullText.length) {
         setTypewriterText(fullText.substring(0, currentIndex));
@@ -616,7 +660,7 @@ const Portfolio = () => {
         clearInterval(typeInterval);
       }
     }, typingSpeed);
-    
+
     return () => clearInterval(typeInterval);
   }, [loading]);
 
@@ -742,13 +786,13 @@ const Portfolio = () => {
     const exitTimer = setTimeout(() => {
       setCurrentTechTab(activeTab);
       setTechTransitionState('entering');
-      
+
       // Fase 3: Después de 100ms, marcar como idle
       const enterTimer = setTimeout(() => {
         setTechTransitionState('idle');
         setPreviousTechTab(null);
       }, 100);
-      
+
       return () => clearTimeout(enterTimer);
     }, 1000);
 
@@ -765,7 +809,7 @@ const Portfolio = () => {
             const maxScroll = container.scrollWidth - container.clientWidth;
             const itemWidth = 444; // Width of card (420px) + gap (24px)
             const newPosition = prev + 0.5; // Velocidad de scroll (0.5px por frame = muy lento y suave)
-            
+
             // Reset to start smoothly when reaching halfway (where duplicates start)
             if (newPosition >= maxScroll / 3) {
               return 0;
@@ -775,7 +819,7 @@ const Portfolio = () => {
           return prev;
         });
       }, 20); // Intervalo de actualización (20ms = 50fps)
-      
+
       return () => clearInterval(scrollInterval);
     }
   }, [loading, isCertificateCarouselPaused]);
@@ -786,6 +830,48 @@ const Portfolio = () => {
       certificateContainerRef.current.scrollLeft = certificateScrollPosition;
     }
   }, [certificateScrollPosition]);
+
+  // Detect active section on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['home', 'technologies', 'certificates', 'projects', 'contact'];
+      const scrollPosition = window.scrollY + 150; // offset for navbar
+      
+      // Si estamos en la parte superior de la página (primeros 100px), marcar Home
+      if (window.scrollY < 100) {
+        setActiveSection('home');
+        return;
+      }
+      
+      // Check if we're at the bottom of the page (for last section)
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      const isAtBottom = windowHeight + window.scrollY >= documentHeight - 50;
+      
+      if (isAtBottom) {
+        setActiveSection('contact');
+        return;
+      }
+
+      // Check each section from bottom to top to prioritize sections we're closer to
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const section = sections[i];
+        const element = document.getElementById(section);
+        if (element) {
+          const { offsetTop } = element;
+          // If scroll position is past the section start, that's our active section
+          if (scrollPosition >= offsetTop) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial call
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   if (loading) {
     return (
@@ -850,25 +936,32 @@ const Portfolio = () => {
       {/* Navigation */}
       <nav className="fixed top-0 w-full bg-slate-950/80 backdrop-blur-lg border-b border-slate-800 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <a href="#home" className="flex items-center">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 p-0.5 hover:scale-110 transition-transform duration-300">
-                <div className="w-full h-full rounded-full bg-slate-950 flex items-center justify-center">
-                  <Code className="w-5 h-5 text-blue-400" />
-                </div>
-              </div>
-            </a>
-
-            {/* Desktop menu */}
-            <div className="hidden md:flex space-x-8">
-              {['Home', 'Technologies', 'Projects', 'Contact'].map((item) => (
+          <div className="flex items-center justify-center h-16">
+            {/* Desktop menu - Centrado */}
+            <div className="hidden md:flex space-x-10">
+              {['Home', 'Technologies', 'Certificates', 'Projects', 'Contact'].map((item) => (
                 <a
                   key={item}
                   href={`#${item.toLowerCase()}`}
-                  className="text-slate-300 hover:text-blue-400 transition-colors duration-300 relative group"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const element = document.getElementById(item.toLowerCase());
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                  }}
+                  className={`text-lg font-medium transition-all duration-300 relative group ${
+                    activeSection === item.toLowerCase()
+                      ? 'text-blue-400'
+                      : 'text-slate-300 hover:text-blue-400'
+                  }`}
                 >
                   {item}
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 group-hover:w-full transition-all duration-300" />
+                  <span 
+                    className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 transition-all duration-300 ${
+                      activeSection === item.toLowerCase() ? 'w-full' : 'w-0 group-hover:w-full'
+                    }`} 
+                  />
                 </a>
               ))}
             </div>
@@ -876,7 +969,7 @@ const Portfolio = () => {
             {/* Mobile menu button */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="md:hidden text-slate-300 hover:text-blue-400"
+              className="md:hidden absolute right-4 text-slate-300 hover:text-blue-400"
             >
               {menuOpen ? <X /> : <Menu />}
             </button>
@@ -887,12 +980,23 @@ const Portfolio = () => {
         {menuOpen && (
           <div className="md:hidden bg-slate-900 border-t border-slate-800">
             <div className="px-2 pt-2 pb-3 space-y-1">
-              {['Home', 'About', 'Technologies', 'Projects', 'Contact'].map((item) => (
+              {['Home', 'Technologies', 'Certificates', 'Projects', 'Contact'].map((item) => (
                 <a
                   key={item}
                   href={`#${item.toLowerCase()}`}
-                  onClick={() => setMenuOpen(false)}
-                  className="block px-3 py-2 text-slate-300 hover:text-blue-400 hover:bg-slate-800 rounded-md transition-colors"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setMenuOpen(false);
+                    const element = document.getElementById(item.toLowerCase());
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                  }}
+                  className={`block px-3 py-2 rounded-md transition-colors ${
+                    activeSection === item.toLowerCase()
+                      ? 'text-blue-400 bg-slate-800'
+                      : 'text-slate-300 hover:text-blue-400 hover:bg-slate-800'
+                  }`}
                 >
                   {item}
                 </a>
@@ -913,13 +1017,13 @@ const Portfolio = () => {
                 Mateo Dueñas
               </h1>
               <p className="text-2xl md:text-3xl text-slate-100 mb-6 font-medium">
-                Software Engineer | Full-Stack Developer | Web and Desktop Developer | Data Analyst
+                Software Engineer | Full-Stack Developer
               </p>
-              <p className="text-lg md:text-xl text-slate-100 max-w-2xl mx-auto lg:mx-0 mb-8 leading-relaxed min-h-[120px]">
+              <p className="text-lg md:text-xl text-slate-100 max-w-2xl mx-auto lg:mx-0 mb-8 leading-relaxed min-h-[120px] text-justify">
                 {typewriterText}
                 <span className="animate-pulse">|</span>
               </p>
-              
+
               {/* Botón CV y Redes Sociales */}
               <div className="flex items-center justify-center lg:justify-start gap-4 mb-8">
                 <a
@@ -929,7 +1033,7 @@ const Portfolio = () => {
                 >
                   Download my CV
                 </a>
-                
+
                 {/* Iconos sociales */}
                 <div className="flex gap-3">
                   <a
@@ -982,7 +1086,7 @@ const Portfolio = () => {
               <div className="relative spline-container">
                 {/* Contenedor con dimensiones extra para recortar y centrar */}
                 <div className="w-[120%] h-[120%] -mt-[10%] -ml-[10%] -mb-[10%] -mr-[10%]">
-                  <Spline 
+                  <Spline
                     scene="https://prod.spline.design/CTzlK88G4nA0eFUO/scene.splinecode"
                     onLoad={onSplineLoad}
                     onMouseMove={onSplineMouseMove}
@@ -1008,18 +1112,16 @@ const Portfolio = () => {
                 <button
                   key={category.id}
                   onClick={() => handleManualTabChange(index)}
-                  className={`px-8 py-4 font-medium relative transition-all duration-1000 ${
-                    currentTechTab === index
-                      ? 'text-blue-400'
-                      : 'text-slate-400 hover:text-slate-300 hover:bg-slate-800/30'
-                  }`}
+                  className={`px-8 py-4 font-medium relative transition-all duration-1000 ${currentTechTab === index
+                    ? 'text-blue-400'
+                    : 'text-slate-400 hover:text-slate-300 hover:bg-slate-800/30'
+                    }`}
                 >
                   {category.title}
                   {/* Línea indicadora inferior con transición suave */}
-                  <div 
-                    className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-1000 ${
-                      currentTechTab === index ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'
-                    }`}
+                  <div
+                    className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-1000 ${currentTechTab === index ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'
+                      }`}
                   />
                 </button>
               ))}
@@ -1028,13 +1130,13 @@ const Portfolio = () => {
 
           {/* Active category display */}
           <div className="mb-8 text-center">
-            <h3 
+            <h3
               key={`title-${currentTechTab}`}
               className="text-3xl font-bold mb-2 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent"
             >
               {techCategories[currentTechTab].title}
             </h3>
-            <p 
+            <p
               key={`desc-${currentTechTab}`}
               className="text-slate-400"
             >
@@ -1048,10 +1150,10 @@ const Portfolio = () => {
             {techTransitionState === 'exiting' && previousTechTab !== null && (
               <div className="tech-cards-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {technologies[techCategories[previousTechTab].id].map((tech, index) => (
-                  <TechCard 
-                    key={`exiting-${previousTechTab}-${tech.name}`} 
-                    tech={tech} 
-                    index={index} 
+                  <TechCard
+                    key={`exiting-${previousTechTab}-${tech.name}`}
+                    tech={tech}
+                    index={index}
                     animationState="exiting"
                     onMouseEnter={() => setIsTechCardHovered(true)}
                     onMouseLeave={() => setIsTechCardHovered(false)}
@@ -1059,15 +1161,15 @@ const Portfolio = () => {
                 ))}
               </div>
             )}
-            
+
             {/* Current tab cards - solo renderizar cuando esté listo */}
             {(techTransitionState === 'entering' || techTransitionState === 'idle') && (
               <div className="tech-cards-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {technologies[techCategories[currentTechTab].id].map((tech, index) => (
-                  <TechCard 
-                    key={`current-${currentTechTab}-${tech.name}`} 
-                    tech={tech} 
-                    index={index} 
+                  <TechCard
+                    key={`current-${currentTechTab}-${tech.name}`}
+                    tech={tech}
+                    index={index}
                     animationState={techTransitionState}
                     onMouseEnter={() => setIsTechCardHovered(true)}
                     onMouseLeave={() => setIsTechCardHovered(false)}
@@ -1080,22 +1182,22 @@ const Portfolio = () => {
       </section>
 
       {/* Certificates Section */}
-      <section id="certificates" className="bg-slate-900/30 relative z-10 overflow-hidden">
+      <section id="certificates" className="pt-20 bg-slate-900/30 relative z-10 overflow-hidden">
         {/* Títulos centrados */}
         <div className="max-w-7xl mx-auto px-4 mb-12">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
             Certificates & Recognition
           </h2>
         </div>
-        
+
         {/* Carousel Container - Full Width */}
         <div className="relative w-full">
           {/* Gradient overlays for smooth edges */}
           <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-slate-900/90 to-transparent z-10 pointer-events-none"></div>
           <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-slate-900/90 to-transparent z-10 pointer-events-none"></div>
-          
+
           {/* Scrollable container */}
-          <div 
+          <div
             ref={certificateContainerRef}
             className="flex gap-6 overflow-x-hidden py-4"
             onMouseEnter={() => setIsCertificateCarouselPaused(true)}
@@ -1110,9 +1212,9 @@ const Portfolio = () => {
               >
                 {/* Certificate Image */}
                 <div className="relative h-64 overflow-hidden bg-gradient-to-br from-blue-900/30 to-purple-900/30">
-                  <img 
-                    src={cert.image} 
-                    alt={cert.title} 
+                  <img
+                    src={cert.image}
+                    alt={cert.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     onError={(e) => {
                       // Fallback si la imagen no carga
@@ -1121,13 +1223,13 @@ const Portfolio = () => {
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent"></div>
-                  
+
                   {/* Shine effect on hover */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
                   </div>
                 </div>
-                
+
                 {/* Certificate Info */}
                 <div className="p-6">
                   <h3 className="text-xl font-bold mb-3 text-white group-hover:text-blue-400 transition-colors leading-tight">
@@ -1168,7 +1270,7 @@ const Portfolio = () => {
               >
                 <div className="bg-gradient-to-br from-blue-600 to-purple-600 h-48 flex items-center justify-center relative overflow-hidden">
                   {/* Video de fondo con reproducción automática */}
-                  <video 
+                  <video
                     autoPlay
                     loop
                     muted
@@ -1182,10 +1284,10 @@ const Portfolio = () => {
                   >
                     <source src={project.video} type="video/mp4" />
                   </video>
-                  
+
                   {/* Overlay con gradiente */}
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent" />
-                  
+
                   {/* Icono de play al hacer hover */}
                   <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10">
                     <span className="text-white font-bold text-lg flex items-center gap-2">
@@ -1277,11 +1379,11 @@ const Portfolio = () => {
 
       {/* Modal para videos de proyectos */}
       {isModalOpen && selectedProject && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn"
           onClick={() => setIsModalOpen(false)}
         >
-          <div 
+          <div
             className="bg-slate-900 rounded-3xl max-w-5xl w-full max-h-[90vh] overflow-auto border-2 border-blue-500/50 shadow-2xl shadow-blue-500/30"
             onClick={(e) => e.stopPropagation()}
           >
@@ -1304,8 +1406,8 @@ const Portfolio = () => {
             {/* Video del proyecto */}
             <div className="p-6">
               <div className="relative bg-black rounded-2xl overflow-hidden mb-6">
-                <video 
-                  controls 
+                <video
+                  controls
                   autoPlay
                   className="w-full h-auto"
                   poster="/images/video-placeholder.jpg"
