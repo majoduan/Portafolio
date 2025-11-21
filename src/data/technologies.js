@@ -1,0 +1,75 @@
+import {
+  JavaIcon,
+  PythonIcon,
+  CSharpIcon,
+  CplusplusIcon,
+  DotNetIcon,
+  NodeIcon,
+  ExpressIcon,
+  NestIcon,
+  FastAPIIcon,
+  ReactIcon as ReactLogo,
+  VueIcon,
+  JSIcon,
+  TSIcon,
+  HTMLIcon,
+  CSSIcon,
+  TailwindIcon,
+  PostgreSQLIcon,
+  MySQLIcon,
+  SQLServerIcon,
+  MongoDBIcon,
+  DockerIcon,
+  GitIcon,
+  AWSIcon,
+  FigmaIcon,
+  GodotIcon,
+  UnityIcon,
+  OracleIcon,
+  SqliteIcon,
+  FirebirdIcon,
+  VercelIcon,
+  RedhatIcon,
+} from '../components/icons/tech';
+
+export const technologies = {
+  backend: [
+    { name: "Java", description: "Robust backend development", level: 80, experience: "3+ years", icon: JavaIcon, color: "from-orange-300 to-orange-400" },
+    { name: "Python", description: "Scripting and data analysis", level: 80, experience: "3+ years", icon: PythonIcon, color: "from-blue-400 to-blue-500" },
+    { name: "C#", description: ".NET development", level: 80, experience: "3+ years", icon: CSharpIcon, color: "from-purple-500 to-purple-700" },
+    { name: "C++", description: "Systems programming", level: 80, experience: "3+ years", icon: CplusplusIcon, color: "from-blue-500 to-blue-700" },
+    { name: ".NET", description: "Enterprise framework", level: 70, experience: "2+ years", icon: DotNetIcon, color: "from-indigo-300 to-indigo-400" },
+    { name: "Node.js", description: "JavaScript backend", level: 70, experience: "2+ years", icon: NodeIcon, color: "from-green-400 to-green-500" },
+    { name: "Express", description: "Minimalist framework", level: 40, experience: "1/2 years", icon: ExpressIcon, color: "from-gray-500 to-gray-700" },
+    { name: "NestJS", description: "Scalable framework", level: 40, experience: "1/2 years", icon: NestIcon, color: "from-red-700 to-red-900" },
+    { name: "FastAPI", description: "Modern Python APIs", level: 80, experience: "2+ years", icon: FastAPIIcon, color: "from-teal-700 to-teal-900" }
+  ],
+  frontend: [
+    { name: "React", description: "UI component library", level: 90, experience: "2+ years", icon: ReactLogo, color: "from-cyan-500 to-cyan-700" },
+    { name: "Vue.js", description: "Progressive framework", level: 80, experience: "2+ years", icon: VueIcon, color: "from-green-600 to-green-800" },
+    { name: "JavaScript", description: "Dynamic web development", level: 80, experience: "3+ years", icon: JSIcon, color: "from-yellow-400 to-yellow-600" },
+    { name: "TypeScript", description: "Typed JavaScript", level: 85, experience: "2+ years", icon: TSIcon, color: "from-blue-500 to-blue-700" },
+    { name: "HTML5", description: "Modern web structure", level: 85, experience: "3+ years", icon: HTMLIcon, color: "from-orange-400 to-orange-500" },
+    { name: "CSS3", description: "Styles and animations", level: 70, experience: "3+ years", icon: CSSIcon, color: "from-blue-400 to-blue-500" },
+    { name: "Tailwind", description: "Utility-first CSS framework", level: 70, experience: "1+ years", icon: TailwindIcon, color: "from-cyan-700 to-cyan-800" }
+  ],
+  databases: [
+    { name: "PostgreSQL", description: "Relational database", level: 90, experience: "3+ years", icon: PostgreSQLIcon, color: "from-blue-500 to-blue-700" },
+    { name: "MySQL", description: "Relational database", level: 75, experience: "3+ years", icon: MySQLIcon, color: "from-blue-900 to-blue-1000" },
+    { name: "SQL Server", description: "Enterprise database", level: 75, experience: "3+ years", icon: SQLServerIcon, color: "from-red-500 to-orange-600" },
+    { name: "MongoDB", description: "NoSQL database", level: 40, experience: "1/2 years", icon: MongoDBIcon, color: "from-green-700 to-green-900" },
+    { name: "Oracle", description: "Enterprise database", level: 75, experience: "1+ years", icon: OracleIcon, color: "from-slate-100 to-slate-300" },
+    { name: "SQLite", description: "Embedded database", level: 75, experience: "3+ years", icon: SqliteIcon, color: "from-sky-400 to-blue-600" },
+    { name: "Firebird", description: "SQL database", level: 40, experience: "1/2 years", icon: FirebirdIcon, color: "from-orange-500 to-red-600" }
+  ],
+  devops: [
+    { name: "Docker", description: "Containerization", level: 75, experience: "2+ years", icon: DockerIcon, color: "from-blue-500 to-blue-700" },
+    { name: "Git", description: "Version control", level: 85, experience: "3+ years", icon: GitIcon, color: "from-orange-700 to-orange-900" },
+    { name: "Red Hat", description: "Enterprise Linux", level: 70, experience: "2+ years", icon: RedhatIcon, color: "from-red-600 to-red-800" },
+    { name: "Vercel", description: "Cloud-based platform", level: 80, experience: "2+ years", icon: VercelIcon, color: "from-slate-100 to-slate-300" },
+    { name: "Figma", description: "Interface design", level: 90, experience: "3+ years", icon: FigmaIcon, color: "from-purple-700 to-pink-800" },
+    { name: "AWS", description: "Cloud services", level: 40, experience: "1/2 years", icon: AWSIcon, color: "from-orange-300 to-yellow-400" },
+    { name: "Godot", description: "Game engine", level: 90, experience: "2+ years", icon: GodotIcon, color: "from-blue-800 to-blue-900" },
+    { name: "Unity", description: "Game development", level: 40, experience: "1/2 years", icon: UnityIcon, color: "from-gray-600 to-gray-800" }
+  ]
+};

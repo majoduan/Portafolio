@@ -97,3 +97,39 @@ html {
 .project-card:hover video {
   transition: opacity 0.3s ease-in-out;
 }
+
+/* Optimizaciones globales de rendimiento */
+* {
+  /* Mejor rendering en fuentes */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Optimizar elementos con transformaciones */
+.tech-card,
+.project-card,
+.group {
+  will-change: transform;
+}
+
+/* Optimizar imágenes lazy loading */
+img[loading="lazy"] {
+  content-visibility: auto;
+}
+
+/* Reducir repaints en animaciones */
+@media (prefers-reduced-motion: no-preference) {
+  .animate-pulse,
+  .animate-spin {
+    animation-duration: 2s;
+  }
+}
+
+/* Optimización de scroll */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
