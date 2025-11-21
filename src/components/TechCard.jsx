@@ -4,9 +4,8 @@ import AnimatedCounter from './AnimatedCounter';
 const TechCard = memo(({ tech, index, animationState, onMouseEnter, onMouseLeave }) => {
   // Si está saliendo, comienza visible. Si está entrando, comienza invisible
   const [isVisible, setIsVisible] = useState(animationState === 'exiting');
-  const IconComponent = tech.icon;
   
-  // Memoizar cálculos que no cambian
+  // Memoizar cálculos que no cambian - optimizado con dependencias específicas
   const { experienceYears, dots, shapeStyle, shouldAnimate } = useMemo(() => {
     const years = parseFloat(tech.experience);
     const dotsCount = Math.min(5, Math.ceil(years));
@@ -28,6 +27,9 @@ const TechCard = memo(({ tech, index, animationState, onMouseEnter, onMouseLeave
       shouldAnimate: animate
     };
   }, [tech.name, tech.experience, animationState]);
+
+  // Memoizar el nombre del componente de icono para evitar re-renders
+  const IconComponent = useMemo(() => tech.icon, [tech.icon]);
 
   // Forzar la transición al montar el componente
   useEffect(() => {

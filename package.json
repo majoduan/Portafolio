@@ -1,8 +1,10 @@
 {
   "name": "mateo-portfolio",
   "private": true,
-  "version": "0.0.0",
+  "version": "2.0.0",
   "type": "module",
+  "description": "Portfolio profesional optimizado con React, Vite y Spline 3D",
+  "author": "Mateo Dueñas <mate.due02@gmail.com>",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -12,6 +14,7 @@
   "dependencies": {
     "@splinetool/react-spline": "^4.1.0",
     "animejs": "^4.2.2",
+    "lodash-es": "^4.17.21",
     "lucide-react": "^0.552.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
@@ -29,6 +32,7 @@
     "globals": "^16.4.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.18",
+    "terser": "^5.44.1",
     "vite": "^7.1.7"
   }
 }

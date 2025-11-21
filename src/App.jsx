@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback, lazy, Suspense } from 'react';
 import { Camera, Mail, Linkedin, Github, Award, ExternalLink, Menu, X, Code } from 'lucide-react';
 import TechCard from './components/TechCard';
+import HUDBootScreen from './components/HUDBootScreen';
 import { technologies } from './data/technologies';
 import { projects, certificates } from './data/projects';
 
@@ -9,7 +10,6 @@ const Spline = lazy(() => import('@splinetool/react-spline'));
 
 const Portfolio = () => {
   const [loading, setLoading] = useState(true);
-  const [bootSequence, setBootSequence] = useState(0);
   const [activeTab, setActiveTab] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isCarouselPaused, setIsCarouselPaused] = useState(false);
@@ -35,25 +35,25 @@ const Portfolio = () => {
   // Texto completo para el efecto typewriter
   const fullText = "Software Engineering student at Escuela Politécnica Nacional with hands-on experience in full-stack development, database management, and data analysis. Building secure, scalable systems with modern technologies.";
 
-  // Función para manejar el evento de carga de Spline
-  const onSplineLoad = (spline) => {
+  // Función para manejar el evento de carga de Spline - optimizada
+  const onSplineLoad = useCallback((spline) => {
     splineRef.current = spline;
     console.log('Spline cargado correctamente');
-  };
+  }, []);
 
-  // Función para manejar el movimiento del mouse sobre Spline
-  const onSplineMouseMove = (e) => {
+  // Función para manejar el movimiento del mouse sobre Spline - optimizada
+  const onSplineMouseMove = useCallback((e) => {
     if (splineRef.current) {
       // Spline maneja automáticamente el movimiento del mouse si está configurado en la escena
       // La escena debe tener la configuración de seguimiento de mouse habilitada
     }
-  };
+  }, []);
 
-  // Función para manejar cambios manuales de tab
-  const handleManualTabChange = (index) => {
+  // Función para manejar cambios manuales de tab - optimizada con useCallback
+  const handleManualTabChange = useCallback((index) => {
     setActiveTab(index);
     setLastManualChange(Date.now()); // Actualizar timestamp para reiniciar el temporizador
-  };
+  }, []);
 
   // Asegurar que el canvas de Spline capture eventos del mouse
   useEffect(() => {
@@ -70,17 +70,8 @@ const Portfolio = () => {
     return () => clearTimeout(timer);
   }, [loading]);
 
-  // Boot sequence messages
-  const bootMessages = [
-    "INITIALIZING SYSTEM...",
-    "LOADING NEURAL NETWORKS...",
-    "COMPILING PORTFOLIO DATA...",
-    "ESTABLISHING CONNECTION...",
-    "SYSTEM ONLINE"
-  ];
-
-  // Technology categories with detailed skill data
-  const techCategories = [
+  // Technology categories with detailed skill data - memoizado
+  const techCategories = useMemo(() => [
     {
       id: "backend",
       title: "Backend Development",
@@ -101,20 +92,7 @@ const Portfolio = () => {
       title: "DevOps & Tools",
       description: "Tools for development, deployment and collaboration"
     }
-  ];
-
-  // Boot sequence animation
-  useEffect(() => {
-    if (bootSequence < bootMessages.length) {
-      const timer = setTimeout(() => {
-        setBootSequence(bootSequence + 1);
-      }, 600);
-      return () => clearTimeout(timer);
-    } else {
-      const timer = setTimeout(() => setLoading(false), 800);
-      return () => clearTimeout(timer);
-    }
-  }, [bootSequence]);
+  ], []);
 
   // Typewriter effect for hero description
   useEffect(() => {
@@ -146,8 +124,8 @@ const Portfolio = () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // Reducir partículas de 50 a 30 para mejor rendimiento
-    const particleCount = 30;
+    // Reducir partículas de 30 a 20 para mejor rendimiento
+    const particleCount = 20;
     particles.current = Array.from({ length: particleCount }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
@@ -214,11 +192,11 @@ const Portfolio = () => {
           const dy = particle.y - other.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 80) {
+          if (distance < 60) {
             ctx.beginPath();
             ctx.moveTo(particle.x, particle.y);
             ctx.lineTo(other.x, other.y);
-            ctx.strokeStyle = `rgba(99, 102, 241, ${0.1 * (1 - distance / 80)})`;
+            ctx.strokeStyle = `rgba(99, 102, 241, ${0.1 * (1 - distance / 60)})`;
             ctx.stroke();
           }
         }
@@ -372,58 +350,11 @@ const Portfolio = () => {
   }, []);
 
   if (loading) {
-    return (
-      <div className="fixed inset-0 bg-slate-950 flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-slate-950 to-purple-900/20" />
-
-        {/* Grid pattern */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0" style={{
-            backgroundImage: 'linear-gradient(rgba(99, 102, 241, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(99, 102, 241, 0.1) 1px, transparent 1px)',
-            backgroundSize: '50px 50px'
-          }} />
-        </div>
-
-        {/* Boot sequence */}
-        <div className="relative z-10 text-center space-y-8 px-4">
-          <div className="relative">
-            <div className="w-32 h-32 mx-auto mb-8 relative">
-              <div className="absolute inset-0 border-4 border-blue-500/30 rounded-full animate-ping" />
-              <div className="absolute inset-4 border-4 border-purple-500/30 rounded-full animate-ping" style={{ animationDelay: '0.3s' }} />
-              <div className="absolute inset-8 border-4 border-cyan-500/30 rounded-full animate-ping" style={{ animationDelay: '0.6s' }} />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <Code className="w-12 h-12 text-blue-400 animate-pulse" />
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            {bootMessages.slice(0, bootSequence).map((msg, i) => (
-              <div
-                key={i}
-                className="text-cyan-400 font-mono text-sm md:text-lg tracking-wider animate-pulse"
-              >
-                &gt; {msg}
-              </div>
-            ))}
-          </div>
-
-          <div className="flex justify-center space-x-2 mt-8">
-            {[...Array(5)].map((_, i) => (
-              <div
-                key={i}
-                className={`h-1 w-12 rounded-full transition-all duration-300 ${i < bootSequence ? 'bg-blue-500' : 'bg-slate-700'
-                  }`}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-    );
+    return <HUDBootScreen onComplete={() => setLoading(false)} />;
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white relative overflow-x-hidden">
+    <div className="min-h-screen bg-slate-950 text-white relative overflow-x-hidden portfolio-fade-in">
       {/* Interactive canvas background */}
       <canvas
         ref={canvasRef}
@@ -765,8 +696,9 @@ const Portfolio = () => {
                     loop
                     muted
                     playsInline
-                    preload="none"
+                    preload="metadata"
                     loading="lazy"
+                    poster={`${project.video.replace('.mp4', '-poster.jpg')}`}
                     className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-300"
                     onLoadedMetadata={(e) => {
                       e.target.muted = true;
@@ -864,7 +796,7 @@ const Portfolio = () => {
 
       {/* Footer */}
       <footer className="py-8 border-t border-slate-800 text-center text-slate-400 relative z-10">
-        <p>© 2024 Mateo Dueñas. Built with React & Tailwind CSS</p>
+        <p>© 2025 Mateo Dueñas. All rights reserved</p>
       </footer>
 
       {/* Modal para videos de proyectos */}
