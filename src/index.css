@@ -68,8 +68,9 @@ body,
 /* Estados de las cards */
 .tech-cards-container {
   position: relative;
-  min-height: 900px; /* Altura mínima aumentada para evitar saltos con cualquier cantidad de cards */
-  height: 900px; /* Altura fija para prevenir cambios durante transiciones */
+  min-height: 400px;
+  transition: height 0.5s ease-in-out;
+  width: 100%;
 }
 
 .tech-cards-grid {
@@ -80,15 +81,26 @@ body,
   left: 0;
 }
 
-/* Las transiciones ahora se manejan directamente en los componentes con transition-all */
-
-/* Ocultar scrollbar del carrusel de certificados */
-.overflow-x-hidden {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+/* Responsive para contenedor de tecnologías */
+@media (max-width: 768px) {
+  .tech-cards-container {
+    min-height: 300px;
+  }
 }
 
-.overflow-x-hidden::-webkit-scrollbar {
+/* Las transiciones ahora se manejan directamente en los componentes con transition-all */
+
+/* Ocultar scrollbar del carrusel de certificados y tecnologías */
+.overflow-x-hidden,
+.overflow-x-auto {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling en iOS */
+  scroll-behavior: smooth;
+}
+
+.overflow-x-hidden::-webkit-scrollbar,
+.overflow-x-auto::-webkit-scrollbar {
   display: none; /* Chrome, Safari and Opera */
 }
 
@@ -496,87 +508,6 @@ section {
   50% { box-shadow: 0 0 20px rgba(168, 85, 247, 1); }
 }
 
-/* Panel superior centro */
-.hud-panel-top-center {
-  top: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 320px;
-  animation-delay: 0.4s;
-}
-
-.hud-metric-gauge {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.hud-gauge-circle {
-  position: relative;
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  border: 3px solid rgba(99, 102, 241, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: conic-gradient(
-    #6366f1 0deg,
-    #a855f7 calc(var(--gauge-value) * 1.8deg),
-    #ec4899 calc(var(--gauge-value) * 3.6deg),
-    rgba(99, 102, 241, 0.1) calc(var(--gauge-value) * 3.6deg)
-  );
-  animation: gauge-rotate 3s ease-in-out infinite;
-}
-
-@keyframes gauge-rotate {
-  0%, 100% { transform: rotate(0deg); }
-  50% { transform: rotate(5deg); }
-}
-
-.hud-gauge-value {
-  position: absolute;
-  font-size: 18px;
-  font-weight: bold;
-  background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.8));
-}
-
-.hud-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-}
-
-.hud-tag {
-  padding: 6px 12px;
-  background: rgba(99, 102, 241, 0.1);
-  border: 1px solid rgba(99, 102, 241, 0.3);
-  border-radius: 15px;
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  animation: tag-glow 2s ease-in-out infinite;
-  box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
-}
-
-@keyframes tag-glow {
-  0%, 100% { 
-    border-color: rgba(99, 102, 241, 0.3);
-    box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
-  }
-  50% { 
-    border-color: rgba(168, 85, 247, 0.6);
-    box-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
-  }
-}
-
 /* Panel derecho */
 .hud-panel-right {
   top: 80px;
@@ -727,12 +658,11 @@ section {
   transform: scale(1.1);
 }
 
-/* Panel inferior centro */
-.hud-panel-bottom-center {
+/* Panel inferior derecha - Monitoreo de Red */
+.hud-panel-bottom-right {
   bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 400px;
+  right: 40px;
+  width: 250px;
   animation-delay: 1s;
 }
 
@@ -742,7 +672,7 @@ section {
   justify-content: space-between;
   height: 80px;
   margin-bottom: 15px;
-  gap: 6px;
+  gap: 4px;
 }
 
 .hud-wave-bar {
@@ -760,55 +690,11 @@ section {
 
 .hud-load-stats {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 5px;
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 1px;
-}
-
-/* Círculos secundarios */
-.hud-secondary-circle {
-  position: absolute;
-  bottom: 100px;
-  width: 120px;
-  height: 120px;
-  border: 2px solid rgba(99, 102, 241, 0.3);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(15, 10, 25, 0.5);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
-  z-index: 15;
-  animation: secondary-rotate 15s linear infinite;
-  color: #a855f7;
-}
-
-.hud-secondary-left {
-  left: 25%;
-  animation-delay: 1.2s;
-}
-
-.hud-secondary-right {
-  right: 25%;
-  animation-direction: reverse;
-  animation-delay: 1.4s;
-}
-
-@keyframes secondary-rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.hud-mini-ring {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border: 2px solid transparent;
-  border-top-color: rgba(168, 85, 247, 0.5);
-  border-radius: 50%;
-  animation: spin 3s linear infinite;
 }
 
 /* Líneas de conexión SVG */
@@ -880,12 +766,11 @@ section {
   
   .hud-panel-top-left,
   .hud-panel-right,
-  .hud-panel-bottom-left {
-    width: 240px;
+  .hud-panel-bottom-left,
+  .hud-panel-bottom-right {
+    width: 220px;
   }
   
-  .hud-panel-top-center,
-  .hud-panel-bottom-center,
   .hud-global-progress {
     width: 320px;
   }
@@ -898,20 +783,18 @@ section {
   }
   
   .hud-panel-top-left,
-  .hud-panel-top-center,
   .hud-panel-right {
     top: 60px;
   }
   
   .hud-panel-bottom-left,
-  .hud-panel-bottom-center {
+  .hud-panel-bottom-right {
     bottom: 60px;
   }
   
-  .hud-secondary-circle {
-    width: 100px;
-    height: 100px;
-    bottom: 80px;
+  /* Ocultar panel inferior derecho en pantallas medianas */
+  .hud-panel-bottom-right {
+    display: none;
   }
 }
 
@@ -925,28 +808,14 @@ section {
     font-size: 12px;
   }
   
+  /* Ocultar panel superior izquierdo (fecha) en móviles */
   .hud-panel-top-left {
-    top: 20px;
-    left: 20px;
-    width: calc(100% - 40px);
+    display: none;
   }
   
-  .hud-panel-top-center {
-    top: 180px;
-    width: calc(100% - 40px);
-  }
-  
+  /* Ocultar panel derecho en móviles */
   .hud-panel-right {
-    top: auto;
-    bottom: 280px;
-    right: 20px;
-    left: 20px;
-    width: calc(100% - 40px);
-  }
-  
-  .hud-panel-bottom-center {
-    bottom: 160px;
-    width: calc(100% - 40px);
+    display: none;
   }
   
   .hud-panel-bottom-left {
@@ -955,13 +824,23 @@ section {
     width: calc(100% - 40px);
   }
   
-  .hud-secondary-circle {
-    display: none;
-  }
+  /* Panel bottom-right ya oculto desde 1024px */
   
   .hud-global-progress {
     width: calc(100% - 40px);
     bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* En pantallas muy pequeñas, ocultar también el panel bottom-left */
+  .hud-panel-bottom-left {
+    display: none;
+  }
+  
+  .hud-center-circle {
+    width: 200px;
+    height: 200px;
   }
 }
 

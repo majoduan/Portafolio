@@ -9,19 +9,56 @@ export default defineConfig({
       'lodash.debounce': 'lodash-es/debounce'
     }
   },
+  // Configuración de preload para recursos críticos
+  experimental: {
+    renderBuiltUrl(filename, { hostType }) {
+      if (hostType === 'js') {
+        return { runtime: `window.__toCdnUrl(${JSON.stringify(filename)})` }
+      }
+    }
+  },
   build: {
-    // Optimización de chunks mejorada
+    // Optimización de chunks mejorada con mejor estrategia de splitting
     rollupOptions: {
       output: {
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom'],
-          'icons': ['lucide-react'],
-          'spline': ['@splinetool/react-spline']
+        manualChunks: (id) => {
+          // Vendor chunks optimizados
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom')) {
+              return 'react-vendor';
+            }
+            if (id.includes('lucide-react')) {
+              return 'icons';
+            }
+            if (id.includes('@splinetool')) {
+              return 'spline';
+            }
+            if (id.includes('lodash')) {
+              return 'utils';
+            }
+            // Otros vendors en un chunk separado
+            return 'vendor';
+          }
+          // Separar componentes grandes
+          if (id.includes('/components/')) {
+            return 'components';
+          }
         },
-        // Optimizar nombres de archivos
-        chunkFileNames: 'assets/[name]-[hash].js',
-        entryFileNames: 'assets/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash].[ext]'
+        // Optimizar nombres de archivos con hash largo para mejor caching
+        chunkFileNames: 'assets/js/[name]-[hash:16].js',
+        entryFileNames: 'assets/js/[name]-[hash:16].js',
+        assetFileNames: (assetInfo) => {
+          // Organizar assets por tipo
+          const info = assetInfo.name.split('.');
+          const ext = info[info.length - 1];
+          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(ext)) {
+            return 'assets/images/[name]-[hash:8][extname]';
+          }
+          if (/woff2?|eot|ttf|otf/i.test(ext)) {
+            return 'assets/fonts/[name]-[hash:8][extname]';
+          }
+          return 'assets/[name]-[hash:8][extname]';
+        }
       }
     },
     // Optimización de tamaño mejorada
@@ -43,18 +80,39 @@ export default defineConfig({
     sourcemap: false,
     // Mejor compresión
     reportCompressedSize: true,
-    // Optimizar assets
-    assetsInlineLimit: 4096
+    // Optimizar assets con mejor threshold
+    assetsInlineLimit: 4096,
+    // Configuración de target para mejor compatibilidad y optimización
+    target: 'es2020',
+    // Habilitar CSS modules
+    cssMinify: 'lightningcss'
   },
   // Optimización de performance mejorada
   optimizeDeps: {
     include: ['react', 'react-dom', 'lucide-react', 'lodash-es'],
-    exclude: ['@splinetool/react-spline']
+    exclude: ['@splinetool/react-spline'],
+    // Force pre-bundling de dependencias críticas
+    esbuildOptions: {
+      target: 'es2020',
+      supported: {
+        'top-level-await': true
+      }
+    }
   },
   // Servidor de desarrollo optimizado
   server: {
     hmr: {
       overlay: false
+    },
+    // Configuración de headers para mejor caching
+    headers: {
+      'Cache-Control': 'public, max-age=31536000'
+    }
+  },
+  // Preview server con configuración similar
+  preview: {
+    headers: {
+      'Cache-Control': 'public, max-age=31536000, immutable'
     }
   }
 })

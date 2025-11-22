@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback, memo } from 'react';
 import { 
-  Cpu, 
   HardDrive, 
   Zap, 
   Mail, 
@@ -9,11 +8,39 @@ import {
   Moon,
   Droplets,
   Wind,
-  Image as ImageIcon,
-  Trash2,
   Power,
   RotateCw
 } from 'lucide-react';
+
+// Precarga inteligente de recursos críticos
+const preloadResources = () => {
+  // Precargar Spline scene (el recurso más pesado)
+  const splineLink = document.createElement('link');
+  splineLink.rel = 'preload';
+  splineLink.as = 'fetch';
+  splineLink.href = 'https://prod.spline.design/CTzlK88G4nA0eFUO/scene.splinecode';
+  splineLink.crossOrigin = 'anonymous';
+  document.head.appendChild(splineLink);
+
+  // Precargar imágenes de certificados (críticas para UX)
+  const certificateImages = [
+    '/images/certificates/epn-award.jpg',
+    '/images/certificates/cisco-networking.jpg',
+    '/images/certificates/digital-transformation.jpg',
+    '/images/certificates/scrum-foundation.jpg'
+  ];
+
+  certificateImages.forEach(src => {
+    const img = new Image();
+    img.src = src;
+    // Almacenar en cache del navegador
+  });
+
+  // Precargar módulo de Spline en paralelo
+  import('@splinetool/react-spline').catch(err => {
+    console.warn('Spline preload failed, will load on demand:', err);
+  });
+};
 
 const HUDBootScreen = memo(({ onComplete }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -57,8 +84,11 @@ const HUDBootScreen = memo(({ onComplete }) => {
     return () => clearInterval(cursorInterval);
   }, []);
 
-  // Fade-in inicial
+  // Fade-in inicial + Precarga de recursos
   useEffect(() => {
+    // Iniciar precarga de recursos en paralelo
+    preloadResources();
+    
     // Empezar el fade-in inmediatamente
     const fadeTimer = setTimeout(() => {
       setFadeState('visible');
@@ -255,25 +285,6 @@ const HUDBootScreen = memo(({ onComplete }) => {
         </div>
       </div>
 
-      {/* Panel Superior Centro - CPU/RAM */}
-      <div className="hud-panel hud-panel-top-center">
-        <div className="hud-metric-gauge">
-          <Cpu className="w-5 h-5" />
-          <div className="hud-gauge-circle" style={{ '--gauge-value': systemProgress }}>
-            <span className="hud-gauge-value">{systemProgress}%</span>
-          </div>
-          <span className="text-xs">CPU USAGE</span>
-        </div>
-
-        <div className="hud-tags">
-          {['REACT', 'TAILWIND', 'VITE', 'NODE.JS'].map((tag, i) => (
-            <span key={i} className="hud-tag" style={{ animationDelay: `${i * 0.1}s` }}>
-              {tag}
-            </span>
-          ))}
-        </div>
-      </div>
-
       {/* Panel Derecho - Reloj y Clima */}
       <div className="hud-panel hud-panel-right">
         <div className="hud-clock">
@@ -341,8 +352,8 @@ const HUDBootScreen = memo(({ onComplete }) => {
         </div>
       </div>
 
-      {/* Panel Inferior Centro - Carga de Datos */}
-      <div className="hud-panel hud-panel-bottom-center">
+      {/* Panel Inferior Derecha - Carga de Datos */}
+      <div className="hud-panel hud-panel-bottom-right">
         <div className="hud-waveform">
           {Array.from({ length: 20 }).map((_, i) => (
             <div 
@@ -360,17 +371,6 @@ const HUDBootScreen = memo(({ onComplete }) => {
           <span className="text-xs">UPLOAD: {(Math.random() * 10).toFixed(1)} MB/s</span>
           <span className="text-xs">DOWNLOAD: {(Math.random() * 50).toFixed(1)} MB/s</span>
         </div>
-      </div>
-
-      {/* Círculos Secundarios Inferiores */}
-      <div className="hud-secondary-circle hud-secondary-left">
-        <ImageIcon className="w-8 h-8" />
-        <div className="hud-mini-ring" />
-      </div>
-
-      <div className="hud-secondary-circle hud-secondary-right">
-        <Trash2 className="w-8 h-8" />
-        <div className="hud-mini-ring" />
       </div>
 
       {/* Líneas de conexión decorativas */}

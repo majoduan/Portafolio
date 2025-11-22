@@ -1,5 +1,28 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback, lazy, Suspense } from 'react';
-import { Camera, Mail, Linkedin, Github, Award, ExternalLink, Menu, X, Code } from 'lucide-react';
+
+// Hook personalizado para Intersection Observer (lazy loading inteligente)
+const useIntersectionObserver = (ref, options = {}) => {
+  const [isIntersecting, setIsIntersecting] = useState(false);
+  const [hasIntersected, setHasIntersected] = useState(false);
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element || hasIntersected) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      setIsIntersecting(entry.isIntersecting);
+      if (entry.isIntersecting) {
+        setHasIntersected(true);
+      }
+    }, { threshold: 0.1, rootMargin: '50px', ...options });
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [ref, hasIntersected, options]);
+
+  return { isIntersecting, hasIntersected };
+};
+import { Mail, Linkedin, Github, ExternalLink, Menu, X, Code } from 'lucide-react';
 import TechCard from './components/TechCard';
 import HUDBootScreen from './components/HUDBootScreen';
 import { technologies } from './data/technologies';
@@ -26,11 +49,20 @@ const Portfolio = () => {
   const [currentTechTab, setCurrentTechTab] = useState(0);
   const [previousTechTab, setPreviousTechTab] = useState(null);
   const [techTransitionState, setTechTransitionState] = useState('idle'); // 'idle', 'exiting', 'entering'
+  
+  // Estado para altura dinámica del contenedor de tecnologías
+  const [containerHeight, setContainerHeight] = useState('auto');
 
   const canvasRef = useRef(null);
   const particles = useRef([]);
   const splineRef = useRef(null);
   const certificateContainerRef = useRef(null);
+  const techContainerRef = useRef(null);
+  const cachedHeights = useRef({}); // Cache de alturas por categoría
+  const projectsSectionRef = useRef(null);
+  
+  // Usar intersection observer para cargar videos solo cuando sean visibles
+  const { hasIntersected: projectsVisible } = useIntersectionObserver(projectsSectionRef);
 
   // Texto completo para el efecto typewriter
   const fullText = "Software Engineering student at Escuela Politécnica Nacional with hands-on experience in full-stack development, database management, and data analysis. Building secure, scalable systems with modern technologies.";
@@ -75,22 +107,22 @@ const Portfolio = () => {
     {
       id: "backend",
       title: "Backend Development",
-      description: "Technology stack I master to create complete and scalable solutions"
+      shortTitle: "Backend"
     },
     {
       id: "frontend",
       title: "Frontend Development",
-      description: "Technologies to create modern and responsive user interfaces"
+      shortTitle: "Frontend"
     },
     {
       id: "databases",
       title: "Databases",
-      description: "Relational and NoSQL data management systems"
+      shortTitle: "Databases"
     },
     {
       id: "devops",
       title: "DevOps & Tools",
-      description: "Tools for development, deployment and collaboration"
+      shortTitle: "DevOps"
     }
   ], []);
 
@@ -258,6 +290,68 @@ const Portfolio = () => {
     return () => clearTimeout(exitTimer);
   }, [activeTab, currentTechTab]);
 
+  // Calcular y cachear altura del contenedor de tecnologías
+  useEffect(() => {
+    if (!techContainerRef.current || techTransitionState !== 'idle') return;
+    
+    const categoryId = techCategories[currentTechTab].id;
+    
+    // Si ya tenemos la altura cacheada, usarla
+    if (cachedHeights.current[categoryId]) {
+      setContainerHeight(cachedHeights.current[categoryId]);
+      return;
+    }
+    
+    // Calcular altura solo la primera vez para esta categoría
+    const measureHeight = () => {
+      const grid = techContainerRef.current?.querySelector('.tech-cards-grid');
+      if (grid) {
+        const height = grid.offsetHeight;
+        cachedHeights.current[categoryId] = height;
+        setContainerHeight(height);
+      }
+    };
+    
+    // Usar requestAnimationFrame para asegurar que el DOM esté actualizado
+    const rafId = requestAnimationFrame(() => {
+      // Pequeño delay adicional para asegurar que las animaciones de entrada hayan comenzado
+      setTimeout(measureHeight, 150);
+    });
+    
+    return () => cancelAnimationFrame(rafId);
+  }, [currentTechTab, techTransitionState, techCategories]);
+
+  // Recalcular alturas en resize (limpiar cache y recalcular)
+  useEffect(() => {
+    let resizeTimeout;
+    
+    const handleResize = () => {
+      // Limpiar el cache cuando cambia el tamaño de ventana
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        cachedHeights.current = {};
+        
+        // Recalcular altura actual
+        if (techContainerRef.current && techTransitionState === 'idle') {
+          const grid = techContainerRef.current.querySelector('.tech-cards-grid');
+          if (grid) {
+            const height = grid.offsetHeight;
+            const categoryId = techCategories[currentTechTab].id;
+            cachedHeights.current[categoryId] = height;
+            setContainerHeight(height);
+          }
+        }
+      }, 300); // Debounce de 300ms
+    };
+    
+    window.addEventListener('resize', handleResize, { passive: true });
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(resizeTimeout);
+    };
+  }, [currentTechTab, techTransitionState, techCategories]);
+
   // Auto-scroll certificates carousel - optimizado con requestAnimationFrame
   useEffect(() => {
     if (!loading && !isCertificateCarouselPaused && certificateContainerRef.current) {
@@ -365,7 +459,7 @@ const Portfolio = () => {
       {/* Navigation */}
       <nav className="fixed top-0 w-full bg-slate-950/80 backdrop-blur-lg border-b border-slate-800 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-center h-16">
+          <div className="flex items-center justify-end h-16">
             {/* Desktop menu - Centrado */}
             <div className="hidden md:flex space-x-10">
               {['Home', 'Technologies', 'Certificates', 'Projects', 'Contact'].map((item) => (
@@ -509,8 +603,8 @@ const Portfolio = () => {
               </div>
             </div>
 
-            {/* Animación 3D de Spline - Derecha */}
-            <div className="hidden lg:block relative h-[600px] w-full overflow-hidden rounded-2xl">
+            {/* Animación 3D de Spline - Derecha en desktop, abajo en móvil */}
+            <div className="relative h-[400px] lg:h-[600px] w-full overflow-hidden rounded-2xl mt-8 lg:mt-0">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 blur-3xl"></div>
               <div className="relative spline-container">
                 {/* Contenedor con dimensiones extra para recortar y centrar */}
@@ -542,29 +636,37 @@ const Portfolio = () => {
           </h2>
           {/* Tab Navigation Bar - Estilo Facebook */}
           <div className="flex justify-center mb-12 border-b border-slate-700/50">
-            <div className="flex gap-2">
+            <div className="flex gap-1 sm:gap-2">
               {techCategories.map((category, index) => (
                 <button
                   key={category.id}
                   onClick={() => handleManualTabChange(index)}
-                  className={`px-8 py-4 font-medium relative transition-all duration-1000 ${currentTechTab === index
-                    ? 'text-blue-400'
-                    : 'text-slate-400 hover:text-slate-300 hover:bg-slate-800/30'
-                    }`}
+                  className={`px-3 sm:px-6 md:px-8 py-3 md:py-4 font-medium relative transition-all duration-1000 whitespace-nowrap text-xs sm:text-sm md:text-base ${
+                    currentTechTab === index
+                      ? 'text-blue-400'
+                      : 'text-slate-400 hover:text-slate-300 hover:bg-slate-800/30'
+                  }`}
                 >
-                  {category.title}
+                  {/* Mostrar título corto en móvil, completo en desktop */}
+                  <span className="hidden sm:inline">{category.title}</span>
+                  <span className="inline sm:hidden">{category.shortTitle}</span>
                   {/* Línea indicadora inferior con transición suave */}
                   <div
-                    className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-1000 ${currentTechTab === index ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'
-                      }`}
+                    className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-1000 ${
+                      currentTechTab === index ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'
+                    }`}
                   />
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Technology Cards Container with fixed height */}
-          <div className="tech-cards-container">
+          {/* Technology Cards Container with dynamic height */}
+          <div 
+            ref={techContainerRef}
+            className="tech-cards-container"
+            style={{ height: containerHeight }}
+          >
             {/* Previous tab cards (exiting) - solo renderizar si está en transición */}
             {techTransitionState === 'exiting' && previousTechTab !== null && (
               <div className="tech-cards-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -672,7 +774,7 @@ const Portfolio = () => {
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="py-20 relative z-10">
+      <section ref={projectsSectionRef} id="projects" className="py-20 relative z-10">
         <div className="max-w-7xl mx-auto px-4 mb-12">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
             Featured Projects
@@ -690,22 +792,26 @@ const Portfolio = () => {
                 className="project-card bg-slate-900/50 backdrop-blur-lg rounded-3xl overflow-hidden border border-slate-800 hover:border-blue-500 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/30 cursor-pointer group"
               >
                 <div className="bg-gradient-to-br from-blue-600 to-purple-600 h-48 flex items-center justify-center relative overflow-hidden">
-                  {/* Video de fondo con reproducción automática - optimizado */}
-                  <video
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    preload="metadata"
-                    loading="lazy"
-                    poster={`${project.video.replace('.mp4', '-poster.jpg')}`}
-                    className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-300"
-                    onLoadedMetadata={(e) => {
-                      e.target.muted = true;
-                    }}
-                  >
-                    <source src={project.video} type="video/mp4" />
-                  </video>
+                  {/* Video de fondo con carga diferida - solo cuando la sección es visible */}
+                  {projectsVisible ? (
+                    <video
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      preload="metadata"
+                      loading="lazy"
+                      poster={`${project.video.replace('.mp4', '-poster.jpg')}`}
+                      className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-300"
+                      onLoadedMetadata={(e) => {
+                        e.target.muted = true;
+                      }}
+                    >
+                      <source src={project.video} type="video/mp4" />
+                    </video>
+                  ) : (
+                    <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-blue-600/50 to-purple-600/50 animate-pulse" />
+                  )}
 
                   {/* Overlay con gradiente */}
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent" />

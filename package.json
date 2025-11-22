@@ -1,7 +1,7 @@
 {
   "name": "mateo-portfolio",
   "private": true,
-  "version": "2.0.0",
+  "version": "2.1.0",
   "type": "module",
   "description": "Portfolio profesional optimizado con React, Vite y Spline 3D",
   "author": "Mateo Dueñas <mate.due02@gmail.com>",
@@ -9,7 +9,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "analyze": "node scripts/analyze-bundle.mjs",
+    "build:analyze": "npm run build && npm run analyze"
   },
   "dependencies": {
     "@splinetool/react-spline": "^4.1.0",

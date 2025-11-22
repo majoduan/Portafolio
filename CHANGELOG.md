@@ -2,6 +2,23 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2.1.0] - 2025-11-22
+
+### 📚 Documentation & UX Improvements
+
+#### Documentation Consolidation
+- Consolidado 8 archivos .md en 2 archivos principales
+- **README.md** - Documentación general, setup y features
+- **PERFORMANCE.md** - Análisis técnico completo de optimizaciones
+- Eliminados: OPTIMIZACIONES.md, OPTIMIZATION_SUMMARY.md, PERFORMANCE_QUICKSTART.md, PERFORMANCE_REPORT.md, QUICKSTART.md, RESUMEN_EJECUTIVO.md, TESTING_GUIDE.md, BUILD_ANALYSIS.md
+- Mejor organización y mantenibilidad
+
+#### UX Enhancements
+- Spline 3D ahora visible en móvil (aparece debajo del contenido)
+- Mejor experiencia responsive en hero section
+- Precarga inteligente de Spline durante boot screen
+- Lazy loading de videos con Intersection Observer
+
 ## [2.0.0-optimized] - 2025-11-21
 
 ### 🚀 Optimizaciones Mayores
