@@ -22,7 +22,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          // Vendor chunks optimizados
+          // Vendor chunks optimizados - sin agrupar componentes
           if (id.includes('node_modules')) {
             if (id.includes('react') || id.includes('react-dom')) {
               return 'react-vendor';
@@ -33,16 +33,10 @@ export default defineConfig({
             if (id.includes('@splinetool')) {
               return 'spline';
             }
-            if (id.includes('lodash')) {
-              return 'utils';
-            }
             // Otros vendors en un chunk separado
             return 'vendor';
           }
-          // Separar componentes grandes
-          if (id.includes('/components/')) {
-            return 'components';
-          }
+          // Dejar que Vite maneje automáticamente los componentes
         },
         // Optimizar nombres de archivos con hash largo para mejor caching
         chunkFileNames: 'assets/js/[name]-[hash:16].js',
