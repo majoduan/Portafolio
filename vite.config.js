@@ -9,14 +9,6 @@ export default defineConfig({
       'lodash.debounce': 'lodash-es/debounce'
     }
   },
-  // Configuración de preload para recursos críticos
-  experimental: {
-    renderBuiltUrl(filename, { hostType }) {
-      if (hostType === 'js') {
-        return { runtime: `window.__toCdnUrl(${JSON.stringify(filename)})` }
-      }
-    }
-  },
   build: {
     // Optimización de chunks mejorada con mejor estrategia de splitting
     rollupOptions: {
