@@ -1,7 +1,7 @@
-import { useState, useEffect, useMemo, memo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import AnimatedCounter from './AnimatedCounter';
 
-const TechCard = memo(({ tech, index, animationState, onMouseEnter, onMouseLeave }) => {
+const TechCard = React.memo(({ tech, index, animationState, onMouseEnter, onMouseLeave }) => {
   // Si está saliendo, comienza visible. Si está entrando, comienza invisible
   const [isVisible, setIsVisible] = useState(animationState === 'exiting');
   

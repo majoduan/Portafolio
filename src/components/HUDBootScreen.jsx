@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback, memo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { 
   HardDrive, 
   Zap, 
@@ -42,7 +42,7 @@ const preloadResources = () => {
   });
 };
 
-const HUDBootScreen = memo(({ onComplete }) => {
+const HUDBootScreen = React.memo(({ onComplete }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [typewriterText, setTypewriterText] = useState('');
   const [showCursor, setShowCursor] = useState(true);
