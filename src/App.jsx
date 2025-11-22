@@ -1,4 +1,12 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback, lazy, Suspense } from 'react';
+import { Mail, Linkedin, Github, ExternalLink, Menu, X, Code } from 'lucide-react';
+import TechCard from './components/TechCard';
+import HUDBootScreen from './components/HUDBootScreen';
+import { technologies } from './data/technologies';
+import { projects, certificates } from './data/projects';
+
+// Lazy load Spline para mejorar el tiempo de carga inicial
+const Spline = lazy(() => import('@splinetool/react-spline'));
 
 // Hook personalizado para Intersection Observer (lazy loading inteligente)
 const useIntersectionObserver = (ref, options = {}) => {
@@ -22,14 +30,6 @@ const useIntersectionObserver = (ref, options = {}) => {
 
   return { isIntersecting, hasIntersected };
 };
-import { Mail, Linkedin, Github, ExternalLink, Menu, X, Code } from 'lucide-react';
-import TechCard from './components/TechCard';
-import HUDBootScreen from './components/HUDBootScreen';
-import { technologies } from './data/technologies';
-import { projects, certificates } from './data/projects';
-
-// Lazy load Spline para mejorar el tiempo de carga inicial
-const Spline = lazy(() => import('@splinetool/react-spline'));
 
 const Portfolio = () => {
   const [loading, setLoading] = useState(true);
