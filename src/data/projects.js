@@ -77,8 +77,8 @@ export const projects = [
 ];
 
 export const certificates = [
-  { title: "EPN Academic Excellence Award", org: "Escuela Politécnica Nacional", icon: "🏆", image: "/images/certificates/epn-award.jpg" },
-  { title: "Networking Basics", org: "Cisco Networking Academy", icon: "🌐", image: "/images/certificates/cisco-networking.jpg" },
-  { title: "Digital Transformation", org: "Instituto Europeo de Posgrado", icon: "🚀", image: "/images/certificates/digital-transformation.jpg" },
-  { title: "SCRUM Foundation", org: "Certiprof - SFPC™", icon: "⚡", image: "/images/certificates/scrum-foundation.jpg" }
+  { title: "EPN Academic Excellence Award", org: "Escuela Politécnica Nacional", icon: "🏆", image: "/images/certificates/epn-award.webp" },
+  { title: "Networking Basics", org: "Cisco Networking Academy", icon: "🌐", image: "/images/certificates/cisco-networking.webp" },
+  { title: "Digital Transformation", org: "Instituto Europeo de Posgrado", icon: "🚀", image: "/images/certificates/digital-transformation.webp" },
+  { title: "SCRUM Foundation", org: "Certiprof - SFPC™", icon: "⚡", image: "/images/certificates/scrum-foundation.webp" }
 ];

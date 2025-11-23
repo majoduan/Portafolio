@@ -44,6 +44,8 @@ const Portfolio = () => {
   const [isTechCardHovered, setIsTechCardHovered] = useState(false); // Nuevo estado para detectar hover en cards
   const [lastManualChange, setLastManualChange] = useState(0); // Timestamp del último cambio manual
   const [activeSection, setActiveSection] = useState('home'); // Estado para la sección activa
+  const [hoveredProject, setHoveredProject] = useState(null); // Estado para precargar video en hover
+  const videoPreloadCache = useRef(new Set()); // Cache de videos precargados
 
   // Estados para manejar la transición de tecnologías
   const [currentTechTab, setCurrentTechTab] = useState(0);
@@ -63,6 +65,22 @@ const Portfolio = () => {
   
   // Usar intersection observer para cargar videos solo cuando sean visibles
   const { hasIntersected: projectsVisible } = useIntersectionObserver(projectsSectionRef);
+
+  // Función para precargar video cuando se hace hover - optimizada con useCallback
+  const preloadVideoOnHover = useCallback((videoSrc) => {
+    // Evitar recargas si ya está en cache
+    if (videoPreloadCache.current.has(videoSrc)) return;
+
+    const video = document.createElement('video');
+    video.preload = 'auto';
+    video.src = videoSrc;
+    video.muted = true;
+    
+    // Marcar como precargado
+    videoPreloadCache.current.add(videoSrc);
+    
+    console.log(`[Preload] Video precargado: ${videoSrc}`);
+  }, []);
 
   // Texto completo para el efecto typewriter
   const fullText = "Software Engineering student at Escuela Politécnica Nacional with hands-on experience in full-stack development, database management, and data analysis. Building secure, scalable systems with modern technologies.";
@@ -789,22 +807,31 @@ const Portfolio = () => {
                   setSelectedProject(project);
                   setIsModalOpen(true);
                 }}
+                onMouseEnter={() => {
+                  setHoveredProject(project);
+                  // Precargar video para modal cuando se hace hover
+                  preloadVideoOnHover(project.video);
+                }}
+                onMouseLeave={() => setHoveredProject(null)}
                 className="project-card bg-slate-900/50 backdrop-blur-lg rounded-3xl overflow-hidden border border-slate-800 hover:border-blue-500 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/30 cursor-pointer group"
               >
                 <div className="bg-gradient-to-br from-blue-600 to-purple-600 h-48 flex items-center justify-center relative overflow-hidden">
                   {/* Video de fondo con carga diferida - solo cuando la sección es visible */}
                   {projectsVisible ? (
                     <video
+                      key={project.video}
                       autoPlay
                       loop
                       muted
                       playsInline
-                      preload="metadata"
-                      loading="lazy"
-                      poster={`${project.video.replace('.mp4', '-poster.jpg')}`}
+                      preload="none"
                       className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-300"
                       onLoadedMetadata={(e) => {
                         e.target.muted = true;
+                        e.target.play().catch(() => {}); // Silenciar errores de autoplay
+                      }}
+                      style={{
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)' // Fallback mientras carga
                       }}
                     >
                       <source src={project.video} type="video/mp4" />
@@ -934,12 +961,24 @@ const Portfolio = () => {
             {/* Video del proyecto */}
             <div className="p-6">
               <div className="relative bg-black rounded-2xl overflow-hidden mb-6">
+                {/* Indicador de carga mientras el video se carga */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-purple-600/20 flex items-center justify-center z-0">
+                  <div className="text-center">
+                    <div className="inline-block w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-3"></div>
+                    <p className="text-slate-400 text-sm">Cargando video...</p>
+                  </div>
+                </div>
                 <video
+                  key={selectedProject.video} // Force re-render on project change
                   controls
                   autoPlay
-                  preload="metadata"
-                  className="w-full h-auto"
-                  poster="/images/video-placeholder.jpg"
+                  preload="auto"
+                  className="w-full h-auto relative z-10"
+                  onLoadedData={(e) => {
+                    // Ocultar loading indicator cuando el video esté listo
+                    e.target.style.opacity = '1';
+                  }}
+                  style={{ opacity: 0, transition: 'opacity 0.3s ease-in-out' }}
                 >
                   <source src={selectedProject.video} type="video/mp4" />
                   Tu navegador no soporta el elemento de video.

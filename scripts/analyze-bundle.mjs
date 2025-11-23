@@ -133,7 +133,13 @@ function analyzeBundle() {
   // Check videos
   const largeVideos = groups.videos.filter(f => f.size > 10000000);
   if (largeVideos.length > 0) {
-    warnings.push(`${largeVideos.length} video(s) > 10MB (consider compression)`);
+    warnings.push(`${largeVideos.length} video(s) > 10MB (run optimize-videos.ps1)`);
+  }
+  
+  // Check if WebP is being used
+  const jpgImages = groups.images.filter(f => ['.jpg', '.jpeg'].includes(f.ext));
+  if (jpgImages.length > 0 && !groups.images.some(f => f.ext === '.webp')) {
+    warnings.push(`${jpgImages.length} JPG image(s) not converted to WebP (run optimize-images.mjs)`);
   }
   
   if (warnings.length === 0) {

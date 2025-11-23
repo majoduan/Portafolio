@@ -12,9 +12,9 @@ import {
   RotateCw
 } from 'lucide-react';
 
-// Precarga inteligente de recursos críticos
+// Precarga inteligente de recursos críticos con estrategia de prioridad
 const preloadResources = () => {
-  // Precargar Spline scene (el recurso más pesado)
+  // 1. PRIORIDAD ALTA: Spline scene (el recurso más pesado ~2MB)
   const splineLink = document.createElement('link');
   splineLink.rel = 'preload';
   splineLink.as = 'fetch';
@@ -22,7 +22,7 @@ const preloadResources = () => {
   splineLink.crossOrigin = 'anonymous';
   document.head.appendChild(splineLink);
 
-  // Precargar imágenes de certificados (críticas para UX)
+  // 2. PRIORIDAD ALTA: Precargar imágenes de certificados (WebP cuando estén convertidas)
   const certificateImages = [
     '/images/certificates/epn-award.jpg',
     '/images/certificates/cisco-networking.jpg',
@@ -33,13 +33,47 @@ const preloadResources = () => {
   certificateImages.forEach(src => {
     const img = new Image();
     img.src = src;
-    // Almacenar en cache del navegador
   });
 
-  // Precargar módulo de Spline en paralelo
+  // 3. PRIORIDAD MEDIA: Precargar módulo de Spline en paralelo
   import('@splinetool/react-spline').catch(err => {
     console.warn('Spline preload failed, will load on demand:', err);
   });
+
+  // 4. PRIORIDAD MEDIA-ALTA: Precargar primeros 2 videos (proyectos destacados)
+  // Estos son los más probables de ser vistos primero
+  const priorityVideos = [
+    '/videos/poa-management.mp4',  // Proyecto principal
+    '/videos/epn-certificates.mp4'  // Segundo proyecto importante
+  ];
+
+  priorityVideos.forEach(videoSrc => {
+    const video = document.createElement('video');
+    video.preload = 'auto'; // Cargar video completo en segundo plano
+    video.src = videoSrc;
+    video.muted = true;
+    // No agregamos al DOM, solo precargamos en memoria
+  });
+
+  // 5. PRIORIDAD BAJA: Prefetch de videos restantes después de 3 segundos
+  setTimeout(() => {
+    const remainingVideos = [
+      '/videos/travel-allowance.mp4',
+      '/videos/storycraft.mp4',
+      '/videos/fitness-tracker.mp4',
+      '/videos/space-invaders.mp4',
+      '/videos/godot-game-2d.mp4',
+      '/videos/godot-game-3d.mp4'
+    ];
+
+    remainingVideos.forEach(videoSrc => {
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.as = 'video';
+      link.href = videoSrc;
+      document.head.appendChild(link);
+    });
+  }, 3000);
 };
 
 const HUDBootScreen = React.memo(({ onComplete }) => {

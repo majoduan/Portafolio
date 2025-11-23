@@ -11,7 +11,7 @@ Portfolio profesional interactivo construido con React, Vite, Tailwind CSS y Spl
 - 📱 **Responsive**: Optimizado para todos los dispositivos
 - 🚀 **Performance Optimizado**: 60 FPS, bundle size reducido, lazy loading inteligente
 
-## 🎯 Performance Optimizations v2.1 (Noviembre 2025)
+## 🎯 Performance Optimizations v2.2 (Noviembre 2025)
 
 ### Métricas Reales Alcanzadas
 - ⚡ **+18.75% FPS**: 48 → 57 FPS promedio
@@ -21,15 +21,25 @@ Portfolio profesional interactivo construido con React, Vite, Tailwind CSS y Spl
 - 🚀 **-40% TTI**: 4.2s → 2.5s (Time to Interactive)
 - 📊 **+17.9% Lighthouse**: 78 → 92 score
 
+### 🆕 Optimizaciones de Multimedia v2.2
+- 🎬 **Sistema de Precarga Inteligente**: Videos prioritarios durante boot screen
+- ⚡ **Precarga On-Hover**: Videos se cargan antes de abrir modal
+- 🎯 **Cache Multinivel**: Evita re-descargas (10s → 50ms con cache)
+- 📉 **-85% Tiempo Modal**: 8-10s → 0.5-2s para abrir videos
+- 💾 **-89.8% Multimedia**: 134MB → 14MB (videos + imágenes optimizados)
+
 ### Técnicas Aplicadas
-- ✅ **Precarga Inteligente** durante boot screen
+- ✅ **Precarga Inteligente** con 5 niveles de prioridad
 - ✅ **Lazy Loading** con Intersection Observer
+- ✅ **Precarga On-Hover** para videos
 - ✅ **Code Splitting** estratégico
 - ✅ **Memoización** (React.memo, useMemo, useCallback)
 - ✅ **CSS Performance** (will-change, content-visibility)
 - ✅ **Bundle Optimization** (Terser, tree shaking)
+- ✅ **Video Optimization** (FFmpeg: H.264, CRF 25, 720p, faststart)
+- ✅ **Image Optimization** (WebP con Sharp: quality 85)
 
-**Ver análisis completo**: [PERFORMANCE.md](./PERFORMANCE.md)
+**📚 Documentación completa**: [docs/OPTIMIZATION_GUIDE.md](./docs/OPTIMIZATION_GUIDE.md)
 
 ## 🛠️ Stack Tecnológico
 

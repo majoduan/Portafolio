@@ -2,6 +2,54 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2.2.0] - 2025-11-23
+
+### 🎬 Multimedia Optimization
+
+#### Videos Optimizados (FFmpeg)
+- **Reducción total: 90%** (130MB → 13MB)
+- Codec: H.264 (libx264) con preset slow
+- CRF: 25 (calidad óptima para web)
+- Resolución: 1280x720 (720p)
+- Audio: AAC 128kbps
+- Flag: +faststart para streaming progresivo
+- 8 videos optimizados individualmente
+
+#### Imágenes Optimizadas (WebP)
+- **Reducción total: 83.7%** (4.16MB → 0.68MB)
+- Formato: WebP (Sharp library)
+- Quality: 85, Effort: 6
+- 4 certificados convertidos
+
+#### Sistema de Precarga Inteligente
+- 5 niveles de prioridad implementados
+- Precarga durante boot screen
+- Precarga on-hover anticipativa
+- Cache tracking (evita re-descargas)
+- Videos abren en 0.5-2s (vs 8-10s antes)
+
+#### Componentes Actualizados
+- `HUDBootScreen.jsx`: Función preloadResources() con estrategia multinivel
+- `App.jsx`: Hooks para hover preloading y cache
+- `data/projects.js`: Rutas actualizadas
+- Modal optimizado con preload="auto"
+
+#### Scripts de Optimización
+- `scripts/optimize-images.mjs`: Conversión automática a WebP
+- Comandos FFmpeg documentados para videos
+
+#### Documentación Consolidada
+- ✅ Toda la documentación ahora en `docs/OPTIMIZATION_GUIDE.md`
+- ✅ Eliminados 11 archivos .md dispersos
+- ✅ Estructura más clara y mantenible
+- ✅ README.md actualizado con link a guía
+
+#### Métricas de Multimedia
+- **Total multimedia**: 134MB → 14MB (-89.8%)
+- **Tiempo modal**: 8-10s → 0.5-2s (-85%)
+- **Con cache**: 50-200ms (-98%)
+- **Descarga 4G**: 107s → 11s (-90%)
+
 ## [2.1.0] - 2025-11-22
 
 ### 📚 Documentation & UX Improvements
