@@ -869,3 +869,168 @@ section {
     opacity: 1;
   }
 }
+
+/* ==================== CONTACT SECTION OPTIMIZATIONS ==================== */
+
+/* Contact form container - optimized with content-visibility */
+.contact-form {
+  content-visibility: auto;
+  contain: layout style paint;
+}
+
+/* Contact left column - profile card optimizations */
+.contact-left-column {
+  content-visibility: auto;
+}
+
+/* Contact right column - form card optimizations */
+.contact-right-column {
+  content-visibility: auto;
+}
+
+/* Optimized hover effects - only apply will-change on hover */
+.contact-left-column .group:hover,
+.contact-right-column > div:hover {
+  will-change: transform, border-color, box-shadow;
+}
+
+/* Remove will-change when not hovering to save memory */
+.contact-left-column .group,
+.contact-right-column > div {
+  will-change: auto;
+}
+
+/* Smooth transitions for form inputs */
+.contact-form input,
+.contact-form textarea {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* Optimize image rendering in contact section */
+.contact-left-column img {
+  image-rendering: auto;
+  content-visibility: auto;
+  will-change: auto;
+}
+
+.contact-left-column img:hover {
+  will-change: transform, opacity;
+}
+
+/* Optimize social link cards */
+.contact-left-column .group\/link {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.contact-left-column .group\/link:hover {
+  will-change: transform, background-color, border-color;
+}
+
+/* Smooth focus states for accessibility */
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Button optimization */
+.contact-form button[type="submit"] {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.contact-form button[type="submit"]:hover {
+  will-change: transform, box-shadow;
+}
+
+/* Error message animation */
+@keyframes errorSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.contact-form .animate-fadeIn {
+  animation: errorSlideIn 0.3s ease-out;
+}
+
+/* Responsive optimizations for contact section */
+@media (max-width: 1024px) {
+  .contact-left-column,
+  .contact-right-column {
+    contain: none; /* Remove containment on smaller screens for better layout */
+  }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .contact-left-column .group:hover,
+  .contact-right-column > div:hover,
+  .contact-form button[type="submit"]:hover {
+    transform: none;
+    will-change: auto;
+  }
+}
+
+/* ==================== TYPING QUOTES OPTIMIZATIONS ==================== */
+
+/* Optimize typing quotes component for performance */
+.typing-quotes-container {
+  content-visibility: auto;
+  contain: layout style paint;
+  will-change: auto;
+}
+
+/* Hardware acceleration for typing animation */
+.typing-quotes-text {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: contents;
+}
+
+/* Optimize cursor blink animation */
+@keyframes cursorBlink {
+  0%, 49%, 51%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ==================== CONTACT FORM INPUTS OPTIMIZATION ==================== */
+
+/* Hardware acceleration for form inputs */
+.contact-form input,
+.contact-form textarea {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: auto;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  will-change: border-color, box-shadow;
+}
+
+/* Optimize button hover */
+.contact-form button[type="submit"] {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: auto;
+}
+
+.contact-form button[type="submit"]:hover {
+  will-change: transform, box-shadow;
+}
+
+.contact-form button[type="submit"]:not(:hover) {
+  will-change: auto;
+}

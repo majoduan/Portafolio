@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useMemo, useCallback, lazy, Suspens
 import { Mail, Linkedin, Github, ExternalLink, Menu, X, Code } from 'lucide-react';
 import TechCard from './components/TechCard';
 import HUDBootScreen from './components/HUDBootScreen';
+import ContactForm from './components/ContactForm';
 import { technologies } from './data/technologies';
 import { projects, certificates } from './data/projects';
 
@@ -889,40 +890,113 @@ const Portfolio = () => {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="pb-20 bg-slate-900/30 relative z-10">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-12 pb-2 leading-tight bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-            Let's Connect
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <a
-              href="mailto:mate.due02@gmail.com"
-              className="bg-slate-900/50 backdrop-blur-lg rounded-2xl p-8 border border-slate-800 hover:border-blue-500 transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-blue-500/30 group"
-            >
-              <Mail className="w-12 h-12 mx-auto mb-4 text-blue-400 group-hover:scale-110 transition-transform" />
-              <h3 className="text-xl font-bold mb-2">Email</h3>
-              <p className="text-slate-400 text-sm">mate.due02@gmail.com</p>
-            </a>
-            <a
-              href="https://linkedin.com/in/mateo-dueñas-andrade"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-slate-900/50 backdrop-blur-lg rounded-2xl p-8 border border-slate-800 hover:border-blue-500 transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-blue-500/30 group"
-            >
-              <Linkedin className="w-12 h-12 mx-auto mb-4 text-blue-400 group-hover:scale-110 transition-transform" />
-              <h3 className="text-xl font-bold mb-2">LinkedIn</h3>
-              <p className="text-slate-400 text-sm">mateo-dueñas-andrade</p>
-            </a>
-            <a
-              href="https://github.com/majoduan"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-slate-900/50 backdrop-blur-lg rounded-2xl p-8 border border-slate-800 hover:border-blue-500 transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-blue-500/30 group"
-            >
-              <Github className="w-12 h-12 mx-auto mb-4 text-blue-400 group-hover:scale-110 transition-transform" />
-              <h3 className="text-xl font-bold mb-2">GitHub</h3>
-              <p className="text-slate-400 text-sm">majoduan</p>
-            </a>
+      <section id="contact" className="py-12 md:py-16 lg:py-20 relative z-10">
+        <div className="max-w-7xl mx-auto px-4">
+          {/* Section Title */}
+          <div className="text-center mb-8 md:mb-12 lg:mb-16">
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+              Let's Connect
+            </h2>
+            <p className="text-slate-300 text-base md:text-lg lg:text-xl max-w-2xl mx-auto px-4">
+              Have a project in mind or want to collaborate? I'd love to hear from you!
+            </p>
+          </div>
+
+          {/* Two Column Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 lg:gap-12 items-stretch">
+            {/* Left Column - Profile Image & Info */}
+            <div className="contact-left-column">
+              {/* Profile Image Card */}
+              <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/50 backdrop-blur-lg rounded-2xl md:rounded-3xl overflow-hidden border border-slate-700/50 hover:border-blue-500/70 transition-all duration-500 shadow-2xl group h-full flex flex-col">
+                {/* Image Container with Gradient Overlay */}
+                <div className="relative h-64 sm:h-80 md:h-96 lg:h-[400px] overflow-hidden bg-gradient-to-br from-blue-900/30 to-purple-900/30">
+                  {/* Placeholder - Replace with actual image */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    {/* SVG Placeholder - you can replace this with <img src="/images/profile.webp" /> */}
+                    <svg className="w-48 h-48 text-blue-400/20 group-hover:text-blue-400/40 transition-colors duration-500" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                    </svg>
+                  </div>
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
+                  
+                  {/* Animated Shine Effect */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent transform -skew-x-12 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
+                  </div>
+                </div>
+
+                {/* Info Section */}
+                <div className="p-6 md:p-8 flex-1 flex flex-col">
+                  <h3 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                    Mateo Dueñas
+                  </h3>
+                  <p className="text-slate-300 mb-4 md:mb-6 text-base md:text-lg leading-relaxed flex-1">
+                    Software Engineer passionate about building scalable solutions. 
+                    Open to new opportunities and collaborations.
+                  </p>
+
+                  {/* Social Links */}
+                  <div className="space-y-3 md:space-y-4">
+                    <a
+                      href="mailto:mate.due02@gmail.com"
+                      className="flex items-center gap-4 p-4 bg-slate-800/50 hover:bg-slate-800 rounded-xl transition-all duration-300 group/link border border-slate-700/50 hover:border-blue-500/50"
+                    >
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center group-hover/link:scale-110 transition-transform duration-300">
+                        <Mail className="w-6 h-6 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm text-slate-400">Email</p>
+                        <p className="text-white font-medium">mate.due02@gmail.com</p>
+                      </div>
+                    </a>
+
+                    <a
+                      href="https://linkedin.com/in/mateo-dueñas-andrade"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-4 p-4 bg-slate-800/50 hover:bg-slate-800 rounded-xl transition-all duration-300 group/link border border-slate-700/50 hover:border-blue-500/50"
+                    >
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center group-hover/link:scale-110 transition-transform duration-300">
+                        <Linkedin className="w-6 h-6 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm text-slate-400">LinkedIn</p>
+                        <p className="text-white font-medium">mateo-dueñas-andrade</p>
+                      </div>
+                    </a>
+
+                    <a
+                      href="https://github.com/majoduan"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-4 p-4 bg-slate-800/50 hover:bg-slate-800 rounded-xl transition-all duration-300 group/link border border-slate-700/50 hover:border-blue-500/50"
+                    >
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center group-hover/link:scale-110 transition-transform duration-300">
+                        <Github className="w-6 h-6 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm text-slate-400">GitHub</p>
+                        <p className="text-white font-medium">majoduan</p>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column - Contact Form */}
+            <div className="contact-right-column">
+              <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/50 backdrop-blur-lg rounded-2xl md:rounded-3xl p-6 md:p-8 lg:p-10 border border-slate-700/50 hover:border-purple-500/70 transition-all duration-500 shadow-2xl h-full">
+                <h3 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4 md:mb-6 text-white">
+                  Send me a message
+                </h3>
+                <p className="text-slate-400 text-sm md:text-base mb-6 md:mb-8">
+                  Fill out the form below and I'll get back to you as soon as possible.
+                </p>
+                <ContactForm />
+              </div>
+            </div>
           </div>
         </div>
       </section>

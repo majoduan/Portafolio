@@ -45,7 +45,20 @@ npm install --save-dev sharp
 node scripts/optimize-images.mjs
 ```
 
+**Configuración Sharp:**
+```javascript
+{
+  quality: 85,    // Calidad óptima (0-100)
+  effort: 6       // Máxima compresión (0-6)
+}
+```
+
 **Resultado esperado:** -70% tamaño de imágenes
+
+**Archivos procesados:**
+- Certificados: `public/images/certificates/*.jpg` → `webp/`
+- Mantiene originales intactos
+- Genera reporte de reducción
 
 ---
 

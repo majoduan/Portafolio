@@ -4,6 +4,13 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 
 ## [2.2.0] - 2025-11-23
 
+### 📚 Documentation Consolidation
+- **Consolidados 9 archivos .md** en una guía única
+- Eliminados: DOCUMENTATION_INDEX, EXECUTIVE_SUMMARY, TECHNICAL_ANALYSIS, QUICKSTART_MULTIMEDIA, VERIFICATION, VISUAL_SUMMARY, ASCII_ART_SUMMARY, CONTACT_*.md
+- **Nueva estructura**: README.md, CHANGELOG.md, docs/OPTIMIZATION_GUIDE.md, scripts/README.md
+- Reducción de 17 a 6 archivos de documentación
+- Mejor organización y mantenibilidad
+
 ### 🎬 Multimedia Optimization
 
 #### Videos Optimizados (FFmpeg)

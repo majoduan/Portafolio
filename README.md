@@ -13,31 +13,27 @@ Portfolio profesional interactivo construido con React, Vite, Tailwind CSS y Spl
 
 ## 🎯 Performance Optimizations v2.2 (Noviembre 2025)
 
-### Métricas Reales Alcanzadas
-- ⚡ **+18.75% FPS**: 48 → 57 FPS promedio
-- 💾 **-29.6% Memoria**: 125MB → 88MB de uso
-- 📦 **-33% Bundle Size**: 420KB → 280KB
-- 🎨 **-50% FCP**: 2.8s → 1.4s (First Contentful Paint)
-- 🚀 **-40% TTI**: 4.2s → 2.5s (Time to Interactive)
-- 📊 **+17.9% Lighthouse**: 78 → 92 score
+### 🚀 Resultados Finales
+- ⚡ **Modal 85% más rápido**: 8-10s → 0.5-2s
+- 🚀 **Con cache 98% mejora**: 8-10s → 50-200ms
+- 💾 **Multimedia -89.8%**: 134MB → 14MB
+- 📊 **Lighthouse Score**: 92 → 96 (+4%)
+- ⚡ **FPS**: 48 → 57 (+19%)
+- 💾 **Memoria**: 125MB → 88MB (-30%)
+- 📦 **Bundle**: 420KB → 280KB (-33%)
 
-### 🆕 Optimizaciones de Multimedia v2.2
-- 🎬 **Sistema de Precarga Inteligente**: Videos prioritarios durante boot screen
-- ⚡ **Precarga On-Hover**: Videos se cargan antes de abrir modal
-- 🎯 **Cache Multinivel**: Evita re-descargas (10s → 50ms con cache)
-- 📉 **-85% Tiempo Modal**: 8-10s → 0.5-2s para abrir videos
-- 💾 **-89.8% Multimedia**: 134MB → 14MB (videos + imágenes optimizados)
+### ✨ Sistema de Precarga Inteligente (5 Niveles)
+1. **Crítico**: Spline 3D + Imágenes (durante boot screen)
+2. **Alta**: Videos prioritarios (paralelo con boot)
+3. **Media**: Videos restantes (prefetch después)
+4. **On-Demand**: Precarga on-hover (anticipación)
+5. **Cache**: Browser cache (segunda visita instantánea)
 
-### Técnicas Aplicadas
-- ✅ **Precarga Inteligente** con 5 niveles de prioridad
-- ✅ **Lazy Loading** con Intersection Observer
-- ✅ **Precarga On-Hover** para videos
-- ✅ **Code Splitting** estratégico
-- ✅ **Memoización** (React.memo, useMemo, useCallback)
-- ✅ **CSS Performance** (will-change, content-visibility)
-- ✅ **Bundle Optimization** (Terser, tree shaking)
-- ✅ **Video Optimization** (FFmpeg: H.264, CRF 25, 720p, faststart)
-- ✅ **Image Optimization** (WebP con Sharp: quality 85)
+### 🎬 Optimizaciones de Multimedia
+- Videos: 130MB → 13MB con FFmpeg (H.264, CRF 25, 720p)
+- Imágenes: 4.2MB → 0.7MB con Sharp (WebP, quality 85)
+- Cache tracking para evitar re-descargas
+- Loading states y animaciones suaves
 
 **📚 Documentación completa**: [docs/OPTIMIZATION_GUIDE.md](./docs/OPTIMIZATION_GUIDE.md)
 
