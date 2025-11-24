@@ -269,7 +269,7 @@ section {
   width: 100%;
   height: 100%;
   transform: translate(-50%, -50%);
-  animation: rotate-ring 20s linear infinite;
+  animation: rotate-ring 20s linear infinite, hud-blink 3s ease-in-out infinite;
   border-top-color: rgba(99, 102, 241, 0.6);
 }
 
@@ -277,7 +277,7 @@ section {
   width: 85%;
   height: 85%;
   transform: translate(-50%, -50%);
-  animation: rotate-ring 15s linear infinite reverse;
+  animation: rotate-ring 15s linear infinite reverse, hud-blink 3s ease-in-out infinite 0.5s;
   border-right-color: rgba(168, 85, 247, 0.6);
 }
 
@@ -285,7 +285,7 @@ section {
   width: 70%;
   height: 70%;
   transform: translate(-50%, -50%);
-  animation: rotate-ring 10s linear infinite;
+  animation: rotate-ring 10s linear infinite, hud-blink 3s ease-in-out infinite 1s;
   border-left-color: rgba(236, 72, 153, 0.6);
 }
 
@@ -326,7 +326,7 @@ section {
   transform: translate(-50%, -50%);
   border-radius: 50%;
   background: radial-gradient(circle, rgba(99, 102, 241, 0.4) 0%, rgba(168, 85, 247, 0.2) 50%, rgba(236, 72, 153, 0.1) 100%);
-  animation: orb-pulse 3s ease-in-out infinite;
+  animation: orb-pulse 3s ease-in-out infinite, hud-blink 2.5s ease-in-out infinite;
   box-shadow: 0 0 60px rgba(99, 102, 241, 0.8), inset 0 0 30px rgba(168, 85, 247, 0.5);
 }
 
@@ -340,7 +340,7 @@ section {
   border-radius: 50%;
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.8), rgba(168, 85, 247, 0.6), rgba(236, 72, 153, 0.4));
   box-shadow: 0 0 40px rgba(99, 102, 241, 1), inset 0 0 20px rgba(168, 85, 247, 0.8);
-  animation: orb-pulse 2s ease-in-out infinite;
+  animation: orb-pulse 2s ease-in-out infinite, hud-blink 2.5s ease-in-out infinite 0.3s;
 }
 
 @keyframes orb-pulse {
@@ -351,6 +351,16 @@ section {
   50% { 
     transform: translate(-50%, -50%) scale(1.1);
     opacity: 0.8;
+  }
+}
+
+/* Animación de parpadeo para orbe, anillos y texto */
+@keyframes hud-blink {
+  0%, 49%, 51%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
   }
 }
 
@@ -371,6 +381,7 @@ section {
   text-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
   white-space: nowrap;
   filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.8)) drop-shadow(0 0 20px rgba(168, 85, 247, 0.5));
+  animation: hud-blink 2.8s ease-in-out infinite;
 }
 
 .hud-cursor {

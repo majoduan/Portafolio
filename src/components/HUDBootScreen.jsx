@@ -172,7 +172,8 @@ const HUDBootScreen = React.memo(({ onComplete }) => {
     const colors = ['rgba(99, 102, 241, ', 'rgba(168, 85, 247, ', 'rgba(236, 72, 153, '];
 
     const animate = () => {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      // Usar negro completamente opaco para evitar acumulación de brillo morado
+      ctx.fillStyle = '#0b0125ff';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       const particles = particlesRef.current;
