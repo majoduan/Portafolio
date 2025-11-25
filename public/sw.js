@@ -1,0 +1,174 @@
+// Service Worker para Portfolio - Cache Strategy
+// Version 1.0.0
+
+const CACHE_NAME = 'mateo-portfolio-v1';
+const RUNTIME_CACHE = 'runtime-cache-v1';
+
+// Assets críticos para cachear inmediatamente
+const PRECACHE_ASSETS = [
+  '/',
+  '/index.html',
+  '/images/foto-perfil.webp',
+  '/images/certificates/cisco-networking.webp',
+  '/images/certificates/digital-transformation.webp',
+  '/images/certificates/epn-award.webp',
+  '/images/certificates/scrum-foundation.webp'
+];
+
+// Instalar Service Worker y pre-cachear assets críticos
+self.addEventListener('install', (event) => {
+  console.log('[SW] Installing Service Worker...');
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      console.log('[SW] Pre-caching critical assets');
+      return cache.addAll(PRECACHE_ASSETS);
+    })
+  );
+  // Activar inmediatamente sin esperar
+  self.skipWaiting();
+});
+
+// Activar Service Worker y limpiar caches antiguos
+self.addEventListener('activate', (event) => {
+  console.log('[SW] Activating Service Worker...');
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames
+          .filter((name) => name !== CACHE_NAME && name !== RUNTIME_CACHE)
+          .map((name) => {
+            console.log('[SW] Deleting old cache:', name);
+            return caches.delete(name);
+          })
+      );
+    })
+  );
+  // Tomar control inmediatamente
+  return self.clients.claim();
+});
+
+// Estrategia de cache: Network First para HTML, Cache First para assets
+self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  const url = new URL(request.url);
+
+  // Ignorar requests no-GET y externos (excepto Spline)
+  if (request.method !== 'GET' || 
+      (!url.origin.includes(self.location.origin) && !url.origin.includes('spline.design'))) {
+    return;
+  }
+
+  // Estrategia según tipo de recurso
+  if (request.destination === 'document') {
+    // HTML: Network First (siempre intentar red primero)
+    event.respondWith(networkFirst(request));
+  } else if (request.url.includes('/videos/')) {
+    // Videos: Cache First (prioritario para performance)
+    event.respondWith(cacheFirstWithExpiry(request, 7 * 24 * 60 * 60 * 1000)); // 7 días
+  } else if (request.url.includes('/images/')) {
+    // Imágenes: Cache First
+    event.respondWith(cacheFirstWithExpiry(request, 30 * 24 * 60 * 60 * 1000)); // 30 días
+  } else if (request.url.includes('.js') || request.url.includes('.css')) {
+    // JS/CSS: Stale While Revalidate
+    event.respondWith(staleWhileRevalidate(request));
+  } else {
+    // Otros: Network First con fallback a cache
+    event.respondWith(networkFirst(request));
+  }
+});
+
+// Network First: Intentar red primero, fallback a cache
+async function networkFirst(request) {
+  try {
+    const networkResponse = await fetch(request);
+    if (networkResponse.ok) {
+      const cache = await caches.open(RUNTIME_CACHE);
+      cache.put(request, networkResponse.clone());
+    }
+    return networkResponse;
+  } catch (error) {
+    const cachedResponse = await caches.match(request);
+    if (cachedResponse) {
+      console.log('[SW] Serving from cache (offline):', request.url);
+      return cachedResponse;
+    }
+    // Fallback para HTML
+    if (request.destination === 'document') {
+      return new Response(
+        '<html><body><h1>Sin conexión</h1><p>Por favor, verifica tu conexión a internet.</p></body></html>',
+        { headers: { 'Content-Type': 'text/html' } }
+      );
+    }
+    throw error;
+  }
+}
+
+// Cache First con expiración: Servir de cache, actualizar en background
+async function cacheFirstWithExpiry(request, maxAge) {
+  const cache = await caches.open(RUNTIME_CACHE);
+  const cachedResponse = await cache.match(request);
+
+  // Si está en cache y no ha expirado, servir de cache
+  if (cachedResponse) {
+    const cachedDate = new Date(cachedResponse.headers.get('date'));
+    const now = new Date();
+    const age = now - cachedDate;
+
+    if (age < maxAge) {
+      console.log('[SW] Serving from cache:', request.url);
+      // Actualizar en background
+      fetch(request).then((networkResponse) => {
+        if (networkResponse.ok) {
+          cache.put(request, networkResponse.clone());
+        }
+      }).catch(() => {});
+      return cachedResponse;
+    }
+  }
+
+  // No está en cache o expiró, intentar red
+  try {
+    const networkResponse = await fetch(request);
+    if (networkResponse.ok) {
+      cache.put(request, networkResponse.clone());
+    }
+    return networkResponse;
+  } catch (error) {
+    // Si falla la red, servir cache aunque haya expirado
+    if (cachedResponse) {
+      console.log('[SW] Network failed, serving stale cache:', request.url);
+      return cachedResponse;
+    }
+    throw error;
+  }
+}
+
+// Stale While Revalidate: Servir cache inmediatamente, actualizar en background
+async function staleWhileRevalidate(request) {
+  const cache = await caches.open(RUNTIME_CACHE);
+  const cachedResponse = await cache.match(request);
+
+  const networkPromise = fetch(request).then((networkResponse) => {
+    if (networkResponse.ok) {
+      cache.put(request, networkResponse.clone());
+    }
+    return networkResponse;
+  }).catch(() => cachedResponse);
+
+  return cachedResponse || networkPromise;
+}
+
+// Mensaje desde la aplicación
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+  
+  if (event.data && event.data.type === 'CLEAR_CACHE') {
+    event.waitUntil(
+      caches.keys().then((cacheNames) => {
+        return Promise.all(cacheNames.map((name) => caches.delete(name)));
+      })
+    );
+  }
+});

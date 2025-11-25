@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useMemo, useCallback, lazy, Suspens
 import { Mail, Linkedin, Github, ExternalLink, Menu, X, Code } from 'lucide-react';
 import TechCard from './components/TechCard';
 import HUDBootScreen from './components/HUDBootScreen';
-import ContactForm from './components/ContactForm';
 import LanguageToggle from './components/LanguageToggle';
 import ThemeToggle from './components/ThemeToggle';
 import { getTechnologies } from './data/technologies';
@@ -12,6 +11,9 @@ import { AppContext } from './contexts/AppContext';
 
 // Lazy load Spline para mejorar el tiempo de carga inicial
 const Spline = lazy(() => import('@splinetool/react-spline'));
+
+// Lazy load ContactForm para reducir bundle inicial (-20 KB)
+const ContactForm = lazy(() => import('./components/ContactForm'));
 
 // Hook personalizado para Intersection Observer (lazy loading inteligente)
 const useIntersectionObserver = (ref, options = {}) => {
@@ -190,8 +192,8 @@ const Portfolio = () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // Reducir partículas de 30 a 20 para mejor rendimiento
-    const particleCount = 20;
+    // Adaptar partículas según tamaño de pantalla (optimización para móvil)
+    const particleCount = window.innerWidth < 768 ? 10 : 20;
     particles.current = Array.from({ length: particleCount }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
@@ -788,6 +790,8 @@ const Portfolio = () => {
                 <div className="relative h-64 overflow-hidden bg-gradient-to-br from-blue-900/30 to-purple-900/30">
                   <img
                     src={cert.image}
+                    srcSet={`${cert.image} 1x`}
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     alt={cert.title}
                     loading="lazy"
                     decoding="async"
@@ -860,6 +864,7 @@ const Portfolio = () => {
                       muted
                       playsInline
                       preload="none"
+                      poster={project.video.replace('.mp4', '-poster.jpg')}
                       className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-300"
                       onLoadedMetadata={(e) => {
                         e.target.muted = true;
@@ -947,6 +952,8 @@ const Portfolio = () => {
                   {/* Profile Image */}
                   <img 
                     src="/images/foto-perfil.webp?v=2" 
+                    srcSet="/images/foto-perfil.webp?v=2 1x"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     alt="Mateo Dueñas - Software Engineer"
                     className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                     loading="lazy"
@@ -1028,7 +1035,13 @@ const Portfolio = () => {
                 <p className="text-slate-400 dark:text-slate-400 text-slate-600 text-sm md:text-base mb-6 md:mb-8">
                   {t('contact.form.subtitle')}
                 </p>
-                <ContactForm />
+                <Suspense fallback={
+                  <div className="flex justify-center items-center h-64">
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                  </div>
+                }>
+                  <ContactForm />
+                </Suspense>
               </div>
             </div>
           </div>
@@ -1081,6 +1094,7 @@ const Portfolio = () => {
                     controls
                     autoPlay
                     preload="auto"
+                    poster={selectedProject.video.replace('.mp4', '-poster.jpg')}
                     className="w-full h-auto max-h-full relative z-10 rounded-2xl shadow-2xl"
                     onLoadedData={(e) => {
                       e.target.style.opacity = '1';

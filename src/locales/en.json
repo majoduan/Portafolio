@@ -281,12 +281,12 @@
       "subtitle": "Fill out the form below and I'll get back to you as soon as possible.",
       "name": {
         "label": "Full Name",
-        "placeholder": "John Doe",
+        "placeholder": "Your name",
         "error": "Name is required"
       },
       "email": {
         "label": "Email Address",
-        "placeholder": "john@example.com",
+        "placeholder": "example@gmail.com",
         "error": "Valid email is required"
       },
       "subject": {

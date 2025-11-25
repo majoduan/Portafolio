@@ -1,5 +1,13 @@
-# CV Folder
+# 📄 CV Folder
 
-Please upload your CV file here with the name: **Mateo_Dueñas_CV.pdf**
+Este directorio contiene el CV en formato PDF.
 
-This file will be available for download from your portfolio website.
+**Archivo requerido**: `Mateo_Dueñas_CV.pdf`
+
+## 📋 Formato
+- **Formato**: PDF
+- **Tamaño recomendado**: < 2 MB
+- **Nombre del archivo**: Exactamente `Mateo_Dueñas_CV.pdf`
+
+## 🔗 Documentación
+Para más información sobre la estructura del proyecto, consulta [docs/README.md](../../docs/README.md)

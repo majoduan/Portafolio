@@ -1,22 +1,39 @@
-# 🏆 Imágenes de Certificados
+# 🏆 Certificados
 
-Coloca aquí las imágenes de tus certificados y reconocimientos.
+Directorio para imágenes de certificados y reconocimientos.
 
-## Archivos necesarios:
+## 📁 Estructura
+```
+certificates/
+├── webp/               # Imágenes optimizadas (usar estas)
+│   ├── epn-award.webp
+│   ├── cisco-networking.webp
+│   ├── digital-transformation.webp
+│   └── scrum-foundation.webp
+└── original/           # Originales JPG (backup)
+```
 
-1. **epn-award.jpg** - EPN Academic Excellence Award
-2. **cisco-networking.jpg** - Cisco Networking Basics
-3. **digital-transformation.jpg** - Instituto Europeo de Posgrado - Digital Transformation
-4. **scrum-foundation.jpg** - Certiprof SCRUM Foundation (SFPC™)
+## ✨ Imágenes Actuales
+1. **epn-award.webp** - EPN Academic Excellence Award (147 KB)
+2. **cisco-networking.webp** - Cisco Networking Basics (223 KB)
+3. **digital-transformation.webp** - Instituto Europeo de Posgrado (125 KB)
+4. **scrum-foundation.webp** - Certiprof SCRUM Foundation (200 KB)
 
-## Recomendaciones:
+**Total**: 695 KB (optimizado desde 4.16 MB, -83.3% de reducción)
 
-- **Formato:** JPG o PNG
-- **Resolución:** Mínimo 800x600 píxeles
-- **Tamaño:** Máximo 5MB por imagen
-- **Orientación:** Preferiblemente horizontal (landscape)
-- **Calidad:** Alta resolución para que se vea nítida
+## 📋 Especificaciones
+- **Formato**: WebP (mejor compresión y calidad)
+- **Quality**: 85
+- **Resolución**: Variable según certificado original
+- **Orientación**: Landscape preferido
 
-## Nota:
-Los nombres de los archivos deben coincidir exactamente con los especificados arriba.
-Si no tienes algún certificado en imagen, puedes dejarlo sin imagen y solo se mostrará el ícono emoji.
+## 🔧 Optimización
+Para agregar nuevos certificados:
+1. Colocar JPG/PNG original en este directorio
+2. Ejecutar: `node scripts/optimize-images.mjs`
+3. Actualizar rutas en `src/data/projectTranslations.js`
+
+## 🔗 Documentación
+Consulta la guía completa de optimización:
+- [docs/OPTIMIZATION_GUIDE.md](../../../docs/OPTIMIZATION_GUIDE.md#-optimización-de-imágenes)
+- [scripts/README.md](../../../scripts/README.md)

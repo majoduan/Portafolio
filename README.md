@@ -35,7 +35,9 @@ Portfolio profesional interactivo construido con React, Vite, Tailwind CSS y Spl
 - Cache tracking para evitar re-descargas
 - Loading states y animaciones suaves
 
-**📚 Documentación completa**: [docs/OPTIMIZATION_GUIDE.md](./docs/OPTIMIZATION_GUIDE.md)
+**📚 Documentación completa**: 
+- [docs/GUIDE.md](./docs/GUIDE.md) - Guía completa con todas las optimizaciones
+- [docs/TECHNICAL_DECISIONS.md](./docs/TECHNICAL_DECISIONS.md) - Decisiones técnicas y análisis arquitectónico
 
 ## 🛠️ Stack Tecnológico
 
@@ -64,6 +66,16 @@ npm run build
 npm run preview
 ```
 
+## 📚 Documentación Completa
+
+La documentación del proyecto está organizada en el directorio `/docs`:
+
+- **[docs/README.md](./docs/README.md)** - Índice principal de documentación
+- **[docs/GUIDE.md](./docs/GUIDE.md)** - Guía completa de desarrollo y optimizaciones
+- **[docs/TECHNICAL_DECISIONS.md](./docs/TECHNICAL_DECISIONS.md)** - Decisiones arquitectónicas y análisis técnico
+- **[docs/I18N_IMPLEMENTATION.md](./docs/I18N_IMPLEMENTATION.md)** - Sistema de internacionalización
+- **[scripts/README.md](./scripts/README.md)** - Documentación de scripts de optimización
+
 ## 🧪 Testing y Validación
 
 ### Quick Performance Test
@@ -85,7 +97,7 @@ npm run preview
 2. Run audit
 3. Target: Score >90
 
-**Detalles completos**: [PERFORMANCE.md](./PERFORMANCE.md)
+**Guía detallada**: [docs/GUIDE.md](./docs/GUIDE.md#-testing-y-validación)
 
 ## 📊 Estructura del Proyecto
 
@@ -140,7 +152,7 @@ Optimizaciones incluidas:
 | **FCP** | 1.4s | ✅ Excelente |
 | **Lighthouse** | 92 | ✅ Excelente |
 
-Ver análisis detallado: [PERFORMANCE.md](./PERFORMANCE.md)
+Ver análisis detallado: [docs/TECHNICAL_DECISIONS.md](./docs/TECHNICAL_DECISIONS.md)
 
 ## 🤝 Contribuir
 

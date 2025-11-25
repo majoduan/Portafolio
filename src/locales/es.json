@@ -281,12 +281,12 @@
       "subtitle": "Completa el formulario a continuación y te responderé lo antes posible.",
       "name": {
         "label": "Nombre Completo",
-        "placeholder": "Juan Pérez",
+        "placeholder": "Tu nombre",
         "error": "El nombre es requerido"
       },
       "email": {
         "label": "Correo Electrónico",
-        "placeholder": "juan@ejemplo.com",
+        "placeholder": "ejemplo@gmail.com",
         "error": "Se requiere un correo válido"
       },
       "subject": {

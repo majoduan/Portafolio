@@ -69,7 +69,7 @@ const TypingQuotes = memo(() => {
         
         {/* Quote text with typewriter effect */}
         <div className="w-full pl-4">
-          <p className="text-slate-700 dark:text-slate-300 text-sm italic leading-relaxed" style={{ willChange: 'contents' }}>
+          <p className="text-sm italic leading-relaxed font-semibold" style={{ willChange: 'contents', color: 'var(--quote-text-color)' }}>
             "{displayedText}"
             <span className="inline-block w-0.5 h-4 bg-blue-400 ml-1 animate-pulse"></span>
           </p>

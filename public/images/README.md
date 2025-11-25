@@ -1,10 +1,17 @@
-# Placeholder para Video
+# 🖼️ Imágenes del Proyecto
 
-Esta carpeta es para imágenes generales del proyecto.
+Directorio para imágenes generales y foto de perfil.
 
-Puedes colocar aquí un archivo llamado **video-placeholder.jpg** que se usará como imagen de vista previa antes de que el video cargue.
+## 📁 Archivos
+- `foto-perfil.webp` - Foto de perfil para la sección de contacto
+- Placeholder para videos (opcional)
 
-Recomendaciones:
-- **Tamaño:** 1920x1080 píxeles
-- **Formato:** JPG
-- **Contenido:** Logo del portfolio o una imagen genérica de tecnología
+## 📋 Recomendaciones
+- **Formato**: WebP (mejor compresión)
+- **Tamaño**: Máximo 500 KB por imagen
+- **Resolución**: Según uso (perfil: 600x600, placeholders: 1920x1080)
+
+## 🔗 Documentación
+Para optimización de imágenes, consulta:
+- [docs/OPTIMIZATION_GUIDE.md](../../docs/OPTIMIZATION_GUIDE.md)
+- [scripts/README.md](../../scripts/README.md)

@@ -10,6 +10,8 @@ export default defineConfig({
     }
   },
   build: {
+    // Copiar Service Worker a dist - Fase 2 optimization
+    copyPublicDir: true,
     // Optimización de chunks mejorada con mejor estrategia de splitting
     rollupOptions: {
       output: {
