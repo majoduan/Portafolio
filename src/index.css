@@ -7,13 +7,40 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Fondo negro permanente para evitar pantallazos blancos */
+/* Variables CSS para colores del tema */
+:root {
+  /* Modo oscuro (default) */
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --text-primary: #ffffff;
+  --text-secondary: #e2e8f0;
+  --text-tertiary: #cbd5e1;
+  --border-color: #334155;
+  --card-bg: rgba(30, 41, 59, 0.5);
+  --nav-bg: rgba(15, 23, 42, 0.8);
+}
+
+html:not(.dark) {
+  /* Modo claro */
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-tertiary: #64748b;
+  --border-color: #e2e8f0;
+  --card-bg: rgba(255, 255, 255, 0.9);
+  --nav-bg: rgba(255, 255, 255, 0.8);
+}
+
+/* Fondo con transición */
 html,
 body,
 #root {
-  background-color: #000000;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   margin: 0;
   padding: 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Configuración para Spline */
@@ -37,6 +64,31 @@ body,
     pointer-events: auto !important;
     cursor: crosshair !important;
   }
+}
+
+/* Canvas de partículas - mantener visible en ambos modos */
+canvas {
+  opacity: 1 !important;
+}
+
+/* En modo oscuro usar screen blend para brillo, en modo claro usar multiply para oscurecer */
+html.dark canvas {
+  mix-blend-mode: screen;
+}
+
+html:not(.dark) canvas {
+  mix-blend-mode: multiply;
+}
+
+/* Escena 3D - mantener sin cambios, forzar fondo transparente */
+html:not(.dark) .spline-container,
+html:not(.dark) .spline-container *,
+html:not(.dark) .spline-container canvas,
+html:not(.dark) .spline-container > div {
+  opacity: 1 !important;
+  filter: none !important;
+  background: transparent !important;
+  background-color: transparent !important;
 }
 
 /* Animación para el modal */
@@ -1033,4 +1085,173 @@ section {
 
 .contact-form button[type="submit"]:not(:hover) {
   will-change: auto;
+}
+
+/* ==================== PROJECT MODAL TWO-COLUMN LAYOUT ==================== */
+/* Layout: Video 2/3 (66.666%) | Info 1/3 (33.334%) */
+
+/* Modal container optimizations */
+.project-modal {
+  max-width: 1400px;
+  content-visibility: auto;
+  contain: layout style paint;
+}
+
+/* Modal content grid - optimized for performance */
+.project-modal-content {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* Video column - fijo en desktop */
+.project-modal-video-column {
+  position: relative;
+  contain: layout style paint;
+}
+
+/* Optimización del video en el modal */
+.project-modal-video-column video {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+/* Info column - scrollable optimizado con altura fija */
+.project-modal-info-column {
+  position: relative;
+  contain: layout style;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+  max-height: calc(90vh - 80px);
+}
+
+/* Custom scrollbar para la columna de información */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(99, 102, 241, 0.5) rgba(15, 23, 42, 0.3);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.3);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.5);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.7);
+}
+
+/* Smooth scrolling en la columna de info */
+.project-modal-info-column {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Hardware acceleration para elementos del modal */
+.project-modal h4,
+.project-modal p,
+.project-modal span,
+.project-modal a {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* Optimización de hover en enlaces del modal */
+.project-modal-info-column a:hover {
+  will-change: transform, box-shadow;
+}
+
+.project-modal-info-column a:not(:hover) {
+  will-change: auto;
+}
+
+/* Responsive: Layout vertical en móviles y tablets */
+@media (max-width: 1023px) {
+  .project-modal {
+    max-width: 95vw;
+  }
+
+  .project-modal-content {
+    grid-template-columns: 1fr;
+    max-height: calc(90vh - 80px);
+  }
+
+  .project-modal-video-column {
+    height: auto;
+    min-height: 250px;
+    max-height: 40vh;
+    border-bottom: 1px solid rgba(99, 102, 241, 0.3);
+  }
+
+  .project-modal-info-column {
+    max-height: calc(50vh - 80px);
+  }
+}
+
+/* Tablets en portrait */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .project-modal-video-column {
+    max-height: 45vh;
+  }
+
+  .project-modal-info-column {
+    max-height: calc(45vh - 80px);
+  }
+}
+
+/* Desktop grande - ajustar tamaños */
+@media (min-width: 1400px) {
+  .project-modal {
+    max-width: 1600px;
+  }
+}
+
+/* Animación de entrada del modal mejorada */
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.project-modal {
+  animation: modalSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Optimización para reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .project-modal {
+    animation: none;
+  }
+
+  .project-modal-info-column {
+    scroll-behavior: auto;
+  }
+
+  .project-modal-info-column a:hover {
+    transform: none;
+    will-change: auto;
+  }
+}
+
+/* Contenido del modal - optimización de renderizado */
+.project-modal-info-column > div {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 100px;
 }

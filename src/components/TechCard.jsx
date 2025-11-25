@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import AnimatedCounter from './AnimatedCounter';
+import { useTranslation } from '../hooks/useTranslation';
 
 const TechCard = React.memo(({ tech, index, animationState, onMouseEnter, onMouseLeave }) => {
+  const { t } = useTranslation();
+  
   // Si está saliendo, comienza visible. Si está entrando, comienza invisible
   const [isVisible, setIsVisible] = useState(animationState === 'exiting');
   
@@ -52,7 +55,7 @@ const TechCard = React.memo(({ tech, index, animationState, onMouseEnter, onMous
 
   return (
     <div
-      className={`tech-card group bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 hover:border-purple-500/30 transition-all duration-1000 rounded-lg shadow-sm hover:shadow-xl backdrop-blur-sm ${
+      className={`tech-card group bg-white/80 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 hover:border-purple-400/50 dark:hover:border-purple-500/40 transition-all duration-1000 rounded-lg shadow-md dark:shadow-lg hover:shadow-xl backdrop-blur-sm ${
         isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
       }`}
       style={{
@@ -78,19 +81,19 @@ const TechCard = React.memo(({ tech, index, animationState, onMouseEnter, onMous
           </div>
 
           <div className="flex-1">
-            <h4 className="text-lg font-bold text-white group-hover:text-purple-300 transition-colors">
+            <h4 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
               {tech.name}
             </h4>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-slate-600 dark:text-gray-400 transition-colors">
               {tech.description}
             </p>
           </div>
 
           <div className="text-right">
-            <div className="text-2xl font-bold text-purple-400">
+            <div className="text-2xl font-bold text-purple-400 dark:text-purple-400 text-purple-600 transition-colors">
               {shouldAnimate ? <AnimatedCounter value={tech.level} isTransitioning={false} /> : tech.level}%
             </div>
-            <div className="text-xs text-gray-500">
+            <div className="text-xs text-slate-400 dark:text-gray-500 text-gray-600 transition-colors">
               {tech.experience}
             </div>
           </div>
@@ -98,12 +101,12 @@ const TechCard = React.memo(({ tech, index, animationState, onMouseEnter, onMous
 
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
-            <span className="text-gray-300">Nivel de dominio</span>
-            <span className="text-purple-300 font-medium">
+            <span className="text-slate-900 dark:text-gray-300 transition-colors">{t('techCard.masteryLevel')}</span>
+            <span className="text-purple-400 dark:text-purple-300 text-purple-600 font-medium transition-colors">
               {shouldAnimate ? <AnimatedCounter value={tech.level} isTransitioning={false} /> : tech.level}%
             </span>
           </div>
-          <div className="w-full bg-slate-700 rounded-full h-2.5 overflow-hidden">
+          <div className="w-full bg-slate-700 dark:bg-slate-700 bg-slate-300 rounded-full h-2.5 overflow-hidden transition-colors">
             <div
               className={`h-full bg-gradient-to-r ${tech.color} rounded-full relative ${shouldAnimate ? 'progress-bar-animate' : ''}`}
               style={{
@@ -117,7 +120,7 @@ const TechCard = React.memo(({ tech, index, animationState, onMouseEnter, onMous
 
         <div className="mt-4 flex justify-between items-center">
           <span className={`px-3 py-1 bg-gradient-to-r ${tech.color} bg-opacity-20 text-xs font-medium rounded-full border border-purple-400/20`}>
-            Experiencia: {tech.experience}
+            {t('techCard.experience')}: {tech.experience}
           </span>
           <div className="flex gap-1">
             {[...Array(5)].map((_, i) => (

@@ -1,0 +1,314 @@
+{
+  "nav": {
+    "home": "Home",
+    "technologies": "Technologies",
+    "certificates": "Certificates",
+    "projects": "Projects",
+    "contact": "Contact"
+  },
+  "hero": {
+    "name": "Mateo Dueñas",
+    "title": "Software Engineer | Full-Stack Developer",
+    "description": "Software Engineering student at Escuela Politécnica Nacional with hands-on experience in full-stack development, database management, and data analysis. Building secure, scalable systems with modern technologies.",
+    "downloadCV": "Download my CV",
+    "stats": {
+      "experience": "years of experience",
+      "projects": "projects",
+      "technologies": "technologies"
+    }
+  },
+  "technologies": {
+    "title": "Technologies and Tools",
+    "categories": {
+      "backend": {
+        "title": "Backend Development",
+        "short": "Backend"
+      },
+      "frontend": {
+        "title": "Frontend Development",
+        "short": "Frontend"
+      },
+      "databases": {
+        "title": "Databases",
+        "short": "Databases"
+      },
+      "devops": {
+        "title": "DevOps & Tools",
+        "short": "DevOps"
+      }
+    },
+    "skills": {
+      "java": {
+        "name": "Java",
+        "description": "Robust backend development"
+      },
+      "python": {
+        "name": "Python",
+        "description": "Scripting and data analysis"
+      },
+      "csharp": {
+        "name": "C#",
+        "description": ".NET development"
+      },
+      "cplusplus": {
+        "name": "C++",
+        "description": "Systems programming"
+      },
+      "dotnet": {
+        "name": ".NET",
+        "description": "Enterprise framework"
+      },
+      "nodejs": {
+        "name": "Node.js",
+        "description": "JavaScript backend"
+      },
+      "express": {
+        "name": "Express",
+        "description": "Minimalist framework"
+      },
+      "nestjs": {
+        "name": "NestJS",
+        "description": "Scalable framework"
+      },
+      "fastapi": {
+        "name": "FastAPI",
+        "description": "Modern Python APIs"
+      },
+      "react": {
+        "name": "React",
+        "description": "UI component library"
+      },
+      "vue": {
+        "name": "Vue.js",
+        "description": "Progressive framework"
+      },
+      "javascript": {
+        "name": "JavaScript",
+        "description": "Dynamic web development"
+      },
+      "typescript": {
+        "name": "TypeScript",
+        "description": "Typed JavaScript"
+      },
+      "html5": {
+        "name": "HTML5",
+        "description": "Modern web structure"
+      },
+      "css3": {
+        "name": "CSS3",
+        "description": "Styles and animations"
+      },
+      "tailwind": {
+        "name": "Tailwind",
+        "description": "Utility-first CSS framework"
+      },
+      "postgresql": {
+        "name": "PostgreSQL",
+        "description": "Relational database"
+      },
+      "mysql": {
+        "name": "MySQL",
+        "description": "Relational database"
+      },
+      "sqlserver": {
+        "name": "SQL Server",
+        "description": "Enterprise database"
+      },
+      "mongodb": {
+        "name": "MongoDB",
+        "description": "NoSQL database"
+      },
+      "oracle": {
+        "name": "Oracle",
+        "description": "Enterprise database"
+      },
+      "sqlite": {
+        "name": "SQLite",
+        "description": "Embedded database"
+      },
+      "firebird": {
+        "name": "Firebird",
+        "description": "SQL database"
+      },
+      "docker": {
+        "name": "Docker",
+        "description": "Containerization"
+      },
+      "git": {
+        "name": "Git",
+        "description": "Version control"
+      },
+      "redhat": {
+        "name": "Red Hat",
+        "description": "Enterprise Linux"
+      },
+      "vercel": {
+        "name": "Vercel",
+        "description": "Cloud-based platform"
+      },
+      "figma": {
+        "name": "Figma",
+        "description": "Interface design"
+      },
+      "aws": {
+        "name": "AWS",
+        "description": "Cloud services"
+      },
+      "godot": {
+        "name": "Godot",
+        "description": "Game engine"
+      },
+      "unity": {
+        "name": "Unity",
+        "description": "Game development"
+      }
+    }
+  },
+  "certificates": {
+    "title": "Certificates & Recognition",
+    "items": {
+      "epn": {
+        "title": "EPN Academic Excellence Award",
+        "org": "Escuela Politécnica Nacional"
+      },
+      "cisco": {
+        "title": "Networking Basics",
+        "org": "Cisco Networking Academy"
+      },
+      "digital": {
+        "title": "Digital Transformation",
+        "org": "Instituto Europeo de Posgrado"
+      },
+      "scrum": {
+        "title": "SCRUM Foundation",
+        "org": "Certiprof - SFPC™"
+      }
+    }
+  },
+  "projects": {
+    "title": "Featured Projects",
+    "viewDemo": "View Full Demo",
+    "modalTitle": "About the Project",
+    "techUsed": "Technologies Used",
+    "projectLinks": "Project Links",
+    "loading": "Loading video...",
+    "items": {
+      "poa": {
+        "title": "POA Management System",
+        "description": "Comprehensive platform for planning and budget management with RBAC model",
+        "longDescription": "A full-stack enterprise application designed for institutional planning and budget management. The system implements a robust Role-Based Access Control (RBAC) model with multiple user hierarchies. Built with modern security practices including JWT authentication, password hashing with bcrypt, and SQL injection prevention. Features include real-time budget tracking, collaborative planning tools, comprehensive reporting dashboards, and audit logging for compliance. The frontend uses React with TypeScript for type safety, while the backend leverages FastAPI's async capabilities for optimal performance. PostgreSQL handles complex relational data, and Docker ensures consistent deployment across environments.",
+        "links": {
+          "frontend": "frontend",
+          "backend": "backend",
+          "demo": "demo"
+        }
+      },
+      "certificates": {
+        "title": "EPN Certificates Automation",
+        "description": "Python tool for automated certificate generation with web scraping and data processing",
+        "longDescription": "An intelligent automation tool developed to streamline the certificate generation process for educational institutions. The system uses Selenium for web scraping to extract student data, Pandas for efficient data processing and validation, and automated template filling for certificate generation. Features include batch processing of hundreds of certificates, data validation and error handling, duplicate detection, and export to multiple formats (PDF, Excel). The Jupyter notebook environment provides an interactive interface for monitoring the process and debugging. This tool reduced certificate generation time from 3 hours to 15 minutes, significantly improving administrative efficiency.",
+        "links": {
+          "github": "github"
+        }
+      },
+      "travel": {
+        "title": "Travel Allowance Calculator",
+        "description": "Budget estimation system with intelligent suggestions and export capabilities",
+        "longDescription": "A sophisticated budget planning application for business travel and institutional expenses. The system provides intelligent cost estimation based on destination, duration, and travel category, with real-time calculations and dynamic form validation. Features include multi-currency support, historical data tracking for better estimates, PDF export with detailed breakdown, and integration with institutional budget systems. The interface is designed for ease of use with step-by-step wizards, auto-save functionality, and responsive design for mobile approval workflows. Built with modern React practices including hooks and context API for state management.",
+        "links": {
+          "demo": "demo",
+          "github": "github"
+        }
+      },
+      "storycraft": {
+        "title": "StoryCraft Platform",
+        "description": "Collaborative storytelling with monolithic and microservices architectures",
+        "longDescription": "An innovative platform for collaborative creative writing that demonstrates both monolithic and microservices architectural patterns. Users can create, share, and co-author stories in real-time with version control and branching narratives. The platform implements WebSocket for real-time collaboration, NestJS microservices for scalability (auth service, story service, notification service), React with Redux for complex state management, and SQL Server for transactional data integrity. Features include character and plot management tools, AI-powered writing suggestions, publishing workflows, and community features like comments and ratings. The project showcases modern software architecture principles including API Gateway pattern, event-driven communication, and containerization with Docker Compose.",
+        "links": {
+          "github": "github"
+        }
+      },
+      "fitness": {
+        "title": "Fitness Tracker",
+        "description": "A web application built for managing workout routines and tracking fitness progress.",
+        "longDescription": "A comprehensive fitness management application built with ASP.NET Web Forms demonstrating enterprise-level architecture patterns. The application uses a strict N-Layer architecture separating Presentation, Business Logic, and Data Access layers for maintainability and testability. Features include personalized workout routine creation with exercise libraries, progress tracking with charts and statistics, calorie and nutrition logging, goal setting and achievement tracking, and social features for sharing progress. The backend implements stored procedures for data operations, Entity Framework for ORM, and includes proper exception handling and logging. Security features include input validation, SQL injection prevention, and session management.",
+        "links": {
+          "github": "github"
+        }
+      },
+      "spaceInvaders": {
+        "title": "Space Invaders",
+        "description": "Classic Space Invaders game.",
+        "longDescription": "A faithful recreation of the iconic Space Invaders arcade game using Python and Pygame, demonstrating game development fundamentals and object-oriented programming. The game features smooth 60 FPS gameplay, sprite-based graphics with custom assets, collision detection systems, progressive difficulty with increasing alien speed, power-up mechanics, high score persistence, and sound effects. Technical highlights include game state management, entity component system for game objects, optimized rendering with sprite groups, and input handling with configurable controls. The project showcases understanding of game loops, frame-independent movement, and classic arcade game design patterns.",
+        "links": {
+          "github": "github"
+        }
+      },
+      "godot2d": {
+        "title": "Godot Game 2D",
+        "description": "Game with traps, fruits that give points and a final trophy that congratulates the player.",
+        "longDescription": "A 2D platformer game developed in Godot Engine showcasing fundamental game mechanics and level design principles. The game features physics-based character movement with jump mechanics, collectible system with scoring, hazard and trap mechanics requiring timing and skill, checkpoint system for player progression, and particle effects for visual feedback. Built using Godot's node-based scene system, GDScript for game logic, tilemap system for level design, and animation state machines for character states. The project demonstrates understanding of 2D game physics, collision layers, signal system for event handling, and game feel through careful tuning of movement parameters.",
+        "links": {
+          "github": "github"
+        }
+      },
+      "godot3d": {
+        "title": "Godot Game 3D",
+        "description": "Game where you control a cube, climb a mountain and collect coins at the top.",
+        "longDescription": "An exploration of 3D game development using Godot Engine, featuring a challenging mountain climbing experience with physics-based movement. The game implements 3D character controller with camera follow system, terrain generation and environmental design, collectible system with 3D spatial awareness, lighting and shadow effects for atmosphere, and victory condition with reward feedback. Technical aspects include Godot's 3D physics engine, spatial nodes and transforms, camera positioning algorithms, mesh and material systems, and 3D collision detection. The project explores fundamental concepts of 3D game development including vector mathematics, quaternion rotations, and level design in three dimensions.",
+        "links": {
+          "github": "github"
+        }
+      }
+    }
+  },
+  "techCard": {
+    "masteryLevel": "Mastery level",
+    "experience": "Experience"
+  },
+  "contact": {
+    "title": "Let's Connect",
+    "subtitle": "Have a project in mind or want to collaborate? I'd love to hear from you!",
+    "profile": {
+      "name": "Mateo Dueñas",
+      "bio": "Software Engineer passionate about building scalable solutions. Open to new opportunities and collaborations.",
+      "emailLabel": "Email",
+      "linkedinLabel": "LinkedIn",
+      "githubLabel": "GitHub"
+    },
+    "form": {
+      "title": "Send me a message",
+      "subtitle": "Fill out the form below and I'll get back to you as soon as possible.",
+      "name": {
+        "label": "Full Name",
+        "placeholder": "John Doe",
+        "error": "Name is required"
+      },
+      "email": {
+        "label": "Email Address",
+        "placeholder": "john@example.com",
+        "error": "Valid email is required"
+      },
+      "subject": {
+        "label": "Subject",
+        "placeholder": "Project Collaboration",
+        "error": "Subject is required"
+      },
+      "message": {
+        "label": "Message",
+        "placeholder": "Tell me about your project or inquiry...",
+        "error": "Message is required"
+      },
+      "submit": "Send Message",
+      "submitting": "Sending...",
+      "helper": "This will open your email client with the message pre-filled"
+    }
+  },
+  "footer": {
+    "copyright": "© 2025 Mateo Dueñas. All rights reserved"
+  },
+  "theme": {
+    "dark": "Dark mode",
+    "light": "Light mode"
+  }
+}

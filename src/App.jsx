@@ -1,10 +1,14 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback, lazy, Suspense } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback, lazy, Suspense, useContext } from 'react';
 import { Mail, Linkedin, Github, ExternalLink, Menu, X, Code } from 'lucide-react';
 import TechCard from './components/TechCard';
 import HUDBootScreen from './components/HUDBootScreen';
 import ContactForm from './components/ContactForm';
-import { technologies } from './data/technologies';
-import { projects, certificates } from './data/projects';
+import LanguageToggle from './components/LanguageToggle';
+import ThemeToggle from './components/ThemeToggle';
+import { getTechnologies } from './data/technologies';
+import { getProjectsData, getCertificatesData } from './data/projectTranslations';
+import { useTranslation } from './hooks/useTranslation';
+import { AppContext } from './contexts/AppContext';
 
 // Lazy load Spline para mejorar el tiempo de carga inicial
 const Spline = lazy(() => import('@splinetool/react-spline'));
@@ -33,6 +37,9 @@ const useIntersectionObserver = (ref, options = {}) => {
 };
 
 const Portfolio = () => {
+  const { t } = useTranslation();
+  const { theme } = useContext(AppContext);
+  
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -55,6 +62,11 @@ const Portfolio = () => {
   
   // Estado para altura dinámica del contenedor de tecnologías
   const [containerHeight, setContainerHeight] = useState('auto');
+  
+  // Get translated data - memoized to prevent recreation on every render
+  const technologies = useMemo(() => getTechnologies(t), [t]);
+  const projects = useMemo(() => getProjectsData(t), [t]);
+  const certificates = useMemo(() => getCertificatesData(t), [t]);
 
   const canvasRef = useRef(null);
   const particles = useRef([]);
@@ -83,8 +95,8 @@ const Portfolio = () => {
     console.log(`[Preload] Video precargado: ${videoSrc}`);
   }, []);
 
-  // Texto completo para el efecto typewriter
-  const fullText = "Software Engineering student at Escuela Politécnica Nacional with hands-on experience in full-stack development, database management, and data analysis. Building secure, scalable systems with modern technologies.";
+  // Texto completo para el efecto typewriter - traducido
+  const fullText = useMemo(() => t('hero.description'), [t]);
 
   // Función para manejar el evento de carga de Spline - optimizada
   const onSplineLoad = useCallback((spline) => {
@@ -121,34 +133,37 @@ const Portfolio = () => {
     return () => clearTimeout(timer);
   }, [loading]);
 
-  // Technology categories with detailed skill data - memoizado
+  // Technology categories with detailed skill data - memoizado y traducido
   const techCategories = useMemo(() => [
     {
       id: "backend",
-      title: "Backend Development",
-      shortTitle: "Backend"
+      title: t('technologies.categories.backend.title'),
+      shortTitle: t('technologies.categories.backend.short')
     },
     {
       id: "frontend",
-      title: "Frontend Development",
-      shortTitle: "Frontend"
+      title: t('technologies.categories.frontend.title'),
+      shortTitle: t('technologies.categories.frontend.short')
     },
     {
       id: "databases",
-      title: "Databases",
-      shortTitle: "Databases"
+      title: t('technologies.categories.databases.title'),
+      shortTitle: t('technologies.categories.databases.short')
     },
     {
       id: "devops",
-      title: "DevOps & Tools",
-      shortTitle: "DevOps"
+      title: t('technologies.categories.devops.title'),
+      shortTitle: t('technologies.categories.devops.short')
     }
-  ], []);
+  ], [t]);
 
   // Typewriter effect for hero description
   useEffect(() => {
     if (loading) return;
 
+    // Reset text cuando cambia el idioma
+    setTypewriterText('');
+    
     let currentIndex = 0;
     const typingSpeed = 30; // Velocidad de escritura en ms
 
@@ -162,7 +177,7 @@ const Portfolio = () => {
     }, typingSpeed);
 
     return () => clearInterval(typeInterval);
-  }, [loading]);
+  }, [loading, fullText]);
 
   // Particle system optimizado - reducido a 30 partículas y optimizado el renderizado
   useEffect(() => {
@@ -198,7 +213,11 @@ const Portfolio = () => {
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
 
     const animate = () => {
-      ctx.fillStyle = 'rgba(15, 23, 42, 0.1)';
+      // Detectar tema actual para colores de partículas
+      const isDark = theme === 'dark';
+      
+      // Fondo del canvas según el tema
+      ctx.fillStyle = isDark ? 'rgba(15, 23, 42, 0.1)' : 'rgba(248, 250, 252, 0.1)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       const particlesArray = particles.current;
@@ -230,13 +249,15 @@ const Portfolio = () => {
         if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
         if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
 
-        // Draw particle
+        // Draw particle - colores según tema
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(99, 102, 241, ${particle.opacity})`;
+        ctx.fillStyle = isDark 
+          ? `rgba(99, 102, 241, ${particle.opacity})` 
+          : `rgba(51, 65, 85, ${particle.opacity * 0.8})`;
         ctx.fill();
 
-        // Conectar solo con partículas cercanas (optimizado)
+        // Conectar solo con partículas cercanas (optimizado) - colores según tema
         for (let j = i + 1; j < len; j++) {
           const other = particlesArray[j];
           const dx = particle.x - other.x;
@@ -247,7 +268,9 @@ const Portfolio = () => {
             ctx.beginPath();
             ctx.moveTo(particle.x, particle.y);
             ctx.lineTo(other.x, other.y);
-            ctx.strokeStyle = `rgba(99, 102, 241, ${0.1 * (1 - distance / 60)})`;
+            ctx.strokeStyle = isDark 
+              ? `rgba(99, 102, 241, ${0.1 * (1 - distance / 60)})` 
+              : `rgba(51, 65, 85, ${0.15 * (1 - distance / 60)})`;
             ctx.stroke();
           }
         }
@@ -272,7 +295,7 @@ const Portfolio = () => {
         cancelAnimationFrame(animationFrameId);
       }
     };
-  }, [loading]);
+  }, [loading, theme]);
 
   // Auto-rotate tech categories
   useEffect(() => {
@@ -467,51 +490,57 @@ const Portfolio = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white relative overflow-x-hidden portfolio-fade-in">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white relative overflow-x-hidden portfolio-fade-in transition-colors duration-300">
       {/* Interactive canvas background */}
       <canvas
         ref={canvasRef}
         className="fixed inset-0 pointer-events-none"
-        style={{ zIndex: 0 }}
+        style={{ zIndex: 1 }}
       />
 
       {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-slate-950/80 backdrop-blur-lg border-b border-slate-800 z-50">
+      <nav className="fixed top-0 w-full bg-slate-950/80 dark:bg-slate-950/80 bg-white/90 backdrop-blur-lg border-b border-slate-800 dark:border-slate-800 border-slate-200 z-50 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-end h-16">
+          <div className="flex items-center justify-between h-16">
             {/* Desktop menu - Centrado */}
-            <div className="hidden md:flex space-x-10">
-              {['Home', 'Technologies', 'Certificates', 'Projects', 'Contact'].map((item) => (
+            <div className="hidden md:flex space-x-10 flex-1 justify-center">
+              {['home', 'technologies', 'certificates', 'projects', 'contact'].map((item) => (
                 <a
                   key={item}
-                  href={`#${item.toLowerCase()}`}
+                  href={`#${item}`}
                   onClick={(e) => {
                     e.preventDefault();
-                    const element = document.getElementById(item.toLowerCase());
+                    const element = document.getElementById(item);
                     if (element) {
                       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
                   }}
                   className={`text-lg font-medium transition-all duration-300 relative group ${
-                    activeSection === item.toLowerCase()
-                      ? 'text-blue-400'
-                      : 'text-slate-300 hover:text-blue-400'
+                    activeSection === item
+                      ? 'text-blue-500 dark:text-blue-400'
+                      : 'text-slate-700 dark:text-slate-300 hover:text-blue-500 dark:hover:text-blue-400'
                   }`}
                 >
-                  {item}
+                  {t(`nav.${item}`)}
                   <span 
                     className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 transition-all duration-300 ${
-                      activeSection === item.toLowerCase() ? 'w-full' : 'w-0 group-hover:w-full'
+                      activeSection === item ? 'w-full' : 'w-0 group-hover:w-full'
                     }`} 
                   />
                 </a>
               ))}
             </div>
+            
+            {/* Language and Theme Toggles - Desktop */}
+            <div className="hidden md:flex items-center gap-3">
+              <LanguageToggle />
+              <ThemeToggle />
+            </div>
 
             {/* Mobile menu button */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="md:hidden absolute right-4 text-slate-300 hover:text-blue-400"
+              className="md:hidden text-slate-300 hover:text-blue-400"
             >
               {menuOpen ? <X /> : <Menu />}
             </button>
@@ -520,48 +549,53 @@ const Portfolio = () => {
 
         {/* Mobile menu */}
         {menuOpen && (
-          <div className="md:hidden bg-slate-900 border-t border-slate-800">
+          <div className="md:hidden bg-slate-900 dark:bg-slate-900 bg-white border-t border-slate-800 dark:border-slate-800 border-slate-200 transition-colors duration-300">
             <div className="px-2 pt-2 pb-3 space-y-1">
-              {['Home', 'Technologies', 'Certificates', 'Projects', 'Contact'].map((item) => (
+              {['home', 'technologies', 'certificates', 'projects', 'contact'].map((item) => (
                 <a
                   key={item}
-                  href={`#${item.toLowerCase()}`}
+                  href={`#${item}`}
                   onClick={(e) => {
                     e.preventDefault();
                     setMenuOpen(false);
-                    const element = document.getElementById(item.toLowerCase());
+                    const element = document.getElementById(item);
                     if (element) {
                       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
                   }}
                   className={`block px-3 py-2 rounded-md transition-colors ${
-                    activeSection === item.toLowerCase()
-                      ? 'text-blue-400 bg-slate-800'
-                      : 'text-slate-300 hover:text-blue-400 hover:bg-slate-800'
+                    activeSection === item
+                      ? 'text-blue-500 dark:text-blue-400 bg-slate-200 dark:bg-slate-800'
+                      : 'text-slate-700 dark:text-slate-300 hover:text-blue-500 dark:hover:text-blue-400 hover:bg-slate-200 dark:hover:bg-slate-800'
                   }`}
                 >
-                  {item}
+                  {t(`nav.${item}`)}
                 </a>
               ))}
+              {/* Language and Theme Toggles - Mobile */}
+              <div className="px-3 py-2 flex gap-3">
+                <LanguageToggle />
+                <ThemeToggle />
+              </div>
             </div>
           </div>
         )}
       </nav>
 
       {/* Hero Section */}
-      <section id="home" className="min-h-screen flex items-center justify-center relative pt-16">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-slate-950 to-purple-900/20" />
+      <section id="home" className="min-h-screen flex items-center justify-center relative pt-16 bg-transparent transition-colors duration-300 z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 dark:from-blue-900/20 via-transparent to-purple-900/10 dark:to-purple-900/20 transition-colors duration-300" />
         <div className="max-w-7xl mx-auto px-4 w-full relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Contenido de texto - Izquierda */}
             <div className="text-center lg:text-left">
               <h1 className="text-5xl md:text-7xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
-                Mateo Dueñas
+                {t('hero.name')}
               </h1>
-              <p className="text-2xl md:text-3xl text-slate-100 mb-6 font-medium">
-                Software Engineer | Full-Stack Developer
+              <p className="text-2xl md:text-3xl text-slate-200 dark:text-slate-100 text-slate-700 mb-6 font-medium transition-colors duration-300">
+                {t('hero.title')}
               </p>
-              <p className="text-lg md:text-xl text-slate-100 max-w-2xl mx-auto lg:mx-0 mb-8 leading-relaxed min-h-[120px] text-justify">
+              <p className="text-lg md:text-xl text-slate-200 dark:text-slate-100 text-slate-600 max-w-2xl mx-auto lg:mx-0 mb-8 leading-relaxed min-h-[120px] text-justify transition-colors duration-300">
                 {typewriterText}
                 <span className="animate-pulse">|</span>
               </p>
@@ -573,7 +607,7 @@ const Portfolio = () => {
                   download="Mateo_Dueñas_CV.pdf"
                   className="inline-block px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full font-semibold hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-105"
                 >
-                  Download my CV
+                  {t('hero.downloadCV')}
                 </a>
 
                 {/* Iconos sociales */}
@@ -604,17 +638,17 @@ const Portfolio = () => {
               </div>
 
               {/* Estadísticas */}
-              <div className="grid grid-cols-3 gap-6 pt-8 border-t border-white/10">
+              <div className="grid grid-cols-3 gap-6 pt-8 border-t border-white/10 dark:border-white/10 border-slate-300 transition-colors duration-300">
                 {[
-                  { value: '3+', label: 'years of experience' },
-                  { value: '15+', label: 'projects' },
-                  { value: '20+', label: 'technologies' }
+                  { value: '2+', label: t('hero.stats.experience') },
+                  { value: '15+', label: t('hero.stats.projects') },
+                  { value: '20+', label: t('hero.stats.technologies') }
                 ].map((stat, i) => (
                   <div key={i} className="text-center">
                     <div className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
                       {stat.value}
                     </div>
-                    <div className="text-sm text-slate-400 mt-1">
+                    <div className="text-sm text-slate-400 dark:text-slate-400 text-slate-600 mt-1 transition-colors duration-300">
                       {stat.label}
                     </div>
                   </div>
@@ -648,22 +682,22 @@ const Portfolio = () => {
       </section>
 
       {/* Technologies Section */}
-      <section id="technologies" className="pt-20 relative z-10">
+      <section id="technologies" className="pt-20 relative z-10 bg-transparent transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-            Technologies and Tools
+            {t('technologies.title')}
           </h2>
           {/* Tab Navigation Bar - Estilo Facebook */}
-          <div className="flex justify-center mb-12 border-b border-slate-700/50">
+          <div className="flex justify-center mb-12 border-b border-slate-700/50 dark:border-slate-700/50 border-slate-300 transition-colors duration-300">
             <div className="flex gap-1 sm:gap-2">
               {techCategories.map((category, index) => (
                 <button
                   key={category.id}
                   onClick={() => handleManualTabChange(index)}
-                  className={`px-3 sm:px-6 md:px-8 py-3 md:py-4 font-medium relative transition-all duration-1000 whitespace-nowrap text-xs sm:text-sm md:text-base ${
+                  className={`px-3 sm:px-6 md:px-8 py-3 md:py-4 font-medium relative transition-all duration-300 whitespace-nowrap text-xs sm:text-sm md:text-base ${
                     currentTechTab === index
-                      ? 'text-blue-400'
-                      : 'text-slate-400 hover:text-slate-300 hover:bg-slate-800/30'
+                      ? 'text-blue-500 dark:text-blue-400'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/30'
                   }`}
                 >
                   {/* Mostrar título corto en móvil, completo en desktop */}
@@ -722,19 +756,19 @@ const Portfolio = () => {
       </section>
 
       {/* Certificates Section */}
-      <section id="certificates" className="pt-20 bg-slate-900/30 relative z-10 overflow-hidden">
+      <section id="certificates" className="pt-20 bg-transparent relative z-10 overflow-hidden transition-colors duration-300">
         {/* Títulos centrados */}
         <div className="max-w-7xl mx-auto px-4 mb-12">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-            Certificates & Recognition
+            {t('certificates.title')}
           </h2>
         </div>
 
         {/* Carousel Container - Full Width */}
         <div className="relative w-full">
           {/* Gradient overlays for smooth edges */}
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-slate-900/90 to-transparent z-10 pointer-events-none"></div>
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-slate-900/90 to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-slate-50 dark:from-slate-950 to-transparent z-10 pointer-events-none transition-colors duration-300"></div>
+          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-slate-50 dark:from-slate-950 to-transparent z-10 pointer-events-none transition-colors duration-300"></div>
 
           {/* Scrollable container */}
           <div
@@ -748,7 +782,7 @@ const Portfolio = () => {
             {[...certificates, ...certificates, ...certificates].map((cert, i) => (
               <div
                 key={i}
-                className="flex-shrink-0 w-[420px] bg-gradient-to-br from-slate-900/80 to-slate-800/50 backdrop-blur-lg rounded-2xl overflow-hidden border border-slate-700/50 hover:border-blue-500/70 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/40 group cursor-pointer"
+                className="flex-shrink-0 w-[420px] bg-white/90 dark:bg-slate-900 backdrop-blur-lg rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50 hover:border-blue-400 dark:hover:border-blue-500/70 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-blue-500/40 group cursor-pointer"
               >
                 {/* Certificate Image */}
                 <div className="relative h-64 overflow-hidden bg-gradient-to-br from-blue-900/30 to-purple-900/30">
@@ -764,7 +798,7 @@ const Portfolio = () => {
                       e.target.parentElement.innerHTML = `<div class="w-full h-full flex items-center justify-center text-6xl">${cert.icon}</div>`;
                     }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-transparent to-transparent dark:from-slate-900 dark:via-slate-900/20 dark:to-transparent"></div>
 
                   {/* Shine effect on hover */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
@@ -774,10 +808,10 @@ const Portfolio = () => {
 
                 {/* Certificate Info */}
                 <div className="p-6">
-                  <h3 className="text-xl font-bold mb-3 text-white group-hover:text-blue-400 transition-colors leading-tight">
+                  <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-tight">
                     {cert.title}
                   </h3>
-                  <div className="flex items-start gap-2 text-slate-400">
+                  <div className="flex items-start gap-2 text-slate-600 dark:text-slate-400">
                     <div className="mt-1.5 flex-shrink-0">
                       <div className="w-2 h-2 bg-blue-400 rounded-full group-hover:animate-pulse"></div>
                     </div>
@@ -793,10 +827,10 @@ const Portfolio = () => {
       </section>
 
       {/* Projects Section */}
-      <section ref={projectsSectionRef} id="projects" className="py-20 relative z-10">
+      <section ref={projectsSectionRef} id="projects" className="py-20 relative z-10 bg-transparent transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 mb-12">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-            Featured Projects
+            {t('projects.title')}
           </h2>
         </div>
         <div className="max-w-6xl mx-auto px-4">
@@ -814,7 +848,7 @@ const Portfolio = () => {
                   preloadVideoOnHover(project.video);
                 }}
                 onMouseLeave={() => setHoveredProject(null)}
-                className="project-card bg-slate-900/50 backdrop-blur-lg rounded-3xl overflow-hidden border border-slate-800 hover:border-blue-500 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/30 cursor-pointer group"
+                className="project-card bg-white/90 dark:bg-slate-900/50 backdrop-blur-lg rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-blue-400 dark:hover:border-blue-500 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-blue-500/30 cursor-pointer group"
               >
                 <div className="bg-gradient-to-br from-blue-600 to-purple-600 h-48 flex items-center justify-center relative overflow-hidden">
                   {/* Video de fondo con carga diferida - solo cuando la sección es visible */}
@@ -842,26 +876,26 @@ const Portfolio = () => {
                   )}
 
                   {/* Overlay con gradiente */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-transparent to-transparent dark:from-slate-900/80 dark:via-transparent dark:to-transparent" />
 
                   {/* Icono de play al hacer hover */}
                   <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10">
                     <span className="text-white font-bold text-lg flex items-center gap-2">
                       <Code className="w-6 h-6" />
-                      Ver Demo Completo
+                      {t('projects.viewDemo')}
                     </span>
                   </div>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-2xl font-bold mb-3 text-white group-hover:text-blue-400 transition-colors">
+                  <h3 className="text-2xl font-bold mb-3 text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                     {project.title}
                   </h3>
-                  <p className="text-slate-300 mb-4">{project.description}</p>
+                  <p className="text-slate-300 dark:text-slate-300 text-slate-600 mb-4">{project.description}</p>
                   <div className="flex flex-wrap gap-2 mb-4">
                     {project.tech.map((tech, j) => (
                       <span
                         key={j}
-                        className="px-3 py-1 bg-slate-800 text-xs rounded-full text-blue-400"
+                        className="px-3 py-1 bg-blue-50 dark:bg-slate-800 text-xs rounded-full text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-transparent"
                       >
                         {tech}
                       </span>
@@ -875,7 +909,7 @@ const Portfolio = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
-                        className="flex items-center space-x-1 px-4 py-2 bg-slate-800 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500 rounded-full text-sm transition-all duration-300"
+                        className="flex items-center space-x-1 px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-white hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500 hover:text-white rounded-full text-sm transition-all duration-300 border border-slate-200 dark:border-transparent"
                       >
                         <span className="capitalize">{key}</span>
                         <ExternalLink className="w-4 h-4" />
@@ -890,15 +924,15 @@ const Portfolio = () => {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-12 md:py-16 lg:py-20 relative z-10">
+      <section id="contact" className="py-12 md:py-16 lg:py-20 relative z-10 bg-transparent transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4">
           {/* Section Title */}
           <div className="text-center mb-8 md:mb-12 lg:mb-16">
             <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              Let's Connect
+              {t('contact.title')}
             </h2>
-            <p className="text-slate-300 text-base md:text-lg lg:text-xl max-w-2xl mx-auto px-4">
-              Have a project in mind or want to collaborate? I'd love to hear from you!
+            <p className="text-slate-300 dark:text-slate-300 text-slate-600 text-base md:text-lg lg:text-xl max-w-2xl mx-auto px-4">
+              {t('contact.subtitle')}
             </p>
           </div>
 
@@ -907,18 +941,19 @@ const Portfolio = () => {
             {/* Left Column - Profile Image & Info */}
             <div className="contact-left-column">
               {/* Profile Image Card */}
-              <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/50 backdrop-blur-lg rounded-2xl md:rounded-3xl overflow-hidden border border-slate-700/50 hover:border-blue-500/70 transition-all duration-500 shadow-2xl group h-full flex flex-col">
+              <div className="bg-white/90 dark:bg-slate-900 backdrop-blur-lg rounded-2xl md:rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-700/50 hover:border-blue-400 dark:hover:border-blue-500/70 transition-all duration-500 shadow-lg dark:shadow-2xl group h-full flex flex-col">
                 {/* Image Container with Gradient Overlay */}
                 <div className="relative h-64 sm:h-80 md:h-96 lg:h-[400px] overflow-hidden bg-gradient-to-br from-blue-900/30 to-purple-900/30">
-                  {/* Placeholder - Replace with actual image */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    {/* SVG Placeholder - you can replace this with <img src="/images/profile.webp" /> */}
-                    <svg className="w-48 h-48 text-blue-400/20 group-hover:text-blue-400/40 transition-colors duration-500" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
-                    </svg>
-                  </div>
+                  {/* Profile Image */}
+                  <img 
+                    src="/images/foto-perfil.webp?v=2" 
+                    alt="Mateo Dueñas - Software Engineer"
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                    loading="lazy"
+                    decoding="async"
+                  />
                   {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-transparent to-transparent dark:from-slate-900 dark:via-slate-900/60 dark:to-transparent"></div>
                   
                   {/* Animated Shine Effect */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
@@ -929,25 +964,24 @@ const Portfolio = () => {
                 {/* Info Section */}
                 <div className="p-6 md:p-8 flex-1 flex flex-col">
                   <h3 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                    Mateo Dueñas
+                    {t('contact.profile.name')}
                   </h3>
-                  <p className="text-slate-300 mb-4 md:mb-6 text-base md:text-lg leading-relaxed flex-1">
-                    Software Engineer passionate about building scalable solutions. 
-                    Open to new opportunities and collaborations.
+                  <p className="text-slate-300 dark:text-slate-300 text-slate-600 mb-4 md:mb-6 text-base md:text-lg leading-relaxed flex-1">
+                    {t('contact.profile.bio')}
                   </p>
 
                   {/* Social Links */}
                   <div className="space-y-3 md:space-y-4">
                     <a
                       href="mailto:mate.due02@gmail.com"
-                      className="flex items-center gap-4 p-4 bg-slate-800/50 hover:bg-slate-800 rounded-xl transition-all duration-300 group/link border border-slate-700/50 hover:border-blue-500/50"
+                      className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all duration-300 group/link border border-slate-200 dark:border-slate-700/50 hover:border-blue-400 dark:hover:border-blue-500/50"
                     >
                       <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center group-hover/link:scale-110 transition-transform duration-300">
                         <Mail className="w-6 h-6 text-white" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-sm text-slate-400">Email</p>
-                        <p className="text-white font-medium">mate.due02@gmail.com</p>
+                        <p className="text-sm text-slate-400 dark:text-slate-400 text-slate-600">{t('contact.profile.emailLabel')}</p>
+                        <p className="text-white dark:text-white text-slate-900 font-medium">mate.due02@gmail.com</p>
                       </div>
                     </a>
 
@@ -955,14 +989,14 @@ const Portfolio = () => {
                       href="https://linkedin.com/in/mateo-dueñas-andrade"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-4 p-4 bg-slate-800/50 hover:bg-slate-800 rounded-xl transition-all duration-300 group/link border border-slate-700/50 hover:border-blue-500/50"
+                      className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all duration-300 group/link border border-slate-200 dark:border-slate-700/50 hover:border-blue-400 dark:hover:border-blue-500/50"
                     >
                       <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center group-hover/link:scale-110 transition-transform duration-300">
                         <Linkedin className="w-6 h-6 text-white" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-sm text-slate-400">LinkedIn</p>
-                        <p className="text-white font-medium">mateo-dueñas-andrade</p>
+                        <p className="text-sm text-slate-400 dark:text-slate-400 text-slate-600">{t('contact.profile.linkedinLabel')}</p>
+                        <p className="text-white dark:text-white text-slate-900 font-medium">mateo-dueñas-andrade</p>
                       </div>
                     </a>
 
@@ -970,14 +1004,14 @@ const Portfolio = () => {
                       href="https://github.com/majoduan"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-4 p-4 bg-slate-800/50 hover:bg-slate-800 rounded-xl transition-all duration-300 group/link border border-slate-700/50 hover:border-blue-500/50"
+                      className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all duration-300 group/link border border-slate-200 dark:border-slate-700/50 hover:border-blue-400 dark:hover:border-blue-500/50"
                     >
                       <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center group-hover/link:scale-110 transition-transform duration-300">
                         <Github className="w-6 h-6 text-white" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-sm text-slate-400">GitHub</p>
-                        <p className="text-white font-medium">majoduan</p>
+                        <p className="text-sm text-slate-400 dark:text-slate-400 text-slate-600">{t('contact.profile.githubLabel')}</p>
+                        <p className="text-white dark:text-white text-slate-900 font-medium">majoduan</p>
                       </div>
                     </a>
                   </div>
@@ -987,12 +1021,12 @@ const Portfolio = () => {
 
             {/* Right Column - Contact Form */}
             <div className="contact-right-column">
-              <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/50 backdrop-blur-lg rounded-2xl md:rounded-3xl p-6 md:p-8 lg:p-10 border border-slate-700/50 hover:border-purple-500/70 transition-all duration-500 shadow-2xl h-full">
-                <h3 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4 md:mb-6 text-white">
-                  Send me a message
+              <div className="bg-white/90 dark:bg-slate-900 backdrop-blur-lg rounded-2xl md:rounded-3xl p-6 md:p-8 lg:p-10 border border-slate-200 dark:border-slate-700/50 hover:border-purple-400 dark:hover:border-purple-500/70 transition-all duration-500 shadow-lg dark:shadow-2xl h-full">
+                <h3 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4 md:mb-6 text-white dark:text-white text-slate-900">
+                  {t('contact.form.title')}
                 </h3>
-                <p className="text-slate-400 text-sm md:text-base mb-6 md:mb-8">
-                  Fill out the form below and I'll get back to you as soon as possible.
+                <p className="text-slate-400 dark:text-slate-400 text-slate-600 text-sm md:text-base mb-6 md:mb-8">
+                  {t('contact.form.subtitle')}
                 </p>
                 <ContactForm />
               </div>
@@ -1002,95 +1036,127 @@ const Portfolio = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 border-t border-slate-800 text-center text-slate-400 relative z-10">
-        <p>© 2025 Mateo Dueñas. All rights reserved</p>
+      <footer className="py-8 border-t border-slate-800 dark:border-slate-800 border-slate-200 text-center text-slate-400 dark:text-slate-400 text-slate-600 relative z-10 transition-colors duration-300">
+        <p>{t('footer.copyright')}</p>
       </footer>
 
-      {/* Modal para videos de proyectos */}
+      {/* Modal para videos de proyectos - Layout de dos columnas */}
       {isModalOpen && selectedProject && (
         <div
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn"
+          className="fixed inset-0 bg-black/30 dark:bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn"
           onClick={() => setIsModalOpen(false)}
         >
           <div
-            className="bg-slate-900 rounded-3xl max-w-5xl w-full max-h-[90vh] overflow-auto border-2 border-blue-500/50 shadow-2xl shadow-blue-500/30"
+            className="project-modal bg-white dark:bg-slate-900 rounded-3xl w-full max-h-[90vh] overflow-hidden border-2 border-slate-200 dark:border-blue-500/50 shadow-2xl dark:shadow-blue-500/30"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Header del modal */}
-            <div className="sticky top-0 bg-slate-900/95 backdrop-blur-lg border-b border-slate-800 p-6 flex justify-between items-center z-10">
-              <div>
-                <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                  {selectedProject.title}
-                </h3>
-                <p className="text-slate-400 mt-1">{selectedProject.description}</p>
-              </div>
+            {/* Header del modal - Sticky con botón de cerrar */}
+            <div className="sticky top-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg border-b border-slate-200 dark:border-slate-800 px-6 py-4 flex justify-between items-center z-20">
+              <h3 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                {selectedProject.title}
+              </h3>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="text-slate-400 hover:text-white transition-colors p-2 hover:bg-slate-800 rounded-full"
+                className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full flex-shrink-0"
+                aria-label="Cerrar modal"
               >
                 <X className="w-6 h-6" />
               </button>
             </div>
 
-            {/* Video del proyecto */}
-            <div className="p-6">
-              <div className="relative bg-black rounded-2xl overflow-hidden mb-6">
-                {/* Indicador de carga mientras el video se carga */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-purple-600/20 flex items-center justify-center z-0">
-                  <div className="text-center">
-                    <div className="inline-block w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-3"></div>
-                    <p className="text-slate-400 text-sm">Cargando video...</p>
+            {/* Contenedor principal - Dos columnas en desktop, una en móvil */}
+            <div className="project-modal-content grid grid-cols-1 lg:grid-cols-[66.666%_33.334%] gap-0 h-[calc(90vh-80px)] overflow-hidden">
+              {/* Columna Izquierda - Video (2/3 del ancho, fijo en desktop) */}
+              <div className="project-modal-video-column bg-slate-50 dark:bg-black lg:h-full flex items-center justify-center p-4 lg:p-6 overflow-y-auto lg:overflow-hidden">
+                <div className="relative w-full h-full flex items-center justify-center">
+                  {/* Indicador de carga mientras el video se carga */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-purple-600/20 flex items-center justify-center z-0 rounded-2xl">
+                    <div className="text-center">
+                      <div className="inline-block w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-3"></div>
+                      <p className="text-slate-600 dark:text-slate-400 text-sm">{t('projects.loading')}</p>
+                    </div>
+                  </div>
+                  <video
+                    key={selectedProject.video}
+                    controls
+                    autoPlay
+                    preload="auto"
+                    className="w-full h-auto max-h-full relative z-10 rounded-2xl shadow-2xl"
+                    onLoadedData={(e) => {
+                      e.target.style.opacity = '1';
+                    }}
+                    style={{ opacity: 0, transition: 'opacity 0.3s ease-in-out' }}
+                  >
+                    <source src={selectedProject.video} type="video/mp4" />
+                    Tu navegador no soporta el elemento de video.
+                  </video>
+                </div>
+              </div>
+
+              {/* Columna Derecha - Información (1/3 del ancho, scroll independiente) */}
+              <div className="project-modal-info-column bg-slate-50 dark:bg-slate-900 p-6 lg:p-8 overflow-y-auto custom-scrollbar">
+                {/* Descripción corta */}
+                <div className="mb-6">
+                  <p className="text-slate-700 dark:text-slate-300 text-base md:text-lg leading-relaxed">
+                    {selectedProject.description}
+                  </p>
+                </div>
+
+                {/* Descripción larga */}
+                {selectedProject.longDescription && (
+                  <div className="mb-8">
+                    <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                      <div className="w-1 h-6 bg-gradient-to-b from-blue-400 to-purple-400 rounded-full"></div>
+                      {t('projects.modalTitle')}
+                    </h4>
+                    <p className="text-slate-700 dark:text-slate-300 text-sm md:text-base leading-relaxed text-justify">
+                      {selectedProject.longDescription}
+                    </p>
+                  </div>
+                )}
+
+                {/* Tecnologías Utilizadas */}
+                <div className="mb-8">
+                  <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                    <div className="w-1 h-6 bg-gradient-to-b from-blue-400 to-purple-400 rounded-full"></div>
+                    {t('projects.techUsed')}
+                  </h4>
+                  <div className="flex flex-wrap gap-3">
+                    {selectedProject.tech.map((tech, j) => (
+                      <span
+                        key={j}
+                        className="px-4 py-2 bg-white dark:bg-slate-800/70 backdrop-blur-sm rounded-full text-blue-600 dark:text-blue-400 font-medium text-sm border border-blue-300 dark:border-blue-500/30 hover:border-blue-500 dark:hover:border-blue-500/60 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-300"
+                      >
+                        {tech}
+                      </span>
+                    ))}
                   </div>
                 </div>
-                <video
-                  key={selectedProject.video} // Force re-render on project change
-                  controls
-                  autoPlay
-                  preload="auto"
-                  className="w-full h-auto relative z-10"
-                  onLoadedData={(e) => {
-                    // Ocultar loading indicator cuando el video esté listo
-                    e.target.style.opacity = '1';
-                  }}
-                  style={{ opacity: 0, transition: 'opacity 0.3s ease-in-out' }}
-                >
-                  <source src={selectedProject.video} type="video/mp4" />
-                  Tu navegador no soporta el elemento de video.
-                </video>
-              </div>
 
-              {/* Tecnologías */}
-              <div className="mb-6">
-                <h4 className="text-lg font-bold text-white mb-3">Tecnologías Utilizadas</h4>
-                <div className="flex flex-wrap gap-2">
-                  {selectedProject.tech.map((tech, j) => (
-                    <span
-                      key={j}
-                      className="px-4 py-2 bg-slate-800 rounded-full text-blue-400 font-medium"
-                    >
-                      {tech}
-                    </span>
-                  ))}
+                {/* Enlaces del proyecto */}
+                <div className="mb-6">
+                  <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                    <div className="w-1 h-6 bg-gradient-to-b from-blue-400 to-purple-400 rounded-full"></div>
+                    {t('projects.projectLinks')}
+                  </h4>
+                  <div className="flex flex-col sm:flex-row flex-wrap gap-3">
+                    {Object.entries(selectedProject.links).map(([key, url]) => (
+                      <a
+                        key={key}
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 rounded-full text-white font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50"
+                      >
+                        <span className="capitalize">{key}</span>
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              {/* Enlaces */}
-              <div>
-                <h4 className="text-lg font-bold text-white mb-3">Enlaces</h4>
-                <div className="flex flex-wrap gap-3">
-                  {Object.entries(selectedProject.links).map(([key, url]) => (
-                    <a
-                      key={key}
-                      href={url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 rounded-full text-white font-medium transition-all duration-300 transform hover:scale-105"
-                    >
-                      <span className="capitalize">{key}</span>
-                      <ExternalLink className="w-4 h-4" />
-                    </a>
-                  ))}
-                </div>
+                {/* Espaciado inferior para mejor scrolling */}
+                <div className="h-4"></div>
               </div>
             </div>
           </div>

@@ -1,0 +1,314 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "technologies": "Tecnologías",
+    "certificates": "Certificados",
+    "projects": "Proyectos",
+    "contact": "Contacto"
+  },
+  "hero": {
+    "name": "Mateo Dueñas",
+    "title": "Ingeniero de Software | Desarrollador Full-Stack",
+    "description": "Estudiante de Ingeniería de Software en la Escuela Politécnica Nacional con experiencia práctica en desarrollo full-stack, gestión de bases de datos y análisis de datos. Construyendo sistemas seguros y escalables con tecnologías modernas.",
+    "downloadCV": "Descargar mi CV",
+    "stats": {
+      "experience": "años de experiencia",
+      "projects": "proyectos",
+      "technologies": "tecnologías"
+    }
+  },
+  "technologies": {
+    "title": "Tecnologías y Herramientas",
+    "categories": {
+      "backend": {
+        "title": "Desarrollo Backend",
+        "short": "Backend"
+      },
+      "frontend": {
+        "title": "Desarrollo Frontend",
+        "short": "Frontend"
+      },
+      "databases": {
+        "title": "Bases de Datos",
+        "short": "Bases de Datos"
+      },
+      "devops": {
+        "title": "DevOps y Herramientas",
+        "short": "DevOps"
+      }
+    },
+    "skills": {
+      "java": {
+        "name": "Java",
+        "description": "Desarrollo backend robusto"
+      },
+      "python": {
+        "name": "Python",
+        "description": "Scripting y análisis de datos"
+      },
+      "csharp": {
+        "name": "C#",
+        "description": "Desarrollo .NET"
+      },
+      "cplusplus": {
+        "name": "C++",
+        "description": "Programación de sistemas"
+      },
+      "dotnet": {
+        "name": ".NET",
+        "description": "Framework empresarial"
+      },
+      "nodejs": {
+        "name": "Node.js",
+        "description": "Backend en JavaScript"
+      },
+      "express": {
+        "name": "Express",
+        "description": "Framework minimalista"
+      },
+      "nestjs": {
+        "name": "NestJS",
+        "description": "Framework escalable"
+      },
+      "fastapi": {
+        "name": "FastAPI",
+        "description": "APIs modernas en Python"
+      },
+      "react": {
+        "name": "React",
+        "description": "Biblioteca de componentes UI"
+      },
+      "vue": {
+        "name": "Vue.js",
+        "description": "Framework progresivo"
+      },
+      "javascript": {
+        "name": "JavaScript",
+        "description": "Desarrollo web dinámico"
+      },
+      "typescript": {
+        "name": "TypeScript",
+        "description": "JavaScript con tipos"
+      },
+      "html5": {
+        "name": "HTML5",
+        "description": "Estructura web moderna"
+      },
+      "css3": {
+        "name": "CSS3",
+        "description": "Estilos y animaciones"
+      },
+      "tailwind": {
+        "name": "Tailwind",
+        "description": "Framework CSS utility-first"
+      },
+      "postgresql": {
+        "name": "PostgreSQL",
+        "description": "Base de datos relacional"
+      },
+      "mysql": {
+        "name": "MySQL",
+        "description": "Base de datos relacional"
+      },
+      "sqlserver": {
+        "name": "SQL Server",
+        "description": "Base de datos empresarial"
+      },
+      "mongodb": {
+        "name": "MongoDB",
+        "description": "Base de datos NoSQL"
+      },
+      "oracle": {
+        "name": "Oracle",
+        "description": "Base de datos empresarial"
+      },
+      "sqlite": {
+        "name": "SQLite",
+        "description": "Base de datos embebida"
+      },
+      "firebird": {
+        "name": "Firebird",
+        "description": "Base de datos SQL"
+      },
+      "docker": {
+        "name": "Docker",
+        "description": "Contenedorización"
+      },
+      "git": {
+        "name": "Git",
+        "description": "Control de versiones"
+      },
+      "redhat": {
+        "name": "Red Hat",
+        "description": "Linux empresarial"
+      },
+      "vercel": {
+        "name": "Vercel",
+        "description": "Plataforma en la nube"
+      },
+      "figma": {
+        "name": "Figma",
+        "description": "Diseño de interfaces"
+      },
+      "aws": {
+        "name": "AWS",
+        "description": "Servicios en la nube"
+      },
+      "godot": {
+        "name": "Godot",
+        "description": "Motor de juegos"
+      },
+      "unity": {
+        "name": "Unity",
+        "description": "Desarrollo de juegos"
+      }
+    }
+  },
+  "certificates": {
+    "title": "Certificados y Reconocimientos",
+    "items": {
+      "epn": {
+        "title": "Premio a la Excelencia Académica EPN",
+        "org": "Escuela Politécnica Nacional"
+      },
+      "cisco": {
+        "title": "Fundamentos de Redes",
+        "org": "Cisco Networking Academy"
+      },
+      "digital": {
+        "title": "Transformación Digital",
+        "org": "Instituto Europeo de Posgrado"
+      },
+      "scrum": {
+        "title": "SCRUM Foundation",
+        "org": "Certiprof - SFPC™"
+      }
+    }
+  },
+  "projects": {
+    "title": "Proyectos Destacados",
+    "viewDemo": "Ver Demo Completo",
+    "modalTitle": "Acerca del Proyecto",
+    "techUsed": "Tecnologías Utilizadas",
+    "projectLinks": "Enlaces del Proyecto",
+    "loading": "Cargando video...",
+    "items": {
+      "poa": {
+        "title": "Sistema de Gestión POA",
+        "description": "Plataforma integral para planificación y gestión presupuestaria con modelo RBAC",
+        "longDescription": "Una aplicación empresarial full-stack diseñada para la planificación institucional y gestión presupuestaria. El sistema implementa un modelo robusto de Control de Acceso Basado en Roles (RBAC) con múltiples jerarquías de usuarios. Construido con prácticas modernas de seguridad que incluyen autenticación JWT, hashing de contraseñas con bcrypt y prevención de inyección SQL. Las características incluyen seguimiento presupuestario en tiempo real, herramientas de planificación colaborativa, paneles de informes completos y registro de auditoría para cumplimiento normativo. El frontend usa React con TypeScript para seguridad de tipos, mientras que el backend aprovecha las capacidades asíncronas de FastAPI para un rendimiento óptimo. PostgreSQL maneja datos relacionales complejos y Docker asegura implementación consistente entre entornos.",
+        "links": {
+          "frontend": "frontend",
+          "backend": "backend",
+          "demo": "demo"
+        }
+      },
+      "certificates": {
+        "title": "Automatización de Certificados EPN",
+        "description": "Herramienta Python para generación automática de certificados con web scraping y procesamiento de datos",
+        "longDescription": "Una herramienta de automatización inteligente desarrollada para agilizar el proceso de generación de certificados para instituciones educativas. El sistema utiliza Selenium para web scraping para extraer datos de estudiantes, Pandas para procesamiento y validación eficiente de datos, y llenado automatizado de plantillas para generación de certificados. Las características incluyen procesamiento por lotes de cientos de certificados, validación de datos y manejo de errores, detección de duplicados y exportación a múltiples formatos (PDF, Excel). El entorno Jupyter notebook proporciona una interfaz interactiva para monitorear el proceso y depuración. Esta herramienta redujo el tiempo de generación de certificados de 3 horas a 15 minutos, mejorando significativamente la eficiencia administrativa.",
+        "links": {
+          "github": "github"
+        }
+      },
+      "travel": {
+        "title": "Calculadora de Viáticos",
+        "description": "Sistema de estimación presupuestaria con sugerencias inteligentes y capacidades de exportación",
+        "longDescription": "Una aplicación sofisticada de planificación presupuestaria para viajes de negocios y gastos institucionales. El sistema proporciona estimación inteligente de costos basada en destino, duración y categoría de viaje, con cálculos en tiempo real y validación dinámica de formularios. Las características incluyen soporte multi-moneda, seguimiento de datos históricos para mejores estimaciones, exportación PDF con desglose detallado e integración con sistemas presupuestarios institucionales. La interfaz está diseñada para facilidad de uso con asistentes paso a paso, funcionalidad de autoguardado y diseño responsive para flujos de aprobación móvil. Construida con prácticas modernas de React incluyendo hooks y Context API para gestión de estado.",
+        "links": {
+          "demo": "demo",
+          "github": "github"
+        }
+      },
+      "storycraft": {
+        "title": "Plataforma StoryCraft",
+        "description": "Narración colaborativa con arquitecturas monolíticas y de microservicios",
+        "longDescription": "Una plataforma innovadora para escritura creativa colaborativa que demuestra patrones arquitectónicos tanto monolíticos como de microservicios. Los usuarios pueden crear, compartir y coescribir historias en tiempo real con control de versiones y narrativas ramificadas. La plataforma implementa WebSocket para colaboración en tiempo real, microservicios NestJS para escalabilidad (servicio de autenticación, servicio de historias, servicio de notificaciones), React con Redux para gestión compleja de estado y SQL Server para integridad transaccional de datos. Las características incluyen herramientas de gestión de personajes y tramas, sugerencias de escritura impulsadas por IA, flujos de trabajo de publicación y características comunitarias como comentarios y calificaciones. El proyecto muestra principios modernos de arquitectura de software incluyendo patrón API Gateway, comunicación basada en eventos y contenedorización con Docker Compose.",
+        "links": {
+          "github": "github"
+        }
+      },
+      "fitness": {
+        "title": "Rastreador de Fitness",
+        "description": "Una aplicación web construida para gestionar rutinas de ejercicio y seguimiento de progreso físico.",
+        "longDescription": "Una aplicación integral de gestión de fitness construida con ASP.NET Web Forms demostrando patrones de arquitectura de nivel empresarial. La aplicación utiliza una arquitectura estricta de N-Capas separando las capas de Presentación, Lógica de Negocio y Acceso a Datos para mantenibilidad y testabilidad. Las características incluyen creación personalizada de rutinas de ejercicio con bibliotecas de ejercicios, seguimiento de progreso con gráficos y estadísticas, registro de calorías y nutrición, establecimiento de metas y seguimiento de logros, y características sociales para compartir progreso. El backend implementa procedimientos almacenados para operaciones de datos, Entity Framework para ORM e incluye manejo apropiado de excepciones y registro. Las características de seguridad incluyen validación de entrada, prevención de inyección SQL y gestión de sesiones.",
+        "links": {
+          "github": "github"
+        }
+      },
+      "spaceInvaders": {
+        "title": "Space Invaders",
+        "description": "Juego clásico de Space Invaders.",
+        "longDescription": "Una recreación fiel del icónico juego arcade Space Invaders usando Python y Pygame, demostrando fundamentos de desarrollo de juegos y programación orientada a objetos. El juego presenta jugabilidad fluida a 60 FPS, gráficos basados en sprites con recursos personalizados, sistemas de detección de colisiones, dificultad progresiva con velocidad alienígena creciente, mecánicas de power-ups, persistencia de puntuación máxima y efectos de sonido. Los aspectos técnicos destacados incluyen gestión de estado del juego, sistema de componentes de entidad para objetos del juego, renderizado optimizado con grupos de sprites y manejo de entrada con controles configurables. El proyecto muestra comprensión de bucles de juego, movimiento independiente de cuadros y patrones clásicos de diseño de juegos arcade.",
+        "links": {
+          "github": "github"
+        }
+      },
+      "godot2d": {
+        "title": "Juego Godot 2D",
+        "description": "Juego con trampas, frutas que dan puntos y un trofeo final que felicita al jugador.",
+        "longDescription": "Un juego de plataformas 2D desarrollado en Godot Engine que muestra mecánicas fundamentales de juego y principios de diseño de niveles. El juego presenta movimiento de personaje basado en física con mecánicas de salto, sistema de coleccionables con puntuación, mecánicas de peligros y trampas que requieren tiempo y habilidad, sistema de puntos de control para progresión del jugador y efectos de partículas para retroalimentación visual. Construido usando el sistema de escenas basado en nodos de Godot, GDScript para lógica del juego, sistema de tilemap para diseño de niveles y máquinas de estados de animación para estados del personaje. El proyecto demuestra comprensión de física de juegos 2D, capas de colisión, sistema de señales para manejo de eventos y sensación del juego a través del ajuste cuidadoso de parámetros de movimiento.",
+        "links": {
+          "github": "github"
+        }
+      },
+      "godot3d": {
+        "title": "Juego Godot 3D",
+        "description": "Juego donde controlas un cubo, escalas una montaña y recoges monedas en la cima.",
+        "longDescription": "Una exploración del desarrollo de juegos 3D usando Godot Engine, presentando una experiencia desafiante de escalada de montaña con movimiento basado en física. El juego implementa controlador de personaje 3D con sistema de seguimiento de cámara, generación de terreno y diseño ambiental, sistema de coleccionables con conciencia espacial 3D, efectos de iluminación y sombras para atmósfera y condición de victoria con retroalimentación de recompensa. Los aspectos técnicos incluyen motor de física 3D de Godot, nodos y transformaciones espaciales, algoritmos de posicionamiento de cámara, sistemas de malla y material y detección de colisiones 3D. El proyecto explora conceptos fundamentales del desarrollo de juegos 3D incluyendo matemáticas vectoriales, rotaciones de cuaterniones y diseño de niveles en tres dimensiones.",
+        "links": {
+          "github": "github"
+        }
+      }
+    }
+  },
+  "techCard": {
+    "masteryLevel": "Nivel de dominio",
+    "experience": "Experiencia"
+  },
+  "contact": {
+    "title": "Conectemos",
+    "subtitle": "¿Tienes un proyecto en mente o quieres colaborar? ¡Me encantaría saber de ti!",
+    "profile": {
+      "name": "Mateo Dueñas",
+      "bio": "Ingeniero de Software apasionado por construir soluciones escalables. Abierto a nuevas oportunidades y colaboraciones.",
+      "emailLabel": "Correo",
+      "linkedinLabel": "LinkedIn",
+      "githubLabel": "GitHub"
+    },
+    "form": {
+      "title": "Envíame un mensaje",
+      "subtitle": "Completa el formulario a continuación y te responderé lo antes posible.",
+      "name": {
+        "label": "Nombre Completo",
+        "placeholder": "Juan Pérez",
+        "error": "El nombre es requerido"
+      },
+      "email": {
+        "label": "Correo Electrónico",
+        "placeholder": "juan@ejemplo.com",
+        "error": "Se requiere un correo válido"
+      },
+      "subject": {
+        "label": "Asunto",
+        "placeholder": "Colaboración de Proyecto",
+        "error": "El asunto es requerido"
+      },
+      "message": {
+        "label": "Mensaje",
+        "placeholder": "Cuéntame sobre tu proyecto o consulta...",
+        "error": "El mensaje es requerido"
+      },
+      "submit": "Enviar Mensaje",
+      "submitting": "Enviando...",
+      "helper": "Esto abrirá tu cliente de correo con el mensaje prellenado"
+    }
+  },
+  "footer": {
+    "copyright": "© 2025 Mateo Dueñas. Todos los derechos reservados"
+  },
+  "theme": {
+    "dark": "Modo oscuro",
+    "light": "Modo claro"
+  }
+}

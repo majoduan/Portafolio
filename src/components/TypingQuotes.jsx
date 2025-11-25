@@ -61,7 +61,7 @@ const TypingQuotes = memo(() => {
 
   return (
     <div className="hidden lg:block mt-6" style={{ contentVisibility: 'auto' }}>
-      <div className="relative bg-slate-800/30 border border-slate-700/50 rounded-xl p-4 min-h-[80px] flex items-center transition-all duration-300">
+      <div className="relative bg-white/80 dark:bg-slate-800/30 border border-slate-200 dark:border-slate-700/50 rounded-xl p-4 min-h-[80px] flex items-center transition-all duration-300">
         {/* Code icon */}
         <div className="absolute -top-3 -left-3 w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center shadow-lg">
           <Code2 className="w-4 h-4 text-white" />
@@ -69,7 +69,7 @@ const TypingQuotes = memo(() => {
         
         {/* Quote text with typewriter effect */}
         <div className="w-full pl-4">
-          <p className="text-slate-300 text-sm italic leading-relaxed" style={{ willChange: 'contents' }}>
+          <p className="text-slate-700 dark:text-slate-300 text-sm italic leading-relaxed" style={{ willChange: 'contents' }}>
             "{displayedText}"
             <span className="inline-block w-0.5 h-4 bg-blue-400 ml-1 animate-pulse"></span>
           </p>
