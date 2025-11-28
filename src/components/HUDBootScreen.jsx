@@ -15,7 +15,6 @@ import {
 
 // Cache global para módulo de Spline precargado
 let splineModuleCache = null;
-let splineSceneCache = null;
 
 // Precarga inteligente de recursos críticos con estrategia de prioridad y caché
 const preloadResources = async () => {
@@ -32,22 +31,7 @@ const preloadResources = async () => {
       });
   }
 
-  // 2. PRIORIDAD ALTA: Precargar escena Spline con fetch para cachear
-  if (!splineSceneCache) {
-    splineSceneCache = fetch('https://prod.spline.design/CTzlK88G4nA0eFUO/scene.splinecode', {
-      mode: 'cors',
-      credentials: 'omit'
-    })
-      .then(response => {
-        if (response.ok) {
-          console.log('✅ Escena Spline precargada y cacheada');
-          return response.blob();
-        }
-      })
-      .catch(err => console.warn('⚠️ Spline scene preload failed:', err));
-  }
-
-  // 3. PRIORIDAD ALTA: Precargar imágenes de certificados
+  // 2. PRIORIDAD ALTA: Precargar imágenes de certificados
   const certificateImages = [
     '/images/certificates/epn-award.jpg',
     '/images/certificates/cisco-networking.jpg',
@@ -63,7 +47,7 @@ const preloadResources = async () => {
     document.head.appendChild(link);
   });
 
-  // 4. PRIORIDAD MEDIA: Precargar solo METADATA de videos prioritarios
+  // 3. PRIORIDAD MEDIA: Precargar solo METADATA de videos prioritarios
   // Esto carga solo los primeros frames, no el video completo (~100KB vs 2MB)
   const priorityVideos = [
     '/videos/poa-management.mp4',
@@ -77,7 +61,7 @@ const preloadResources = async () => {
     video.muted = true;
   });
 
-  // 5. PRIORIDAD BAJA: Prefetch ligero de videos restantes después de 5 segundos
+  // 4. PRIORIDAD BAJA: Prefetch ligero de videos restantes después de 5 segundos
   setTimeout(() => {
     const remainingVideos = [
       '/videos/travel-allowance.mp4',

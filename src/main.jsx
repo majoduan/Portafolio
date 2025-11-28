@@ -4,14 +4,17 @@ import './index.css'
 import App from './App.jsx'
 import { AppContextProvider } from './contexts/AppContext'
 import { registerServiceWorker } from './utils/registerSW'
+import ErrorBoundary from './components/ErrorBoundary'
 
 // Registrar Service Worker para cache estratégico
 registerServiceWorker();
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <AppContextProvider>
-      <App />
-    </AppContextProvider>
+    <ErrorBoundary>
+      <AppContextProvider>
+        <App />
+      </AppContextProvider>
+    </ErrorBoundary>
   </StrictMode>,
 )

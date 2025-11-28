@@ -11,7 +11,10 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "analyze": "node scripts/analyze-bundle.mjs",
-    "build:analyze": "npm run build && npm run analyze"
+    "build:analyze": "npm run build && npm run analyze",
+    "optimize-images": "node scripts/generate-responsive-images.mjs",
+    "optimize-posters": "node scripts/optimize-video-posters.mjs",
+    "build:full": "npm run optimize-images && npm run build"
   },
   "dependencies": {
     "@splinetool/react-spline": "^4.1.0",

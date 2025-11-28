@@ -1,0 +1,65 @@
+{
+  "name": "Mateo Dueñas - Full Stack Developer Portfolio",
+  "short_name": "Mateo Portfolio",
+  "description": "Portfolio profesional de Mateo Dueñas, Full Stack Software Engineer especializado en React, Node.js y tecnologías web modernas",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "es",
+  "dir": "ltr",
+  "categories": ["portfolio", "developer", "technology"],
+  "icons": [
+    {
+      "src": "/bow-and-arrow.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/images/screenshot-wide.webp",
+      "sizes": "1280x720",
+      "type": "image/webp",
+      "form_factor": "wide",
+      "label": "Portfolio Home - Desktop"
+    },
+    {
+      "src": "/images/screenshot-mobile.webp",
+      "sizes": "750x1334",
+      "type": "image/webp",
+      "form_factor": "narrow",
+      "label": "Portfolio Home - Mobile"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Proyectos",
+      "short_name": "Proyectos",
+      "description": "Ver mis proyectos destacados",
+      "url": "/#projects",
+      "icons": [
+        {
+          "src": "/bow-and-arrow.svg",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Contacto",
+      "short_name": "Contacto",
+      "description": "Envíame un mensaje",
+      "url": "/#contact",
+      "icons": [
+        {
+          "src": "/bow-and-arrow.svg",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "prefer_related_applications": false
+}

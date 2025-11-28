@@ -56,6 +56,7 @@ const Portfolio = () => {
   const [activeSection, setActiveSection] = useState('home'); // Estado para la sección activa
   const [hoveredProject, setHoveredProject] = useState(null); // Estado para precargar video en hover
   const videoPreloadCache = useRef(new Set()); // Cache de videos precargados
+  const splineLoadingRef = useRef(false); // Prevenir carga duplicada de Spline
 
   // Estados para manejar la transición de tecnologías
   const [currentTechTab, setCurrentTechTab] = useState(0);
@@ -100,10 +101,17 @@ const Portfolio = () => {
   // Texto completo para el efecto typewriter - traducido
   const fullText = useMemo(() => t('hero.description'), [t]);
 
-  // Función para manejar el evento de carga de Spline - optimizada
+  // Función para manejar el evento de carga de Spline - optimizada con prevención de duplicados
   const onSplineLoad = useCallback((spline) => {
+    // Prevenir procesamiento duplicado en React Strict Mode
+    if (splineLoadingRef.current) {
+      console.log('⚠️ Spline ya cargado, ignorando duplicado (React Strict Mode)');
+      return;
+    }
+    
+    splineLoadingRef.current = true;
     splineRef.current = spline;
-    console.log('Spline cargado correctamente');
+    console.log('✅ Spline cargado correctamente');
   }, []);
 
   // Función para manejar el movimiento del mouse sobre Spline - optimizada
@@ -690,6 +698,7 @@ const Portfolio = () => {
                     </div>
                   }>
                     <Spline
+                      key="spline-scene"
                       scene="https://prod.spline.design/CTzlK88G4nA0eFUO/scene.splinecode"
                       onLoad={onSplineLoad}
                       onMouseMove={onSplineMouseMove}
@@ -809,10 +818,16 @@ const Portfolio = () => {
                 {/* Certificate Image */}
                 <div className="relative h-64 overflow-hidden bg-gradient-to-br from-blue-900/30 to-purple-900/30">
                   <img
-                    src={cert.image}
-                    srcSet={`${cert.image} 1x`}
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    src={`/images/optimized/${cert.image.split('/').pop().replace('.jpg', '').replace('.webp', '')}-800w.webp`}
+                    srcSet={`
+                      /images/optimized/${cert.image.split('/').pop().replace('.jpg', '').replace('.webp', '')}-400w.webp 400w,
+                      /images/optimized/${cert.image.split('/').pop().replace('.jpg', '').replace('.webp', '')}-800w.webp 800w,
+                      /images/optimized/${cert.image.split('/').pop().replace('.jpg', '').replace('.webp', '')}-1200w.webp 1200w
+                    `}
+                    sizes="(max-width: 640px) 400px, 800px"
                     alt={cert.title}
+                    width="420"
+                    height="256"
                     loading="lazy"
                     decoding="async"
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
@@ -884,7 +899,7 @@ const Portfolio = () => {
                       muted
                       playsInline
                       preload="none"
-                      poster={project.video.replace('.mp4', '-poster.jpg')}
+                      poster={project.video.replace('.mp4', '-poster.webp')}
                       className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-300"
                       loading="lazy"
                       onLoadStart={(e) => {
@@ -980,10 +995,16 @@ const Portfolio = () => {
                 <div className="relative h-64 sm:h-80 md:h-96 lg:h-[400px] overflow-hidden bg-gradient-to-br from-blue-900/30 to-purple-900/30">
                   {/* Profile Image */}
                   <img 
-                    src="/images/foto-perfil.webp?v=2" 
-                    srcSet="/images/foto-perfil.webp?v=2 1x"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    src="/images/optimized/foto-perfil-800w.webp" 
+                    srcSet="
+                      /images/optimized/foto-perfil-400w.webp 400w,
+                      /images/optimized/foto-perfil-800w.webp 800w,
+                      /images/optimized/foto-perfil-1200w.webp 1200w
+                    "
+                    sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px"
                     alt="Mateo Dueñas - Software Engineer"
+                    width="800"
+                    height="1000"
                     className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                     loading="lazy"
                     decoding="async"
@@ -1123,7 +1144,7 @@ const Portfolio = () => {
                     controls
                     autoPlay
                     preload="auto"
-                    poster={selectedProject.video.replace('.mp4', '-poster.jpg')}
+                    poster={selectedProject.video.replace('.mp4', '-poster.webp')}
                     playsInline
                     className="w-full h-auto max-h-full relative z-10 rounded-2xl shadow-2xl"
                     onLoadedData={(e) => {

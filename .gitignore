@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Archivos de documentación opcionales (descomentar si no quieres versionarlos)
+# OPTIMIZATIONS_SUMMARY.md
+
+# Build analysis
+.vite/
+stats.html

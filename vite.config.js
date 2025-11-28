@@ -22,8 +22,7 @@ export default defineConfig({
   resolve: {
     alias: {
       'lodash.debounce': 'lodash-es/debounce'
-    },
-    dedupe: ['react', 'react-dom']
+    }
   },
   build: {
     // Copiar Service Worker a dist - Fase 2 optimization
