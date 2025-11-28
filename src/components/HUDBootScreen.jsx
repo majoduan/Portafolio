@@ -13,17 +13,41 @@ import {
   RotateCw
 } from 'lucide-react';
 
-// Precarga inteligente de recursos críticos con estrategia de prioridad
-const preloadResources = () => {
-  // 1. PRIORIDAD ALTA: Spline scene (el recurso más pesado ~2MB)
-  const splineLink = document.createElement('link');
-  splineLink.rel = 'preload';
-  splineLink.as = 'fetch';
-  splineLink.href = 'https://prod.spline.design/CTzlK88G4nA0eFUO/scene.splinecode';
-  splineLink.crossOrigin = 'anonymous';
-  document.head.appendChild(splineLink);
+// Cache global para módulo de Spline precargado
+let splineModuleCache = null;
+let splineSceneCache = null;
 
-  // 2. PRIORIDAD ALTA: Precargar imágenes de certificados (WebP cuando estén convertidas)
+// Precarga inteligente de recursos críticos con estrategia de prioridad y caché
+const preloadResources = async () => {
+  // 1. PRIORIDAD ALTA: Precargar y cachear módulo de Spline
+  if (!splineModuleCache) {
+    splineModuleCache = import('@splinetool/react-spline')
+      .then(module => {
+        console.log('✅ Módulo Spline precargado y cacheado');
+        return module;
+      })
+      .catch(err => {
+        console.warn('⚠️ Spline preload failed, will load on demand:', err);
+        return null;
+      });
+  }
+
+  // 2. PRIORIDAD ALTA: Precargar escena Spline con fetch para cachear
+  if (!splineSceneCache) {
+    splineSceneCache = fetch('https://prod.spline.design/CTzlK88G4nA0eFUO/scene.splinecode', {
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(response => {
+        if (response.ok) {
+          console.log('✅ Escena Spline precargada y cacheada');
+          return response.blob();
+        }
+      })
+      .catch(err => console.warn('⚠️ Spline scene preload failed:', err));
+  }
+
+  // 3. PRIORIDAD ALTA: Precargar imágenes de certificados
   const certificateImages = [
     '/images/certificates/epn-award.jpg',
     '/images/certificates/cisco-networking.jpg',
@@ -32,31 +56,28 @@ const preloadResources = () => {
   ];
 
   certificateImages.forEach(src => {
-    const img = new Image();
-    img.src = src;
+    const link = document.createElement('link');
+    link.rel = 'prefetch';
+    link.as = 'image';
+    link.href = src;
+    document.head.appendChild(link);
   });
 
-  // 3. PRIORIDAD MEDIA: Precargar módulo de Spline en paralelo
-  import('@splinetool/react-spline').catch(err => {
-    console.warn('Spline preload failed, will load on demand:', err);
-  });
-
-  // 4. PRIORIDAD MEDIA-ALTA: Precargar primeros 2 videos (proyectos destacados)
-  // Estos son los más probables de ser vistos primero
+  // 4. PRIORIDAD MEDIA: Precargar solo METADATA de videos prioritarios
+  // Esto carga solo los primeros frames, no el video completo (~100KB vs 2MB)
   const priorityVideos = [
-    '/videos/poa-management.mp4',  // Proyecto principal
-    '/videos/epn-certificates.mp4'  // Segundo proyecto importante
+    '/videos/poa-management.mp4',
+    '/videos/epn-certificates.mp4'
   ];
 
   priorityVideos.forEach(videoSrc => {
     const video = document.createElement('video');
-    video.preload = 'auto'; // Cargar video completo en segundo plano
+    video.preload = 'metadata'; // Solo metadata, no video completo
     video.src = videoSrc;
     video.muted = true;
-    // No agregamos al DOM, solo precargamos en memoria
   });
 
-  // 5. PRIORIDAD BAJA: Prefetch de videos restantes después de 3 segundos
+  // 5. PRIORIDAD BAJA: Prefetch ligero de videos restantes después de 5 segundos
   setTimeout(() => {
     const remainingVideos = [
       '/videos/travel-allowance.mp4',
@@ -74,8 +95,11 @@ const preloadResources = () => {
       link.href = videoSrc;
       document.head.appendChild(link);
     });
-  }, 3000);
+  }, 5000); // Aumentado a 5s para dar prioridad a recursos críticos
 };
+
+// Exportar cache para uso en App.jsx
+export const getSplineModuleCache = () => splineModuleCache;
 
 const HUDBootScreen = React.memo(({ onComplete }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -149,17 +173,24 @@ const HUDBootScreen = React.memo(({ onComplete }) => {
     return () => clearInterval(progressInterval);
   }, [onComplete]);
 
-  // Sistema de partículas optimizado - reducido de 80 a 40 partículas
+  // Sistema de partículas ULTRA-OPTIMIZADO
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d', { alpha: false });
+    const ctx = canvas.getContext('2d', { 
+      alpha: false,
+      desynchronized: true, // Mejor performance en algunos navegadores
+      willReadFrequently: false
+    });
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // Reducir partículas de 80 a 40 para mejor rendimiento
-    const particleCount = 40;
+    // Reducir a 25 partículas en móvil, 30 en desktop
+    const particleCount = window.innerWidth < 768 ? 20 : 25;
+    const maxDistance = 150; // Precalcular
+    const maxDistanceSq = maxDistance * maxDistance; // Evitar sqrt cuando sea posible
+    
     particlesRef.current = Array.from({ length: particleCount }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
@@ -169,51 +200,65 @@ const HUDBootScreen = React.memo(({ onComplete }) => {
       opacity: Math.random() * 0.5 + 0.3
     }));
 
-    // Colores precalculados para evitar cálculos en cada frame
-    const colors = ['rgba(99, 102, 241, ', 'rgba(168, 85, 247, ', 'rgba(236, 72, 153, '];
+    // Colores precalculados
+    const colors = [
+      'rgba(99, 102, 241, ',
+      'rgba(168, 85, 247, ',
+      'rgba(236, 72, 153, '
+    ];
+    
+    // Variables para throttling
+    let frameCount = 0;
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
 
     const animate = () => {
-      // Usar negro completamente opaco para evitar acumulación de brillo morado
-      ctx.fillStyle = '#0b0125ff';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      frameCount++;
+      
+      // Limpiar canvas
+      ctx.fillStyle = '#0b0125';
+      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
       const particles = particlesRef.current;
       const len = particles.length;
 
+      // Actualizar y dibujar partículas
       for (let i = 0; i < len; i++) {
-        const particle = particles[i];
+        const p = particles[i];
         
         // Actualizar posición
-        particle.x += particle.vx;
-        particle.y += particle.vy;
+        p.x += p.vx;
+        p.y += p.vy;
 
-        // Rebotar en los bordes optimizado
-        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
-        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+        // Rebotar en bordes (optimizado con operadores ternarios)
+        p.vx = (p.x < 0 || p.x > canvasWidth) ? -p.vx : p.vx;
+        p.vy = (p.y < 0 || p.y > canvasHeight) ? -p.vy : p.vy;
 
-        // Dibujar partícula
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-        const color = colors[i % 3];
-        ctx.fillStyle = `${color}${particle.opacity})`;
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = `${color}0.8)`;
-        ctx.fill();
+        // Dibujar partícula (sin shadow para mejor performance)
+        ctx.fillStyle = `${colors[i % 3]}${p.opacity})`;
+        ctx.fillRect(p.x - p.radius, p.y - p.radius, p.radius * 2, p.radius * 2);
+      }
 
-        // Conectar solo partículas cercanas (optimizado)
-        for (let j = i + 1; j < len; j++) {
-          const other = particles[j];
-          const dx = particle.x - other.x;
-          const dy = particle.y - other.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+      // Conectar partículas solo cada 2 frames para reducir cálculos a la mitad
+      if (frameCount % 2 === 0) {
+        ctx.lineWidth = 0.5;
+        for (let i = 0; i < len; i++) {
+          const p1 = particles[i];
+          for (let j = i + 1; j < len; j++) {
+            const p2 = particles[j];
+            const dx = p1.x - p2.x;
+            const dy = p1.y - p2.y;
+            const distSq = dx * dx + dy * dy; // Evitar sqrt
 
-          if (distance < 120) {
-            ctx.beginPath();
-            ctx.moveTo(particle.x, particle.y);
-            ctx.lineTo(other.x, other.y);
-            ctx.strokeStyle = `rgba(99, 102, 241, ${0.15 * (1 - distance / 120)})`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
+            if (distSq < maxDistanceSq) {
+              const dist = Math.sqrt(distSq); // Solo calcular cuando sea necesario
+              const opacity = 0.15 * (1 - dist / maxDistance);
+              ctx.strokeStyle = `rgba(99, 102, 241, ${opacity})`;
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.stroke();
+            }
           }
         }
       }

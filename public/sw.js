@@ -1,18 +1,18 @@
-// Service Worker para Portfolio - Cache Strategy
-// Version 1.0.0
+// Service Worker para Portfolio - Cache Strategy OPTIMIZADO
+// Version 2.0.0 - Enhanced Performance
 
-const CACHE_NAME = 'mateo-portfolio-v1';
-const RUNTIME_CACHE = 'runtime-cache-v1';
+const CACHE_VERSION = '2.0.0';
+const CACHE_NAME = `mateo-portfolio-v${CACHE_VERSION}`;
+const RUNTIME_CACHE = `runtime-cache-v${CACHE_VERSION}`;
+const IMAGE_CACHE = `images-cache-v${CACHE_VERSION}`;
+const VIDEO_CACHE = `videos-cache-v${CACHE_VERSION}`;
 
-// Assets críticos para cachear inmediatamente
+// Assets críticos para cachear inmediatamente - OPTIMIZADO
 const PRECACHE_ASSETS = [
   '/',
   '/index.html',
-  '/images/foto-perfil.webp',
-  '/images/certificates/cisco-networking.webp',
-  '/images/certificates/digital-transformation.webp',
-  '/images/certificates/epn-award.webp',
-  '/images/certificates/scrum-foundation.webp'
+  '/images/foto-perfil.webp'
+  // Certificados se cargan bajo demanda con stale-while-revalidate
 ];
 
 // Instalar Service Worker y pre-cachear assets críticos
@@ -35,7 +35,12 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames
-          .filter((name) => name !== CACHE_NAME && name !== RUNTIME_CACHE)
+          .filter((name) => 
+            name !== CACHE_NAME && 
+            name !== RUNTIME_CACHE && 
+            name !== IMAGE_CACHE && 
+            name !== VIDEO_CACHE
+          )
           .map((name) => {
             console.log('[SW] Deleting old cache:', name);
             return caches.delete(name);
@@ -58,31 +63,34 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Estrategia según tipo de recurso
+  // Estrategia según tipo de recurso - OPTIMIZADO
   if (request.destination === 'document') {
     // HTML: Network First (siempre intentar red primero)
-    event.respondWith(networkFirst(request));
+    event.respondWith(networkFirst(request, RUNTIME_CACHE));
   } else if (request.url.includes('/videos/')) {
-    // Videos: Cache First (prioritario para performance)
-    event.respondWith(cacheFirstWithExpiry(request, 7 * 24 * 60 * 60 * 1000)); // 7 días
+    // Videos: Cache First con cache dedicado (alta prioridad para performance)
+    event.respondWith(cacheFirstWithExpiry(request, VIDEO_CACHE, 14 * 24 * 60 * 60 * 1000)); // 14 días
   } else if (request.url.includes('/images/')) {
-    // Imágenes: Cache First
-    event.respondWith(cacheFirstWithExpiry(request, 30 * 24 * 60 * 60 * 1000)); // 30 días
+    // Imágenes: Stale While Revalidate con cache dedicado
+    event.respondWith(staleWhileRevalidateWithCache(request, IMAGE_CACHE));
   } else if (request.url.includes('.js') || request.url.includes('.css')) {
-    // JS/CSS: Stale While Revalidate
-    event.respondWith(staleWhileRevalidate(request));
+    // JS/CSS: Stale While Revalidate (mejor UX)
+    event.respondWith(staleWhileRevalidateWithCache(request, RUNTIME_CACHE));
+  } else if (request.url.includes('spline.design')) {
+    // Escena Spline: Cache First con larga expiración
+    event.respondWith(cacheFirstWithExpiry(request, RUNTIME_CACHE, 7 * 24 * 60 * 60 * 1000)); // 7 días
   } else {
     // Otros: Network First con fallback a cache
-    event.respondWith(networkFirst(request));
+    event.respondWith(networkFirst(request, RUNTIME_CACHE));
   }
 });
 
 // Network First: Intentar red primero, fallback a cache
-async function networkFirst(request) {
+async function networkFirst(request, cacheName = RUNTIME_CACHE) {
   try {
     const networkResponse = await fetch(request);
     if (networkResponse.ok) {
-      const cache = await caches.open(RUNTIME_CACHE);
+      const cache = await caches.open(cacheName);
       cache.put(request, networkResponse.clone());
     }
     return networkResponse;
@@ -104,8 +112,8 @@ async function networkFirst(request) {
 }
 
 // Cache First con expiración: Servir de cache, actualizar en background
-async function cacheFirstWithExpiry(request, maxAge) {
-  const cache = await caches.open(RUNTIME_CACHE);
+async function cacheFirstWithExpiry(request, cacheName, maxAge) {
+  const cache = await caches.open(cacheName);
   const cachedResponse = await cache.match(request);
 
   // Si está en cache y no ha expirado, servir de cache
@@ -116,12 +124,14 @@ async function cacheFirstWithExpiry(request, maxAge) {
 
     if (age < maxAge) {
       console.log('[SW] Serving from cache:', request.url);
-      // Actualizar en background
-      fetch(request).then((networkResponse) => {
-        if (networkResponse.ok) {
-          cache.put(request, networkResponse.clone());
-        }
-      }).catch(() => {});
+      // Actualizar en background solo si está cerca de expirar (80% del maxAge)
+      if (age > maxAge * 0.8) {
+        fetch(request).then((networkResponse) => {
+          if (networkResponse.ok) {
+            cache.put(request, networkResponse.clone());
+          }
+        }).catch(() => {});
+      }
       return cachedResponse;
     }
   }
@@ -144,8 +154,8 @@ async function cacheFirstWithExpiry(request, maxAge) {
 }
 
 // Stale While Revalidate: Servir cache inmediatamente, actualizar en background
-async function staleWhileRevalidate(request) {
-  const cache = await caches.open(RUNTIME_CACHE);
+async function staleWhileRevalidateWithCache(request, cacheName) {
+  const cache = await caches.open(cacheName);
   const cachedResponse = await cache.match(request);
 
   const networkPromise = fetch(request).then((networkResponse) => {
@@ -155,6 +165,7 @@ async function staleWhileRevalidate(request) {
     return networkResponse;
   }).catch(() => cachedResponse);
 
+  // Retornar cache inmediatamente si existe, sino esperar a red
   return cachedResponse || networkPromise;
 }
 

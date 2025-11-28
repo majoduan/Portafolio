@@ -1,16 +1,29 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { compression } from 'vite-plugin-compression2'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    // Compresión Brotli y Gzip para assets
+    compression({
+      algorithm: 'brotliCompress',
+      exclude: [/\.(br)$/, /\.(gz)$/],
+      threshold: 1024,
+      compressionOptions: { level: 11 }
+    }),
+    compression({
+      algorithm: 'gzip',
+      exclude: [/\.(br)$/, /\.(gz)$/],
+      threshold: 1024
+    })
+  ],
   resolve: {
     alias: {
-      'lodash.debounce': 'lodash-es/debounce',
-      'react': 'react',
-      'react-dom': 'react-dom'
+      'lodash.debounce': 'lodash-es/debounce'
     },
-    dedupe: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime']
+    dedupe: ['react', 'react-dom']
   },
   build: {
     // Copiar Service Worker a dist - Fase 2 optimization
@@ -24,16 +37,31 @@ export default defineConfig({
             if (id.includes('react') || id.includes('react-dom')) {
               return 'react-vendor';
             }
-            if (id.includes('lucide-react')) {
+            if (id.includes('lucide-react') || id.includes('react-icons')) {
               return 'icons';
             }
             if (id.includes('@splinetool')) {
               return 'spline';
             }
+            if (id.includes('animejs')) {
+              return 'animations';
+            }
+            if (id.includes('lodash')) {
+              return 'utils';
+            }
             // Otros vendors en un chunk separado
             return 'vendor';
           }
-          // Dejar que Vite maneje automáticamente los componentes
+          // Split componentes grandes en chunks separados
+          if (id.includes('src/components/HUDBootScreen')) {
+            return 'boot-screen';
+          }
+          if (id.includes('src/components/ContactForm')) {
+            return 'contact-form';
+          }
+          if (id.includes('src/data/')) {
+            return 'data';
+          }
         },
         // Optimizar nombres de archivos con hash largo para mejor caching
         chunkFileNames: 'assets/js/[name]-[hash:16].js',
@@ -66,7 +94,7 @@ export default defineConfig({
       }
     },
     // Chunks más pequeños y mejor compresión
-    chunkSizeWarningLimit: 800,
+    chunkSizeWarningLimit: 500,
     cssCodeSplit: true,
     sourcemap: false,
     // Mejor compresión

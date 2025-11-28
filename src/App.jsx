@@ -181,19 +181,26 @@ const Portfolio = () => {
     return () => clearInterval(typeInterval);
   }, [loading, fullText]);
 
-  // Particle system optimizado - reducido a 30 partículas y optimizado el renderizado
+  // Particle system ULTRA-OPTIMIZADO
   useEffect(() => {
     if (loading) return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d', { alpha: false });
+    const ctx = canvas.getContext('2d', { 
+      alpha: false,
+      desynchronized: true,
+      willReadFrequently: false
+    });
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // Adaptar partículas según tamaño de pantalla (optimización para móvil)
-    const particleCount = window.innerWidth < 768 ? 10 : 30;
+    // Reducir partículas: 8 en móvil, 20 en desktop
+    const particleCount = window.innerWidth < 768 ? 8 : 20;
+    const maxDistance = 80;
+    const maxDistanceSq = maxDistance * maxDistance;
+    
     particles.current = Array.from({ length: particleCount }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
@@ -206,6 +213,9 @@ const Portfolio = () => {
     let mouseX = 0;
     let mouseY = 0;
     let animationFrameId;
+    let frameCount = 0;
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
 
     const handleMouseMove = (e) => {
       mouseX = e.clientX;
@@ -215,65 +225,75 @@ const Portfolio = () => {
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
 
     const animate = () => {
-      // Detectar tema actual para colores de partículas
+      frameCount++;
       const isDark = theme === 'dark';
       
-      // Fondo del canvas según el tema
+      // Fondo según tema
       ctx.fillStyle = isDark ? 'rgba(15, 23, 42, 0.1)' : 'rgba(248, 250, 252, 0.1)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
       const particlesArray = particles.current;
       const len = particlesArray.length;
+      
+      // Colores precalculados según tema
+      const particleColor = isDark ? 'rgba(99, 102, 241, ' : 'rgba(51, 65, 85, ';
+      const lineColor = isDark ? 'rgba(99, 102, 241, ' : 'rgba(51, 65, 85, ';
+      const opacityMultiplier = isDark ? 1 : 0.8;
 
       for (let i = 0; i < len; i++) {
-        const particle = particlesArray[i];
+        const p = particlesArray[i];
         
-        // Mouse interaction optimizada
-        const dx = mouseX - particle.x;
-        const dy = mouseY - particle.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+        // Mouse interaction solo cada 3 frames
+        if (frameCount % 3 === 0) {
+          const dx = mouseX - p.x;
+          const dy = mouseY - p.y;
+          const distSq = dx * dx + dy * dy;
 
-        if (distance < 100) {
-          const force = (100 - distance) / 100;
-          particle.vx -= (dx / distance) * force * 0.2;
-          particle.vy -= (dy / distance) * force * 0.2;
+          if (distSq < 10000) { // 100px squared
+            const dist = Math.sqrt(distSq);
+            const force = (100 - dist) / 100;
+            p.vx -= (dx / dist) * force * 0.2;
+            p.vy -= (dy / dist) * force * 0.2;
+          }
         }
 
-        // Update position
-        particle.x += particle.vx;
-        particle.y += particle.vy;
+        // Actualizar posición
+        p.x += p.vx;
+        p.y += p.vy;
 
         // Damping
-        particle.vx *= 0.99;
-        particle.vy *= 0.99;
+        p.vx *= 0.99;
+        p.vy *= 0.99;
 
         // Boundary check optimizado
-        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
-        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+        p.vx = (p.x < 0 || p.x > canvasWidth) ? -p.vx : p.vx;
+        p.vy = (p.y < 0 || p.y > canvasHeight) ? -p.vy : p.vy;
 
-        // Draw particle - colores según tema
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-        ctx.fillStyle = isDark 
-          ? `rgba(99, 102, 241, ${particle.opacity})` 
-          : `rgba(51, 65, 85, ${particle.opacity * 0.8})`;
-        ctx.fill();
+        // Dibujar partícula (fillRect es más rápido que arc)
+        ctx.fillStyle = `${particleColor}${p.opacity * opacityMultiplier})`;
+        ctx.fillRect(p.x - p.radius, p.y - p.radius, p.radius * 2, p.radius * 2);
+      }
 
-        // Conectar solo con partículas cercanas (optimizado) - colores según tema
-        for (let j = i + 1; j < len; j++) {
-          const other = particlesArray[j];
-          const dx = particle.x - other.x;
-          const dy = particle.y - other.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+      // Conectar partículas solo cada 2 frames
+      if (frameCount % 2 === 0) {
+        ctx.lineWidth = 0.5;
+        for (let i = 0; i < len; i++) {
+          const p1 = particlesArray[i];
+          for (let j = i + 1; j < len; j++) {
+            const p2 = particlesArray[j];
+            const dx = p1.x - p2.x;
+            const dy = p1.y - p2.y;
+            const distSq = dx * dx + dy * dy;
 
-          if (distance < 60) {
-            ctx.beginPath();
-            ctx.moveTo(particle.x, particle.y);
-            ctx.lineTo(other.x, other.y);
-            ctx.strokeStyle = isDark 
-              ? `rgba(99, 102, 241, ${0.1 * (1 - distance / 60)})` 
-              : `rgba(51, 65, 85, ${0.15 * (1 - distance / 60)})`;
-            ctx.stroke();
+            if (distSq < maxDistanceSq) {
+              const dist = Math.sqrt(distSq);
+              const opacity = (isDark ? 0.1 : 0.15) * (1 - dist / maxDistance);
+              ctx.strokeStyle = `${lineColor}${opacity})`;
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.stroke();
+            }
           }
         }
       }
@@ -855,7 +875,7 @@ const Portfolio = () => {
                 className="project-card bg-white/90 dark:bg-slate-900/50 backdrop-blur-lg rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-red-500 dark:hover:border-blue-500 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-blue-500/30 cursor-pointer group"
               >
                 <div className="bg-gradient-to-br from-blue-600 to-purple-600 h-48 flex items-center justify-center relative overflow-hidden">
-                  {/* Video de fondo con carga diferida - solo cuando la sección es visible */}
+                  {/* Video de fondo con carga diferida ULTRA-OPTIMIZADA */}
                   {projectsVisible ? (
                     <video
                       key={project.video}
@@ -866,12 +886,21 @@ const Portfolio = () => {
                       preload="none"
                       poster={project.video.replace('.mp4', '-poster.jpg')}
                       className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-300"
-                      onLoadedMetadata={(e) => {
+                      loading="lazy"
+                      onLoadStart={(e) => {
+                        // Cargar solo cuando realmente sea necesario
+                        const video = e.target;
+                        if (!video.hasAttribute('data-loaded')) {
+                          video.setAttribute('data-loaded', 'true');
+                        }
+                      }}
+                      onLoadedData={(e) => {
                         e.target.muted = true;
                         e.target.play().catch(() => {}); // Silenciar errores de autoplay
                       }}
                       style={{
-                        backgroundColor: 'rgba(59, 130, 246, 0.1)' // Fallback mientras carga
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        contentVisibility: 'auto' // Optimización de rendering
                       }}
                     >
                       <source src={project.video} type="video/mp4" />
@@ -1095,11 +1124,16 @@ const Portfolio = () => {
                     autoPlay
                     preload="auto"
                     poster={selectedProject.video.replace('.mp4', '-poster.jpg')}
+                    playsInline
                     className="w-full h-auto max-h-full relative z-10 rounded-2xl shadow-2xl"
                     onLoadedData={(e) => {
                       e.target.style.opacity = '1';
                     }}
-                    style={{ opacity: 0, transition: 'opacity 0.3s ease-in-out' }}
+                    style={{ 
+                      opacity: 0, 
+                      transition: 'opacity 0.3s ease-in-out',
+                      contentVisibility: 'auto'
+                    }}
                   >
                     <source src={selectedProject.video} type="video/mp4" />
                     Tu navegador no soporta el elemento de video.
