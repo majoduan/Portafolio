@@ -168,7 +168,7 @@ const ContactForm = memo(() => {
       {/* Submit Button */}
       <button
         type="submit"
-        className="w-full py-3 md:py-4 px-6 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 rounded-xl font-semibold text-white text-base md:text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/50 flex items-center justify-center gap-3 group"
+        className="w-full py-3 md:py-4 px-6 bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-500 dark:to-purple-500 hover:from-red-600 hover:to-orange-600 dark:hover:from-blue-600 dark:hover:to-purple-600 rounded-xl font-semibold text-white text-base md:text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-red-500/50 dark:hover:shadow-blue-500/50 flex items-center justify-center gap-3 group"
       >
         <span>{t('contact.form.submit')}</span>
         <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />

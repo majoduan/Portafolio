@@ -100,7 +100,7 @@ const TechCard = React.memo(({ tech, index, animationState, onMouseEnter, onMous
           
           {/* Solo nivel en móvil */}
           <div className="text-right flex-shrink-0">
-            <div className="text-lg font-bold text-purple-600 dark:text-purple-400">
+            <div className="text-lg font-bold text-red-600 dark:text-purple-400">
               {tech.level}%
             </div>
           </div>
@@ -138,7 +138,7 @@ const TechCard = React.memo(({ tech, index, animationState, onMouseEnter, onMous
           </div>
 
           <div className="flex-1">
-            <h4 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+            <h4 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-red-600 dark:group-hover:text-purple-400 transition-colors">
               {tech.name}
             </h4>
             <p className="text-sm text-slate-600 dark:text-gray-400 transition-colors">
@@ -147,7 +147,7 @@ const TechCard = React.memo(({ tech, index, animationState, onMouseEnter, onMous
           </div>
 
           <div className="text-right">
-            <div className="text-2xl font-bold text-purple-400 dark:text-purple-400 text-purple-600 transition-colors">
+            <div className="text-2xl font-bold text-red-600 dark:text-purple-400 transition-colors">
               {shouldAnimate ? <AnimatedCounter value={tech.level} isTransitioning={false} /> : tech.level}%
             </div>
             <div className="text-xs text-slate-400 dark:text-gray-500 text-gray-600 transition-colors">
@@ -159,7 +159,7 @@ const TechCard = React.memo(({ tech, index, animationState, onMouseEnter, onMous
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
             <span className="text-slate-900 dark:text-gray-300 transition-colors">{t('techCard.masteryLevel')}</span>
-            <span className="text-purple-400 dark:text-purple-300 text-purple-600 font-medium transition-colors">
+            <span className="text-red-600 dark:text-purple-300 font-medium transition-colors">
               {shouldAnimate ? <AnimatedCounter value={tech.level} isTransitioning={false} /> : tech.level}%
             </span>
           </div>

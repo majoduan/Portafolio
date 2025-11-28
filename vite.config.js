@@ -6,8 +6,11 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      'lodash.debounce': 'lodash-es/debounce'
-    }
+      'lodash.debounce': 'lodash-es/debounce',
+      'react': 'react',
+      'react-dom': 'react-dom'
+    },
+    dedupe: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime']
   },
   build: {
     // Copiar Service Worker a dist - Fase 2 optimization
@@ -77,8 +80,7 @@ export default defineConfig({
   },
   // Optimización de performance mejorada
   optimizeDeps: {
-    include: ['react', 'react-dom', 'lucide-react', 'lodash-es'],
-    exclude: ['@splinetool/react-spline'],
+    include: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'lucide-react', 'lodash-es', '@splinetool/react-spline'],
     // Force pre-bundling de dependencias críticas
     esbuildOptions: {
       target: 'es2020',

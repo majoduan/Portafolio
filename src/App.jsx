@@ -193,7 +193,7 @@ const Portfolio = () => {
     canvas.height = window.innerHeight;
 
     // Adaptar partículas según tamaño de pantalla (optimización para móvil)
-    const particleCount = window.innerWidth < 768 ? 10 : 20;
+    const particleCount = window.innerWidth < 768 ? 10 : 30;
     particles.current = Array.from({ length: particleCount }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
@@ -519,13 +519,13 @@ const Portfolio = () => {
                   }}
                   className={`text-lg font-medium transition-all duration-300 relative group ${
                     activeSection === item
-                      ? 'text-blue-500 dark:text-blue-400'
-                      : 'text-slate-700 dark:text-slate-300 hover:text-blue-500 dark:hover:text-blue-400'
+                      ? 'text-red-600 dark:text-blue-400'
+                      : 'text-slate-700 dark:text-slate-300 hover:text-red-600 dark:hover:text-blue-400'
                   }`}
                 >
                   {t(`nav.${item}`)}
                   <span 
-                    className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 transition-all duration-300 ${
+                    className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-400 dark:to-purple-400 transition-all duration-300 ${
                       activeSection === item ? 'w-full' : 'w-0 group-hover:w-full'
                     }`} 
                   />
@@ -567,8 +567,8 @@ const Portfolio = () => {
                   }}
                   className={`block px-3 py-2 rounded-md transition-colors ${
                     activeSection === item
-                      ? 'text-blue-500 dark:text-blue-400 bg-slate-200 dark:bg-slate-800'
-                      : 'text-slate-700 dark:text-slate-300 hover:text-blue-500 dark:hover:text-blue-400 hover:bg-slate-200 dark:hover:bg-slate-800'
+                      ? 'text-red-600 dark:text-blue-400 bg-slate-200 dark:bg-slate-800'
+                      : 'text-slate-700 dark:text-slate-300 hover:text-red-600 dark:hover:text-blue-400 hover:bg-slate-200 dark:hover:bg-slate-800'
                   }`}
                 >
                   {t(`nav.${item}`)}
@@ -591,7 +591,7 @@ const Portfolio = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Contenido de texto - Izquierda */}
             <div className="text-center lg:text-left">
-              <h1 className="text-5xl md:text-7xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
+              <h1 className="text-5xl md:text-7xl font-bold mb-4 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent animate-pulse">
                 {t('hero.name')}
               </h1>
               <p className="text-2xl md:text-3xl text-slate-200 dark:text-slate-100 text-slate-700 mb-6 font-medium transition-colors duration-300">
@@ -607,7 +607,7 @@ const Portfolio = () => {
                 <a
                   href="/cv/Mateo_Dueñas_CV.pdf"
                   download="Mateo_Dueñas_CV.pdf"
-                  className="inline-block px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full font-semibold hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-105"
+                  className="inline-block px-8 py-3 bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-500 dark:to-purple-500 rounded-full font-semibold text-white hover:shadow-lg hover:shadow-red-500/50 dark:hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-105"
                 >
                   {t('hero.downloadCV')}
                 </a>
@@ -618,7 +618,7 @@ const Portfolio = () => {
                     href="https://www.linkedin.com/in/mateo-dueñas"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-105"
+                    className="w-12 h-12 rounded-full bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-500 dark:to-purple-500 flex items-center justify-center hover:shadow-lg hover:shadow-red-500/50 dark:hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-105"
                   >
                     <Linkedin className="w-5 h-5 text-white" />
                   </a>
@@ -626,13 +626,13 @@ const Portfolio = () => {
                     href="https://github.com/mateo-dueñas"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-105"
+                    className="w-12 h-12 rounded-full bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-500 dark:to-purple-500 flex items-center justify-center hover:shadow-lg hover:shadow-red-500/50 dark:hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-105"
                   >
                     <Github className="w-5 h-5 text-white" />
                   </a>
                   <a
                     href="mailto:mateo.duenas@epn.edu.ec"
-                    className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-105"
+                    className="w-12 h-12 rounded-full bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-500 dark:to-purple-500 flex items-center justify-center hover:shadow-lg hover:shadow-red-500/50 dark:hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-105"
                   >
                     <Mail className="w-5 h-5 text-white" />
                   </a>
@@ -647,7 +647,7 @@ const Portfolio = () => {
                   { value: '20+', label: t('hero.stats.technologies') }
                 ].map((stat, i) => (
                   <div key={i} className="text-center">
-                    <div className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+                    <div className="text-3xl font-bold bg-gradient-to-r from-orange-500 to-red-500 dark:from-purple-400 dark:to-blue-400 bg-clip-text text-transparent">
                       {stat.value}
                     </div>
                     <div className="text-sm text-slate-400 dark:text-slate-400 text-slate-600 mt-1 transition-colors duration-300">
@@ -686,7 +686,7 @@ const Portfolio = () => {
       {/* Technologies Section */}
       <section id="technologies" className="pt-20 relative z-10 bg-transparent transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
             {t('technologies.title')}
           </h2>
           {/* Tab Navigation Bar - Estilo Facebook */}
@@ -698,7 +698,7 @@ const Portfolio = () => {
                   onClick={() => handleManualTabChange(index)}
                   className={`px-3 sm:px-6 md:px-8 py-3 md:py-4 font-medium relative transition-all duration-300 whitespace-nowrap text-xs sm:text-sm md:text-base ${
                     currentTechTab === index
-                      ? 'text-blue-500 dark:text-blue-400'
+                      ? 'text-red-600 dark:text-blue-400'
                       : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/30'
                   }`}
                 >
@@ -707,7 +707,7 @@ const Portfolio = () => {
                   <span className="inline sm:hidden">{category.shortTitle}</span>
                   {/* Línea indicadora inferior con transición suave */}
                   <div
-                    className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-1000 ${
+                    className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-500 dark:to-purple-500 transition-all duration-1000 ${
                       currentTechTab === index ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'
                     }`}
                   />
@@ -761,7 +761,7 @@ const Portfolio = () => {
       <section id="certificates" className="pt-20 bg-transparent relative z-10 overflow-hidden transition-colors duration-300">
         {/* Títulos centrados */}
         <div className="max-w-7xl mx-auto px-4 mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
             {t('certificates.title')}
           </h2>
         </div>
@@ -784,7 +784,7 @@ const Portfolio = () => {
             {[...certificates, ...certificates, ...certificates].map((cert, i) => (
               <div
                 key={i}
-                className="flex-shrink-0 w-[420px] bg-white/90 dark:bg-slate-900 backdrop-blur-lg rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50 hover:border-blue-400 dark:hover:border-blue-500/70 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-blue-500/40 group cursor-pointer"
+                className="flex-shrink-0 w-[420px] bg-white/90 dark:bg-slate-900 backdrop-blur-lg rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50 hover:border-red-500 dark:hover:border-blue-500/70 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-blue-500/40 group cursor-pointer"
               >
                 {/* Certificate Image */}
                 <div className="relative h-64 overflow-hidden bg-gradient-to-br from-blue-900/30 to-purple-900/30">
@@ -812,7 +812,7 @@ const Portfolio = () => {
 
                 {/* Certificate Info */}
                 <div className="p-6">
-                  <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-tight">
+                  <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white group-hover:text-red-600 dark:group-hover:text-blue-400 transition-colors leading-tight">
                     {cert.title}
                   </h3>
                   <div className="flex items-start gap-2 text-slate-600 dark:text-slate-400">
@@ -833,7 +833,7 @@ const Portfolio = () => {
       {/* Projects Section */}
       <section ref={projectsSectionRef} id="projects" className="py-20 relative z-10 bg-transparent transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
             {t('projects.title')}
           </h2>
         </div>
@@ -852,7 +852,7 @@ const Portfolio = () => {
                   preloadVideoOnHover(project.video);
                 }}
                 onMouseLeave={() => setHoveredProject(null)}
-                className="project-card bg-white/90 dark:bg-slate-900/50 backdrop-blur-lg rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-blue-400 dark:hover:border-blue-500 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-blue-500/30 cursor-pointer group"
+                className="project-card bg-white/90 dark:bg-slate-900/50 backdrop-blur-lg rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-red-500 dark:hover:border-blue-500 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-blue-500/30 cursor-pointer group"
               >
                 <div className="bg-gradient-to-br from-blue-600 to-purple-600 h-48 flex items-center justify-center relative overflow-hidden">
                   {/* Video de fondo con carga diferida - solo cuando la sección es visible */}
@@ -892,7 +892,7 @@ const Portfolio = () => {
                   </div>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-2xl font-bold mb-3 text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  <h3 className="text-2xl font-bold mb-3 text-slate-900 dark:text-white group-hover:text-red-600 dark:group-hover:text-blue-400 transition-colors">
                     {project.title}
                   </h3>
                   <p className="text-slate-300 dark:text-slate-300 text-slate-600 mb-4">{project.description}</p>
@@ -900,7 +900,7 @@ const Portfolio = () => {
                     {project.tech.map((tech, j) => (
                       <span
                         key={j}
-                        className="px-3 py-1 bg-blue-50 dark:bg-slate-800 text-xs rounded-full text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-transparent"
+                        className="px-3 py-1 bg-red-50 dark:bg-slate-800 text-xs rounded-full text-red-600 dark:text-blue-400 border border-red-200 dark:border-transparent"
                       >
                         {tech}
                       </span>
@@ -914,7 +914,7 @@ const Portfolio = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
-                        className="flex items-center space-x-1 px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-white hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500 hover:text-white rounded-full text-sm transition-all duration-300 border border-slate-200 dark:border-transparent"
+                        className="flex items-center space-x-1 px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-white hover:bg-gradient-to-r hover:from-red-500 hover:to-orange-500 dark:hover:from-blue-500 dark:hover:to-purple-500 hover:text-white rounded-full text-sm transition-all duration-300 border border-slate-200 dark:border-transparent"
                       >
                         <span className="capitalize">{key}</span>
                         <ExternalLink className="w-4 h-4" />
@@ -933,7 +933,7 @@ const Portfolio = () => {
         <div className="max-w-7xl mx-auto px-4">
           {/* Section Title */}
           <div className="text-center mb-8 md:mb-12 lg:mb-16">
-            <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
               {t('contact.title')}
             </h2>
             <p className="text-slate-300 dark:text-slate-300 text-slate-600 text-base md:text-lg lg:text-xl max-w-2xl mx-auto px-4">
@@ -946,7 +946,7 @@ const Portfolio = () => {
             {/* Left Column - Profile Image & Info */}
             <div className="contact-left-column">
               {/* Profile Image Card */}
-              <div className="bg-white/90 dark:bg-slate-900 backdrop-blur-lg rounded-2xl md:rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-700/50 hover:border-blue-400 dark:hover:border-blue-500/70 transition-all duration-500 shadow-lg dark:shadow-2xl group h-full flex flex-col">
+              <div className="bg-white/90 dark:bg-slate-900 backdrop-blur-lg rounded-2xl md:rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-700/50 hover:border-red-500 dark:hover:border-blue-500/70 transition-all duration-500 shadow-lg dark:shadow-2xl group h-full flex flex-col">
                 {/* Image Container with Gradient Overlay */}
                 <div className="relative h-64 sm:h-80 md:h-96 lg:h-[400px] overflow-hidden bg-gradient-to-br from-blue-900/30 to-purple-900/30">
                   {/* Profile Image */}
@@ -970,7 +970,7 @@ const Portfolio = () => {
 
                 {/* Info Section */}
                 <div className="p-6 md:p-8 flex-1 flex flex-col">
-                  <h3 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                  <h3 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4 bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
                     {t('contact.profile.name')}
                   </h3>
                   <p className="text-slate-300 dark:text-slate-300 text-slate-600 mb-4 md:mb-6 text-base md:text-lg leading-relaxed flex-1">
@@ -981,14 +981,14 @@ const Portfolio = () => {
                   <div className="space-y-3 md:space-y-4">
                     <a
                       href="mailto:mate.due02@gmail.com"
-                      className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all duration-300 group/link border border-slate-200 dark:border-slate-700/50 hover:border-blue-400 dark:hover:border-blue-500/50"
+                      className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all duration-300 group/link border border-slate-200 dark:border-slate-700/50 hover:border-red-500 dark:hover:border-blue-500/50"
                     >
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center group-hover/link:scale-110 transition-transform duration-300">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-500 dark:to-purple-500 flex items-center justify-center group-hover/link:scale-110 transition-transform duration-300">
                         <Mail className="w-6 h-6 text-white" />
                       </div>
                       <div className="flex-1">
                         <p className="text-sm text-slate-400 dark:text-slate-400 text-slate-600">{t('contact.profile.emailLabel')}</p>
-                        <p className="text-white dark:text-white text-slate-900 font-medium">mate.due02@gmail.com</p>
+                        <p className="text-slate-900 dark:text-white font-medium">mate.due02@gmail.com</p>
                       </div>
                     </a>
 
@@ -996,14 +996,14 @@ const Portfolio = () => {
                       href="https://linkedin.com/in/mateo-dueñas-andrade"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all duration-300 group/link border border-slate-200 dark:border-slate-700/50 hover:border-blue-400 dark:hover:border-blue-500/50"
+                      className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all duration-300 group/link border border-slate-200 dark:border-slate-700/50 hover:border-red-500 dark:hover:border-blue-500/50"
                     >
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center group-hover/link:scale-110 transition-transform duration-300">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-500 dark:to-purple-500 flex items-center justify-center group-hover/link:scale-110 transition-transform duration-300">
                         <Linkedin className="w-6 h-6 text-white" />
                       </div>
                       <div className="flex-1">
                         <p className="text-sm text-slate-400 dark:text-slate-400 text-slate-600">{t('contact.profile.linkedinLabel')}</p>
-                        <p className="text-white dark:text-white text-slate-900 font-medium">mateo-dueñas-andrade</p>
+                        <p className="text-slate-900 dark:text-white font-medium">mateo-dueñas-andrade</p>
                       </div>
                     </a>
 
@@ -1011,14 +1011,14 @@ const Portfolio = () => {
                       href="https://github.com/majoduan"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all duration-300 group/link border border-slate-200 dark:border-slate-700/50 hover:border-blue-400 dark:hover:border-blue-500/50"
+                      className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all duration-300 group/link border border-slate-200 dark:border-slate-700/50 hover:border-red-500 dark:hover:border-blue-500/50"
                     >
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center group-hover/link:scale-110 transition-transform duration-300">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-500 dark:to-purple-500 flex items-center justify-center group-hover/link:scale-110 transition-transform duration-300">
                         <Github className="w-6 h-6 text-white" />
                       </div>
                       <div className="flex-1">
                         <p className="text-sm text-slate-400 dark:text-slate-400 text-slate-600">{t('contact.profile.githubLabel')}</p>
-                        <p className="text-white dark:text-white text-slate-900 font-medium">majoduan</p>
+                        <p className="text-slate-900 dark:text-white font-medium">majoduan</p>
                       </div>
                     </a>
                   </div>
@@ -1029,7 +1029,7 @@ const Portfolio = () => {
             {/* Right Column - Contact Form */}
             <div className="contact-right-column">
               <div className="bg-white/90 dark:bg-slate-900 backdrop-blur-lg rounded-2xl md:rounded-3xl p-6 md:p-8 lg:p-10 border border-slate-200 dark:border-slate-700/50 hover:border-purple-400 dark:hover:border-purple-500/70 transition-all duration-500 shadow-lg dark:shadow-2xl h-full">
-                <h3 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4 md:mb-6 text-white dark:text-white text-slate-900">
+                <h3 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
                   {t('contact.form.title')}
                 </h3>
                 <p className="text-slate-400 dark:text-slate-400 text-slate-600 text-sm md:text-base mb-6 md:mb-8">
@@ -1065,7 +1065,7 @@ const Portfolio = () => {
           >
             {/* Header del modal - Sticky con botón de cerrar */}
             <div className="sticky top-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg border-b border-slate-200 dark:border-slate-800 px-6 py-4 flex justify-between items-center z-20">
-              <h3 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+              <h3 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
                 {selectedProject.title}
               </h3>
               <button
@@ -1120,7 +1120,7 @@ const Portfolio = () => {
                 {selectedProject.longDescription && (
                   <div className="mb-8">
                     <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                      <div className="w-1 h-6 bg-gradient-to-b from-blue-400 to-purple-400 rounded-full"></div>
+                      <div className="w-1 h-6 bg-gradient-to-b from-red-500 to-orange-500 dark:from-blue-400 dark:to-purple-400 rounded-full"></div>
                       {t('projects.modalTitle')}
                     </h4>
                     <p className="text-slate-700 dark:text-slate-300 text-sm md:text-base leading-relaxed text-justify">
@@ -1132,14 +1132,14 @@ const Portfolio = () => {
                 {/* Tecnologías Utilizadas */}
                 <div className="mb-8">
                   <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                    <div className="w-1 h-6 bg-gradient-to-b from-blue-400 to-purple-400 rounded-full"></div>
+                    <div className="w-1 h-6 bg-gradient-to-b from-red-500 to-orange-500 dark:from-blue-400 dark:to-purple-400 rounded-full"></div>
                     {t('projects.techUsed')}
                   </h4>
                   <div className="flex flex-wrap gap-3">
                     {selectedProject.tech.map((tech, j) => (
                       <span
                         key={j}
-                        className="px-4 py-2 bg-white dark:bg-slate-800/70 backdrop-blur-sm rounded-full text-blue-600 dark:text-blue-400 font-medium text-sm border border-blue-300 dark:border-blue-500/30 hover:border-blue-500 dark:hover:border-blue-500/60 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-300"
+                        className="px-4 py-2 bg-white dark:bg-slate-800/70 backdrop-blur-sm rounded-full text-red-600 dark:text-blue-400 font-medium text-sm border border-red-300 dark:border-blue-500/30 hover:border-red-500 dark:hover:border-blue-500/60 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-300"
                       >
                         {tech}
                       </span>
@@ -1150,7 +1150,7 @@ const Portfolio = () => {
                 {/* Enlaces del proyecto */}
                 <div className="mb-6">
                   <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                    <div className="w-1 h-6 bg-gradient-to-b from-blue-400 to-purple-400 rounded-full"></div>
+                    <div className="w-1 h-6 bg-gradient-to-b from-red-500 to-orange-500 dark:from-blue-400 dark:to-purple-400 rounded-full"></div>
                     {t('projects.projectLinks')}
                   </h4>
                   <div className="flex flex-col sm:flex-row flex-wrap gap-3">
@@ -1160,7 +1160,7 @@ const Portfolio = () => {
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 rounded-full text-white font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50"
+                        className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-500 dark:to-purple-500 hover:from-red-600 hover:to-orange-600 dark:hover:from-blue-600 dark:hover:to-purple-600 rounded-full text-white font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-500/50 dark:hover:shadow-blue-500/50"
                       >
                         <span className="capitalize">{key}</span>
                         <ExternalLink className="w-4 h-4" />
