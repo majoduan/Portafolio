@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
-const AnimatedCounter = React.memo(({ value, duration = 1800, isTransitioning }) => {
-  const [count, setCount] = useState(0);
+const AnimatedCounter = React.memo(({ value, duration = 1800, isTransitioning, disabled = false }) => {
+  const [count, setCount] = useState(disabled ? value : 0);
 
   useEffect(() => {
+    // Si está deshabilitado (móvil), mostrar valor final inmediatamente
+    if (disabled) {
+      setCount(value);
+      return;
+    }
+
     if (isTransitioning) {
       setCount(0);
       return;
@@ -31,7 +37,7 @@ const AnimatedCounter = React.memo(({ value, duration = 1800, isTransitioning })
         cancelAnimationFrame(animationFrame);
       }
     };
-  }, [value, duration, isTransitioning]);
+  }, [value, duration, isTransitioning, disabled]);
 
   return <>{count}</>;
 });

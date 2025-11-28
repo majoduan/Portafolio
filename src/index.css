@@ -147,7 +147,18 @@ html:not(.dark) .spline-container > div {
 /* Responsive para contenedor de tecnologías */
 @media (max-width: 768px) {
   .tech-cards-container {
-    min-height: 300px;
+    min-height: 200px; /* Reducido de 300px a 200px para cards compactas */
+  }
+  
+  /* Optimizaciones adicionales para móvil */
+  .tech-card {
+    /* Desactivar transformaciones complejas en móvil */
+    transform: none !important;
+  }
+  
+  .tech-card:hover {
+    /* Desactivar will-change en móvil */
+    will-change: auto;
   }
 }
 

@@ -145,6 +145,7 @@
   width: 2px;
   height: 8px;
   background: rgba(99, 102, 241, 0.4);
+  /* 400px circle -> 90% = 360px diameter -> radius 180px */
   transform-origin: center 180px;
   box-shadow: 0 0 4px rgba(99, 102, 241, 0.6);
 }
@@ -604,6 +605,12 @@
     height: 350px;
   }
   
+  /* Ajustar transform-origin de ticks para círculo de 350px */
+  /* 350px * 0.9 = 315px diameter -> radius 157.5px */
+  .hud-tick {
+    transform-origin: center 157.5px;
+  }
+  
   .hud-panel {
     padding: 15px;
   }
@@ -626,6 +633,12 @@
     height: 300px;
   }
   
+  /* Ajustar transform-origin de ticks para círculo de 300px */
+  /* 300px * 0.9 = 270px diameter -> radius 135px */
+  .hud-tick {
+    transform-origin: center 135px;
+  }
+  
   .hud-panel-top-left,
   .hud-panel-right {
     top: 60px;
@@ -646,6 +659,12 @@
   .hud-center-circle {
     width: 250px;
     height: 250px;
+  }
+  
+  /* Ajustar transform-origin de ticks para círculo de 250px */
+  /* 250px * 0.9 = 225px diameter -> radius 112.5px */
+  .hud-tick {
+    transform-origin: center 112.5px;
   }
   
   .hud-panel {
@@ -685,5 +704,11 @@
   .hud-center-circle {
     width: 200px;
     height: 200px;
+  }
+  
+  /* Ajustar transform-origin de ticks para círculo de 200px */
+  /* 200px * 0.9 = 180px diameter -> radius 90px */
+  .hud-tick {
+    transform-origin: center 90px;
   }
 }

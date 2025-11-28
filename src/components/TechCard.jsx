@@ -2,8 +2,22 @@ import React, { useState, useEffect, useMemo } from 'react';
 import AnimatedCounter from './AnimatedCounter';
 import { useTranslation } from '../hooks/useTranslation';
 
+// Hook para detectar si es dispositivo móvil
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize, { passive: true });
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  
+  return isMobile;
+};
+
 const TechCard = React.memo(({ tech, index, animationState, onMouseEnter, onMouseLeave }) => {
   const { t } = useTranslation();
+  const isMobile = useIsMobile();
   
   // Si está saliendo, comienza visible. Si está entrando, comienza invisible
   const [isVisible, setIsVisible] = useState(animationState === 'exiting');
@@ -21,7 +35,8 @@ const TechCard = React.memo(({ tech, index, animationState, onMouseEnter, onMous
     const randomIndex = tech.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % shapes.length;
     const shape = shapes[randomIndex];
     
-    const animate = animationState === 'idle' || animationState === 'entering';
+    // En móvil, no animar para mejor performance
+    const animate = !isMobile && (animationState === 'idle' || animationState === 'entering');
     
     return {
       experienceYears: years,
@@ -29,7 +44,7 @@ const TechCard = React.memo(({ tech, index, animationState, onMouseEnter, onMous
       shapeStyle: shape,
       shouldAnimate: animate
     };
-  }, [tech.name, tech.experience, animationState]);
+  }, [tech.name, tech.experience, animationState, isMobile]);
 
   // Memoizar el nombre del componente de icono para evitar re-renders
   const IconComponent = useMemo(() => tech.icon, [tech.icon]);
@@ -53,6 +68,48 @@ const TechCard = React.memo(({ tech, index, animationState, onMouseEnter, onMous
     }
   }, [animationState]);
 
+  // Renderizado móvil compacto (optimizado para performance)
+  if (isMobile) {
+    return (
+      <div
+        className={`tech-card group bg-white/80 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 transition-opacity duration-500 rounded-lg shadow-md backdrop-blur-sm ${
+          isVisible ? 'opacity-100' : 'opacity-0'
+        }`}
+        style={{
+          transitionDelay: `${index * 50}ms`
+        }}
+      >
+        <div className="p-3 flex items-center gap-3">
+          {/* Icono compacto */}
+          <div
+            className={`w-12 h-12 flex-shrink-0 bg-gradient-to-r ${tech.color} ${shapeStyle.rounded} flex items-center justify-center shadow-md p-2`}
+            style={{ clipPath: shapeStyle.clipPath }}
+          >
+            <IconComponent className="w-full h-full text-white" />
+          </div>
+          
+          {/* Info compacta */}
+          <div className="flex-1 min-w-0">
+            <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">
+              {tech.name}
+            </h4>
+            <p className="text-xs text-slate-600 dark:text-gray-400 truncate">
+              {tech.experience}
+            </p>
+          </div>
+          
+          {/* Solo nivel en móvil */}
+          <div className="text-right flex-shrink-0">
+            <div className="text-lg font-bold text-purple-600 dark:text-purple-400">
+              {tech.level}%
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
+  // Renderizado desktop completo (con todas las animaciones)
   return (
     <div
       className={`tech-card group bg-white/80 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 hover:border-purple-400/50 dark:hover:border-purple-500/40 transition-all duration-1000 rounded-lg shadow-md dark:shadow-lg hover:shadow-xl backdrop-blur-sm ${

@@ -724,7 +724,7 @@ const Portfolio = () => {
           >
             {/* Previous tab cards (exiting) - solo renderizar si está en transición */}
             {techTransitionState === 'exiting' && previousTechTab !== null && (
-              <div className="tech-cards-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="tech-cards-grid grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8">
                 {technologies[techCategories[previousTechTab].id].map((tech, index) => (
                   <TechCard
                     key={`exiting-${previousTechTab}-${tech.name}`}
@@ -740,7 +740,7 @@ const Portfolio = () => {
 
             {/* Current tab cards - solo renderizar cuando esté listo */}
             {(techTransitionState === 'entering' || techTransitionState === 'idle') && (
-              <div className="tech-cards-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="tech-cards-grid grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8">
                 {technologies[techCategories[currentTechTab].id].map((tech, index) => (
                   <TechCard
                     key={`current-${currentTechTab}-${tech.name}`}
