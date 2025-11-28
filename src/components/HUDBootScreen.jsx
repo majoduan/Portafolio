@@ -82,9 +82,6 @@ const preloadResources = async () => {
   }, 5000); // Aumentado a 5s para dar prioridad a recursos críticos
 };
 
-// Exportar cache para uso en App.jsx
-export const getSplineModuleCache = () => splineModuleCache;
-
 const HUDBootScreen = React.memo(({ onComplete }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [typewriterText, setTypewriterText] = useState('');
