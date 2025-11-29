@@ -8,6 +8,7 @@ import { getTechnologies } from './data/technologies';
 import { getProjectsData, getCertificatesData } from './data/projectTranslations';
 import { useTranslation } from './hooks/useTranslation';
 import { AppContext } from './contexts/AppContext';
+import { preloadCriticalResources } from './utils/preloadResources';
 
 // Lazy load Spline para mejorar el tiempo de carga inicial
 const Spline = lazy(() => import('@splinetool/react-spline'));
@@ -516,7 +517,11 @@ const Portfolio = () => {
   }, []);
 
   if (loading) {
-    return <HUDBootScreen onComplete={() => setLoading(false)} />;
+    return <HUDBootScreen onComplete={() => {
+      setLoading(false);
+      // Precargar recursos críticos DESPUÉS del boot screen
+      setTimeout(() => preloadCriticalResources(), 500);
+    }} />;
   }
 
   return (

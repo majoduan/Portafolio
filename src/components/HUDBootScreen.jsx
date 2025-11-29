@@ -55,73 +55,8 @@ const HUDBootScreen = React.memo(({ onComplete }) => {
     return () => clearInterval(cursorInterval);
   }, []);
 
-  // Fade-in inicial + Precarga de recursos
+  // Fade-in inicial (sin precarga para evitar referencias circulares)
   useEffect(() => {
-    // Precarga inteligente de recursos críticos
-    const preloadResources = async () => {
-      try {
-        // 1. PRIORIDAD ALTA: Precargar módulo de Spline
-        import('@splinetool/react-spline')
-          .then(() => console.log('✅ Módulo Spline precargado'))
-          .catch(err => console.warn('⚠️ Spline preload failed:', err));
-
-        // 2. PRIORIDAD ALTA: Precargar imágenes de certificados
-        const certificateImages = [
-          '/images/certificates/epn-award.jpg',
-          '/images/certificates/cisco-networking.jpg',
-          '/images/certificates/digital-transformation.jpg',
-          '/images/certificates/scrum-foundation.jpg'
-        ];
-
-        certificateImages.forEach(src => {
-          const link = document.createElement('link');
-          link.rel = 'prefetch';
-          link.as = 'image';
-          link.href = src;
-          document.head.appendChild(link);
-        });
-
-        // 3. PRIORIDAD MEDIA: Precargar metadata de videos prioritarios
-        const priorityVideos = [
-          '/videos/poa-management.mp4',
-          '/videos/epn-certificates.mp4'
-        ];
-
-        priorityVideos.forEach(videoSrc => {
-          const video = document.createElement('video');
-          video.preload = 'metadata';
-          video.src = videoSrc;
-          video.muted = true;
-        });
-
-        // 4. PRIORIDAD BAJA: Prefetch de videos restantes después de 5s
-        setTimeout(() => {
-          const remainingVideos = [
-            '/videos/travel-allowance.mp4',
-            '/videos/storycraft.mp4',
-            '/videos/fitness-tracker.mp4',
-            '/videos/space-invaders.mp4',
-            '/videos/godot-game-2d.mp4',
-            '/videos/godot-game-3d.mp4'
-          ];
-
-          remainingVideos.forEach(videoSrc => {
-            const link = document.createElement('link');
-            link.rel = 'prefetch';
-            link.as = 'video';
-            link.href = videoSrc;
-            document.head.appendChild(link);
-          });
-        }, 5000);
-      } catch (error) {
-        console.warn('⚠️ Error en precarga de recursos:', error);
-      }
-    };
-
-    // Iniciar precarga
-    preloadResources();
-    
-    // Empezar el fade-in inmediatamente
     const fadeTimer = setTimeout(() => {
       setFadeState('visible');
     }, 2000);
