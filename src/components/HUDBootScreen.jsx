@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import './HUDBootScreen.css';
 import { 
   HardDrive, 
@@ -12,75 +12,6 @@ import {
   Power,
   RotateCw
 } from 'lucide-react';
-
-// Cache global para módulo de Spline precargado
-let splineModuleCache = null;
-
-// Precarga inteligente de recursos críticos con estrategia de prioridad y caché
-const preloadResources = async () => {
-  // 1. PRIORIDAD ALTA: Precargar y cachear módulo de Spline
-  if (!splineModuleCache) {
-    splineModuleCache = import('@splinetool/react-spline')
-      .then(module => {
-        console.log('✅ Módulo Spline precargado y cacheado');
-        return module;
-      })
-      .catch(err => {
-        console.warn('⚠️ Spline preload failed, will load on demand:', err);
-        return null;
-      });
-  }
-
-  // 2. PRIORIDAD ALTA: Precargar imágenes de certificados
-  const certificateImages = [
-    '/images/certificates/epn-award.jpg',
-    '/images/certificates/cisco-networking.jpg',
-    '/images/certificates/digital-transformation.jpg',
-    '/images/certificates/scrum-foundation.jpg'
-  ];
-
-  certificateImages.forEach(src => {
-    const link = document.createElement('link');
-    link.rel = 'prefetch';
-    link.as = 'image';
-    link.href = src;
-    document.head.appendChild(link);
-  });
-
-  // 3. PRIORIDAD MEDIA: Precargar solo METADATA de videos prioritarios
-  // Esto carga solo los primeros frames, no el video completo (~100KB vs 2MB)
-  const priorityVideos = [
-    '/videos/poa-management.mp4',
-    '/videos/epn-certificates.mp4'
-  ];
-
-  priorityVideos.forEach(videoSrc => {
-    const video = document.createElement('video');
-    video.preload = 'metadata'; // Solo metadata, no video completo
-    video.src = videoSrc;
-    video.muted = true;
-  });
-
-  // 4. PRIORIDAD BAJA: Prefetch ligero de videos restantes después de 5 segundos
-  setTimeout(() => {
-    const remainingVideos = [
-      '/videos/travel-allowance.mp4',
-      '/videos/storycraft.mp4',
-      '/videos/fitness-tracker.mp4',
-      '/videos/space-invaders.mp4',
-      '/videos/godot-game-2d.mp4',
-      '/videos/godot-game-3d.mp4'
-    ];
-
-    remainingVideos.forEach(videoSrc => {
-      const link = document.createElement('link');
-      link.rel = 'prefetch';
-      link.as = 'video';
-      link.href = videoSrc;
-      document.head.appendChild(link);
-    });
-  }, 5000); // Aumentado a 5s para dar prioridad a recursos críticos
-};
 
 const HUDBootScreen = React.memo(({ onComplete }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -114,7 +45,7 @@ const HUDBootScreen = React.memo(({ onComplete }) => {
       }
     }, 100);
     return () => clearInterval(interval);
-  }, []);
+  }, [initText]);
 
   // Cursor parpadeante
   useEffect(() => {
@@ -126,13 +57,74 @@ const HUDBootScreen = React.memo(({ onComplete }) => {
 
   // Fade-in inicial + Precarga de recursos
   useEffect(() => {
-    // Iniciar precarga de recursos en paralelo
+    // Precarga inteligente de recursos críticos
+    const preloadResources = async () => {
+      try {
+        // 1. PRIORIDAD ALTA: Precargar módulo de Spline
+        import('@splinetool/react-spline')
+          .then(() => console.log('✅ Módulo Spline precargado'))
+          .catch(err => console.warn('⚠️ Spline preload failed:', err));
+
+        // 2. PRIORIDAD ALTA: Precargar imágenes de certificados
+        const certificateImages = [
+          '/images/certificates/epn-award.jpg',
+          '/images/certificates/cisco-networking.jpg',
+          '/images/certificates/digital-transformation.jpg',
+          '/images/certificates/scrum-foundation.jpg'
+        ];
+
+        certificateImages.forEach(src => {
+          const link = document.createElement('link');
+          link.rel = 'prefetch';
+          link.as = 'image';
+          link.href = src;
+          document.head.appendChild(link);
+        });
+
+        // 3. PRIORIDAD MEDIA: Precargar metadata de videos prioritarios
+        const priorityVideos = [
+          '/videos/poa-management.mp4',
+          '/videos/epn-certificates.mp4'
+        ];
+
+        priorityVideos.forEach(videoSrc => {
+          const video = document.createElement('video');
+          video.preload = 'metadata';
+          video.src = videoSrc;
+          video.muted = true;
+        });
+
+        // 4. PRIORIDAD BAJA: Prefetch de videos restantes después de 5s
+        setTimeout(() => {
+          const remainingVideos = [
+            '/videos/travel-allowance.mp4',
+            '/videos/storycraft.mp4',
+            '/videos/fitness-tracker.mp4',
+            '/videos/space-invaders.mp4',
+            '/videos/godot-game-2d.mp4',
+            '/videos/godot-game-3d.mp4'
+          ];
+
+          remainingVideos.forEach(videoSrc => {
+            const link = document.createElement('link');
+            link.rel = 'prefetch';
+            link.as = 'video';
+            link.href = videoSrc;
+            document.head.appendChild(link);
+          });
+        }, 5000);
+      } catch (error) {
+        console.warn('⚠️ Error en precarga de recursos:', error);
+      }
+    };
+
+    // Iniciar precarga
     preloadResources();
     
     // Empezar el fade-in inmediatamente
     const fadeTimer = setTimeout(() => {
       setFadeState('visible');
-    }, 2000); // Duración del fade-in
+    }, 2000);
     
     return () => clearTimeout(fadeTimer);
   }, []);

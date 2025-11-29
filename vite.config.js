@@ -6,17 +6,15 @@ import { compression } from 'vite-plugin-compression2'
 export default defineConfig({
   plugins: [
     react(),
-    // Compresión Brotli y Gzip para assets
+    // Compresión Brotli optimizada (solo .br para máximo ahorro de bandwidth)
     compression({
       algorithm: 'brotliCompress',
-      exclude: [/\.(br)$/, /\.(gz)$/],
-      threshold: 1024,
-      compressionOptions: { level: 11 }
-    }),
-    compression({
-      algorithm: 'gzip',
-      exclude: [/\.(br)$/, /\.(gz)$/],
-      threshold: 1024
+      threshold: 10240, // 10KB - comprimir casi todo
+      compressionOptions: { level: 6 }, // Balance velocidad/ratio
+      deleteOriginFile: false, // Mantener originales como fallback
+      skipIfLargerOrEqual: true, // No crear si comprimido >= original
+      filter: /\.(js|mjs|json|css|html|svg)$/i, // Solo estos tipos de archivo
+      exclude: [/\.gz$/] // No generar .gz, solo .br
     })
   ],
   resolve: {
