@@ -5,10 +5,10 @@
 export const preloadCriticalResources = () => {
   // 1. PRIORIDAD ALTA: Precargar imágenes de certificados
   const certificateImages = [
-    '/images/certificates/epn-award.jpg',
-    '/images/certificates/cisco-networking.jpg',
-    '/images/certificates/digital-transformation.jpg',
-    '/images/certificates/scrum-foundation.jpg'
+    '/images/certificates/epn-award.webp',
+    '/images/certificates/cisco-networking.webp',
+    '/images/certificates/digital-transformation.webp',
+    '/images/certificates/scrum-foundation.webp'
   ];
 
   certificateImages.forEach(src => {

@@ -139,7 +139,8 @@ async function cacheFirstWithExpiry(request, cacheName, maxAge) {
   // No está en cache o expiró, intentar red
   try {
     const networkResponse = await fetch(request);
-    if (networkResponse.ok) {
+    // Solo cachear respuestas completas (no parciales como 206)
+    if (networkResponse.ok && networkResponse.status !== 206) {
       cache.put(request, networkResponse.clone());
     }
     return networkResponse;
@@ -159,7 +160,8 @@ async function staleWhileRevalidateWithCache(request, cacheName) {
   const cachedResponse = await cache.match(request);
 
   const networkPromise = fetch(request).then((networkResponse) => {
-    if (networkResponse.ok) {
+    // Solo cachear respuestas completas (no parciales como 206)
+    if (networkResponse.ok && networkResponse.status !== 206) {
       cache.put(request, networkResponse.clone());
     }
     return networkResponse;
