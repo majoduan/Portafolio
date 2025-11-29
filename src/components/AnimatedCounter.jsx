@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 
-const AnimatedCounter = React.memo(({ value, duration = 1800, isTransitioning, disabled = false }) => {
+const AnimatedCounter = memo(({ value, duration = 1800, isTransitioning, disabled = false }) => {
   const [count, setCount] = useState(disabled ? value : 0);
 
   useEffect(() => {

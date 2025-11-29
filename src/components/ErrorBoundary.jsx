@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
 
 /**
@@ -6,7 +6,7 @@ import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
  * Captura errores de React y muestra UI de fallback elegante
  * Implementa mejores prácticas de manejo de errores
  */
-class ErrorBoundary extends React.Component {
+class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
     this.state = {

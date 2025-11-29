@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, memo } from 'react';
 import './HUDBootScreen.css';
 import { 
   HardDrive, 
@@ -13,7 +13,7 @@ import {
   RotateCw
 } from 'lucide-react';
 
-const HUDBootScreen = React.memo(({ onComplete }) => {
+const HUDBootScreen = memo(({ onComplete }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [typewriterText, setTypewriterText] = useState('');
   const [showCursor, setShowCursor] = useState(true);

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback, lazy, Suspense, useContext } from 'react';
-import { Mail, Linkedin, Github, ExternalLink, Menu, X, Code } from 'lucide-react';
+import { useState, useEffect, useRef, useMemo, useCallback, lazy, Suspense, useContext } from 'react';
+import { Mail, Linkedin, Github, ExternalLink, Menu, X, Code, Home, Cpu, Award, Briefcase, MessageCircle, Sun, Moon, Languages } from 'lucide-react';
 import TechCard from './components/TechCard';
 import HUDBootScreen from './components/HUDBootScreen';
 import LanguageToggle from './components/LanguageToggle';
@@ -41,11 +41,10 @@ const useIntersectionObserver = (ref, options = {}) => {
 
 const Portfolio = () => {
   const { t } = useTranslation();
-  const { theme } = useContext(AppContext);
+  const { theme, toggleTheme, language, toggleLanguage } = useContext(AppContext);
   
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState(0);
-  const [menuOpen, setMenuOpen] = useState(false);
   const [isCarouselPaused, setIsCarouselPaused] = useState(false);
   const [typewriterText, setTypewriterText] = useState('');
   const [selectedProject, setSelectedProject] = useState(null);
@@ -535,10 +534,11 @@ const Portfolio = () => {
 
       {/* Navigation */}
       <nav className="fixed top-0 w-full bg-slate-950/80 dark:bg-slate-950/80 bg-white/90 backdrop-blur-lg border-b border-slate-800 dark:border-slate-800 border-slate-200 z-50 transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center justify-between h-16">
             {/* Desktop menu - Centrado */}
-            <div className="hidden md:flex space-x-10 flex-1 justify-center">
+            <div className="flex space-x-10 flex-1 justify-center">
               {['home', 'technologies', 'certificates', 'projects', 'contact'].map((item) => (
                 <a
                   key={item}
@@ -567,55 +567,77 @@ const Portfolio = () => {
             </div>
             
             {/* Language and Theme Toggles - Desktop */}
-            <div className="hidden md:flex items-center gap-3">
+            <div className="flex items-center gap-3">
               <LanguageToggle />
               <ThemeToggle />
             </div>
-
-            {/* Mobile menu button */}
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="md:hidden text-slate-300 hover:text-blue-400"
-            >
-              {menuOpen ? <X /> : <Menu />}
-            </button>
           </div>
-        </div>
 
-        {/* Mobile menu */}
-        {menuOpen && (
-          <div className="md:hidden bg-slate-900 dark:bg-slate-900 bg-white border-t border-slate-800 dark:border-slate-800 border-slate-200 transition-colors duration-300">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              {['home', 'technologies', 'certificates', 'projects', 'contact'].map((item) => (
+          {/* Mobile Navigation - Always visible with icons */}
+          <div className="md:hidden flex items-center justify-center h-14 px-1">
+            {/* Navigation Icons - Centered */}
+            <div className="flex items-center justify-around gap-1">
+              {[
+                { id: 'home', icon: Home },
+                { id: 'technologies', icon: Cpu },
+                { id: 'certificates', icon: Award },
+                { id: 'projects', icon: Briefcase },
+                { id: 'contact', icon: MessageCircle }
+              ].map(({ id, icon: Icon }) => (
                 <a
-                  key={item}
-                  href={`#${item}`}
+                  key={id}
+                  href={`#${id}`}
                   onClick={(e) => {
                     e.preventDefault();
-                    setMenuOpen(false);
-                    const element = document.getElementById(item);
+                    const element = document.getElementById(id);
                     if (element) {
                       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
                   }}
-                  className={`block px-3 py-2 rounded-md transition-colors ${
-                    activeSection === item
-                      ? 'text-red-600 dark:text-blue-400 bg-slate-200 dark:bg-slate-800'
-                      : 'text-slate-700 dark:text-slate-300 hover:text-red-600 dark:hover:text-blue-400 hover:bg-slate-200 dark:hover:bg-slate-800'
+                  className={`flex flex-col items-center justify-center p-2 rounded-lg transition-all duration-300 ${
+                    activeSection === id
+                      ? 'text-red-600 dark:text-blue-400 bg-red-50 dark:bg-blue-900/30'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-red-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/50'
                   }`}
+                  aria-label={t(`nav.${id}`)}
                 >
-                  {t(`nav.${item}`)}
+                  <Icon className="w-5 h-5" strokeWidth={activeSection === id ? 2.5 : 2} />
+                  <span className="text-[10px] font-medium mt-0.5 leading-tight">
+                    {t(`nav.${id}`).split(' ')[0]}
+                  </span>
                 </a>
               ))}
-              {/* Language and Theme Toggles - Mobile */}
-              <div className="px-3 py-2 flex gap-3">
-                <LanguageToggle />
-                <ThemeToggle />
-              </div>
             </div>
           </div>
-        )}
+        </div>
       </nav>
+
+      {/* Floating Action Buttons - Mobile Only (bottom-left) */}
+      <div className="md:hidden fixed bottom-6 left-4 z-50 flex flex-col gap-3">
+        {/* Theme Toggle Button */}
+        <button
+          onClick={toggleTheme}
+          className="w-14 h-14 rounded-full bg-white dark:bg-slate-800 shadow-lg hover:shadow-xl border-2 border-slate-200 dark:border-slate-700 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95"
+          aria-label="Toggle theme"
+        >
+          {theme === 'dark' ? (
+            <Moon className="w-6 h-6 text-slate-300" />
+          ) : (
+            <Sun className="w-6 h-6 text-amber-500" />
+          )}
+        </button>
+
+        {/* Language Toggle Button */}
+        <button
+          onClick={toggleLanguage}
+          className="w-14 h-14 rounded-full bg-white dark:bg-slate-800 shadow-lg hover:shadow-xl border-2 border-slate-200 dark:border-slate-700 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95"
+          aria-label="Toggle language"
+        >
+          <span className="text-2xl leading-none flex items-center justify-center h-full" role="img" aria-label={language === 'en' ? 'English' : 'Español'}>
+            {language === 'en' ? '🇺🇸' : '🇪🇸'}
+          </span>
+        </button>
+      </div>
 
       {/* Hero Section */}
       <section id="home" className="min-h-screen flex items-center justify-center relative pt-16 bg-transparent transition-colors duration-300 z-10">

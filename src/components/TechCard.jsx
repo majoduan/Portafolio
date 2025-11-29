@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, memo } from 'react';
 import AnimatedCounter from './AnimatedCounter';
 import { useTranslation } from '../hooks/useTranslation';
 
@@ -15,7 +15,7 @@ const useIsMobile = () => {
   return isMobile;
 };
 
-const TechCard = React.memo(({ tech, index, animationState, onMouseEnter, onMouseLeave }) => {
+const TechCard = memo(({ tech, index, animationState, onMouseEnter, onMouseLeave }) => {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   

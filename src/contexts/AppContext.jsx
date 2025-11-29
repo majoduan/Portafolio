@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useMemo } from 'react';
+import { createContext, useState, useEffect, useMemo } from 'react';
 
 // Create context for app-wide state (language and theme)
 export const AppContext = createContext();

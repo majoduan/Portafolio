@@ -20,7 +20,9 @@ export default defineConfig({
   resolve: {
     alias: {
       'lodash.debounce': 'lodash-es/debounce'
-    }
+    },
+    // Asegurar que solo hay una instancia de React en todo el proyecto
+    dedupe: ['react', 'react-dom']
   },
   build: {
     // Copiar Service Worker a dist - Fase 2 optimization
