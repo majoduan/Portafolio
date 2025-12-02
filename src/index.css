@@ -166,7 +166,8 @@ html:not(.dark) .spline-container > div {
 
 /* Ocultar scrollbar del carrusel de certificados y tecnologías */
 .overflow-x-hidden,
-.overflow-x-auto {
+.overflow-x-auto,
+.scrollbar-hide {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
   -webkit-overflow-scrolling: touch; /* Smooth scrolling en iOS */
@@ -174,8 +175,36 @@ html:not(.dark) .spline-container > div {
 }
 
 .overflow-x-hidden::-webkit-scrollbar,
-.overflow-x-auto::-webkit-scrollbar {
+.overflow-x-auto::-webkit-scrollbar,
+.scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari and Opera */
+}
+
+/* Scroll snap para certificados - suave y natural */
+.snap-x {
+  scroll-snap-type: x mandatory;
+  scroll-padding: 0 16px;
+}
+
+.snap-center {
+  scroll-snap-align: center;
+}
+
+.snap-always {
+  scroll-snap-stop: always;
+}
+
+/* Ajustes responsive para scroll snap */
+@media (max-width: 768px) {
+  .snap-x {
+    scroll-padding: 0 8px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .snap-x {
+    scroll-padding: 0 24px;
+  }
 }
 
 /* Optimización de videos en las cards de proyectos */

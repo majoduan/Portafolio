@@ -39,6 +39,180 @@ const useIntersectionObserver = (ref, options = {}) => {
   return { isIntersecting, hasIntersected };
 };
 
+// Hook para detectar si un video específico está visible (optimización móvil)
+const useVideoVisibility = (videoRef) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const isMobile = window.innerWidth < 768;
+
+  useEffect(() => {
+    if (!isMobile || !videoRef.current) {
+      setIsVisible(true); // Desktop: siempre visible
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+        
+        // Pausar/reproducir video automáticamente según visibilidad
+        const video = videoRef.current?.querySelector('video');
+        if (video) {
+          if (entry.isIntersecting) {
+            video.play().catch(() => {}); // Reproducir si es visible
+          } else {
+            video.pause(); // Pausar si no es visible
+          }
+        }
+      },
+      {
+        threshold: 0.8, // 80% del video debe estar visible
+        rootMargin: '0px'
+      }
+    );
+
+    observer.observe(videoRef.current);
+    return () => observer.disconnect();
+  }, [videoRef, isMobile]);
+
+  return isVisible;
+};
+
+// Componente ProjectCard separado para evitar violar reglas de hooks
+const ProjectCard = ({ project, onProjectClick, onVideoPreload, t }) => {
+  const videoCardRef = useRef(null);
+  const isVideoVisible = useVideoVisibility(videoCardRef);
+  const isMobile = window.innerWidth < 768;
+
+  return (
+    <div
+      ref={videoCardRef}
+      onClick={() => onProjectClick(project)}
+      onMouseEnter={() => onVideoPreload(project.video)}
+      className="project-card bg-white/90 dark:bg-slate-900/50 backdrop-blur-lg rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-red-500 dark:hover:border-blue-500 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-blue-500/30 cursor-pointer group"
+    >
+      <div className="bg-gradient-to-br from-blue-600 to-purple-600 h-48 flex items-center justify-center relative overflow-hidden">
+        {/* Renderizado condicional: móvil solo muestra video si está visible */}
+        {isMobile ? (
+          isVideoVisible ? (
+            // MÓVIL: Video solo si está visible en viewport
+            <video
+              key={project.video}
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              poster={project.video.replace('.mp4', '-poster.webp')}
+              className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-300"
+              onLoadedData={(e) => {
+                e.target.muted = true;
+                e.target.play().catch(() => {});
+              }}
+              style={{
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                contentVisibility: 'auto'
+              }}
+            >
+              <source src={project.video} type="video/mp4" />
+            </video>
+          ) : (
+            // MÓVIL: Poster cuando no está visible
+            <img
+              src={project.video.replace('.mp4', '-poster.webp')}
+              alt={project.title}
+              className="absolute inset-0 w-full h-full object-cover opacity-60"
+              loading="lazy"
+            />
+          )
+        ) : (
+          // DESKTOP: Comportamiento original (todos los videos autoplay)
+          <video
+            key={project.video}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="none"
+            poster={project.video.replace('.mp4', '-poster.webp')}
+            className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-300"
+            loading="lazy"
+            onLoadStart={(e) => {
+              const video = e.target;
+              if (!video.hasAttribute('data-loaded')) {
+                video.setAttribute('data-loaded', 'true');
+              }
+            }}
+            onLoadedData={(e) => {
+              e.target.muted = true;
+              e.target.play().catch(() => {});
+            }}
+            style={{
+              backgroundColor: 'rgba(59, 130, 246, 0.1)',
+              contentVisibility: 'auto'
+            }}
+          >
+            <source src={project.video} type="video/mp4" />
+          </video>
+        )}
+
+        {/* Overlay con gradiente */}
+        <div className="absolute inset-0 bg-gradient-to-t from-transparent to-transparent dark:from-slate-900/80 dark:via-transparent dark:to-transparent" />
+
+        {/* Play icon en móvil cuando muestra poster */}
+        {isMobile && !isVideoVisible && (
+          <div className="absolute inset-0 flex items-center justify-center z-10">
+            <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+              <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </div>
+          </div>
+        )}
+
+        {/* Icono de play al hacer hover (desktop) */}
+        <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10">
+          <span className="text-white font-bold text-lg flex items-center gap-2">
+            <Code className="w-6 h-6" />
+            {t('projects.viewDemo')}
+          </span>
+        </div>
+      </div>
+
+      <div className="p-6">
+        <h3 className="text-2xl font-bold mb-3 text-slate-900 dark:text-white group-hover:text-red-600 dark:group-hover:text-blue-400 transition-colors">
+          {project.title}
+        </h3>
+        <p className="text-slate-300 dark:text-slate-300 text-slate-600 mb-4">{project.description}</p>
+        <div className="flex flex-wrap gap-2 mb-4">
+          {project.tech.map((tech, j) => (
+            <span
+              key={j}
+              className="px-3 py-1 bg-red-50 dark:bg-slate-800 text-xs rounded-full text-red-600 dark:text-blue-400 border border-red-200 dark:border-transparent"
+            >
+              {tech}
+            </span>
+          ))}
+        </div>
+        <div className="flex flex-wrap gap-3">
+          {Object.entries(project.links).map(([key, url]) => (
+            <a
+              key={key}
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center space-x-1 px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-white hover:bg-gradient-to-r hover:from-red-500 hover:to-orange-500 dark:hover:from-blue-500 dark:hover:to-purple-500 hover:text-white rounded-full text-sm transition-all duration-300 border border-slate-200 dark:border-transparent"
+            >
+              <span className="capitalize">{key}</span>
+              <ExternalLink className="w-4 h-4" />
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Portfolio = () => {
   const { t } = useTranslation();
   const { theme, toggleTheme, language, toggleLanguage } = useContext(AppContext);
@@ -49,8 +223,9 @@ const Portfolio = () => {
   const [typewriterText, setTypewriterText] = useState('');
   const [selectedProject, setSelectedProject] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [certificateScrollPosition, setCertificateScrollPosition] = useState(0);
+  const [currentCertificateIndex, setCurrentCertificateIndex] = useState(0);
   const [isCertificateCarouselPaused, setIsCertificateCarouselPaused] = useState(false);
+  const [isMobileView, setIsMobileView] = useState(window.innerWidth < 768);
   const [isTechCardHovered, setIsTechCardHovered] = useState(false); // Nuevo estado para detectar hover en cards
   const [lastManualChange, setLastManualChange] = useState(0); // Timestamp del último cambio manual
   const [activeSection, setActiveSection] = useState('home'); // Estado para la sección activa
@@ -424,47 +599,52 @@ const Portfolio = () => {
     };
   }, [currentTechTab, techTransitionState, techCategories]);
 
-  // Auto-scroll certificates carousel - optimizado con requestAnimationFrame
+  // Auto-advance certificates carousel con paginación
   useEffect(() => {
-    if (!loading && !isCertificateCarouselPaused && certificateContainerRef.current) {
-      let animationFrameId;
-      let lastTime = 0;
+    if (!loading && !isCertificateCarouselPaused) {
+      const interval = setInterval(() => {
+        setCurrentCertificateIndex((prev) => {
+          // Móvil: salta de 1 en 1, Desktop: salta de 2 en 2
+          const step = isMobileView ? 1 : 2;
+          const next = prev + step;
+          // Loop infinito: si llega al final, vuelve al inicio
+          return next >= certificates.length ? 0 : next;
+        });
+      }, 4000); // Cambiar cada 4 segundos
 
-      const animate = (currentTime) => {
-        if (currentTime - lastTime >= 16) { // ~60fps
-          setCertificateScrollPosition((prev) => {
-            const container = certificateContainerRef.current;
-            if (container) {
-              const maxScroll = container.scrollWidth - container.clientWidth;
-              const newPosition = prev + 0.5;
-
-              if (newPosition >= maxScroll / 3) {
-                return 0;
-              }
-              return newPosition;
-            }
-            return prev;
-          });
-          lastTime = currentTime;
-        }
-        animationFrameId = requestAnimationFrame(animate);
-      };
-
-      animationFrameId = requestAnimationFrame(animate);
-      return () => {
-        if (animationFrameId) {
-          cancelAnimationFrame(animationFrameId);
-        }
-      };
+      return () => clearInterval(interval);
     }
-  }, [loading, isCertificateCarouselPaused]);
+  }, [loading, isCertificateCarouselPaused, certificates.length, isMobileView]);
 
-  // Apply scroll position to container
+  // Scroll automático al cambiar índice
   useEffect(() => {
     if (certificateContainerRef.current) {
-      certificateContainerRef.current.scrollLeft = certificateScrollPosition;
+      const container = certificateContainerRef.current;
+      // Obtener el ancho real de la card del DOM
+      const card = container.querySelector('.certificate-card');
+      if (card) {
+        const cardWidth = card.offsetWidth;
+        const computedStyle = window.getComputedStyle(container.querySelector('.flex'));
+        const gap = parseInt(computedStyle.gap) || 0;
+        const scrollPosition = currentCertificateIndex * (cardWidth + gap);
+        
+        container.scrollTo({
+          left: scrollPosition,
+          behavior: 'smooth'
+        });
+      }
     }
-  }, [certificateScrollPosition]);
+  }, [currentCertificateIndex, isMobileView]);
+
+  // Detectar cambios en viewport para actualizar isMobileView
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobileView(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize, { passive: true });
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Detect active section on scroll - optimizado con throttle
   useEffect(() => {
@@ -822,25 +1002,39 @@ const Portfolio = () => {
           </h2>
         </div>
 
-        {/* Carousel Container - Full Width */}
-        <div className="relative w-full">
-          {/* Gradient overlays for smooth edges */}
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-slate-50 dark:from-slate-950 to-transparent z-10 pointer-events-none transition-colors duration-300"></div>
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-slate-50 dark:from-slate-950 to-transparent z-10 pointer-events-none transition-colors duration-300"></div>
-
-          {/* Scrollable container */}
+        {/* Carousel Container - Responsive Grid */}
+        <div className="relative w-full mx-auto px-4">
+          {/* Scrollable container - Desktop: 2 cards, Móvil: 1 card */}
           <div
             ref={certificateContainerRef}
-            className="flex gap-6 overflow-x-hidden py-4"
+            className="overflow-x-hidden py-4 scrollbar-hide mx-auto"
             onMouseEnter={() => setIsCertificateCarouselPaused(true)}
             onMouseLeave={() => setIsCertificateCarouselPaused(false)}
-            style={{ scrollBehavior: 'auto' }}
+            onTouchStart={() => setIsCertificateCarouselPaused(true)}
+            onTouchEnd={() => setTimeout(() => setIsCertificateCarouselPaused(false), 2000)}
+            style={{ 
+              scrollBehavior: 'smooth',
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+              // Móvil: 1 card completa, Desktop: 2 cards completas más anchas
+              maxWidth: isMobileView ? 'min(90vw, 420px)' : 'min(98vw, 1400px)'
+            }}
           >
-            {/* Duplicate certificates for infinite scroll effect */}
-            {[...certificates, ...certificates, ...certificates].map((cert, i) => (
-              <div
-                key={i}
-                className="flex-shrink-0 w-[420px] bg-white/90 dark:bg-slate-900 backdrop-blur-lg rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50 hover:border-red-500 dark:hover:border-blue-500/70 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-blue-500/40 group cursor-pointer"
+            {/* Grid de certificados */}
+            <div className="flex gap-6">
+              {certificates.map((cert, i) => (
+                <div
+                  key={i}
+                  className="certificate-card flex-shrink-0 bg-white/90 dark:bg-slate-900 backdrop-blur-lg rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50 hover:border-red-500 dark:hover:border-blue-500/70 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-blue-500/40 group cursor-pointer"
+                  style={{
+                    // Móvil: 1 card = 100% del contenedor, Desktop: 2 cards = (100% - gap) / 2
+                    width: isMobileView ? '100%' : 'calc((100% - 24px) / 2)'
+                  }}
+                  onClick={() => {
+                    setCurrentCertificateIndex(i);
+                    setIsCertificateCarouselPaused(true);
+                    setTimeout(() => setIsCertificateCarouselPaused(false), 3000);
+                  }}
               >
                 {/* Certificate Image */}
                 <div className="relative h-64 overflow-hidden bg-gradient-to-br from-blue-900/30 to-purple-900/30">
@@ -888,6 +1082,39 @@ const Portfolio = () => {
                 </div>
               </div>
             ))}
+            </div>
+          </div>
+
+          {/* Indicadores de navegación (dots) - Dinámicos según isMobileView */}
+          <div className="flex justify-center items-center gap-2 mt-8 mb-4">
+            {(() => {
+              // Móvil: 1 card por página = 4 dots, Desktop: 2 cards por página = 2 dots
+              const pageSize = isMobileView ? 1 : 2;
+              const totalPages = Math.ceil(certificates.length / pageSize);
+              const currentPage = Math.floor(currentCertificateIndex / pageSize);
+              
+              return Array.from({ length: totalPages }, (_, pageIndex) => {
+                const isActive = pageIndex === currentPage;
+                const targetIndex = pageIndex * pageSize;
+                
+                return (
+                  <button
+                    key={pageIndex}
+                    onClick={() => {
+                      setCurrentCertificateIndex(targetIndex);
+                      setIsCertificateCarouselPaused(true);
+                      setTimeout(() => setIsCertificateCarouselPaused(false), 4000);
+                    }}
+                    className={`transition-all duration-300 rounded-full ${
+                      isActive
+                        ? 'w-8 h-2 bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-400 dark:to-purple-400'
+                        : 'w-2 h-2 bg-slate-300 dark:bg-slate-600 hover:bg-slate-400 dark:hover:bg-slate-500'
+                    }`}
+                    aria-label={`Ver página ${pageIndex + 1}`}
+                  />
+                );
+              });
+            })()}
           </div>
         </div>
       </section>
@@ -901,100 +1128,35 @@ const Portfolio = () => {
         </div>
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {projects.map((project, i) => (
-              <div
-                key={i}
-                onClick={() => {
-                  setSelectedProject(project);
-                  setIsModalOpen(true);
-                }}
-                onMouseEnter={() => {
-                  setHoveredProject(project);
-                  // Precargar video para modal cuando se hace hover
-                  preloadVideoOnHover(project.video);
-                }}
-                onMouseLeave={() => setHoveredProject(null)}
-                className="project-card bg-white/90 dark:bg-slate-900/50 backdrop-blur-lg rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-red-500 dark:hover:border-blue-500 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-blue-500/30 cursor-pointer group"
-              >
-                <div className="bg-gradient-to-br from-blue-600 to-purple-600 h-48 flex items-center justify-center relative overflow-hidden">
-                  {/* Video de fondo con carga diferida ULTRA-OPTIMIZADA */}
-                  {projectsVisible ? (
-                    <video
-                      key={project.video}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      preload="none"
-                      poster={project.video.replace('.mp4', '-poster.webp')}
-                      className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-300"
-                      loading="lazy"
-                      onLoadStart={(e) => {
-                        // Cargar solo cuando realmente sea necesario
-                        const video = e.target;
-                        if (!video.hasAttribute('data-loaded')) {
-                          video.setAttribute('data-loaded', 'true');
-                        }
-                      }}
-                      onLoadedData={(e) => {
-                        e.target.muted = true;
-                        e.target.play().catch(() => {}); // Silenciar errores de autoplay
-                      }}
-                      style={{
-                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                        contentVisibility: 'auto' // Optimización de rendering
-                      }}
-                    >
-                      <source src={project.video} type="video/mp4" />
-                    </video>
-                  ) : (
-                    <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-blue-600/50 to-purple-600/50 animate-pulse" />
-                  )}
-
-                  {/* Overlay con gradiente */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-transparent to-transparent dark:from-slate-900/80 dark:via-transparent dark:to-transparent" />
-
-                  {/* Icono de play al hacer hover */}
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                    <span className="text-white font-bold text-lg flex items-center gap-2">
-                      <Code className="w-6 h-6" />
-                      {t('projects.viewDemo')}
-                    </span>
+            {projectsVisible ? (
+              projects.map((project, i) => (
+                <ProjectCard
+                  key={i}
+                  project={project}
+                  onProjectClick={(proj) => {
+                    setSelectedProject(proj);
+                    setIsModalOpen(true);
+                  }}
+                  onVideoPreload={preloadVideoOnHover}
+                  t={t}
+                />
+              ))
+            ) : (
+              // Skeleton mientras la sección no es visible
+              projects.map((project, i) => (
+                <div
+                  key={i}
+                  className="project-card bg-white/90 dark:bg-slate-900/50 backdrop-blur-lg rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-lg"
+                >
+                  <div className="bg-gradient-to-br from-blue-600/50 to-purple-600/50 h-48 animate-pulse" />
+                  <div className="p-6">
+                    <div className="h-6 bg-slate-300 dark:bg-slate-700 rounded mb-3 animate-pulse" />
+                    <div className="h-4 bg-slate-300 dark:bg-slate-700 rounded mb-2 animate-pulse" />
+                    <div className="h-4 bg-slate-300 dark:bg-slate-700 rounded w-2/3 animate-pulse" />
                   </div>
                 </div>
-                <div className="p-6">
-                  <h3 className="text-2xl font-bold mb-3 text-slate-900 dark:text-white group-hover:text-red-600 dark:group-hover:text-blue-400 transition-colors">
-                    {project.title}
-                  </h3>
-                  <p className="text-slate-300 dark:text-slate-300 text-slate-600 mb-4">{project.description}</p>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.tech.map((tech, j) => (
-                      <span
-                        key={j}
-                        className="px-3 py-1 bg-red-50 dark:bg-slate-800 text-xs rounded-full text-red-600 dark:text-blue-400 border border-red-200 dark:border-transparent"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="flex flex-wrap gap-3">
-                    {Object.entries(project.links).map(([key, url]) => (
-                      <a
-                        key={key}
-                        href={url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="flex items-center space-x-1 px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-white hover:bg-gradient-to-r hover:from-red-500 hover:to-orange-500 dark:hover:from-blue-500 dark:hover:to-purple-500 hover:text-white rounded-full text-sm transition-all duration-300 border border-slate-200 dark:border-transparent"
-                      >
-                        <span className="capitalize">{key}</span>
-                        <ExternalLink className="w-4 h-4" />
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </section>
