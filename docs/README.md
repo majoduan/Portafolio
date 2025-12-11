@@ -7,12 +7,13 @@ Bienvenido a la documentación técnica del portafolio de Mateo Dueñas.
 ### 🚀 [Guía Completa](./GUIDE.md) ⭐ **RECOMENDADO**
 **¡Empieza aquí!** Guía unificada de desarrollo y optimización:
 - Quick Start y setup del proyecto
-- Todas las optimizaciones implementadas (v2.4.0)
+- Todas las optimizaciones implementadas (v2.4.0+)
 - Sistema de precarga inteligente de 5 niveles
 - Optimización de multimedia (videos y imágenes)
+- **Optimización móvil v2.3** - Control de videos selectivos
 - Sistema de internacionalización
 - Performance y métricas actuales
-- Testing, validación y troubleshooting
+- Testing móvil y desktop, validación y troubleshooting
 - **Todo en un solo documento consolidado**
 
 ### 🏗️ [Decisiones Técnicas](./TECHNICAL_DECISIONS.md) 📋
@@ -31,6 +32,13 @@ Sistema de internacionalización completo:
 - Agregar nuevos idiomas
 - Best practices y decisiones de diseño
 
+### 📋 [Historial de Cambios](./CHANGELOG.md)
+Registro completo de versiones y actualizaciones:
+- Changelog detallado por versión
+- Nuevas funcionalidades agregadas
+- Optimizaciones implementadas
+- Bugs corregidos
+
 ### 🛠️ [Scripts de Automatización](../scripts/README.md)
 Scripts de optimización disponibles:
 - Optimización de imágenes a WebP
@@ -42,12 +50,34 @@ Scripts de optimización disponibles:
 ```
 mateo-portfolio/
 ├── docs/                           # 📚 Documentación técnica
-│   ├── README.md                   # Este archivo
-│   ├── OPTIMIZATION_GUIDE.md       # Guía de optimizaciones
-│   └── I18N_IMPLEMENTATION.md      # Sistema de traducción
+│   ├── README.md                   # Este archivo (índice)
+│   ├── GUIDE.md                    # Guía completa (desarrollo + optimizaciones + testing)
+│   ├── TECHNICAL_DECISIONS.md      # Decisiones arquitectónicas
+│   ├── I18N_IMPLEMENTATION.md      # Sistema de internacionalización
+│   └── CHANGELOG.md                # Historial de cambios
+│
+├── scripts/                        # 🛠️ Scripts de optimización
+│   └── README.md                   # Documentación de scripts
 │
 ├── public/                         # 🎬 Assets públicos
-│   ├── videos/                     # Videos de proyectos (optimizados)
+│   ├── videos/                     # Videos de proyectos (optimizados, 13MB total)
+│   ├── images/                     # Imágenes y certificados (WebP, 0.7MB)
+│   ├── cv/                         # CV en PDF
+│   ├── manifest.json               # PWA manifest
+│   └── sw.js                       # Service Worker
+│
+├── src/                            # 💻 Código fuente
+│   ├── components/                 # Componentes React
+│   ├── contexts/                   # Context API (theme + i18n)
+│   ├── data/                       # Datos estáticos
+│   ├── hooks/                      # Custom hooks
+│   ├── locales/                    # Traducciones (en, es)
+│   ├── utils/                      # Utilidades (precarga, SW)
+│   ├── App.jsx                     # Componente principal
+│   └── main.jsx                    # Entry point
+│
+└── vite.config.js                  # Configuración de build optimizada
+```
 │   ├── images/                     # Imágenes y certificados
 │   └── cv/                         # CV en PDF
 │

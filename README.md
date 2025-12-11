@@ -44,8 +44,9 @@ Portfolio profesional interactivo construido con React, Vite, Tailwind CSS y Spl
 - Desktop: Sin cambios (todos los videos autoplay)
 
 **📚 Documentación completa**: 
-- [docs/GUIDE.md](./docs/GUIDE.md) - Guía completa con todas las optimizaciones
+- [docs/GUIDE.md](./docs/GUIDE.md) - Guía completa con todas las optimizaciones y testing móvil
 - [docs/TECHNICAL_DECISIONS.md](./docs/TECHNICAL_DECISIONS.md) - Decisiones técnicas y análisis arquitectónico
+- [docs/CHANGELOG.md](./docs/CHANGELOG.md) - Historial de cambios del proyecto
 
 ## 🛠️ Stack Tecnológico
 
@@ -79,9 +80,10 @@ npm run preview
 La documentación del proyecto está organizada en el directorio `/docs`:
 
 - **[docs/README.md](./docs/README.md)** - Índice principal de documentación
-- **[docs/GUIDE.md](./docs/GUIDE.md)** - Guía completa de desarrollo y optimizaciones
+- **[docs/GUIDE.md](./docs/GUIDE.md)** - Guía completa de desarrollo, optimizaciones y testing móvil
 - **[docs/TECHNICAL_DECISIONS.md](./docs/TECHNICAL_DECISIONS.md)** - Decisiones arquitectónicas y análisis técnico
 - **[docs/I18N_IMPLEMENTATION.md](./docs/I18N_IMPLEMENTATION.md)** - Sistema de internacionalización
+- **[docs/CHANGELOG.md](./docs/CHANGELOG.md)** - Historial de cambios y versiones
 - **[scripts/README.md](./scripts/README.md)** - Documentación de scripts de optimización
 
 ## 🧪 Testing y Validación
@@ -111,24 +113,40 @@ npm run preview
 
 ```
 mateo-portfolio/
+├── docs/                        # 📚 Documentación técnica
+│   ├── README.md                # Índice de documentación
+│   ├── GUIDE.md                 # Guía completa (desarrollo + optimizaciones + testing)
+│   ├── TECHNICAL_DECISIONS.md   # Decisiones arquitectónicas
+│   ├── I18N_IMPLEMENTATION.md   # Sistema i18n
+│   └── CHANGELOG.md             # Historial de cambios
+├── scripts/                     # 🛠️ Scripts de optimización
+│   └── README.md                # Documentación de scripts
 ├── src/
 │   ├── components/
 │   │   ├── HUDBootScreen.jsx    # Pantalla de inicio
 │   │   ├── TechCard.jsx         # Cards de tecnologías
-│   │   ├── AnimatedCounter.jsx  # Contador animado
+│   │   ├── ContactForm.jsx      # Formulario de contacto
 │   │   └── icons/tech/          # Iconos SVG personalizados
+│   ├── contexts/
+│   │   └── AppContext.jsx       # Context API (theme + i18n)
 │   ├── data/
 │   │   ├── projects.js          # Datos de proyectos
 │   │   └── technologies.js      # Datos de skills
+│   ├── locales/
+│   │   ├── en.json              # Traducciones inglés
+│   │   └── es.json              # Traducciones español
+│   ├── utils/
+│   │   ├── preloadResources.js  # Sistema de precarga
+│   │   └── registerSW.js        # Service Worker
 │   ├── App.jsx                  # Componente principal
 │   ├── main.jsx                 # Entry point
 │   └── index.css                # Estilos globales
 ├── public/
-│   ├── videos/                  # Videos de proyectos
+│   ├── videos/                  # Videos de proyectos (optimizados)
 │   ├── images/                  # Imágenes y certificados
-│   └── cv/                      # CV en PDF
-├── OPTIMIZACIONES.md            # Reporte detallado
-├── TESTING_GUIDE.md             # Guía de validación
+│   ├── cv/                      # CV en PDF
+│   ├── manifest.json            # PWA manifest
+│   └── sw.js                    # Service Worker
 └── vite.config.js               # Configuración optimizada
 ```
 

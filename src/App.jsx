@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo, useCallback, lazy, Suspense, useContext } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback, lazy, Suspense, useContext } from 'react';
 import { Mail, Linkedin, Github, ExternalLink, Menu, X, Code, Home, Cpu, Award, Briefcase, MessageCircle, Sun, Moon, Languages } from 'lucide-react';
 import TechCard from './components/TechCard';
 import HUDBootScreen from './components/HUDBootScreen';
@@ -40,47 +40,64 @@ const useIntersectionObserver = (ref, options = {}) => {
 };
 
 // Hook para detectar si un video específico está visible (optimización móvil)
-const useVideoVisibility = (videoRef) => {
+// Ahora con control adicional para pausar cuando el modal está abierto
+const useVideoVisibility = (videoRef, shouldPauseVideo = false) => {
   const [isVisible, setIsVisible] = useState(false);
   const isMobile = window.innerWidth < 768;
 
   useEffect(() => {
-    if (!isMobile || !videoRef.current) {
-      setIsVisible(true); // Desktop: siempre visible
+    if (!videoRef.current) return;
+
+    const video = videoRef.current.querySelector('video');
+    if (!video) return;
+
+    // Prioridad 1: Si shouldPauseVideo es true, pausar inmediatamente
+    if (shouldPauseVideo) {
+      video.pause();
       return;
     }
 
+    // Prioridad 2: En móvil, usar IntersectionObserver
+    if (!isMobile) {
+      setIsVisible(true);
+      // Desktop: reproducir si no está pausado externamente
+      if (!shouldPauseVideo) {
+        video.play().catch(() => {});
+      }
+      return;
+    }
+
+    // Móvil: Observer para reproducir solo cuando esté visible
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsVisible(entry.isIntersecting);
         
-        // Pausar/reproducir video automáticamente según visibilidad
-        const video = videoRef.current?.querySelector('video');
-        if (video) {
+        if (!shouldPauseVideo) {
           if (entry.isIntersecting) {
-            video.play().catch(() => {}); // Reproducir si es visible
+            video.play().catch(() => {});
           } else {
-            video.pause(); // Pausar si no es visible
+            video.pause();
           }
         }
       },
       {
-        threshold: 0.8, // 80% del video debe estar visible
+        threshold: 0.8,
         rootMargin: '0px'
       }
     );
 
     observer.observe(videoRef.current);
     return () => observer.disconnect();
-  }, [videoRef, isMobile]);
+  }, [videoRef, isMobile, shouldPauseVideo]);
 
   return isVisible;
 };
 
 // Componente ProjectCard separado para evitar violar reglas de hooks
-const ProjectCard = ({ project, onProjectClick, onVideoPreload, t }) => {
+// Memoizado para evitar re-renders innecesarios
+const ProjectCard = React.memo(({ project, onProjectClick, onVideoPreload, t, shouldPauseVideo = false }) => {
   const videoCardRef = useRef(null);
-  const isVideoVisible = useVideoVisibility(videoCardRef);
+  const isVideoVisible = useVideoVisibility(videoCardRef, shouldPauseVideo);
   const isMobile = window.innerWidth < 768;
 
   return (
@@ -211,7 +228,7 @@ const ProjectCard = ({ project, onProjectClick, onVideoPreload, t }) => {
       </div>
     </div>
   );
-};
+});
 
 const Portfolio = () => {
   const { t } = useTranslation();
@@ -232,6 +249,7 @@ const Portfolio = () => {
   const [hoveredProject, setHoveredProject] = useState(null); // Estado para precargar video en hover
   const videoPreloadCache = useRef(new Set()); // Cache de videos precargados
   const splineLoadingRef = useRef(false); // Prevenir carga duplicada de Spline
+  const projectVideoRefs = useRef([]); // Referencias a todos los videos de las cards
 
   // Estados para manejar la transición de tecnologías
   const [currentTechTab, setCurrentTechTab] = useState(0);
@@ -1139,6 +1157,7 @@ const Portfolio = () => {
                   }}
                   onVideoPreload={preloadVideoOnHover}
                   t={t}
+                  shouldPauseVideo={isModalOpen}
                 />
               ))
             ) : (
