@@ -9,12 +9,19 @@ import { getProjectsData, getCertificatesData } from './data/projectTranslations
 import { useTranslation } from './hooks/useTranslation';
 import { AppContext } from './contexts/AppContext';
 import { preloadCriticalResources } from './utils/preloadResources';
+import { useAggressiveVideoControl } from './hooks/useAggressiveVideoControl';
+import { clearAllVideoCache, restoreVideoCache } from './utils/videoCache';
+import { getOptimalVideoSource, getOptimalPoster } from './utils/adaptiveVideo';
+import './utils/videoDebug'; // Debugging helpers en window global
 
 // Lazy load Spline para mejorar el tiempo de carga inicial
 const Spline = lazy(() => import('@splinetool/react-spline'));
 
 // Lazy load ContactForm para reducir bundle inicial (-20 KB)
 const ContactForm = lazy(() => import('./components/ContactForm'));
+
+// Lazy load ModalVideoPlayer para modal más rápido (-5 KB)
+const ModalVideoPlayer = lazy(() => import('./components/ModalVideoPlayer'));
 
 // Hook personalizado para Intersection Observer (lazy loading inteligente)
 const useIntersectionObserver = (ref, options = {}) => {
@@ -39,66 +46,14 @@ const useIntersectionObserver = (ref, options = {}) => {
   return { isIntersecting, hasIntersected };
 };
 
-// Hook para detectar si un video específico está visible (optimización móvil)
-// Ahora con control adicional para pausar cuando el modal está abierto
-const useVideoVisibility = (videoRef, shouldPauseVideo = false) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const isMobile = window.innerWidth < 768;
-
-  useEffect(() => {
-    if (!videoRef.current) return;
-
-    const video = videoRef.current.querySelector('video');
-    if (!video) return;
-
-    // Prioridad 1: Si shouldPauseVideo es true, pausar inmediatamente
-    if (shouldPauseVideo) {
-      video.pause();
-      return;
-    }
-
-    // Prioridad 2: En móvil, usar IntersectionObserver
-    if (!isMobile) {
-      setIsVisible(true);
-      // Desktop: reproducir si no está pausado externamente
-      if (!shouldPauseVideo) {
-        video.play().catch(() => {});
-      }
-      return;
-    }
-
-    // Móvil: Observer para reproducir solo cuando esté visible
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsVisible(entry.isIntersecting);
-        
-        if (!shouldPauseVideo) {
-          if (entry.isIntersecting) {
-            video.play().catch(() => {});
-          } else {
-            video.pause();
-          }
-        }
-      },
-      {
-        threshold: 0.8,
-        rootMargin: '0px'
-      }
-    );
-
-    observer.observe(videoRef.current);
-    return () => observer.disconnect();
-  }, [videoRef, isMobile, shouldPauseVideo]);
-
-  return isVisible;
-};
-
 // Componente ProjectCard separado para evitar violar reglas de hooks
 // Memoizado para evitar re-renders innecesarios
+// OPTIMIZADO v2.4: Video control agresivo + límite 10s móvil + IntersectionObserver 50%
 const ProjectCard = React.memo(({ project, onProjectClick, onVideoPreload, t, shouldPauseVideo = false }) => {
   const videoCardRef = useRef(null);
-  const isVideoVisible = useVideoVisibility(videoCardRef, shouldPauseVideo);
-  const isMobile = window.innerWidth < 768;
+  
+  // Hook optimizado: Solo controla pausa, no renderizado condicional
+  useAggressiveVideoControl(videoCardRef, shouldPauseVideo);
 
   return (
     <div
@@ -108,83 +63,40 @@ const ProjectCard = React.memo(({ project, onProjectClick, onVideoPreload, t, sh
       className="project-card bg-white/90 dark:bg-slate-900/50 backdrop-blur-lg rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-red-500 dark:hover:border-blue-500 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-blue-500/30 cursor-pointer group"
     >
       <div className="bg-gradient-to-br from-blue-600 to-purple-600 h-48 flex items-center justify-center relative overflow-hidden">
-        {/* Renderizado condicional: móvil solo muestra video si está visible */}
-        {isMobile ? (
-          isVideoVisible ? (
-            // MÓVIL: Video solo si está visible en viewport
-            <video
-              key={project.video}
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="metadata"
-              poster={project.video.replace('.mp4', '-poster.webp')}
-              className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-300"
-              onLoadedData={(e) => {
-                e.target.muted = true;
-                e.target.play().catch(() => {});
-              }}
-              style={{
-                backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                contentVisibility: 'auto'
-              }}
-            >
-              <source src={project.video} type="video/mp4" />
-            </video>
-          ) : (
-            // MÓVIL: Poster cuando no está visible
-            <img
-              src={project.video.replace('.mp4', '-poster.webp')}
-              alt={project.title}
-              className="absolute inset-0 w-full h-full object-cover opacity-60"
-              loading="lazy"
-            />
-          )
-        ) : (
-          // DESKTOP: Comportamiento original (todos los videos autoplay)
-          <video
-            key={project.video}
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="none"
-            poster={project.video.replace('.mp4', '-poster.webp')}
-            className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-300"
-            loading="lazy"
-            onLoadStart={(e) => {
-              const video = e.target;
-              if (!video.hasAttribute('data-loaded')) {
-                video.setAttribute('data-loaded', 'true');
-              }
-            }}
-            onLoadedData={(e) => {
-              e.target.muted = true;
-              e.target.play().catch(() => {});
-            }}
-            style={{
-              backgroundColor: 'rgba(59, 130, 246, 0.1)',
-              contentVisibility: 'auto'
-            }}
-          >
-            <source src={project.video} type="video/mp4" />
-          </video>
-        )}
+        {/* NUEVO v2.4: Video siempre renderizado, IO controla solo pausa */}
+        {/* Adaptive: 480p en móvil, 720p en desktop */}
+        <video
+          key={project.video}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          poster={getOptimalPoster(project.video)}
+          className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-300"
+          onLoadStart={(e) => {
+            console.log('[Video] 🎬 Cargando:', project.title);
+          }}
+          onLoadedData={(e) => {
+            console.log('[Video] ✅ Cargado:', project.title);
+            e.target.muted = true;
+            e.target.play()
+              .then(() => console.log('[Video] ▶️ Reproduciendo:', project.title))
+              .catch((err) => console.error('[Video] ❌ Error play:', project.title, err));
+          }}
+          onError={(e) => {
+            console.error('[Video] ❌ Error carga:', project.title, e.target.error);
+          }}
+          style={{
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            contentVisibility: 'auto'
+          }}
+        >
+          <source src={getOptimalVideoSource(project.video)} type="video/mp4" />
+        </video>
 
         {/* Overlay con gradiente */}
         <div className="absolute inset-0 bg-gradient-to-t from-transparent to-transparent dark:from-slate-900/80 dark:via-transparent dark:to-transparent" />
-
-        {/* Play icon en móvil cuando muestra poster */}
-        {isMobile && !isVideoVisible && (
-          <div className="absolute inset-0 flex items-center justify-center z-10">
-            <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-              <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z"/>
-              </svg>
-            </div>
-          </div>
-        )}
 
         {/* Icono de play al hacer hover (desktop) */}
         <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10">
@@ -712,6 +624,27 @@ const Portfolio = () => {
     handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // NUEVO v2.4: Gestión agresiva de cache de videos al abrir/cerrar modal
+  // Previene trabas en móviles al liberar memoria de videos activos
+  useEffect(() => {
+    if (isModalOpen) {
+      // Modal abierto: Limpiar cache de TODOS los videos de las cards
+      // Excluir el video del modal (selector .project-modal)
+      console.log('[Modal] 🔓 Modal abierto - Limpiando cache de videos de cards');
+      clearAllVideoCache('.project-modal');
+    } else if (selectedProject === null) {
+      // Modal cerrado (selectedProject se pone a null al cerrar)
+      // Restaurar los videos que estaban cargados
+      console.log('[Modal] 🔒 Modal cerrado - Restaurando videos');
+      
+      // Pequeño delay para evitar lag al cerrar
+      setTimeout(() => {
+        restoreVideoCache();
+        // El IntersectionObserver manejará la reproducción de los videos visibles
+      }, 300);
+    }
+  }, [isModalOpen, selectedProject]);
 
   if (loading) {
     return <HUDBootScreen onComplete={() => {
@@ -1315,7 +1248,10 @@ const Portfolio = () => {
       {isModalOpen && selectedProject && (
         <div
           className="fixed inset-0 bg-black/30 dark:bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn"
-          onClick={() => setIsModalOpen(false)}
+          onClick={() => {
+            setIsModalOpen(false);
+            setSelectedProject(null); // Limpiar selección para trigger del useEffect
+          }}
         >
           <div
             className="project-modal bg-white dark:bg-slate-900 rounded-3xl w-full max-h-[90vh] overflow-hidden border-2 border-slate-200 dark:border-blue-500/50 shadow-2xl dark:shadow-blue-500/30"
@@ -1327,7 +1263,10 @@ const Portfolio = () => {
                 {selectedProject.title}
               </h3>
               <button
-                onClick={() => setIsModalOpen(false)}
+                onClick={() => {
+                  setIsModalOpen(false);
+                  setSelectedProject(null); // Limpiar selección para trigger del useEffect
+                }}
                 className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full flex-shrink-0"
                 aria-label="Cerrar modal"
               >
@@ -1339,35 +1278,22 @@ const Portfolio = () => {
             <div className="project-modal-content grid grid-cols-1 lg:grid-cols-[66.666%_33.334%] gap-0 h-[calc(90vh-80px)] overflow-hidden">
               {/* Columna Izquierda - Video (2/3 del ancho, fijo en desktop) */}
               <div className="project-modal-video-column bg-slate-50 dark:bg-black lg:h-full flex items-center justify-center p-4 lg:p-6 overflow-y-auto lg:overflow-hidden">
-                <div className="relative w-full h-full flex items-center justify-center">
-                  {/* Indicador de carga mientras el video se carga */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-purple-600/20 flex items-center justify-center z-0 rounded-2xl">
+                {/* NUEVO v2.4: Lazy loaded video player con adaptive quality */}
+                <Suspense fallback={
+                  <div className="w-full h-full flex items-center justify-center">
                     <div className="text-center">
-                      <div className="inline-block w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-3"></div>
-                      <p className="text-slate-600 dark:text-slate-400 text-sm">{t('projects.loading')}</p>
+                      <div className="inline-block w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                      <p className="text-slate-600 dark:text-slate-300 font-medium">
+                        {t('projects.loading')}
+                      </p>
                     </div>
                   </div>
-                  <video
-                    key={selectedProject.video}
-                    controls
-                    autoPlay
-                    preload="auto"
-                    poster={selectedProject.video.replace('.mp4', '-poster.webp')}
-                    playsInline
-                    className="w-full h-auto max-h-full relative z-10 rounded-2xl shadow-2xl"
-                    onLoadedData={(e) => {
-                      e.target.style.opacity = '1';
-                    }}
-                    style={{ 
-                      opacity: 0, 
-                      transition: 'opacity 0.3s ease-in-out',
-                      contentVisibility: 'auto'
-                    }}
-                  >
-                    <source src={selectedProject.video} type="video/mp4" />
-                    Tu navegador no soporta el elemento de video.
-                  </video>
-                </div>
+                }>
+                  <ModalVideoPlayer
+                    src={selectedProject.video}
+                    alt={selectedProject.title}
+                  />
+                </Suspense>
               </div>
 
               {/* Columna Derecha - Información (1/3 del ancho, scroll independiente) */}

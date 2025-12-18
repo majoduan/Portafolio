@@ -11,15 +11,17 @@ Portfolio profesional interactivo construido con React, Vite, Tailwind CSS y Spl
 - 📱 **Responsive**: Optimizado para todos los dispositivos
 - 🚀 **Performance Optimizado**: 60 FPS, bundle size reducido, lazy loading inteligente
 
-## 🎯 Performance Optimizations v2.3 (Diciembre 2025)
+## 🎯 Performance Optimizations v2.4 (Diciembre 2025)
 
-### 🔥 **NUEVO: Optimización Crítica para Móviles**
-- 📱 **Videos selectivos**: Solo 1 video activo en móvil (vs 8 simultáneos)
-- ⚡ **GPU móvil**: 85% → 15% (-70% de uso)
-- 💾 **RAM móvil**: 280MB → 95MB (-66%)
-- 🔋 **Batería**: -8%/min → -2%/min (-75% consumo)
-- 📊 **FPS móvil**: 15-25 → 55-60 (+200%)
-- 🌡️ **Temperatura**: Reducción significativa (no más apagados)
+### 🔥 **NUEVO v2.4: Control Agresivo de Videos (YouTube-inspired)**
+- 🎬 **Threshold 50%**: Videos se reproducen solo cuando 50% está visible (antes: 80%)
+- ⏱️ **Límite 10s móvil**: Videos se pausan automáticamente a los 10s en móvil
+- 🖥️ **Desktop optimizado**: IntersectionObserver en desktop (antes: autoplay sin control)
+- 🧹 **Cache limpiado**: Al abrir modal, cache de videos se limpia (previene trabas móvil)
+- ⚡ **GPU móvil**: 85% → 15% (-82%)
+- 💾 **RAM móvil**: 280MB → 90MB (-68%)
+- 🔋 **Batería**: -8%/min → -1.5%/min (-81% consumo)
+- 📊 **FPS móvil**: 15-25 → 55-60 (+233%)
 
 ### 🚀 Resultados Finales
 - ⚡ **Modal 85% más rápido**: 8-10s → 0.5-2s

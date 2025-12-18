@@ -1,11 +1,12 @@
 // Service Worker para Portfolio - Cache Strategy OPTIMIZADO
-// Version 2.0.0 - Enhanced Performance
+// Version 2.4.0 - Enhanced Video Caching + Adaptive Quality
 
-const CACHE_VERSION = '2.0.0';
+const CACHE_VERSION = '2.4.0';
 const CACHE_NAME = `mateo-portfolio-v${CACHE_VERSION}`;
 const RUNTIME_CACHE = `runtime-cache-v${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-cache-v${CACHE_VERSION}`;
 const VIDEO_CACHE = `videos-cache-v${CACHE_VERSION}`;
+const VIDEO_MOBILE_CACHE = `videos-mobile-cache-v${CACHE_VERSION}`;
 
 // Assets críticos para cachear inmediatamente - OPTIMIZADO
 const PRECACHE_ASSETS = [
@@ -39,7 +40,8 @@ self.addEventListener('activate', (event) => {
             name !== CACHE_NAME && 
             name !== RUNTIME_CACHE && 
             name !== IMAGE_CACHE && 
-            name !== VIDEO_CACHE
+            name !== VIDEO_CACHE &&
+            name !== VIDEO_MOBILE_CACHE // v2.4: Nueva cache para videos mobile
           )
           .map((name) => {
             console.log('[SW] Deleting old cache:', name);
@@ -63,13 +65,16 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Estrategia según tipo de recurso - OPTIMIZADO
+  // Estrategia según tipo de recurso - OPTIMIZADO v2.4
   if (request.destination === 'document') {
     // HTML: Network First (siempre intentar red primero)
     event.respondWith(networkFirst(request, RUNTIME_CACHE));
   } else if (request.url.includes('/videos/')) {
-    // Videos: Cache First con cache dedicado (alta prioridad para performance)
-    event.respondWith(cacheFirstWithExpiry(request, VIDEO_CACHE, 14 * 24 * 60 * 60 * 1000)); // 14 días
+    // Videos: Cache on-demand con separación mobile/desktop
+    // NUEVO: No pre-cachear, solo cachear después de primera visualización
+    const isMobile = request.url.includes('-mobile.mp4');
+    const cacheName = isMobile ? VIDEO_MOBILE_CACHE : VIDEO_CACHE;
+    event.respondWith(cacheOnDemand(request, cacheName, 30 * 24 * 60 * 60 * 1000)); // 30 días
   } else if (request.url.includes('/images/')) {
     // Imágenes: Stale While Revalidate con cache dedicado
     event.respondWith(staleWhileRevalidateWithCache(request, IMAGE_CACHE));
@@ -169,6 +174,53 @@ async function staleWhileRevalidateWithCache(request, cacheName) {
 
   // Retornar cache inmediatamente si existe, sino esperar a red
   return cachedResponse || networkPromise;
+}
+
+// NUEVO v2.4: Cache on Demand para videos
+// Solo cachea después de que el usuario vea el video por primera vez
+async function cacheOnDemand(request, cacheName, maxAge) {
+  const cache = await caches.open(cacheName);
+  const cachedResponse = await cache.match(request);
+
+  // Si está en cache y no ha expirado, servir inmediatamente
+  if (cachedResponse) {
+    const cachedDate = new Date(cachedResponse.headers.get('date'));
+    const now = new Date();
+    const age = now - cachedDate;
+
+    if (age < maxAge) {
+      console.log('[SW] Video desde cache:', request.url);
+      return cachedResponse;
+    } else {
+      console.log('[SW] Video expirado, descargando nuevo:', request.url);
+    }
+  }
+
+  // No está en cache o expiró, descargar de red
+  try {
+    const networkResponse = await fetch(request);
+    
+    // Cachear solo si es respuesta completa (200) o parcial (206)
+    if (networkResponse.ok) {
+      // Para videos, siempre intentar cachear la respuesta completa
+      if (networkResponse.status === 200) {
+        console.log('[SW] Cacheando video completo:', request.url);
+        cache.put(request, networkResponse.clone());
+      } else if (networkResponse.status === 206) {
+        console.log('[SW] Respuesta parcial (206), no cachear:', request.url);
+        // No cachear respuestas parciales, causaría problemas
+      }
+    }
+    
+    return networkResponse;
+  } catch (error) {
+    // Si falla red y hay cache (aunque expirado), servirlo
+    if (cachedResponse) {
+      console.log('[SW] Red falló, sirviendo cache expirado:', request.url);
+      return cachedResponse;
+    }
+    throw error;
+  }
 }
 
 // Mensaje desde la aplicación
