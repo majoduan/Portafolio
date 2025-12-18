@@ -26,7 +26,6 @@ export const useAggressiveVideoControl = (videoRef, shouldPauseVideo = false) =>
     // === PRIORIDAD 1: Pausa global (modal abierto) ===
     if (shouldPauseVideo) {
       video.pause();
-      console.log('[VideoControl] 🛑 Video pausado (modal abierto)');
       return;
     }
 
@@ -40,15 +39,11 @@ export const useAggressiveVideoControl = (videoRef, shouldPauseVideo = false) =>
           // Menos del 10% visible - pausar
           if (!video.paused) {
             video.pause();
-            console.log('[VideoControl] ⏸️ Video pausado (fuera del viewport)');
           }
         } else {
           // Más del 10% visible - reproducir
           if (video.paused && !timeLimitReached) {
-            video.play().catch(err => {
-              console.log('[VideoControl] ⚠️ No se pudo reproducir:', err.message);
-            });
-            console.log('[VideoControl] ▶️ Video reproducido (volvió al viewport)');
+            video.play().catch(() => {});
           }
         }
       },
@@ -66,7 +61,6 @@ export const useAggressiveVideoControl = (videoRef, shouldPauseVideo = false) =>
       if (isMobile && !timeLimitReached && video.currentTime >= 10) {
         video.pause();
         timeLimitReached = true;
-        console.log('[VideoControl] 📱 Video pausado (límite 10s móvil)');
       }
     };
 
@@ -74,7 +68,6 @@ export const useAggressiveVideoControl = (videoRef, shouldPauseVideo = false) =>
     const handleLoop = () => {
       if (isMobile) {
         timeLimitReached = false;
-        console.log('[VideoControl] 🔄 Loop detectado, reset límite');
       }
     };
 

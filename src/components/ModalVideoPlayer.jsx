@@ -30,14 +30,12 @@ const ModalVideoPlayer = ({ src, alt, className = '' }) => {
       trackVideoEvent('loaded', optimalSrc);
       
       // Intentar reproducir automáticamente
-      video.play().catch((error) => {
-        console.warn('[ModalVideo] Autoplay bloqueado:', error);
-        // No mostrar error, es comportamiento normal del browser
+      video.play().catch(() => {
+        // Autoplay bloqueado (comportamiento normal del browser)
       });
     };
 
     const handleError = (error) => {
-      console.error('[ModalVideo] Error cargando video:', error);
       setHasError(true);
       setIsLoading(false);
       

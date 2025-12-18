@@ -18,10 +18,8 @@ const PRECACHE_ASSETS = [
 
 // Instalar Service Worker y pre-cachear assets críticos
 self.addEventListener('install', (event) => {
-  console.log('[SW] Installing Service Worker...');
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('[SW] Pre-caching critical assets');
       return cache.addAll(PRECACHE_ASSETS);
     })
   );
@@ -31,7 +29,6 @@ self.addEventListener('install', (event) => {
 
 // Activar Service Worker y limpiar caches antiguos
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Activating Service Worker...');
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
@@ -44,7 +41,6 @@ self.addEventListener('activate', (event) => {
             name !== VIDEO_MOBILE_CACHE // v2.4: Nueva cache para videos mobile
           )
           .map((name) => {
-            console.log('[SW] Deleting old cache:', name);
             return caches.delete(name);
           })
       );
@@ -102,7 +98,6 @@ async function networkFirst(request, cacheName = RUNTIME_CACHE) {
   } catch (error) {
     const cachedResponse = await caches.match(request);
     if (cachedResponse) {
-      console.log('[SW] Serving from cache (offline):', request.url);
       return cachedResponse;
     }
     // Fallback para HTML
@@ -128,7 +123,6 @@ async function cacheFirstWithExpiry(request, cacheName, maxAge) {
     const age = now - cachedDate;
 
     if (age < maxAge) {
-      console.log('[SW] Serving from cache:', request.url);
       // Actualizar en background solo si está cerca de expirar (80% del maxAge)
       if (age > maxAge * 0.8) {
         fetch(request).then((networkResponse) => {
@@ -152,7 +146,6 @@ async function cacheFirstWithExpiry(request, cacheName, maxAge) {
   } catch (error) {
     // Si falla la red, servir cache aunque haya expirado
     if (cachedResponse) {
-      console.log('[SW] Network failed, serving stale cache:', request.url);
       return cachedResponse;
     }
     throw error;
@@ -189,10 +182,7 @@ async function cacheOnDemand(request, cacheName, maxAge) {
     const age = now - cachedDate;
 
     if (age < maxAge) {
-      console.log('[SW] Video desde cache:', request.url);
       return cachedResponse;
-    } else {
-      console.log('[SW] Video expirado, descargando nuevo:', request.url);
     }
   }
 
@@ -204,19 +194,15 @@ async function cacheOnDemand(request, cacheName, maxAge) {
     if (networkResponse.ok) {
       // Para videos, siempre intentar cachear la respuesta completa
       if (networkResponse.status === 200) {
-        console.log('[SW] Cacheando video completo:', request.url);
         cache.put(request, networkResponse.clone());
-      } else if (networkResponse.status === 206) {
-        console.log('[SW] Respuesta parcial (206), no cachear:', request.url);
-        // No cachear respuestas parciales, causaría problemas
       }
+      // No cachear respuestas parciales (206), causaría problemas
     }
     
     return networkResponse;
   } catch (error) {
     // Si falla red y hay cache (aunque expirado), servirlo
     if (cachedResponse) {
-      console.log('[SW] Red falló, sirviendo cache expirado:', request.url);
       return cachedResponse;
     }
     throw error;

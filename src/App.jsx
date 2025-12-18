@@ -12,7 +12,6 @@ import { preloadCriticalResources } from './utils/preloadResources';
 import { useAggressiveVideoControl } from './hooks/useAggressiveVideoControl';
 import { clearAllVideoCache, restoreVideoCache } from './utils/videoCache';
 import { getOptimalVideoSource, getOptimalPoster } from './utils/adaptiveVideo';
-import './utils/videoDebug'; // Debugging helpers en window global
 
 // Lazy load Spline para mejorar el tiempo de carga inicial
 const Spline = lazy(() => import('@splinetool/react-spline'));
@@ -74,18 +73,9 @@ const ProjectCard = React.memo(({ project, onProjectClick, onVideoPreload, t, sh
           preload="metadata"
           poster={getOptimalPoster(project.video)}
           className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-300"
-          onLoadStart={(e) => {
-            console.log('[Video] 🎬 Cargando:', project.title);
-          }}
           onLoadedData={(e) => {
-            console.log('[Video] ✅ Cargado:', project.title);
             e.target.muted = true;
-            e.target.play()
-              .then(() => console.log('[Video] ▶️ Reproduciendo:', project.title))
-              .catch((err) => console.error('[Video] ❌ Error play:', project.title, err));
-          }}
-          onError={(e) => {
-            console.error('[Video] ❌ Error carga:', project.title, e.target.error);
+            e.target.play().catch(() => {});
           }}
           style={{
             backgroundColor: 'rgba(59, 130, 246, 0.1)',
@@ -199,8 +189,6 @@ const Portfolio = () => {
     
     // Marcar como precargado
     videoPreloadCache.current.add(videoSrc);
-    
-    console.log(`[Preload] Video precargado: ${videoSrc}`);
   }, []);
 
   // Texto completo para el efecto typewriter - traducido
@@ -210,13 +198,11 @@ const Portfolio = () => {
   const onSplineLoad = useCallback((spline) => {
     // Prevenir procesamiento duplicado en React Strict Mode
     if (splineLoadingRef.current) {
-      console.log('⚠️ Spline ya cargado, ignorando duplicado (React Strict Mode)');
       return;
     }
     
     splineLoadingRef.current = true;
     splineRef.current = spline;
-    console.log('✅ Spline cargado correctamente');
   }, []);
 
   // Función para manejar el movimiento del mouse sobre Spline - optimizada
@@ -239,7 +225,6 @@ const Portfolio = () => {
       const splineCanvas = document.querySelector('.spline-container canvas');
       if (splineCanvas) {
         splineCanvas.style.pointerEvents = 'auto';
-        console.log('Canvas de Spline configurado para interacción');
       }
     };
 
@@ -631,12 +616,10 @@ const Portfolio = () => {
     if (isModalOpen) {
       // Modal abierto: Limpiar cache de TODOS los videos de las cards
       // Excluir el video del modal (selector .project-modal)
-      console.log('[Modal] 🔓 Modal abierto - Limpiando cache de videos de cards');
       clearAllVideoCache('.project-modal');
     } else if (selectedProject === null) {
       // Modal cerrado (selectedProject se pone a null al cerrar)
       // Restaurar los videos que estaban cargados
-      console.log('[Modal] 🔒 Modal cerrado - Restaurando videos');
       
       // Pequeño delay para evitar lag al cerrar
       setTimeout(() => {

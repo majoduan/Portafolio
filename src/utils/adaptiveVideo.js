@@ -32,14 +32,6 @@ export const shouldUseMobileVideo = () => {
   // Usar mobile si: es móvil OR pantalla pequeña OR conexión lenta OR ahorro de datos
   const useMobile = isMobile || isSmallScreen || isSlowConnection || saveData;
   
-  console.log(`[AdaptiveVideo] 📊 Device analysis:`, {
-    isMobile,
-    isSmallScreen,
-    isSlowConnection,
-    saveData,
-    decision: useMobile ? '480p (mobile)' : '720p (desktop)'
-  });
-  
   return useMobile;
 };
 
@@ -87,8 +79,6 @@ export const preloadOptimalVideo = (videoPath) => {
   video.preload = 'metadata';
   video.src = optimalSrc;
   video.muted = true;
-  
-  console.log(`[AdaptiveVideo] 📥 Precargando: ${optimalSrc}`);
   
   return video;
 };

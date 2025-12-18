@@ -31,7 +31,7 @@ export const useTranslation = () => {
         if (result && typeof result === 'object' && k in result) {
           result = result[k];
         } else {
-          console.warn(`Translation key not found: ${key} for language: ${language}`);
+          // Translation key not found, returning key
           return key; // Return key if translation not found
         }
       }

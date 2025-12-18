@@ -8,8 +8,6 @@ export function registerServiceWorker() {
       navigator.serviceWorker
         .register('/sw.js')
         .then((registration) => {
-          console.log('✅ Service Worker registrado:', registration.scope);
-
           // Verificar actualizaciones cada hora
           setInterval(() => {
             registration.update();
@@ -21,30 +19,23 @@ export function registerServiceWorker() {
             
             newWorker.addEventListener('statechange', () => {
               if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                // Nuevo SW instalado, mostrar notificación opcional
-                console.log('🔄 Nueva versión disponible. Recarga la página para actualizar.');
-                
                 // Opcional: Mostrar banner de actualización
                 showUpdateNotification(newWorker);
               }
             });
           });
         })
-        .catch((error) => {
-          console.error('❌ Error al registrar Service Worker:', error);
+        .catch(() => {
+          // Error al registrar Service Worker
         });
 
       // Escuchar mensajes del SW
       navigator.serviceWorker.addEventListener('message', (event) => {
         if (event.data && event.data.type === 'CACHE_UPDATED') {
-          console.log('📦 Cache actualizado:', event.data.url);
+          // Cache actualizado
         }
       });
     });
-  } else if (!('serviceWorker' in navigator)) {
-    console.log('⚠️ Service Worker no soportado en este navegador');
-  } else {
-    console.log('🔧 Service Worker deshabilitado en desarrollo');
   }
 }
 
@@ -119,7 +110,6 @@ export function clearServiceWorkerCache() {
     navigator.serviceWorker.controller?.postMessage({
       type: 'CLEAR_CACHE'
     });
-    console.log('🗑️ Cache limpiado');
   }
 }
 

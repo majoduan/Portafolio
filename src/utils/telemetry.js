@@ -14,7 +14,7 @@
 const TELEMETRY_CONFIG = {
   enabled: true, // Cambiar a false en desarrollo si no quieres logs
   endpoint: null, // URL de endpoint custom (opcional)
-  useConsole: true, // Log en consola (útil para debugging)
+  useConsole: false, // Log en consola desactivado para producción
   sampleRate: 1.0 // 1.0 = 100% de usuarios (reducir en producción si es necesario)
 };
 
@@ -35,10 +35,7 @@ const sendTelemetryEvent = (eventName, eventData) => {
     url: window.location.href
   };
 
-  // Console logging (desarrollo)
-  if (TELEMETRY_CONFIG.useConsole) {
-    console.log(`[Telemetry] ${eventName}`, payload);
-  }
+  // Console logging desactivado para producción
 
   // Enviar a endpoint custom
   if (TELEMETRY_CONFIG.endpoint) {
@@ -83,7 +80,7 @@ export const initWebVitalsTracking = () => {
     
     lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
   } catch (e) {
-    console.warn('[Telemetry] LCP observer not supported');
+    // LCP observer not supported
   }
 
   // FID - First Input Delay
@@ -102,7 +99,7 @@ export const initWebVitalsTracking = () => {
     
     fidObserver.observe({ type: 'first-input', buffered: true });
   } catch (e) {
-    console.warn('[Telemetry] FID observer not supported');
+    // FID observer not supported
   }
 
   // CLS - Cumulative Layout Shift
@@ -127,7 +124,7 @@ export const initWebVitalsTracking = () => {
       });
     }, { once: true });
   } catch (e) {
-    console.warn('[Telemetry] CLS observer not supported');
+    // CLS observer not supported
   }
 
   // FCP - First Contentful Paint
@@ -145,7 +142,7 @@ export const initWebVitalsTracking = () => {
     
     fcpObserver.observe({ type: 'paint', buffered: true });
   } catch (e) {
-    console.warn('[Telemetry] FCP observer not supported');
+    // FCP observer not supported
   }
 
   // TTFB - Time to First Byte
@@ -161,10 +158,8 @@ export const initWebVitalsTracking = () => {
       });
     }
   } catch (e) {
-    console.warn('[Telemetry] TTFB not available');
+    // TTFB not available
   }
-
-  console.log('[Telemetry] ✅ Web Vitals tracking initialized');
 };
 
 /**
@@ -233,8 +228,6 @@ export const initErrorTracking = () => {
       reason: event.reason?.message || String(event.reason)
     });
   });
-
-  console.log('[Telemetry] ✅ Error tracking initialized');
 };
 
 /**
@@ -251,8 +244,6 @@ export const initTelemetry = () => {
   initWebVitalsTracking();
   trackPageLoadPerformance();
   initErrorTracking();
-  
-  console.log('[Telemetry] 📊 Sistema de telemetría inicializado');
 };
 
 export default {

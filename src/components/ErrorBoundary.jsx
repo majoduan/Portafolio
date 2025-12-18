@@ -31,7 +31,6 @@ class ErrorBoundary extends Component {
       errorInfo?.componentStack?.includes('Spline');
     
     if (isSplineCacheError) {
-      console.warn('⚠️ Error de caché de Spline ignorado (React Strict Mode en desarrollo)');
       // Resetear el error automáticamente
       setTimeout(() => {
         this.setState({
@@ -42,9 +41,6 @@ class ErrorBoundary extends Component {
       }, 100);
       return;
     }
-    
-    // Log del error para debugging
-    console.error('🔴 Error capturado por ErrorBoundary:', error, errorInfo);
     
     this.setState(prevState => ({
       error,

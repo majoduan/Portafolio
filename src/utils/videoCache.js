@@ -30,13 +30,6 @@ export const shouldUseAggressiveCache = () => {
   // Modo agresivo: móvil OR poca RAM OR (conexión lenta AND poca RAM)
   const aggressive = isMobile || isLowMemory || (isSlowConnection && isLowMemory);
   
-  console.log(`[VideoCache] 🔍 Device analysis:`, {
-    isMobile,
-    isLowMemory,
-    isSlowConnection,
-    aggressiveMode: aggressive
-  });
-  
   return aggressive;
 };
 
@@ -59,7 +52,6 @@ export const clearAllVideoCache = (excludeSelector = null, aggressive = null) =>
   allVideos.forEach((video, index) => {
     // Si hay un selector de exclusión, verificar si el video debe ser excluido
     if (excludeSelector && video.closest(excludeSelector)) {
-      console.log('[VideoCache] ⏭️ Video excluido de limpieza');
       return;
     }
 
@@ -92,9 +84,6 @@ export const clearAllVideoCache = (excludeSelector = null, aggressive = null) =>
 
     clearedCount++;
   });
-
-  const mode = useAggressiveMode ? 'agresivo' : 'soft';
-  console.log(`[VideoCache] 🧹 Cache limpiado (${mode}): ${clearedCount} videos pausados`);
   
   // Sugerir al navegador que libere memoria (solo en modo agresivo)
   if (useAggressiveMode && window.gc) {
@@ -135,8 +124,6 @@ export const restoreVideoCache = (selector = 'video') => {
       skippedCount++;
     }
   });
-
-  console.log(`[VideoCache] ♻️ Cache restaurado: ${restoredCount} videos recargados, ${skippedCount} ya en cache`);
   
   // Limpiar estado guardado
   videoCacheState.clear();
@@ -169,10 +156,6 @@ export const pauseOffscreenVideos = (threshold = 0.3) => {
       pausedCount++;
     }
   });
-
-  if (pausedCount > 0) {
-    console.log(`[VideoCache] 🎬 Videos fuera de pantalla pausados: ${pausedCount}`);
-  }
 
   return pausedCount;
 };

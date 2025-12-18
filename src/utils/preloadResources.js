@@ -14,10 +14,6 @@ export const preloadCriticalResources = () => {
     connection.saveData === true  // Usuario activó "ahorro de datos"
   );
 
-  console.log('[Preload] 📱 Device:', isMobile ? 'Mobile' : 'Desktop');
-  console.log('[Preload] 🌐 Connection:', connection?.effectiveType || 'unknown');
-  if (isSlow) console.log('[Preload] ⚠️ Slow connection detected');
-
   // NIVEL 1: CRÍTICO - Imágenes de certificados (siempre precargar, son ligeras)
   const certificateImages = [
     '/images/certificates/epn-award.webp',
@@ -56,8 +52,6 @@ export const preloadCriticalResources = () => {
 
   // NIVEL 3: Videos - SOLO en desktop con conexión rápida
   if (!isMobile && !isSlow) {
-    console.log('[Preload] 🎬 Preloading videos (desktop + fast connection)');
-    
     // 2A. Videos prioritarios - metadata only
     const priorityVideos = [
       '/videos/poa-management.mp4',
@@ -89,11 +83,6 @@ export const preloadCriticalResources = () => {
         link.href = videoSrc;
         document.head.appendChild(link);
       });
-      
-      console.log('[Preload] ✅ Remaining videos prefetched');
     }, 5000);
-  } else {
-    console.log('[Preload] 🚫 Skipping video preload (mobile or slow connection)');
-    console.log('[Preload] 📹 Videos will load on-demand when visible in viewport');
   }
 };
