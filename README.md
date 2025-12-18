@@ -10,6 +10,7 @@ Portfolio profesional interactivo construido con React, Vite, Tailwind CSS y Spl
 - ⚡ **Sistema de Partículas**: Canvas interactivo con partículas que reaccionan al mouse
 - 📱 **Responsive**: Optimizado para todos los dispositivos
 - 🚀 **Performance Optimizado**: 60 FPS, bundle size reducido, lazy loading inteligente
+- 🔒 **Seguridad Reforzada**: CSP headers, HSTS, XSS protection, headers de seguridad HTTP
 
 ## 🎯 Performance Optimizations v2.4 (Diciembre 2025)
 
@@ -192,6 +193,33 @@ Optimizaciones incluidas:
 | **Temperatura** | 🔥🔥🔥 Crítica | 🔥 Normal | ✅ Resuelto |
 
 Ver análisis detallado: [docs/TECHNICAL_DECISIONS.md](./docs/TECHNICAL_DECISIONS.md)
+
+## 🔒 Seguridad
+
+Este proyecto implementa múltiples capas de seguridad:
+
+- ✅ **Content Security Policy (CSP)** - Headers HTTP restrictivos
+- ✅ **HSTS** - Strict-Transport-Security con preload
+- ✅ **XSS Protection** - Múltiples medidas anti-XSS
+- ✅ **Clickjacking Prevention** - X-Frame-Options: DENY
+- ✅ **MIME Sniffing Protection** - X-Content-Type-Options
+- ✅ **Permissions Policy** - APIs sensibles deshabilitadas
+- ✅ **Sin dependencias vulnerables** - Auditorías regulares con npm audit
+
+**Documentación completa**: [docs/SECURITY.md](./docs/SECURITY.md)
+
+## 🛠️ Solución de Problemas
+
+¿Ves mensajes de error en la consola? ¿WebSocket warnings? ¿Logs duplicados?
+
+**Revisa la guía completa**: [docs/TROUBLESHOOTING.md](./docs/TROUBLESHOOTING.md)
+
+### Problemas Comunes (Quick Fix)
+
+- **WebSocket errors**: Normal en desarrollo, no afecta funcionalidad
+- **Logs duplicados**: React Strict Mode (solo en dev)
+- **Service Worker disabled**: Solo activo en producción
+- **Puerto ocupado**: `lsof -ti:5173 | xargs kill -9`
 
 ## 🤝 Contribuir
 

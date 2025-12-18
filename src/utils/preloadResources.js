@@ -4,6 +4,9 @@
  * OPTIMIZADO: Adaptativo según dispositivo y velocidad de conexión
  */
 export const preloadCriticalResources = () => {
+  // Debug mode - cambiar a true para ver logs detallados
+  const DEBUG = false;
+  
   // Detectar móvil y conexión
   const isMobile = window.innerWidth < 768;
   const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
@@ -52,6 +55,8 @@ export const preloadCriticalResources = () => {
 
   // NIVEL 3: Videos - SOLO en desktop con conexión rápida
   if (!isMobile && !isSlow) {
+    if (DEBUG) console.log('[Preload] 🎬 Preloading videos (desktop + fast connection)');
+    
     // 2A. Videos prioritarios - metadata only
     const priorityVideos = [
       '/videos/poa-management.mp4',
@@ -75,6 +80,10 @@ export const preloadCriticalResources = () => {
         '/videos/godot-game-2d.mp4',
         '/videos/godot-game-3d.mp4'
       ];
+
+      if (DEBUG && remainingVideos.length > 0) {
+        console.log(`[Preload] ⏳ Prefetching ${remainingVideos.length} remaining videos...`);
+      }
 
       remainingVideos.forEach(videoSrc => {
         const link = document.createElement('link');

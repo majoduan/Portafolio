@@ -12,9 +12,9 @@
 
 // Configuración de telemetría
 const TELEMETRY_CONFIG = {
-  enabled: true, // Cambiar a false en desarrollo si no quieres logs
+  enabled: import.meta.env.PROD, // Solo habilitado en producción
   endpoint: null, // URL de endpoint custom (opcional)
-  useConsole: false, // Log en consola desactivado para producción
+  useConsole: false, // Log en consola desactivado
   sampleRate: 1.0 // 1.0 = 100% de usuarios (reducir en producción si es necesario)
 };
 

@@ -119,7 +119,8 @@ export default defineConfig({
   // Servidor de desarrollo optimizado
   server: {
     hmr: {
-      overlay: false
+      overlay: false, // Deshabilitar overlay de errores
+      clientPort: 5173 // Puerto explícito para HMR
     },
     // Configuración de headers para mejor caching
     headers: {
