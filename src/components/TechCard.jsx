@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, memo } from 'react';
+import React, { useState, useEffect, useMemo, memo } from 'react';
 import AnimatedCounter from './AnimatedCounter';
 import { useTranslation } from '../hooks/useTranslation';
 

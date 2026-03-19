@@ -2,6 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <!-- Detectar idioma/tema guardados ANTES del render para evitar flash -->
+    <script>
+      document.documentElement.lang = localStorage.getItem('portfolio-language') || (navigator.language.startsWith('es') ? 'es' : 'en');
+      if (localStorage.getItem('portfolio-theme') === 'light' || (!localStorage.getItem('portfolio-theme') && window.matchMedia('(prefers-color-scheme: light)').matches)) { document.documentElement.classList.remove('dark'); } else { document.documentElement.classList.add('dark'); }
+    </script>
     <link rel="icon" type="image/svg+xml" href="/bow-and-arrow.svg" />
     
     <!-- PWA Manifest -->
@@ -13,7 +18,8 @@
     <!-- Resource Hints para optimización de carga -->
     <link rel="preconnect" href="https://prod.spline.design" crossorigin />
     <link rel="dns-prefetch" href="https://prod.spline.design" />
-    <link rel="prefetch" href="/images/foto-perfil.webp" as="image" />
+    <!-- Preload de imagen de perfil (usada en sección contacto) -->
+    <link rel="prefetch" href="/images/optimized/foto-perfil-800w.webp" as="image" />
     
     <!-- Meta Tags SEO -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

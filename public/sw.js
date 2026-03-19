@@ -12,6 +12,7 @@ const VIDEO_MOBILE_CACHE = `videos-mobile-cache-v${CACHE_VERSION}`;
 const PRECACHE_ASSETS = [
   '/',
   '/index.html',
+  '/offline.html',
   '/images/foto-perfil.webp'
   // Certificados se cargan bajo demanda con stale-while-revalidate
 ];
@@ -100,8 +101,12 @@ async function networkFirst(request, cacheName = RUNTIME_CACHE) {
     if (cachedResponse) {
       return cachedResponse;
     }
-    // Fallback para HTML
+    // Fallback para HTML - serve branded offline page from cache
     if (request.destination === 'document') {
+      const offlinePage = await caches.match('/offline.html');
+      if (offlinePage) {
+        return offlinePage;
+      }
       return new Response(
         '<html><body><h1>Sin conexión</h1><p>Por favor, verifica tu conexión a internet.</p></body></html>',
         { headers: { 'Content-Type': 'text/html' } }

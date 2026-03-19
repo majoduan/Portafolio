@@ -8,10 +8,12 @@ export function registerServiceWorker() {
       navigator.serviceWorker
         .register('/sw.js')
         .then((registration) => {
-          // Verificar actualizaciones cada hora
-          setInterval(() => {
-            registration.update();
-          }, 60 * 60 * 1000);
+          // Verificar actualizaciones cada hora (guard against multiple intervals)
+          if (!window.__swUpdateInterval) {
+            window.__swUpdateInterval = setInterval(() => {
+              registration.update();
+            }, 60 * 60 * 1000);
+          }
 
           // Notificar cuando hay actualización disponible
           registration.addEventListener('updatefound', () => {

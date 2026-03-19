@@ -1,4 +1,4 @@
-import { memo, useContext } from 'react';
+import React, { memo, useContext } from 'react';
 import { Languages } from 'lucide-react';
 import { AppContext } from '../contexts/AppContext';
 
@@ -18,8 +18,8 @@ const LanguageToggle = memo(() => {
       title={`Switch to ${language === 'en' ? 'Spanish' : 'English'}`}
     >
       {/* Language Icon with animation */}
-      <Languages 
-        className="w-5 h-5 text-slate-300 group-hover:text-blue-400 transition-colors duration-300" 
+      <Languages
+        className="w-5 h-5 text-slate-700 dark:text-slate-300 group-hover:text-blue-400 transition-colors duration-300"
       />
       
       {/* Language Flag and Text */}
@@ -27,12 +27,12 @@ const LanguageToggle = memo(() => {
         {language === 'en' ? (
           <>
             <span className="text-2xl leading-none" role="img" aria-label="English">🇺🇸</span>
-            <span className="text-slate-300 group-hover:text-blue-400 transition-colors duration-300">EN</span>
+            <span className="text-slate-700 dark:text-slate-300 group-hover:text-blue-400 transition-colors duration-300">EN</span>
           </>
         ) : (
           <>
             <span className="text-2xl leading-none" role="img" aria-label="Español">🇪🇸</span>
-            <span className="text-slate-300 group-hover:text-blue-400 transition-colors duration-300">ES</span>
+            <span className="text-slate-700 dark:text-slate-300 group-hover:text-blue-400 transition-colors duration-300">ES</span>
           </>
         )}
       </span>

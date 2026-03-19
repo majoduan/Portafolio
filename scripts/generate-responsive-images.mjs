@@ -17,7 +17,8 @@ const __dirname = dirname(__filename);
 
 // Configuración
 const SIZES = [400, 800, 1200, 1920];
-const QUALITY = 85;
+const WEBP_QUALITY = 85;
+const AVIF_QUALITY = 50;
 const INPUT_DIRS = [
   join(__dirname, '../public/images'),
   join(__dirname, '../public/images/certificates')
@@ -63,22 +64,39 @@ async function generateResponsiveVersions(inputPath, outputDir) {
         continue;
       }
 
-      const outputPath = join(outputDir, `${filename}-${size}w.webp`);
-      
+      const webpOutputPath = join(outputDir, `${filename}-${size}w.webp`);
+      const avifOutputPath = join(outputDir, `${filename}-${size}w.avif`);
+
+      // Generate WebP version
       await sharp(inputPath)
-        .resize(size, null, { 
+        .resize(size, null, {
           withoutEnlargement: true,
           fit: 'inside'
         })
-        .webp({ 
-          quality: QUALITY,
+        .webp({
+          quality: WEBP_QUALITY,
           effort: 6 // Balance entre velocidad y compresión
         })
-        .toFile(outputPath);
-      
-      const stats = await sharp(outputPath).metadata();
-      const fileSize = (stats.size / 1024).toFixed(2);
-      console.log(`  ${colors.green}✓${colors.reset} ${size}w → ${fileSize} KB`);
+        .toFile(webpOutputPath);
+
+      const webpStats = await sharp(webpOutputPath).metadata();
+      const webpFileSize = (webpStats.size / 1024).toFixed(2);
+      console.log(`  ${colors.green}✓${colors.reset} ${size}w.webp → ${webpFileSize} KB`);
+
+      // Generate AVIF version
+      await sharp(inputPath)
+        .resize(size, null, {
+          withoutEnlargement: true,
+          fit: 'inside'
+        })
+        .avif({
+          quality: AVIF_QUALITY
+        })
+        .toFile(avifOutputPath);
+
+      const avifStats = await sharp(avifOutputPath).metadata();
+      const avifFileSize = (avifStats.size / 1024).toFixed(2);
+      console.log(`  ${colors.green}✓${colors.reset} ${size}w.avif → ${avifFileSize} KB`);
     }
     
     console.log(`${colors.green}✅ Completado: ${filename}${colors.reset}`);

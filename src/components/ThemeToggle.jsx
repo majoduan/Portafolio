@@ -1,4 +1,4 @@
-import { memo, useContext } from 'react';
+import React, { memo, useContext } from 'react';
 import { Moon, Sun } from 'lucide-react';
 import { AppContext } from '../contexts/AppContext';
 
@@ -20,8 +20,8 @@ const ThemeToggle = memo(() => {
     >
       {/* Theme Icon with animation */}
       {theme === 'dark' ? (
-        <Moon 
-          className="w-5 h-5 text-slate-300 group-hover:text-blue-400 transition-colors duration-300" 
+        <Moon
+          className="w-5 h-5 text-slate-700 dark:text-slate-300 group-hover:text-blue-400 transition-colors duration-300"
           fill="currentColor"
         />
       ) : (

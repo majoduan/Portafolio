@@ -1,11 +1,12 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 import { compression } from 'vite-plugin-compression2'
-
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
+    tailwindcss(),
     // Compresión Brotli optimizada (solo .br para máximo ahorro de bandwidth)
     compression({
       algorithm: 'brotliCompress',
@@ -18,11 +19,7 @@ export default defineConfig({
     })
   ],
   resolve: {
-    alias: {
-      'lodash.debounce': 'lodash-es/debounce'
-    },
-    // Asegurar que solo hay una instancia de React en todo el proyecto
-    dedupe: ['react', 'react-dom']
+    dedupe: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime']
   },
   build: {
     // Copiar Service Worker a dist - Fase 2 optimization
@@ -36,17 +33,11 @@ export default defineConfig({
             if (id.includes('react') || id.includes('react-dom')) {
               return 'react-vendor';
             }
-            if (id.includes('lucide-react') || id.includes('react-icons')) {
+            if (id.includes('lucide-react')) {
               return 'icons';
             }
             if (id.includes('@splinetool')) {
               return 'spline';
-            }
-            if (id.includes('animejs')) {
-              return 'animations';
-            }
-            if (id.includes('lodash')) {
-              return 'utils';
             }
             // Otros vendors en un chunk separado
             return 'vendor';
@@ -79,19 +70,8 @@ export default defineConfig({
         }
       }
     },
-    // Optimización de tamaño mejorada
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true,
-        pure_funcs: ['console.log', 'console.info'],
-        passes: 2
-      },
-      mangle: {
-        safari10: true
-      }
-    },
+    // Minificación con esbuild (más rápido que terser, output similar)
+    minify: 'esbuild',
     // Chunks más pequeños y mejor compresión
     chunkSizeWarningLimit: 500,
     cssCodeSplit: true,
@@ -102,12 +82,12 @@ export default defineConfig({
     assetsInlineLimit: 4096,
     // Configuración de target para mejor compatibilidad y optimización
     target: 'es2020',
-    // Habilitar CSS modules
-    cssMinify: 'lightningcss'
+    // CSS minificación manejada por Tailwind v4
+    cssMinify: true
   },
   // Optimización de performance mejorada
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'lucide-react', 'lodash-es', '@splinetool/react-spline'],
+    include: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'lucide-react'],
     // Force pre-bundling de dependencias críticas
     esbuildOptions: {
       target: 'es2020',
@@ -116,15 +96,14 @@ export default defineConfig({
       }
     }
   },
+  // Drop console/debugger solo en producción
+  esbuild: process.env.NODE_ENV === 'production' ? {
+    drop: ['console', 'debugger']
+  } : {},
   // Servidor de desarrollo optimizado
   server: {
     hmr: {
-      overlay: false, // Deshabilitar overlay de errores
-      clientPort: 5173 // Puerto explícito para HMR
-    },
-    // Configuración de headers para mejor caching
-    headers: {
-      'Cache-Control': 'public, max-age=31536000'
+      overlay: false
     }
   },
   // Preview server con configuración similar

@@ -29,8 +29,8 @@ export const AppContextProvider = ({ children }) => {
     if (savedTheme && (savedTheme === 'dark' || savedTheme === 'light')) {
       return savedTheme;
     }
-    // Default to dark mode
-    return 'dark';
+    // Default to system preference
+    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
   };
 
   const [language, setLanguage] = useState(getInitialLanguage);

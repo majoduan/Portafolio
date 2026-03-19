@@ -301,11 +301,16 @@
       },
       "submit": "Enviar Mensaje",
       "submitting": "Enviando...",
-      "helper": "Esto abrirá tu cliente de correo con el mensaje prellenado"
+      "helper": "Esto abrirá tu cliente de correo con el mensaje prellenado",
+      "emailBody": {
+        "greeting": "Hola Mateo",
+        "intro": "Mi nombre es",
+        "regards": "Saludos cordiales"
+      }
     }
   },
   "footer": {
-    "copyright": "© 2025 Mateo Dueñas. Todos los derechos reservados"
+    "copyright": "© 2026 Mateo Dueñas. Todos los derechos reservados"
   },
   "theme": {
     "dark": "Modo oscuro",

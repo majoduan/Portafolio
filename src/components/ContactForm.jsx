@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, memo } from 'react';
+import React, { useState, useCallback, useMemo, memo } from 'react';
 import { Mail, Send, User } from 'lucide-react';
 import TypingQuotes from './TypingQuotes';
 import { useTranslation } from '../hooks/useTranslation';
@@ -75,7 +75,7 @@ const ContactForm = memo(() => {
     // Create mailto link with encoded parameters
     const subject = encodeURIComponent(formData.subject);
     const body = encodeURIComponent(
-      `Hi Mateo,\n\nMy name is ${formData.name}.\n\n${formData.message}\n\nBest regards,\n${formData.name}`
+      `${t('contact.form.emailBody.greeting')},\n\n${t('contact.form.emailBody.intro')} ${formData.name}.\n\n${formData.message}\n\n${t('contact.form.emailBody.regards')},\n${formData.name}`
     );
     
     const mailtoLink = `mailto:${emailAddress}?subject=${subject}&body=${body}`;
@@ -95,7 +95,7 @@ const ContactForm = memo(() => {
     >
       {/* Name Field */}
       <div className="mb-4">
-        <label htmlFor="name" className="block text-sm font-medium text-slate-300 dark:text-slate-300 text-slate-700 mb-2">
+        <label htmlFor="name" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
           <User className="w-4 h-4 inline mr-2" />
           {t('contact.form.name.label')}
         </label>
@@ -107,10 +107,10 @@ const ContactForm = memo(() => {
           onChange={handleChange}
           placeholder={t('contact.form.name.placeholder')}
           style={{ backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}
-          className={`w-full px-4 py-3 bg-slate-800/50 dark:bg-slate-800/50 bg-white border rounded-xl text-white dark:text-white text-slate-900 placeholder-slate-500 dark:placeholder-slate-500 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 ${
-            errors.name 
-              ? 'border-red-500 focus:ring-red-500' 
-              : 'border-slate-700 dark:border-slate-700 border-slate-300 focus:ring-blue-500 focus:border-blue-500'
+          className={`w-full px-4 py-3 bg-white dark:bg-slate-800/50 border rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 transition-all duration-300 ${
+            errors.name
+              ? 'border-red-500 focus:ring-red-500'
+              : 'border-slate-300 dark:border-slate-700 focus:ring-blue-500 focus:border-blue-500'
           }`}
         />
         {errors.name && (
@@ -120,7 +120,7 @@ const ContactForm = memo(() => {
 
       {/* Subject Field */}
       <div className="mb-4">
-        <label htmlFor="subject" className="block text-sm font-medium text-slate-300 dark:text-slate-300 text-slate-700 mb-2">
+        <label htmlFor="subject" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
           <Mail className="w-4 h-4 inline mr-2" />
           {t('contact.form.subject.label')}
         </label>
@@ -131,10 +131,10 @@ const ContactForm = memo(() => {
           value={formData.subject}
           onChange={handleChange}
           placeholder={t('contact.form.subject.placeholder')}
-          className={`w-full px-4 py-3 bg-slate-800/50 dark:bg-slate-800/50 bg-white border rounded-xl text-white dark:text-white text-slate-900 placeholder-slate-500 dark:placeholder-slate-500 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 ${
-            errors.subject 
-              ? 'border-red-500 focus:ring-red-500' 
-              : 'border-slate-700 dark:border-slate-700 border-slate-300 focus:ring-blue-500 focus:border-blue-500'
+          className={`w-full px-4 py-3 bg-white dark:bg-slate-800/50 border rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 transition-all duration-300 ${
+            errors.subject
+              ? 'border-red-500 focus:ring-red-500'
+              : 'border-slate-300 dark:border-slate-700 focus:ring-blue-500 focus:border-blue-500'
           }`}
         />
         {errors.subject && (
@@ -144,7 +144,7 @@ const ContactForm = memo(() => {
 
       {/* Message Field */}
       <div className="mb-4">
-        <label htmlFor="message" className="block text-sm font-medium text-slate-300 dark:text-slate-300 text-slate-700 mb-2">
+        <label htmlFor="message" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
           <Send className="w-4 h-4 inline mr-2" />
           {t('contact.form.message.label')}
         </label>
@@ -154,10 +154,10 @@ const ContactForm = memo(() => {
           value={formData.message}
           onChange={handleChange}
           placeholder={t('contact.form.message.placeholder')}
-          className={`w-full h-32 md:h-40 lg:h-44 px-4 py-3 bg-slate-800/50 dark:bg-slate-800/50 bg-white border rounded-xl text-white dark:text-white text-slate-900 placeholder-slate-500 dark:placeholder-slate-500 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 resize-none ${
-            errors.message 
-              ? 'border-red-500 focus:ring-red-500' 
-              : 'border-slate-700 dark:border-slate-700 border-slate-300 focus:ring-blue-500 focus:border-blue-500'
+          className={`w-full h-32 md:h-40 lg:h-44 px-4 py-3 bg-white dark:bg-slate-800/50 border rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 transition-all duration-300 resize-none ${
+            errors.message
+              ? 'border-red-500 focus:ring-red-500'
+              : 'border-slate-300 dark:border-slate-700 focus:ring-blue-500 focus:border-blue-500'
           }`}
         />
         {errors.message && (
@@ -175,7 +175,7 @@ const ContactForm = memo(() => {
       </button>
 
       {/* Helper text */}
-      <p className="text-center text-xs md:text-sm text-slate-400 dark:text-slate-400 text-slate-600 mt-3">
+      <p className="text-center text-xs md:text-sm text-slate-600 dark:text-slate-400 mt-3">
         {t('contact.form.helper')}
       </p>
 

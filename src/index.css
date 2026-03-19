@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 /* Scroll suave para toda la página */
 html {
@@ -55,26 +53,25 @@ body,
 }
 
 /* Configuración para Spline */
-@layer utilities {
-  .spline-container {
-    position: relative;
-    overflow: hidden;
-    width: 100%;
-    height: 600px;
-  }
-  
-  /* Ocultar elementos adicionales que puedan aparecer */
-  .spline-container a[href*="spline"],
-  .spline-container div[class*="logo"],
-  .spline-container div[id*="logo"] {
-    display: none !important;
-  }
+/* Configuración para Spline */
+.spline-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 600px;
+}
 
-  /* Asegurar que el canvas capture los eventos del mouse */
-  .spline-container canvas {
-    pointer-events: auto !important;
-    cursor: crosshair !important;
-  }
+/* Ocultar elementos adicionales que puedan aparecer */
+.spline-container a[href*="spline"],
+.spline-container div[class*="logo"],
+.spline-container div[id*="logo"] {
+  display: none !important;
+}
+
+/* Asegurar que el canvas capture los eventos del mouse */
+.spline-container canvas {
+  pointer-events: auto !important;
+  cursor: crosshair !important;
 }
 
 /* Canvas de partículas - mantener visible en ambos modos */
@@ -418,36 +415,6 @@ section {
   }
 }
 
-/* ==================== CONTACT FORM INPUTS OPTIMIZATION ==================== */
-
-/* Hardware acceleration for form inputs */
-.contact-form input,
-.contact-form textarea {
-  backface-visibility: hidden;
-  transform: translateZ(0);
-  will-change: auto;
-}
-
-.contact-form input:focus,
-.contact-form textarea:focus {
-  will-change: border-color, box-shadow;
-}
-
-/* Optimize button hover */
-.contact-form button[type="submit"] {
-  backface-visibility: hidden;
-  transform: translateZ(0);
-  will-change: auto;
-}
-
-.contact-form button[type="submit"]:hover {
-  will-change: transform, box-shadow;
-}
-
-.contact-form button[type="submit"]:not(:hover) {
-  will-change: auto;
-}
-
 /* ==================== PROJECT MODAL TWO-COLUMN LAYOUT ==================== */
 /* Layout: Video 2/3 (66.666%) | Info 1/3 (33.334%) */
 
@@ -492,7 +459,7 @@ section {
 /* Custom scrollbar para la columna de información */
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: var(--accent-blue-alpha-50) rgba(15, 23, 42, 0.3);
+  scrollbar-color: var(--accent-blue-alpha-50) var(--bg-secondary);
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -500,7 +467,7 @@ section {
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.3);
+  background: var(--bg-secondary);
   border-radius: 4px;
 }
 

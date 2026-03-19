@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo, memo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, memo } from 'react';
 import './HUDBootScreen.css';
 import { 
   HardDrive, 
@@ -13,7 +13,7 @@ import {
   RotateCw
 } from 'lucide-react';
 
-const HUDBootScreen = memo(({ onComplete }) => {
+const HUDBootScreen = memo(({ onComplete, splineReady = false }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [typewriterText, setTypewriterText] = useState('');
   const [showCursor, setShowCursor] = useState(true);
@@ -64,22 +64,38 @@ const HUDBootScreen = memo(({ onComplete }) => {
     return () => clearTimeout(fadeTimer);
   }, []);
 
-  // Progreso del sistema
+  // Progreso del sistema - adaptativo según splineReady
+  // 0-85: progreso normal (50ms/tick = ~4.25s)
+  // 85-100: solo avanza si splineReady (o timeout de 15s)
   useEffect(() => {
+    const startTime = Date.now();
+    const MAX_WAIT = 15000; // Máximo 15s esperando Spline
+
     const progressInterval = setInterval(() => {
       setSystemProgress(prev => {
         if (prev >= 100) {
           clearInterval(progressInterval);
-          // Iniciar fade-out
           setFadeState('fade-out');
-          setTimeout(() => onComplete(), 1500); // Esperar a que termine el fade-out (1.5s)
+          setTimeout(() => onComplete(), 1500);
           return 100;
         }
-        return prev + 1;
+
+        // De 0 a 85: progreso normal
+        if (prev < 85) return prev + 1;
+
+        // De 85 a 100: esperar Spline o timeout
+        const elapsed = Date.now() - startTime;
+        if (splineReady || elapsed > MAX_WAIT) {
+          return prev + 1; // Continuar normalmente
+        }
+
+        // Spline no listo y dentro del timeout: avanzar muy lento (simular espera)
+        if (prev < 92) return prev + 0.2;
+        return prev; // Pausar en ~92%
       });
     }, 50);
     return () => clearInterval(progressInterval);
-  }, [onComplete]);
+  }, [onComplete, splineReady]);
 
   // Sistema de partículas ULTRA-OPTIMIZADO
   useEffect(() => {
@@ -117,8 +133,8 @@ const HUDBootScreen = memo(({ onComplete }) => {
     
     // Variables para throttling
     let frameCount = 0;
-    const canvasWidth = canvas.width;
-    const canvasHeight = canvas.height;
+    let canvasWidth = canvas.width;
+    let canvasHeight = canvas.height;
 
     const animate = () => {
       frameCount++;
@@ -179,6 +195,8 @@ const HUDBootScreen = memo(({ onComplete }) => {
     const handleResize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      canvasWidth = canvas.width;
+      canvasHeight = canvas.height;
     };
 
     window.addEventListener('resize', handleResize, { passive: true });
