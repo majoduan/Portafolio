@@ -1,395 +1,428 @@
 'use client';
-import React, { useState, useEffect, useRef, useMemo, memo } from 'react';
-import { 
-  HardDrive, 
-  Zap, 
-  Mail, 
-  Calendar,
-  Sun,
-  Moon,
-  Droplets,
-  Wind,
-  Power,
-  RotateCw
-} from 'lucide-react';
+import React, { useState, useEffect, useMemo, memo } from 'react';
+
+// Deterministic PRNG for consistent circuit layout across renders
+const createRng = (seed) => {
+  let s = seed;
+  return () => {
+    s = (s * 16807) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
+};
+
+/* ============================================================
+   CIRCUIT GENERATION — multiple path behaviours for variety
+   ============================================================ */
+
+// Pattern A: Simple L-shape (1 turn)
+const patternL = (sx, sy, cx, cy, rng, reach) => {
+  const tx = sx + (cx - sx) * reach;
+  const ty = sy + (cy - sy) * reach;
+  return rng() > 0.5
+    ? [{ x: sx, y: sy }, { x: tx, y: sy }, { x: tx, y: ty }]
+    : [{ x: sx, y: sy }, { x: sx, y: ty }, { x: tx, y: ty }];
+};
+
+// Pattern B: Zigzag (2-3 turns)
+const patternZigzag = (sx, sy, cx, cy, rng, reach) => {
+  const pts = [{ x: sx, y: sy }];
+  const steps = 2 + Math.floor(rng() * 2);
+  let px = sx, py = sy;
+  for (let s = 0; s < steps; s++) {
+    const t = ((s + 1) / steps) * reach;
+    const nx = px + (cx - px) * t;
+    const ny = py + (cy - py) * t;
+    if (s % 2 === 0) {
+      pts.push({ x: nx, y: py });
+      pts.push({ x: nx, y: ny });
+    } else {
+      pts.push({ x: px, y: ny });
+      pts.push({ x: nx, y: ny });
+    }
+    px = nx; py = ny;
+  }
+  return pts;
+};
+
+// Pattern C: Staircase (many short segments)
+const patternStaircase = (sx, sy, cx, cy, rng, reach) => {
+  const pts = [{ x: sx, y: sy }];
+  const steps = 3 + Math.floor(rng() * 3);
+  let px = sx, py = sy;
+  for (let s = 0; s < steps; s++) {
+    const frac = reach / steps;
+    const nx = px + (cx - px) * frac;
+    const ny = py + (cy - py) * frac;
+    pts.push({ x: nx, y: py });
+    pts.push({ x: nx, y: ny });
+    px = nx; py = ny;
+  }
+  return pts;
+};
+
+// Pattern D: Long straight run then turn toward center
+const patternStraightThenTurn = (sx, sy, cx, cy, rng, reach, edge) => {
+  const pts = [{ x: sx, y: sy }];
+  const runLen = (0.15 + rng() * 0.3);
+  // Run parallel to edge first
+  if (edge === 0 || edge === 2) {
+    const dir = rng() > 0.5 ? 1 : -1;
+    const mx = sx + dir * runLen * Math.abs(cx - sx);
+    pts.push({ x: mx, y: sy });
+    const ty = sy + (cy - sy) * reach;
+    pts.push({ x: mx, y: ty });
+    const fx = mx + (cx - mx) * reach * 0.5;
+    pts.push({ x: fx, y: ty });
+  } else {
+    const dir = rng() > 0.5 ? 1 : -1;
+    const my = sy + dir * runLen * Math.abs(cy - sy);
+    pts.push({ x: sx, y: my });
+    const tx = sx + (cx - sx) * reach;
+    pts.push({ x: tx, y: my });
+    const fy = my + (cy - my) * reach * 0.5;
+    pts.push({ x: tx, y: fy });
+  }
+  return pts;
+};
+
+// Pattern E: Tree-like branching (returns main path + branch paths)
+const patternTree = (sx, sy, cx, cy, rng, reach, isMobile) => {
+  const mainPts = patternZigzag(sx, sy, cx, cy, rng, reach);
+  const branches = [];
+  // Create 1-3 sub-branches from junction points
+  const branchCount = isMobile ? 1 : 1 + Math.floor(rng() * 2);
+  for (let b = 0; b < branchCount; b++) {
+    const ji = 1 + Math.floor(rng() * Math.max(1, mainPts.length - 2));
+    const jp = mainPts[Math.min(ji, mainPts.length - 1)];
+    const bLen = 20 + rng() * 60;
+    const dir = Math.floor(rng() * 4);
+    const ex = jp.x + [bLen, -bLen, 0, 0][dir];
+    const ey = jp.y + [0, 0, bLen, -bLen][dir];
+    branches.push([{ x: jp.x, y: jp.y }, { x: ex, y: ey }]);
+    // Sub-sub branch
+    if (rng() > 0.5) {
+      const sLen = 10 + rng() * 30;
+      const sDir = (dir + 1) % 4;
+      const sx2 = ex + [sLen, -sLen, 0, 0][sDir];
+      const sy2 = ey + [0, 0, sLen, -sLen][sDir];
+      branches.push([{ x: ex, y: ey }, { x: sx2, y: sy2 }]);
+    }
+  }
+  return { mainPts, branches };
+};
+
+const ORB_RADIUS = 50; // Radius of the central orb (visual size)
+
+const generateCircuits = (w, h) => {
+  const cx = w / 2;
+  const cy = h / 2;
+  const rng = createRng(42);
+  const isMobile = w < 640;
+  const isTablet = w >= 640 && w < 1024;
+
+  // +33% more circuits per view
+  const mainCount = isMobile ? 14 : isTablet ? 24 : 35;
+  const circuits = [];
+  const patterns = [patternL, patternZigzag, patternStaircase, patternStraightThenTurn];
+
+  for (let i = 0; i < mainCount; i++) {
+    const edge = i % 4;
+    const connectsToOrb = rng() < 0.3;
+
+    let sx, sy;
+    switch (edge) {
+      case 0: sx = rng() * w * 0.9 + w * 0.05; sy = 0; break;
+      case 1: sx = w; sy = rng() * h * 0.9 + h * 0.05; break;
+      case 2: sx = rng() * w * 0.9 + w * 0.05; sy = h; break;
+      default: sx = 0; sy = rng() * h * 0.9 + h * 0.05; break;
+    }
+
+    const maxReach = connectsToOrb ? 0.92 + rng() * 0.06 : 0.15 + rng() * 0.45;
+
+    // Use tree pattern ~20% of the time, else cycle through patterns
+    const useTree = rng() < 0.2;
+    let pts;
+    let extraBranches = [];
+
+    if (useTree) {
+      const result = patternTree(sx, sy, cx, cy, rng, maxReach, isMobile);
+      pts = result.mainPts;
+      extraBranches = result.branches;
+    } else {
+      const patIdx = i % patterns.length;
+      const pat = patterns[patIdx];
+      pts = pat === patternStraightThenTurn
+        ? pat(sx, sy, cx, cy, rng, maxReach, edge)
+        : pat(sx, sy, cx, cy, rng, maxReach);
+    }
+
+    // If connects to orb: replace final approach with a clean
+    // right-angle path that ends in a straight horizontal or vertical
+    // line stopping exactly at the orb edge. No diagonals.
+    if (connectsToOrb && pts.length >= 2) {
+      // Remove any points already inside/near the orb
+      while (pts.length > 1 && Math.hypot(pts[pts.length - 1].x - cx, pts[pts.length - 1].y - cy) < ORB_RADIUS * 1.5) {
+        pts.pop();
+      }
+      if (pts.length < 1) pts.push({ x: sx, y: sy });
+
+      const last = pts[pts.length - 1];
+      // Decide approach axis: whichever is farther from center
+      const dx = Math.abs(last.x - cx);
+      const dy = Math.abs(last.y - cy);
+
+      if (dx >= dy) {
+        // Approach horizontally: first align Y to center, then go straight H to orb edge
+        const orbEdgeX = last.x < cx ? cx - ORB_RADIUS : cx + ORB_RADIUS;
+        pts.push({ x: last.x, y: cy }); // vertical move to center Y
+        pts.push({ x: orbEdgeX, y: cy }); // horizontal straight into orb
+      } else {
+        // Approach vertically: first align X to center, then go straight V to orb edge
+        const orbEdgeY = last.y < cy ? cy - ORB_RADIUS : cy + ORB_RADIUS;
+        pts.push({ x: cx, y: last.y }); // horizontal move to center X
+        pts.push({ x: cx, y: orbEdgeY }); // vertical straight into orb
+      }
+    }
+
+    const startDist = Math.hypot(sx - cx, sy - cy);
+    const maxDist = Math.hypot(cx, cy);
+    const normDist = 1 - startDist / maxDist;
+
+    circuits.push({
+      id: `m${i}`,
+      points: pts,
+      connectsToOrb,
+      activateAt: Math.floor(normDist * 45) + 5,
+      delay: normDist * 2.5,
+      duration: 0.8 + rng() * 1.4,
+    });
+
+    // Add tree branches as separate circuits
+    extraBranches.forEach((brPts, bi) => {
+      circuits.push({
+        id: `t${i}-${bi}`,
+        points: brPts,
+        connectsToOrb: false,
+        activateAt: Math.floor(normDist * 45) + 12,
+        delay: normDist * 2.5 + 0.6,
+        duration: 0.3 + rng() * 0.4,
+      });
+    });
+  }
+
+  // Additional standalone branches from random main circuits
+  const branchCount = isMobile ? 8 : isTablet ? 14 : 22;
+  for (let i = 0; i < branchCount; i++) {
+    const parent = circuits[Math.floor(rng() * Math.min(circuits.length, mainCount))];
+    if (parent.points.length < 3) continue;
+    const ji = 1 + Math.floor(rng() * (parent.points.length - 2));
+    const jp = parent.points[ji];
+    const len = 12 + rng() * (isMobile ? 35 : 65);
+    const dir = Math.floor(rng() * 4);
+    const ex = jp.x + [len, -len, 0, 0][dir];
+    const ey = jp.y + [0, 0, len, -len][dir];
+    const branchPts = [{ x: jp.x, y: jp.y }, { x: ex, y: ey }];
+
+    // 30% chance of an L-turn sub-branch
+    if (rng() > 0.7) {
+      const subLen = 10 + rng() * 25;
+      const subDir = (dir + (rng() > 0.5 ? 1 : 3)) % 4;
+      branchPts.push({
+        x: ex + [subLen, -subLen, 0, 0][subDir],
+        y: ey + [0, 0, subLen, -subLen][subDir],
+      });
+    }
+
+    circuits.push({
+      id: `b${i}`,
+      points: branchPts,
+      connectsToOrb: false,
+      activateAt: parent.activateAt + 6 + Math.floor(rng() * 8),
+      delay: parent.delay + 0.3 + rng() * 0.5,
+      duration: 0.3 + rng() * 0.5,
+    });
+  }
+
+  return circuits;
+};
+
+// Build SVG path 'd' attribute and total length
+const getPathData = (points) => {
+  let d = '';
+  let length = 0;
+  for (let i = 0; i < points.length; i++) {
+    d += `${i === 0 ? 'M' : 'L'}${points[i].x.toFixed(1)},${points[i].y.toFixed(1)} `;
+    if (i > 0) {
+      length += Math.hypot(points[i].x - points[i - 1].x, points[i].y - points[i - 1].y);
+    }
+  }
+  return { d, length };
+};
+
+/* ============================================================
+   COMPONENT
+   ============================================================ */
 
 const HUDBootScreen = memo(({ onComplete, splineReady = false }) => {
-  const [currentTime, setCurrentTime] = useState(new Date());
-  const [typewriterText, setTypewriterText] = useState('');
-  const [showCursor, setShowCursor] = useState(true);
-  const [systemProgress, setSystemProgress] = useState(0);
-  const [fadeState, setFadeState] = useState('fade-in'); // 'fade-in', 'visible', 'fade-out'
-  const canvasRef = useRef(null);
-  const particlesRef = useRef([]);
-  const animationFrameRef = useRef(null);
-  
-  const initText = useMemo(() => "> INITIALIZING SYSTEM...", []);
+  const [progress, setProgress] = useState(0);
+  const [fadeState, setFadeState] = useState('visible');
+  const [orbActive, setOrbActive] = useState(false);
+  const [orbIntensity, setOrbIntensity] = useState(0);
+  const [dims, setDims] = useState({ w: 0, h: 0 });
 
-  // Actualizar reloj
+  // Viewport dimensions
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-    return () => clearInterval(timer);
+    const update = () => setDims({ w: window.innerWidth, h: window.innerHeight });
+    update();
+    window.addEventListener('resize', update, { passive: true });
+    return () => window.removeEventListener('resize', update);
   }, []);
 
-  // Efecto typewriter para texto central
-  useEffect(() => {
-    let index = 0;
-    const interval = setInterval(() => {
-      if (index <= initText.length) {
-        setTypewriterText(initText.slice(0, index));
-        index++;
-      } else {
-        clearInterval(interval);
-      }
-    }, 100);
-    return () => clearInterval(interval);
-  }, [initText]);
-
-  // Cursor parpadeante
-  useEffect(() => {
-    const cursorInterval = setInterval(() => {
-      setShowCursor(prev => !prev);
-    }, 530);
-    return () => clearInterval(cursorInterval);
-  }, []);
-
-  // Fade-in inicial (sin precarga para evitar referencias circulares)
-  useEffect(() => {
-    const fadeTimer = setTimeout(() => {
-      setFadeState('visible');
-    }, 2000);
-    
-    return () => clearTimeout(fadeTimer);
-  }, []);
-
-  // Progreso del sistema - adaptativo según splineReady
-  // 0-85: progreso normal (50ms/tick = ~4.25s)
-  // 85-100: solo avanza si splineReady (o timeout de 15s)
+  // Progress timer
   useEffect(() => {
     const startTime = Date.now();
-    const MAX_WAIT = 15000; // Máximo 15s esperando Spline
-
-    const progressInterval = setInterval(() => {
-      setSystemProgress(prev => {
+    const MAX_WAIT = 15000;
+    const interval = setInterval(() => {
+      setProgress(prev => {
         if (prev >= 100) {
-          clearInterval(progressInterval);
+          clearInterval(interval);
           setFadeState('fade-out');
           setTimeout(() => onComplete(), 1500);
           return 100;
         }
-
-        // De 0 a 85: progreso normal
         if (prev < 85) return prev + 1;
-
-        // De 85 a 100: esperar Spline o timeout
         const elapsed = Date.now() - startTime;
-        if (splineReady || elapsed > MAX_WAIT) {
-          return prev + 1; // Continuar normalmente
-        }
-
-        // Spline no listo y dentro del timeout: avanzar muy lento (simular espera)
+        if (splineReady || elapsed > MAX_WAIT) return prev + 1;
         if (prev < 92) return prev + 0.2;
-        return prev; // Pausar en ~92%
+        return prev;
       });
     }, 50);
-    return () => clearInterval(progressInterval);
+    return () => clearInterval(interval);
   }, [onComplete, splineReady]);
 
-  // Sistema de partículas ULTRA-OPTIMIZADO
+  // Orb activation — flicker then ramp up
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (progress >= 55 && !orbActive) setOrbActive(true);
+  }, [progress, orbActive]);
 
-    const ctx = canvas.getContext('2d', { 
-      alpha: false,
-      desynchronized: true, // Mejor performance en algunos navegadores
-      willReadFrequently: false
-    });
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+  useEffect(() => {
+    if (!orbActive) return;
+    // Phase 1: flicker (rapid random intensity, 0-0.4)
+    let frame;
+    let elapsed = 0;
+    const flickerDuration = 1200; // ms
+    const rampDuration = 1000;   // ms
+    let lastTime = performance.now();
 
-    // Reducir a 25 partículas en móvil, 30 en desktop
-    const particleCount = window.innerWidth < 768 ? 20 : 25;
-    const maxDistance = 150; // Precalcular
-    const maxDistanceSq = maxDistance * maxDistance; // Evitar sqrt cuando sea posible
-    
-    particlesRef.current = Array.from({ length: particleCount }, () => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.5) * 0.3,
-      radius: Math.random() * 1.5 + 0.5,
-      opacity: Math.random() * 0.5 + 0.3
-    }));
+    const animate = (now) => {
+      const dt = now - lastTime;
+      lastTime = now;
+      elapsed += dt;
 
-    // Colores precalculados
-    const colors = [
-      'rgba(99, 102, 241, ',
-      'rgba(168, 85, 247, ',
-      'rgba(236, 72, 153, '
-    ];
-    
-    // Variables para throttling
-    let frameCount = 0;
-    let canvasWidth = canvas.width;
-    let canvasHeight = canvas.height;
-
-    const animate = () => {
-      frameCount++;
-      
-      // Limpiar canvas
-      ctx.fillStyle = '#0b0125';
-      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-
-      const particles = particlesRef.current;
-      const len = particles.length;
-
-      // Actualizar y dibujar partículas
-      for (let i = 0; i < len; i++) {
-        const p = particles[i];
-        
-        // Actualizar posición
-        p.x += p.vx;
-        p.y += p.vy;
-
-        // Rebotar en bordes (optimizado con operadores ternarios)
-        p.vx = (p.x < 0 || p.x > canvasWidth) ? -p.vx : p.vx;
-        p.vy = (p.y < 0 || p.y > canvasHeight) ? -p.vy : p.vy;
-
-        // Dibujar partícula (sin shadow para mejor performance)
-        ctx.fillStyle = `${colors[i % 3]}${p.opacity})`;
-        ctx.fillRect(p.x - p.radius, p.y - p.radius, p.radius * 2, p.radius * 2);
+      if (elapsed < flickerDuration) {
+        // Random flicker between 0.05 and 0.4
+        setOrbIntensity(0.05 + Math.random() * 0.35);
+      } else if (elapsed < flickerDuration + rampDuration) {
+        // Smooth ramp from 0.4 to 1.0
+        const rampProgress = (elapsed - flickerDuration) / rampDuration;
+        setOrbIntensity(0.4 + rampProgress * 0.6);
+      } else {
+        setOrbIntensity(1);
+        return; // stop
       }
-
-      // Conectar partículas solo cada 2 frames para reducir cálculos a la mitad
-      if (frameCount % 2 === 0) {
-        ctx.lineWidth = 0.5;
-        for (let i = 0; i < len; i++) {
-          const p1 = particles[i];
-          for (let j = i + 1; j < len; j++) {
-            const p2 = particles[j];
-            const dx = p1.x - p2.x;
-            const dy = p1.y - p2.y;
-            const distSq = dx * dx + dy * dy; // Evitar sqrt
-
-            if (distSq < maxDistanceSq) {
-              const dist = Math.sqrt(distSq); // Solo calcular cuando sea necesario
-              const opacity = 0.15 * (1 - dist / maxDistance);
-              ctx.strokeStyle = `rgba(99, 102, 241, ${opacity})`;
-              ctx.beginPath();
-              ctx.moveTo(p1.x, p1.y);
-              ctx.lineTo(p2.x, p2.y);
-              ctx.stroke();
-            }
-          }
-        }
-      }
-
-      animationFrameRef.current = requestAnimationFrame(animate);
+      frame = requestAnimationFrame(animate);
     };
+    frame = requestAnimationFrame(animate);
+    return () => { if (frame) cancelAnimationFrame(frame); };
+  }, [orbActive]);
 
-    animate();
+  // No typewriter text — clean boot screen
 
-    const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      canvasWidth = canvas.width;
-      canvasHeight = canvas.height;
-    };
-
-    window.addEventListener('resize', handleResize, { passive: true });
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
-    };
-  }, []);
-
-  const formatTime = (date) => {
-    return date.toLocaleTimeString('en-US', { 
-      hour: '2-digit', 
-      minute: '2-digit',
-      hour12: false 
-    });
-  };
+  // Generate circuits
+  const circuits = useMemo(() => {
+    if (!dims.w || !dims.h) return [];
+    return generateCircuits(dims.w, dims.h);
+  }, [dims.w, dims.h]);
 
   return (
-    <div className={`hud-boot-screen hud-${fadeState}`}>
-      {/* Canvas de partículas */}
-      <canvas ref={canvasRef} className="hud-canvas" />
+    <div className={`cb cb--${fadeState}`}>
+      {/* Circuit traces */}
+      <svg className="cb__svg" viewBox={`0 0 ${dims.w} ${dims.h}`} preserveAspectRatio="none">
+        {circuits.map(circuit => {
+          const { d, length } = getPathData(circuit.points);
+          const active = progress >= circuit.activateAt;
+          const lastPt = circuit.points[circuit.points.length - 1];
+          const showEndDot = !circuit.connectsToOrb;
 
-      {/* Scanlines effect */}
-      <div className="hud-scanlines" />
-
-      {/* Círculo Central Principal */}
-      <div className="hud-center-circle">
-        {/* Anillos externos rotatorios */}
-        <div className="hud-ring hud-ring-outer-1" />
-        <div className="hud-ring hud-ring-outer-2" />
-        <div className="hud-ring hud-ring-outer-3" />
-        
-        {/* Anillo con marcas de medición */}
-        <div className="hud-measurement-ring">
-          {Array.from({ length: 36 }).map((_, i) => (
-            <div 
-              key={i} 
-              className="hud-tick"
-              style={{ transform: `rotate(${i * 10}deg)` }}
-            />
-          ))}
-        </div>
-
-        {/* Orbe central pulsante */}
-        <div className="hud-orb">
-          <div className="hud-orb-inner" />
-        </div>
-
-        {/* Texto central con typewriter */}
-        <div className="hud-center-text">
-          {typewriterText}
-          {showCursor && <span className="hud-cursor">_</span>}
-        </div>
-
-        {/* Línea de escaneo horizontal */}
-        <div className="hud-scan-line" />
-      </div>
-
-      {/* Panel Superior Izquierdo - Fecha y Sistema */}
-      <div className="hud-panel hud-panel-top-left">
-        <div className="hud-date-display">
-          <div className="hud-date-circle">
-            <span className="text-4xl font-bold">{currentTime.getDate()}</span>
-            <span className="text-sm uppercase">
-              {currentTime.toLocaleDateString('en-US', { month: 'short' })}
-            </span>
-          </div>
-        </div>
-        
-        <div className="hud-system-indicators">
-          <div className="hud-indicator">
-            <HardDrive className="w-4 h-4" />
-            <span className="text-xs">STORAGE: 256GB</span>
-            <div className="hud-progress-ring" style={{ '--progress': 75 }} />
-          </div>
-          <div className="hud-indicator">
-            <Zap className="w-4 h-4" />
-            <span className="text-xs">POWER: 100%</span>
-            <div className="hud-progress-bar">
-              <div className="hud-progress-fill" style={{ width: '100%' }} />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Panel Derecho - Reloj y Clima */}
-      <div className="hud-panel hud-panel-right">
-        <div className="hud-clock">
-          <div className="text-5xl font-bold tracking-wider">
-            {formatTime(currentTime)}
-          </div>
-          <div className="text-sm text-cyan-400/70 mt-1">
-            Quito, Ecuador • {currentTime.getSeconds()}s
-          </div>
-        </div>
-
-        <div className="hud-weather-widget">
-          <div className="hud-weather-icon">
-            <Moon className="w-12 h-12" />
-          </div>
-          <div className="text-3xl font-bold">13°C</div>
-        </div>
-
-        <div className="hud-weather-details">
-          <div className="hud-weather-item">
-            <Droplets className="w-4 h-4" />
-            <span>68%</span>
-          </div>
-          <div className="hud-weather-item">
-            <Wind className="w-4 h-4" />
-            <span>12 km/h</span>
-          </div>
-          <div className="hud-weather-item">
-            <Sun className="w-4 h-4" />
-            <span>06:30</span>
-          </div>
-        </div>
-
-        <div className="hud-events">
-          <Calendar className="w-4 h-4" />
-          <span className="text-xs">SYSTEM BOOT SEQUENCE</span>
-        </div>
-      </div>
-
-      {/* Panel Inferior Izquierdo - Comunicaciones */}
-      <div className="hud-panel hud-panel-bottom-left">
-        <div className="hud-comms-section">
-          <Mail className="w-5 h-5" />
-          <span className="text-xs">NEW MESSAGES: 0</span>
-        </div>
-        
-        <div className="hud-status-grid">
-          <div className="hud-status-item">
-            <div className="hud-status-dot" />
-            <span>NETWORK ONLINE</span>
-          </div>
-          <div className="hud-status-item">
-            <div className="hud-status-dot" />
-            <span>SECURITY ACTIVE</span>
-          </div>
-        </div>
-
-        <div className="hud-power-controls">
-          <button className="hud-power-btn">
-            <Power className="w-4 h-4" />
-          </button>
-          <button className="hud-power-btn">
-            <RotateCw className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
-
-      {/* Panel Inferior Derecha - Carga de Datos */}
-      <div className="hud-panel hud-panel-bottom-right">
-        <div className="hud-waveform">
-          {Array.from({ length: 20 }).map((_, i) => (
-            <div 
-              key={i} 
-              className="hud-wave-bar"
-              style={{ 
-                height: `${Math.random() * 60 + 20}%`,
-                animationDelay: `${i * 0.05}s`
-              }}
-            />
-          ))}
-        </div>
-        
-        <div className="hud-load-stats">
-          <span className="text-xs">UPLOAD: {(Math.random() * 10).toFixed(1)} MB/s</span>
-          <span className="text-xs">DOWNLOAD: {(Math.random() * 50).toFixed(1)} MB/s</span>
-        </div>
-      </div>
-
-      {/* Líneas de conexión decorativas */}
-      <svg className="hud-connections" width="100%" height="100%">
-        <line x1="20%" y1="30%" x2="35%" y2="50%" className="hud-connection-line" />
-        <line x1="80%" y1="30%" x2="65%" y2="50%" className="hud-connection-line" />
-        <line x1="50%" y1="80%" x2="50%" y2="60%" className="hud-connection-line" />
+          return (
+            <g key={circuit.id}>
+              {/* Glow layer */}
+              <path
+                d={d} fill="none" stroke="white" strokeWidth={3}
+                strokeLinecap="round" strokeLinejoin="round"
+                className="cb__trace-glow"
+                style={{
+                  strokeDasharray: length,
+                  strokeDashoffset: active ? 0 : length,
+                  opacity: active ? 0.25 : 0,
+                  transition: `stroke-dashoffset ${circuit.duration}s ease-out ${circuit.delay}s, opacity 0.4s ease ${circuit.delay}s`,
+                }}
+              />
+              {/* Main trace */}
+              <path
+                d={d} fill="none" stroke="white" strokeWidth={1.2}
+                strokeLinecap="round" strokeLinejoin="round"
+                style={{
+                  strokeDasharray: length,
+                  strokeDashoffset: active ? 0 : length,
+                  opacity: active ? 0.8 : 0,
+                  transition: `stroke-dashoffset ${circuit.duration}s ease-out ${circuit.delay}s, opacity 0.4s ease ${circuit.delay}s`,
+                }}
+              />
+              {/* Junction dots — skip last point for orb-connected circuits */}
+              {circuit.points.slice(1, showEndDot ? undefined : -1).map((p, j) => {
+                const dotDelay = circuit.delay + circuit.duration * ((j + 1) / circuit.points.length);
+                return (
+                  <circle key={j} cx={p.x} cy={p.y} r={1.8} fill="white"
+                    style={{
+                      opacity: active ? 0.45 : 0,
+                      transition: `opacity 0.5s ease ${dotDelay}s`,
+                    }}
+                  />
+                );
+              })}
+              {/* End dot — only for non-orb circuits */}
+              {showEndDot && (
+                <circle
+                  cx={lastPt.x} cy={lastPt.y} r={3} fill="white"
+                  style={{
+                    opacity: active ? 0.85 : 0,
+                    transition: `opacity 0.5s ease ${circuit.delay + circuit.duration}s`,
+                  }}
+                />
+              )}
+            </g>
+          );
+        })}
       </svg>
 
-      {/* Indicador de progreso global */}
-      <div className="hud-global-progress">
-        <div className="hud-global-progress-bar">
-          <div 
-            className="hud-global-progress-fill" 
-            style={{ width: `${systemProgress}%` }}
-          />
+      {/* Central Orb — intensity driven by flicker→ramp animation */}
+      <div className="cb__orb" style={{
+        '--orb-intensity': orbIntensity,
+        '--orb-glow': `${orbIntensity * 30}px`,
+        '--orb-glow2': `${orbIntensity * 70}px`,
+        '--orb-glow3': `${orbIntensity * 120}px`,
+      }}>
+        <div className="cb__orb-core" />
+      </div>
+
+      {/* Progress bar */}
+      <div className="cb__progress">
+        <div className="cb__progress-track">
+          <div className="cb__progress-fill" style={{ width: `${progress}%` }} />
         </div>
-        <span className="text-xs text-cyan-400/70 mt-2">
-          INITIALIZING... {systemProgress}%
+        <span className="cb__progress-label">
+          INITIALIZING... {Math.floor(progress)}%
         </span>
       </div>
     </div>
@@ -397,5 +430,4 @@ const HUDBootScreen = memo(({ onComplete, splineReady = false }) => {
 });
 
 HUDBootScreen.displayName = 'HUDBootScreen';
-
 export default HUDBootScreen;

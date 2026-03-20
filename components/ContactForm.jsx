@@ -108,7 +108,7 @@ const ContactForm = memo(() => {
           onChange={handleChange}
           placeholder={t('contact.form.name.placeholder')}
           style={{ backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}
-          className={`w-full px-4 py-3 bg-white dark:bg-slate-800/50 border rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 transition-all duration-300 ${
+          className={`w-full px-4 py-3 bg-white dark:bg-[var(--bg-elevated-50)] border rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 transition-all duration-300 ${
             errors.name
               ? 'border-red-500 focus:ring-red-500'
               : 'border-slate-300 dark:border-slate-700 focus:ring-blue-500 focus:border-blue-500'
@@ -132,7 +132,7 @@ const ContactForm = memo(() => {
           value={formData.subject}
           onChange={handleChange}
           placeholder={t('contact.form.subject.placeholder')}
-          className={`w-full px-4 py-3 bg-white dark:bg-slate-800/50 border rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 transition-all duration-300 ${
+          className={`w-full px-4 py-3 bg-white dark:bg-[var(--bg-elevated-50)] border rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 transition-all duration-300 ${
             errors.subject
               ? 'border-red-500 focus:ring-red-500'
               : 'border-slate-300 dark:border-slate-700 focus:ring-blue-500 focus:border-blue-500'
@@ -155,7 +155,7 @@ const ContactForm = memo(() => {
           value={formData.message}
           onChange={handleChange}
           placeholder={t('contact.form.message.placeholder')}
-          className={`w-full h-32 md:h-40 lg:h-44 px-4 py-3 bg-white dark:bg-slate-800/50 border rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 transition-all duration-300 resize-none ${
+          className={`w-full h-32 md:h-40 lg:h-44 px-4 py-3 bg-white dark:bg-[var(--bg-elevated-50)] border rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 transition-all duration-300 resize-none ${
             errors.message
               ? 'border-red-500 focus:ring-red-500'
               : 'border-slate-300 dark:border-slate-700 focus:ring-blue-500 focus:border-blue-500'

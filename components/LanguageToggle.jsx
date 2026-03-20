@@ -14,7 +14,7 @@ const LanguageToggle = memo(() => {
   return (
     <button
       onClick={toggleLanguage}
-      className="relative flex items-center gap-2 px-4 py-2 rounded-lg bg-white/50 dark:bg-slate-800/50 hover:bg-white/80 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-700/50 hover:border-blue-500/50 transition-all duration-300 group"
+      className="relative flex items-center gap-2 px-4 py-2 rounded-lg bg-white/50 dark:bg-[var(--bg-elevated-50)] hover:bg-white/80 dark:hover:bg-[var(--bg-elevated)] border border-slate-300 dark:border-slate-700/50 hover:border-blue-500/50 transition-all duration-300 group"
       aria-label={`Switch to ${language === 'en' ? 'Spanish' : 'English'}`}
       title={`Switch to ${language === 'en' ? 'Spanish' : 'English'}`}
     >

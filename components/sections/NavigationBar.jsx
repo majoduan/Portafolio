@@ -63,7 +63,7 @@ const NavigationBar = React.memo(() => {
   return (
     <>
       {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-white/90 dark:bg-slate-950/80 backdrop-blur-lg border-b border-slate-200 dark:border-slate-800 z-50 transition-colors duration-300">
+      <nav className="fixed top-0 w-full bg-white/90 dark:bg-[var(--nav-bg)] backdrop-blur-lg border-b border-slate-200 dark:border-slate-800 z-50 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center justify-between h-16">
@@ -128,7 +128,7 @@ const NavigationBar = React.memo(() => {
                   className={`flex flex-col items-center justify-center p-2 rounded-lg transition-all duration-300 ${
                     activeSection === id
                       ? 'text-red-600 dark:text-blue-400 bg-red-50 dark:bg-blue-900/30'
-                      : 'text-slate-600 dark:text-slate-400 hover:text-red-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/50'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-red-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-[var(--bg-elevated-50)]'
                   }`}
                   aria-label={t(`nav.${id}`)}
                 >
@@ -148,7 +148,7 @@ const NavigationBar = React.memo(() => {
         {/* Theme Toggle Button */}
         <button
           onClick={toggleTheme}
-          className="w-14 h-14 rounded-full bg-white dark:bg-slate-800 shadow-lg hover:shadow-xl border-2 border-slate-200 dark:border-slate-700 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95"
+          className="w-14 h-14 rounded-full bg-white dark:bg-[var(--bg-elevated)] shadow-lg hover:shadow-xl border-2 border-slate-200 dark:border-slate-700 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95"
           aria-label="Toggle theme"
         >
           {theme === 'dark' ? (
@@ -161,7 +161,7 @@ const NavigationBar = React.memo(() => {
         {/* Language Toggle Button */}
         <button
           onClick={toggleLanguage}
-          className="w-14 h-14 rounded-full bg-white dark:bg-slate-800 shadow-lg hover:shadow-xl border-2 border-slate-200 dark:border-slate-700 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95"
+          className="w-14 h-14 rounded-full bg-white dark:bg-[var(--bg-elevated)] shadow-lg hover:shadow-xl border-2 border-slate-200 dark:border-slate-700 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95"
           aria-label="Toggle language"
         >
           <span className="text-2xl leading-none flex items-center justify-center h-full" role="img" aria-label={language === 'en' ? 'English' : 'Español'}>

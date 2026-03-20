@@ -73,7 +73,7 @@ const TechCard = memo(({ tech, index, animationState, onMouseEnter, onMouseLeave
   if (isMobile) {
     return (
       <div
-        className={`tech-card group bg-white/80 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 transition-opacity duration-500 rounded-lg shadow-md backdrop-blur-sm ${
+        className={`tech-card group bg-white/80 dark:bg-[var(--bg-elevated-50)] border border-slate-200 dark:border-slate-700/50 transition-opacity duration-500 rounded-lg shadow-md backdrop-blur-sm ${
           isVisible ? 'opacity-100' : 'opacity-0'
         }`}
         style={{
@@ -113,7 +113,7 @@ const TechCard = memo(({ tech, index, animationState, onMouseEnter, onMouseLeave
   // Renderizado desktop completo (con todas las animaciones)
   return (
     <div
-      className={`tech-card group bg-white/80 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 hover:border-purple-400/50 dark:hover:border-purple-500/40 transition-all duration-1000 rounded-lg shadow-md dark:shadow-lg hover:shadow-xl backdrop-blur-sm ${
+      className={`tech-card group bg-white/80 dark:bg-[var(--bg-elevated-50)] border border-slate-200 dark:border-slate-700/50 hover:border-purple-400/50 dark:hover:border-purple-500/40 transition-all duration-1000 rounded-lg shadow-md dark:shadow-lg hover:shadow-xl backdrop-blur-sm ${
         isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
       }`}
       style={{
@@ -164,7 +164,7 @@ const TechCard = memo(({ tech, index, animationState, onMouseEnter, onMouseLeave
               {shouldAnimate ? <AnimatedCounter value={tech.level} isTransitioning={false} /> : tech.level}%
             </span>
           </div>
-          <div className="w-full bg-slate-700 dark:bg-slate-700 bg-slate-300 rounded-full h-2.5 overflow-hidden transition-colors">
+          <div className="w-full bg-slate-700 dark:bg-[var(--border-color)] bg-slate-300 rounded-full h-2.5 overflow-hidden transition-colors">
             <div
               className={`h-full bg-gradient-to-r ${tech.color} rounded-full relative ${shouldAnimate ? 'progress-bar-animate' : ''}`}
               style={{

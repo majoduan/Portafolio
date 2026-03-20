@@ -162,7 +162,7 @@ const TechnologiesSection = React.memo(() => {
                 className={`px-3 sm:px-6 md:px-8 py-3 md:py-4 font-medium relative transition-all duration-300 whitespace-nowrap text-xs sm:text-sm md:text-base ${
                   currentTechTab === index
                     ? 'text-red-600 dark:text-blue-400'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/30'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-[var(--bg-elevated-30)]'
                 }`}
               >
                 {/* Show short title on mobile, full on desktop */}

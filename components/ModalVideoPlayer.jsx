@@ -112,7 +112,7 @@ const ModalVideoPlayer = ({ src, alt, className = '' }) => {
         }`}
         style={{ 
           maxHeight: '70vh',
-          backgroundColor: 'rgba(15, 23, 42, 0.5)' 
+          backgroundColor: 'var(--bg-secondary-50)'
         }}
       >
         <source src={optimalSrc} type="video/mp4" />

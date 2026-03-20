@@ -28,7 +28,7 @@ const ContactSection = React.memo(() => {
             {/* Left Column - Profile Image & Info */}
             <div className="contact-left-column">
               {/* Profile Image Card */}
-              <div className="bg-white/90 dark:bg-slate-900 backdrop-blur-lg rounded-2xl md:rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-700/50 hover:border-red-500 dark:hover:border-blue-500/70 transition-all duration-500 shadow-lg dark:shadow-2xl group h-full flex flex-col">
+              <div className="bg-white/90 dark:bg-[var(--bg-secondary)] backdrop-blur-lg rounded-2xl md:rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-700/50 hover:border-red-500 dark:hover:border-blue-500/70 transition-all duration-500 shadow-lg dark:shadow-2xl group h-full flex flex-col">
                 {/* Image Container with Gradient Overlay */}
                 <div className="relative h-64 sm:h-80 md:h-96 lg:h-[400px] overflow-hidden bg-gradient-to-br from-blue-900/30 to-purple-900/30">
                   {/* Profile Image */}
@@ -81,7 +81,7 @@ const ContactSection = React.memo(() => {
                   <div className="space-y-3 md:space-y-4">
                     <a
                       href="mailto:mate.due02@gmail.com"
-                      className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all duration-300 group/link border border-slate-200 dark:border-slate-700/50 hover:border-red-500 dark:hover:border-blue-500/50"
+                      className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-[var(--bg-elevated-50)] hover:bg-slate-100 dark:hover:bg-[var(--bg-elevated)] rounded-xl transition-all duration-300 group/link border border-slate-200 dark:border-slate-700/50 hover:border-red-500 dark:hover:border-blue-500/50"
                     >
                       <div className="w-12 h-12 rounded-full bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-500 dark:to-purple-500 flex items-center justify-center group-hover/link:scale-110 transition-transform duration-300">
                         <Mail className="w-6 h-6 text-white" />
@@ -96,7 +96,7 @@ const ContactSection = React.memo(() => {
                       href="https://linkedin.com/in/mateo-dueñas-andrade"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all duration-300 group/link border border-slate-200 dark:border-slate-700/50 hover:border-red-500 dark:hover:border-blue-500/50"
+                      className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-[var(--bg-elevated-50)] hover:bg-slate-100 dark:hover:bg-[var(--bg-elevated)] rounded-xl transition-all duration-300 group/link border border-slate-200 dark:border-slate-700/50 hover:border-red-500 dark:hover:border-blue-500/50"
                     >
                       <div className="w-12 h-12 rounded-full bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-500 dark:to-purple-500 flex items-center justify-center group-hover/link:scale-110 transition-transform duration-300">
                         <Linkedin className="w-6 h-6 text-white" />
@@ -111,7 +111,7 @@ const ContactSection = React.memo(() => {
                       href="https://github.com/majoduan"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all duration-300 group/link border border-slate-200 dark:border-slate-700/50 hover:border-red-500 dark:hover:border-blue-500/50"
+                      className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-[var(--bg-elevated-50)] hover:bg-slate-100 dark:hover:bg-[var(--bg-elevated)] rounded-xl transition-all duration-300 group/link border border-slate-200 dark:border-slate-700/50 hover:border-red-500 dark:hover:border-blue-500/50"
                     >
                       <div className="w-12 h-12 rounded-full bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-500 dark:to-purple-500 flex items-center justify-center group-hover/link:scale-110 transition-transform duration-300">
                         <Github className="w-6 h-6 text-white" />
@@ -128,7 +128,7 @@ const ContactSection = React.memo(() => {
 
             {/* Right Column - Contact Form */}
             <div className="contact-right-column">
-              <div className="bg-white/90 dark:bg-slate-900 backdrop-blur-lg rounded-2xl md:rounded-3xl p-6 md:p-8 lg:p-10 border border-slate-200 dark:border-slate-700/50 hover:border-purple-400 dark:hover:border-purple-500/70 transition-all duration-500 shadow-lg dark:shadow-2xl h-full">
+              <div className="bg-white/90 dark:bg-[var(--bg-secondary)] backdrop-blur-lg rounded-2xl md:rounded-3xl p-6 md:p-8 lg:p-10 border border-slate-200 dark:border-slate-700/50 hover:border-purple-400 dark:hover:border-purple-500/70 transition-all duration-500 shadow-lg dark:shadow-2xl h-full">
                 <h3 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
                   {t('contact.form.title')}
                 </h3>

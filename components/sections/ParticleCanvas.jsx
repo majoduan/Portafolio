@@ -18,7 +18,7 @@ const ParticleCanvas = React.memo(() => {
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d', {
-      alpha: false,
+      alpha: true,
       desynchronized: true,
       willReadFrequently: false
     });
@@ -79,9 +79,8 @@ const ParticleCanvas = React.memo(() => {
       // Leer tema actual desde ref (sin dependency en theme -> no destruye particulas)
       const isDark = themeRef.current === 'dark';
 
-      // Fondo segun tema (trail fade suave al cambiar tema gracias al alpha 0.1)
-      ctx.fillStyle = isDark ? 'rgba(15, 23, 42, 0.1)' : 'rgba(248, 250, 252, 0.1)';
-      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+      // Limpiar canvas completamente (canvas es transparente, el fondo CSS se ve a través)
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
       const particlesArray = particles.current;
       const len = particlesArray.length;

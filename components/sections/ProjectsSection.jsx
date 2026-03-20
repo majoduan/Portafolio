@@ -30,7 +30,7 @@ const ProjectCard = React.memo(({ project, onProjectClick, t }) => {
       onClick={() => onProjectClick(project)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
-      className="project-card bg-white/90 dark:bg-slate-900/50 backdrop-blur-lg rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-red-500 dark:hover:border-blue-500 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-blue-500/30 cursor-pointer group"
+      className="project-card bg-white/90 dark:bg-[var(--bg-secondary-50)] backdrop-blur-lg rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-red-500 dark:hover:border-blue-500 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-blue-500/30 cursor-pointer group"
     >
       <div className="bg-gradient-to-br from-blue-600 to-purple-600 h-48 flex items-center justify-center relative overflow-hidden">
         {/* Poster siempre visible como base */}
@@ -78,7 +78,7 @@ const ProjectCard = React.memo(({ project, onProjectClick, t }) => {
           {project.tech.map((tech, j) => (
             <span
               key={j}
-              className="px-3 py-1 bg-red-50 dark:bg-slate-800 text-xs rounded-full text-red-600 dark:text-blue-400 border border-red-200 dark:border-transparent"
+              className="px-3 py-1 bg-red-50 dark:bg-[var(--bg-elevated)] text-xs rounded-full text-red-600 dark:text-blue-400 border border-red-200 dark:border-transparent"
             >
               {tech}
             </span>
@@ -92,7 +92,7 @@ const ProjectCard = React.memo(({ project, onProjectClick, t }) => {
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="flex items-center space-x-1 px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-white hover:bg-gradient-to-r hover:from-red-500 hover:to-orange-500 dark:hover:from-blue-500 dark:hover:to-purple-500 hover:text-white rounded-full text-sm transition-all duration-300 border border-slate-200 dark:border-transparent"
+              className="flex items-center space-x-1 px-4 py-2 bg-slate-100 dark:bg-[var(--bg-elevated)] text-slate-700 dark:text-white hover:bg-gradient-to-r hover:from-red-500 hover:to-orange-500 dark:hover:from-blue-500 dark:hover:to-purple-500 hover:text-white rounded-full text-sm transition-all duration-300 border border-slate-200 dark:border-transparent"
             >
               <span className="capitalize">{key}</span>
               <ExternalLink className="w-4 h-4" />
@@ -151,13 +151,13 @@ const ProjectsSection = React.memo(() => {
               projects.map((project, i) => (
                 <div
                   key={i}
-                  className="project-card bg-white/90 dark:bg-slate-900/50 backdrop-blur-lg rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-lg"
+                  className="project-card bg-white/90 dark:bg-[var(--bg-secondary-50)] backdrop-blur-lg rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-lg"
                 >
                   <div className="bg-gradient-to-br from-blue-600/50 to-purple-600/50 h-48 animate-pulse" />
                   <div className="p-6">
-                    <div className="h-6 bg-slate-300 dark:bg-slate-700 rounded mb-3 animate-pulse" />
-                    <div className="h-4 bg-slate-300 dark:bg-slate-700 rounded mb-2 animate-pulse" />
-                    <div className="h-4 bg-slate-300 dark:bg-slate-700 rounded w-2/3 animate-pulse" />
+                    <div className="h-6 bg-slate-300 dark:bg-[var(--border-color)] rounded mb-3 animate-pulse" />
+                    <div className="h-4 bg-slate-300 dark:bg-[var(--border-color)] rounded mb-2 animate-pulse" />
+                    <div className="h-4 bg-slate-300 dark:bg-[var(--border-color)] rounded w-2/3 animate-pulse" />
                   </div>
                 </div>
               ))
@@ -173,17 +173,17 @@ const ProjectsSection = React.memo(() => {
           onClick={handleCloseModal}
         >
           <div
-            className="project-modal bg-white dark:bg-slate-900 rounded-3xl w-full max-h-[90vh] overflow-hidden border-2 border-slate-200 dark:border-blue-500/50 shadow-2xl dark:shadow-blue-500/30"
+            className="project-modal bg-white dark:bg-[var(--bg-secondary)] rounded-3xl w-full max-h-[90vh] overflow-hidden border-2 border-slate-200 dark:border-blue-500/50 shadow-2xl dark:shadow-blue-500/30"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal header - Sticky with close button */}
-            <div className="sticky top-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg border-b border-slate-200 dark:border-slate-800 px-6 py-4 flex justify-between items-center z-20">
+            <div className="sticky top-0 bg-white/95 dark:bg-[var(--bg-primary-95)] backdrop-blur-lg border-b border-slate-200 dark:border-slate-800 px-6 py-4 flex justify-between items-center z-20">
               <h3 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
                 {selectedProject.title}
               </h3>
               <button
                 onClick={handleCloseModal}
-                className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full flex-shrink-0"
+                className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors p-2 hover:bg-slate-100 dark:hover:bg-[var(--bg-elevated)] rounded-full flex-shrink-0"
                 aria-label="Cerrar modal"
               >
                 <X className="w-6 h-6" />
@@ -210,7 +210,7 @@ const ProjectsSection = React.memo(() => {
               </div>
 
               {/* Right Column - Info (1/3 width, independent scroll) */}
-              <div className="project-modal-info-column bg-slate-50 dark:bg-slate-900 p-6 lg:p-8 overflow-y-auto custom-scrollbar">
+              <div className="project-modal-info-column bg-slate-50 dark:bg-[var(--bg-secondary)] p-6 lg:p-8 overflow-y-auto custom-scrollbar">
                 {/* Short description */}
                 <div className="mb-6">
                   <p className="text-slate-700 dark:text-slate-300 text-base md:text-lg leading-relaxed">
@@ -241,7 +241,7 @@ const ProjectsSection = React.memo(() => {
                     {selectedProject.tech.map((tech, j) => (
                       <span
                         key={j}
-                        className="px-4 py-2 bg-white dark:bg-slate-800/70 backdrop-blur-sm rounded-full text-red-600 dark:text-blue-400 font-medium text-sm border border-red-300 dark:border-blue-500/30 hover:border-red-500 dark:hover:border-blue-500/60 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-300"
+                        className="px-4 py-2 bg-white dark:bg-[var(--bg-elevated-70)] backdrop-blur-sm rounded-full text-red-600 dark:text-blue-400 font-medium text-sm border border-red-300 dark:border-blue-500/30 hover:border-red-500 dark:hover:border-blue-500/60 hover:bg-slate-50 dark:hover:bg-[var(--bg-elevated)] transition-all duration-300"
                       >
                         {tech}
                       </span>

@@ -74,10 +74,10 @@ class ErrorBoundary extends Component {
     if (this.state.hasError) {
       // UI de fallback personalizada
       return (
-        <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-[var(--bg-primary)] flex items-center justify-center p-4">
           <div className="max-w-2xl w-full">
             {/* Card de error */}
-            <div className="bg-slate-900 border border-red-500/30 rounded-2xl p-8 shadow-2xl">
+            <div className="bg-[var(--bg-secondary)] border border-red-500/30 rounded-2xl p-8 shadow-2xl">
               {/* Icono y título */}
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-orange-500 rounded-xl flex items-center justify-center flex-shrink-0">
@@ -95,7 +95,7 @@ class ErrorBoundary extends Component {
 
               {/* Mensaje de error (solo en desarrollo) */}
               {process.env.NODE_ENV === 'development' && this.state.error && (
-                <div className="mb-6 p-4 bg-slate-800/50 border border-slate-700 rounded-lg">
+                <div className="mb-6 p-4 bg-[var(--bg-elevated-50)] border border-slate-700 rounded-lg">
                   <p className="text-xs font-mono text-red-400 mb-2">
                     {this.state.error.toString()}
                   </p>
@@ -140,7 +140,7 @@ class ErrorBoundary extends Component {
                 
                 <button
                   onClick={this.handleReload}
-                  className="flex-1 px-6 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl font-semibold text-white transition-all duration-300 flex items-center justify-center gap-2"
+                  className="flex-1 px-6 py-3 bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated)] border border-slate-700 rounded-xl font-semibold text-white transition-all duration-300 flex items-center justify-center gap-2"
                 >
                   <RefreshCw className="w-5 h-5" />
                   Recargar página
@@ -148,7 +148,7 @@ class ErrorBoundary extends Component {
                 
                 <button
                   onClick={this.handleGoHome}
-                  className="flex-1 px-6 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl font-semibold text-white transition-all duration-300 flex items-center justify-center gap-2"
+                  className="flex-1 px-6 py-3 bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated)] border border-slate-700 rounded-xl font-semibold text-white transition-all duration-300 flex items-center justify-center gap-2"
                 >
                   <Home className="w-5 h-5" />
                   Ir al inicio

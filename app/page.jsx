@@ -51,7 +51,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white relative overflow-x-hidden portfolio-fade-in transition-colors duration-300">
+    <div className="min-h-screen bg-[var(--bg-primary)] text-slate-900 dark:text-white relative overflow-x-hidden portfolio-fade-in transition-colors duration-300">
       <ParticleCanvas />
       <NavigationBar />
       <HeroSection shouldLoadSpline={shouldLoadSpline} />

@@ -90,7 +90,7 @@ const CertificatesSection = React.memo(() => {
             {certificates.map((cert, i) => (
               <div
                 key={i}
-                className="certificate-card flex-shrink-0 bg-white/90 dark:bg-slate-900 backdrop-blur-lg rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50 hover:border-red-500 dark:hover:border-blue-500/70 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-blue-500/40 group cursor-pointer"
+                className="certificate-card flex-shrink-0 bg-white/90 dark:bg-[var(--bg-secondary)] backdrop-blur-lg rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50 hover:border-red-500 dark:hover:border-blue-500/70 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-blue-500/40 group cursor-pointer"
                 style={{
                   width: isMobileView ? '100%' : 'calc((100% - 24px) / 2)'
                 }}
@@ -181,7 +181,7 @@ const CertificatesSection = React.memo(() => {
                   className={`transition-all duration-300 rounded-full ${
                     isActive
                       ? 'w-8 h-2 bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-400 dark:to-purple-400'
-                      : 'w-2 h-2 bg-slate-300 dark:bg-slate-600 hover:bg-slate-400 dark:hover:bg-slate-500'
+                      : 'w-2 h-2 bg-slate-300 dark:bg-[var(--border-color)] hover:bg-slate-400 dark:hover:bg-[var(--bg-elevated)]'
                   }`}
                   aria-label={`Ver página ${pageIndex + 1}`}
                 />

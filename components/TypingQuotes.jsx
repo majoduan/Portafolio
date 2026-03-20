@@ -62,7 +62,7 @@ const TypingQuotes = memo(() => {
 
   return (
     <div className="hidden lg:block mt-6" style={{ contentVisibility: 'auto' }}>
-      <div className="relative bg-white/80 dark:bg-slate-800/30 border border-slate-200 dark:border-slate-700/50 rounded-xl p-4 min-h-[80px] flex items-center transition-all duration-300">
+      <div className="relative bg-white/80 dark:bg-[var(--bg-elevated-30)] border border-slate-200 dark:border-slate-700/50 rounded-xl p-4 min-h-[80px] flex items-center transition-all duration-300">
         {/* Code icon */}
         <div className="absolute -top-3 -left-3 w-8 h-8 bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-500 dark:to-purple-500 rounded-full flex items-center justify-center shadow-lg">
           <Code2 className="w-4 h-4 text-white" />
