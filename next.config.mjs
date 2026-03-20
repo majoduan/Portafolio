@@ -1,9 +1,23 @@
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   // TODO: Remove after Phase 3 lint fixes
   eslint: {
     ignoreDuringBuilds: true,
+  },
+  // @splinetool/react-spline exports only ESM "import" condition
+  // which Next.js webpack can't resolve. Point directly to the file.
+  webpack: (config) => {
+    config.resolve.alias['@splinetool/react-spline'] = resolve(
+      __dirname,
+      'node_modules/@splinetool/react-spline/dist/react-spline.js'
+    );
+    return config;
   },
 
   async headers() {
