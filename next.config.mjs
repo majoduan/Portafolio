@@ -6,9 +6,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // TODO: Remove after Phase 3 lint fixes
   eslint: {
-    ignoreDuringBuilds: true,
+    dirs: ['app', 'components', 'contexts', 'hooks', 'utils', 'data'],
   },
   // @splinetool/react-spline exports only ESM "import" condition
   // which Next.js webpack can't resolve. Point directly to the file.
