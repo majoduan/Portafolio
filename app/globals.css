@@ -209,8 +209,8 @@ html:not(.dark) .spline-container > div {
 }
 
 @media (min-width: 1024px) {
-  .hero-title {
-    font-size: clamp(3.5rem, 6vw, 8rem);
+  html[lang="es"] .hero-title {
+    font-size: clamp(3.5rem, 6.5vw, 8rem);
   }
 }
 
