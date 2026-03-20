@@ -162,7 +162,12 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
           </div>
 
           {/* Animacion 3D de Spline - Desktop/tablet only, fallback CSS en movil */}
-          <div className="relative h-[400px] lg:h-[600px] w-full overflow-hidden rounded-2xl mt-8 lg:mt-0">
+          <div className="relative h-[400px] lg:h-[600px] w-full mt-8 lg:mt-0">
+            {/* Fade vignette — dissolves the Spline black into page background */}
+            <div className="absolute -inset-8 lg:-inset-12 z-20 pointer-events-none" style={{
+              background: `radial-gradient(ellipse 70% 60% at center, transparent 30%, var(--bg-primary) 75%)`
+            }} />
+            <div className="absolute inset-0 overflow-hidden rounded-2xl">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 blur-3xl"></div>
             {shouldLoadSpline ? (
               <SplineErrorBoundary fallback={
@@ -204,6 +209,7 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
                 </div>
               </div>
             )}
+            </div>
           </div>
         </div>
       </div>

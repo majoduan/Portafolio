@@ -90,7 +90,7 @@ const CertificatesSection = React.memo(() => {
             {certificates.map((cert, i) => (
               <div
                 key={i}
-                className="certificate-card flex-shrink-0 bg-white/90 dark:bg-[var(--bg-secondary)] backdrop-blur-lg rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50 hover:border-[var(--accent-border)] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-[var(--accent-glow)] group cursor-pointer"
+                className="certificate-card flex-shrink-0 bg-white/90 dark:bg-[var(--bg-secondary)] backdrop-blur-lg rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50 hover:border-[var(--btn-primary)] transition-all duration-300 transform hover:scale-105 shadow-[0_4px_4px_rgba(0,0,0,0.25)] hover:shadow-xl dark:hover:shadow-2xl group cursor-pointer"
                 style={{
                   width: isMobileView ? '100%' : 'calc((100% - 24px) / 2)'
                 }}
@@ -100,8 +100,8 @@ const CertificatesSection = React.memo(() => {
                   setTimeout(() => setIsCertificateCarouselPaused(false), 3000);
                 }}
               >
-                {/* Certificate Image */}
-                <div className="relative h-64 overflow-hidden bg-gradient-to-br from-blue-900/30 to-purple-900/30">
+                {/* Certificate Image — full card with overlay */}
+                <div className="relative h-72 overflow-hidden bg-gradient-to-br from-blue-900/30 to-purple-900/30">
                   <picture>
                     <source
                       srcSet={`
@@ -122,7 +122,7 @@ const CertificatesSection = React.memo(() => {
                       sizes="(max-width: 640px) 400px, 800px"
                       alt={cert.title}
                       width="420"
-                      height="256"
+                      height="288"
                       loading="lazy"
                       decoding="async"
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
@@ -132,26 +132,25 @@ const CertificatesSection = React.memo(() => {
                       }}
                     />
                   </picture>
-                  <div className="absolute inset-0 bg-gradient-to-t from-transparent to-transparent dark:from-slate-900 dark:via-slate-900/20 dark:to-transparent"></div>
+
+                  {/* Bottom gradient overlay — stronger on hover for text legibility */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent transition-all duration-300 group-hover:from-black/85 group-hover:via-black/30" />
 
                   {/* Shine effect on hover */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
                   </div>
-                </div>
 
-                {/* Certificate Info */}
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white group-hover:text-[var(--accent-solid)] transition-colors leading-tight">
-                    {cert.title}
-                  </h3>
-                  <div className="flex items-start gap-2 text-slate-600 dark:text-slate-400">
-                    <div className="mt-1.5 flex-shrink-0">
-                      <div className="w-2 h-2 bg-blue-400 rounded-full group-hover:animate-pulse"></div>
+                  {/* Content overlay — title and org */}
+                  <div className="absolute inset-x-0 bottom-0 p-5 z-10">
+                    <h3 className="text-white font-bold text-lg md:text-xl leading-tight transition-transform duration-300 group-hover:-translate-y-1">
+                      {cert.title}
+                    </h3>
+                    {/* Org — slides up on hover */}
+                    <div className="flex items-center gap-2 text-white/0 group-hover:text-white/80 mt-1 max-h-0 group-hover:max-h-10 overflow-hidden transition-all duration-400 ease-out">
+                      <div className="w-2 h-2 bg-[var(--btn-primary)] rounded-full flex-shrink-0 shadow-[0_4px_4px_rgba(0,0,0,0.25)]"></div>
+                      <p className="text-sm leading-relaxed">{cert.org}</p>
                     </div>
-                    <p className="text-sm leading-relaxed">
-                      {cert.org}
-                    </p>
                   </div>
                 </div>
               </div>
@@ -180,7 +179,7 @@ const CertificatesSection = React.memo(() => {
                   }}
                   className={`transition-all duration-300 rounded-full ${
                     isActive
-                      ? 'w-8 h-2 bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)]'
+                      ? 'w-8 h-2 bg-[var(--btn-primary)] shadow-[0_4px_4px_rgba(0,0,0,0.25)]'
                       : 'w-2 h-2 bg-slate-300 dark:bg-[var(--border-color)] hover:bg-slate-400 dark:hover:bg-[var(--bg-elevated)]'
                   }`}
                   aria-label={`Ver página ${pageIndex + 1}`}
