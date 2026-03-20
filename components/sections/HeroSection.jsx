@@ -164,8 +164,21 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
           {/* Animacion 3D de Spline - Desktop/tablet only, fallback CSS en movil */}
           <div className="relative h-[400px] lg:h-[600px] w-full mt-8 lg:mt-0">
             {/* Fade vignette — dissolves the Spline black into page background */}
-            <div className="absolute -inset-8 lg:-inset-12 z-20 pointer-events-none" style={{
-              background: `radial-gradient(ellipse 70% 60% at center, transparent 30%, var(--bg-primary) 75%)`
+            {/* Top edge */}
+            <div className="absolute -top-8 -left-8 -right-8 h-24 lg:h-32 z-20 pointer-events-none" style={{
+              background: `linear-gradient(to bottom, var(--bg-primary) 0%, transparent 100%)`
+            }} />
+            {/* Bottom edge */}
+            <div className="absolute -bottom-8 -left-8 -right-8 h-24 lg:h-32 z-20 pointer-events-none" style={{
+              background: `linear-gradient(to top, var(--bg-primary) 0%, transparent 100%)`
+            }} />
+            {/* Left edge */}
+            <div className="absolute -top-8 -bottom-8 -left-8 w-24 lg:w-32 z-20 pointer-events-none" style={{
+              background: `linear-gradient(to right, var(--bg-primary) 0%, transparent 100%)`
+            }} />
+            {/* Right edge */}
+            <div className="absolute -top-8 -bottom-8 -right-8 w-24 lg:w-32 z-20 pointer-events-none" style={{
+              background: `linear-gradient(to left, var(--bg-primary) 0%, transparent 100%)`
             }} />
             <div className="absolute inset-0 overflow-hidden rounded-2xl">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 blur-3xl"></div>
