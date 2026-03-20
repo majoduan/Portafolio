@@ -29,3 +29,7 @@ dist-ssr
 # Build analysis
 .vite/
 stats.html
+
+# Next.js
+.next/
+out/

@@ -1,15 +1,15 @@
 {
   "name": "mateo-portfolio",
   "private": true,
-  "version": "2.1.0",
+  "version": "3.0.0",
   "type": "module",
-  "description": "Portfolio profesional optimizado con React, Vite y Spline 3D",
+  "description": "Portfolio profesional optimizado con Next.js, React y Spline 3D",
   "author": "Mateo Dueñas <mate.due02@gmail.com>",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
     "analyze": "node scripts/analyze-bundle.mjs",
     "build:analyze": "npm run build && npm run analyze",
     "optimize-images": "node scripts/generate-responsive-images.mjs",
@@ -19,23 +19,22 @@
   "dependencies": {
     "@splinetool/react-spline": "^4.1.0",
     "lucide-react": "^0.552.0",
+    "next": "^15.3.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
+    "@tailwindcss/postcss": "^4.2.2",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "@vitejs/plugin-react": "^5.0.4",
-    "@tailwindcss/vite": "^4.2.2",
     "eslint": "^9.36.0",
     "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-react-refresh": "^0.4.22",
     "globals": "^16.4.0",
-    "lightningcss": "^1.30.2",
     "sharp": "^0.34.5",
-    "tailwindcss": "^4.2.2",
-    "vite": "^7.1.7",
-    "vite-plugin-compression2": "^2.3.1"
+    "tailwindcss": "^4.2.2"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["sharp"]
   }
 }

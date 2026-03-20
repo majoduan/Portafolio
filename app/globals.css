@@ -1,0 +1,874 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Scroll suave para toda la página */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Variables CSS para colores del tema — FUENTE DE VERDAD ÚNICA
+   Para cambiar el fondo oscuro de toda la app, editar solo --bg-primary aquí.
+   Los colores derivados (secondary, elevated, alpha variants) se basan en esta paleta. */
+:root {
+  /* Modo oscuro (default) — Paleta basada en #1A1D25 */
+  --bg-primary: #1A1D25;
+  --bg-secondary: #22252E;
+  --bg-elevated: #2A2D36;
+  --bg-primary-rgb: 26, 29, 37;
+  --text-primary: #ffffff;
+  --text-secondary: #e2e8f0;
+  --text-tertiary: #cbd5e1;
+  --border-color: #3A3D46;
+  --nav-bg: rgba(26, 29, 37, 0.85);
+  --card-bg: rgba(34, 37, 46, 0.5);
+  --quote-text-color: #cbd5e1;
+
+  /* Alpha variants — derivadas de la paleta */
+  --bg-secondary-50: rgba(34, 37, 46, 0.5);
+  --bg-primary-95: rgba(26, 29, 37, 0.95);
+  --bg-elevated-50: rgba(42, 45, 54, 0.5);
+  --bg-elevated-30: rgba(42, 45, 54, 0.3);
+  --bg-elevated-70: rgba(42, 45, 54, 0.7);
+
+  /* Colores de acento — FUENTE DE VERDAD para gradientes y acentos
+     Cambiar estos valores actualiza todo el esquema de color accent del dark mode.
+     Dark: azul→púrpura | Light: rojo→naranja */
+  --accent-from: #60a5fa;          /* Gradient start — blue-400 */
+  --accent-to: #c084fc;            /* Gradient end — purple-400 */
+  --accent-via: #c084fc;           /* 3-color middle — purple-400 */
+  --accent-to-alt: #f472b6;        /* 3-color end — pink-400 */
+  --accent-solid: #60a5fa;         /* Solid accent text — blue-400 */
+  --accent-solid-alt: #c084fc;     /* Alt solid (purple side) — purple-400 */
+
+  /* Stronger variants for buttons/CTAs */
+  --accent-from-strong: #3b82f6;   /* blue-500 */
+  --accent-to-strong: #a855f7;     /* purple-500 */
+  --accent-from-hover: #2563eb;    /* blue-600 — hover state */
+  --accent-to-hover: #9333ea;      /* purple-600 — hover state */
+
+  /* Accent with opacity for borders, shadows, glows */
+  --accent-glow: rgba(59, 130, 246, 0.5);
+  --accent-glow-strong: rgba(59, 130, 246, 0.3);
+  --accent-border: rgba(59, 130, 246, 0.5);
+  --accent-border-hover: rgba(59, 130, 246, 0.7);
+  --accent-border-subtle: rgba(59, 130, 246, 0.3);
+  --accent-bg-subtle: rgba(59, 130, 246, 0.1);
+  --accent-bg-muted: rgba(30, 58, 138, 0.3);
+
+  /* Legacy — used by scrollbar, kept for compatibility */
+  --accent-blue-alpha-10: rgba(99, 102, 241, 0.1);
+  --accent-blue-alpha-30: rgba(99, 102, 241, 0.3);
+  --accent-blue-alpha-50: rgba(99, 102, 241, 0.5);
+  --accent-blue-alpha-70: rgba(99, 102, 241, 0.7);
+}
+
+html:not(.dark) {
+  /* Modo claro */
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-elevated: #ffffff;
+  --bg-primary-rgb: 248, 250, 252;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-tertiary: #64748b;
+  --border-color: #e2e8f0;
+  --nav-bg: rgba(255, 255, 255, 0.85);
+  --card-bg: rgba(255, 255, 255, 0.9);
+  --quote-text-color: #0f172a;
+
+  /* Alpha variants — modo claro */
+  --bg-secondary-50: rgba(255, 255, 255, 0.5);
+  --bg-primary-95: rgba(248, 250, 252, 0.95);
+  --bg-elevated-50: rgba(255, 255, 255, 0.5);
+  --bg-elevated-30: rgba(255, 255, 255, 0.3);
+  --bg-elevated-70: rgba(255, 255, 255, 0.7);
+
+  /* Accent colors — light mode: rojo→naranja */
+  --accent-from: #ef4444;          /* red-500 */
+  --accent-to: #f97316;            /* orange-500 */
+  --accent-via: #f97316;           /* orange-500 */
+  --accent-to-alt: #eab308;        /* yellow-500 */
+  --accent-solid: #dc2626;         /* red-600 */
+  --accent-solid-alt: #ea580c;     /* orange-600 */
+
+  --accent-from-strong: #ef4444;   /* red-500 */
+  --accent-to-strong: #f97316;     /* orange-500 */
+  --accent-from-hover: #dc2626;    /* red-600 */
+  --accent-to-hover: #ea580c;      /* orange-600 */
+
+  --accent-glow: rgba(239, 68, 68, 0.5);
+  --accent-glow-strong: rgba(239, 68, 68, 0.3);
+  --accent-border: rgba(239, 68, 68, 0.5);
+  --accent-border-hover: rgba(239, 68, 68, 0.7);
+  --accent-border-subtle: rgba(239, 68, 68, 0.3);
+  --accent-bg-subtle: rgba(239, 68, 68, 0.1);
+  --accent-bg-muted: rgba(239, 68, 68, 0.3);
+}
+
+/* Fondo con transición */
+html,
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Configuración para Spline */
+/* Configuración para Spline */
+.spline-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 600px;
+}
+
+/* Ocultar elementos adicionales que puedan aparecer */
+.spline-container a[href*="spline"],
+.spline-container div[class*="logo"],
+.spline-container div[id*="logo"] {
+  display: none !important;
+}
+
+/* Asegurar que el canvas capture los eventos del mouse */
+.spline-container canvas {
+  pointer-events: auto !important;
+  cursor: crosshair !important;
+}
+
+/* Canvas de partículas - transparente, las partículas se dibujan sobre el fondo CSS */
+canvas {
+  opacity: 1 !important;
+}
+
+/* Escena 3D - mantener sin cambios, forzar fondo transparente */
+html:not(.dark) .spline-container,
+html:not(.dark) .spline-container *,
+html:not(.dark) .spline-container canvas,
+html:not(.dark) .spline-container > div {
+  opacity: 1 !important;
+  filter: none !important;
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Animación para el modal */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Animación para las barras de progreso */
+@keyframes progressBarFill {
+  0% {
+    width: 0%;
+  }
+}
+
+.progress-bar-animate {
+  animation: progressBarFill 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Animaciones para las transiciones de tecnologías */
+/* Estados de las cards */
+.tech-cards-container {
+  position: relative;
+  min-height: 400px;
+  transition: height 0.5s ease-in-out;
+  width: 100%;
+}
+
+.tech-cards-grid {
+  transition: none;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+/* Responsive para contenedor de tecnologías */
+@media (max-width: 768px) {
+  .tech-cards-container {
+    min-height: 200px; /* Reducido de 300px a 200px para cards compactas */
+  }
+  
+  /* Optimizaciones adicionales para móvil */
+  .tech-card {
+    /* Desactivar transformaciones complejas en móvil */
+    transform: none !important;
+  }
+  
+  .tech-card:hover {
+    /* Desactivar will-change en móvil */
+    will-change: auto;
+  }
+}
+
+/* Las transiciones ahora se manejan directamente en los componentes con transition-all */
+
+/* Ocultar scrollbar del carrusel de certificados y tecnologías */
+.overflow-x-hidden,
+.overflow-x-auto,
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling en iOS */
+  scroll-behavior: smooth;
+}
+
+.overflow-x-hidden::-webkit-scrollbar,
+.overflow-x-auto::-webkit-scrollbar,
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+/* Scroll snap para certificados - suave y natural */
+.snap-x {
+  scroll-snap-type: x mandatory;
+  scroll-padding: 0 16px;
+}
+
+.snap-center {
+  scroll-snap-align: center;
+}
+
+.snap-always {
+  scroll-snap-stop: always;
+}
+
+/* Ajustes responsive para scroll snap */
+@media (max-width: 768px) {
+  .snap-x {
+    scroll-padding: 0 8px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .snap-x {
+    scroll-padding: 0 24px;
+  }
+}
+
+/* Optimización de videos en las cards de proyectos */
+.project-card video {
+  /* Mejorar rendimiento del video */
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  image-rendering: auto;
+  content-visibility: auto;
+}
+
+/* Smooth transition para el hover del video */
+.project-card:hover video {
+  will-change: opacity;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Optimizaciones globales de rendimiento */
+* {
+  /* Mejor rendering en fuentes */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* will-change solo en hover para mejor rendimiento */
+.tech-card:hover,
+.project-card:hover {
+  will-change: transform;
+}
+
+/* Optimizar imágenes y videos lazy loading */
+img[loading="lazy"],
+video[loading="lazy"] {
+  content-visibility: auto;
+  contain: layout style paint;
+}
+
+/* Containment para secciones grandes */
+section {
+  contain: layout style;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
+}
+
+/* Reducir repaints en animaciones - aumentar duración para menos frames */
+@media (prefers-reduced-motion: no-preference) {
+  .animate-pulse {
+    animation-duration: 3s;
+  }
+  .animate-spin {
+    animation-duration: 2.5s;
+  }
+}
+
+/* Optimización de scroll */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==================== PORTFOLIO FADE-IN ==================== */
+
+.portfolio-fade-in {
+  animation: portfolioFadeIn 2s ease-in-out forwards;
+}
+
+@keyframes portfolioFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* ==================== CONTACT SECTION OPTIMIZATIONS ==================== */
+
+/* Contact form container - optimized with content-visibility */
+.contact-form {
+  content-visibility: auto;
+  contain: layout style paint;
+}
+
+/* Contact left column - profile card optimizations */
+.contact-left-column {
+  content-visibility: auto;
+}
+
+/* Contact right column - form card optimizations */
+.contact-right-column {
+  content-visibility: auto;
+}
+
+/* Optimized hover effects - only apply will-change on hover */
+.contact-left-column .group:hover,
+.contact-right-column > div:hover {
+  will-change: transform, border-color, box-shadow;
+}
+
+/* Remove will-change when not hovering to save memory */
+.contact-left-column .group,
+.contact-right-column > div {
+  will-change: auto;
+}
+
+/* Smooth transitions for form inputs */
+.contact-form input,
+.contact-form textarea {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* Optimize image rendering in contact section */
+.contact-left-column img {
+  image-rendering: auto;
+  content-visibility: auto;
+  will-change: auto;
+}
+
+.contact-left-column img:hover {
+  will-change: transform, opacity;
+}
+
+/* Optimize social link cards */
+.contact-left-column .group\/link {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.contact-left-column .group\/link:hover {
+  will-change: transform, background-color, border-color;
+}
+
+/* Smooth focus states for accessibility */
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Button optimization */
+.contact-form button[type="submit"] {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.contact-form button[type="submit"]:hover {
+  will-change: transform, box-shadow;
+}
+
+/* Error message animation */
+@keyframes errorSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.contact-form .animate-fadeIn {
+  animation: errorSlideIn 0.3s ease-out;
+}
+
+/* Responsive optimizations for contact section */
+@media (max-width: 1024px) {
+  .contact-left-column,
+  .contact-right-column {
+    contain: none; /* Remove containment on smaller screens for better layout */
+  }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .contact-left-column .group:hover,
+  .contact-right-column > div:hover,
+  .contact-form button[type="submit"]:hover {
+    transform: none;
+    will-change: auto;
+  }
+}
+
+/* ==================== TYPING QUOTES OPTIMIZATIONS ==================== */
+
+/* Optimize typing quotes component for performance */
+.typing-quotes-container {
+  content-visibility: auto;
+  contain: layout style paint;
+  will-change: auto;
+}
+
+/* Hardware acceleration for typing animation */
+.typing-quotes-text {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: contents;
+}
+
+/* Optimize cursor blink animation */
+@keyframes cursorBlink {
+  0%, 49%, 51%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ==================== PROJECT MODAL TWO-COLUMN LAYOUT ==================== */
+/* Layout: Video 2/3 (66.666%) | Info 1/3 (33.334%) */
+
+/* Modal container optimizations */
+.project-modal {
+  max-width: 1400px;
+  content-visibility: auto;
+  contain: layout style paint;
+}
+
+/* Modal content grid - optimized for performance */
+.project-modal-content {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* Video column - fijo en desktop */
+.project-modal-video-column {
+  position: relative;
+  contain: layout style paint;
+}
+
+/* Optimización del video en el modal */
+.project-modal-video-column video {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+/* Info column - scrollable optimizado con altura fija */
+.project-modal-info-column {
+  position: relative;
+  contain: layout style;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+  max-height: calc(90vh - 80px);
+}
+
+/* Custom scrollbar para la columna de información */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-blue-alpha-50) var(--bg-secondary);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--accent-blue-alpha-50);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-blue-alpha-70);
+}
+
+/* Smooth scrolling en la columna de info */
+.project-modal-info-column {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Hardware acceleration para elementos del modal */
+.project-modal h4,
+.project-modal p,
+.project-modal span,
+.project-modal a {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* Optimización de hover en enlaces del modal */
+.project-modal-info-column a:hover {
+  will-change: transform, box-shadow;
+}
+
+.project-modal-info-column a:not(:hover) {
+  will-change: auto;
+}
+
+/* Responsive: Layout vertical en móviles y tablets */
+@media (max-width: 1023px) {
+  .project-modal {
+    max-width: 95vw;
+  }
+
+  .project-modal-content {
+    grid-template-columns: 1fr;
+    max-height: calc(90vh - 80px);
+  }
+
+  .project-modal-video-column {
+    height: auto;
+    min-height: 250px;
+    max-height: 40vh;
+    border-bottom: 1px solid var(--accent-blue-alpha-30);
+  }
+
+  .project-modal-info-column {
+    max-height: calc(50vh - 80px);
+  }
+}
+
+/* Tablets en portrait */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .project-modal-video-column {
+    max-height: 45vh;
+  }
+
+  .project-modal-info-column {
+    max-height: calc(45vh - 80px);
+  }
+}
+
+/* Desktop grande - ajustar tamaños */
+@media (min-width: 1400px) {
+  .project-modal {
+    max-width: 1600px;
+  }
+}
+
+/* Animación de entrada del modal mejorada */
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.project-modal {
+  animation: modalSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Optimización para reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .project-modal {
+    animation: none;
+  }
+
+  .project-modal-info-column {
+    scroll-behavior: auto;
+  }
+
+  .project-modal-info-column a:hover {
+    transform: none;
+    will-change: auto;
+  }
+}
+
+/* Contenido del modal - optimización de renderizado */
+.project-modal-info-column > div {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 100px;
+}
+
+/* ==================== MOBILE NAVIGATION STYLES ==================== */
+/* Navegación móvil compacta con iconos */
+@media (max-width: 767px) {
+  /* Asegurar que la navegación móvil sea compacta y eficiente */
+  nav {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Optimizar el tamaño de los iconos de navegación en móvil */
+  nav a[href^="#"] {
+    min-width: 60px;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  
+  /* Mejorar el área de toque de los botones en móvil */
+  nav button {
+    min-width: 44px;
+    min-height: 44px;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  
+  /* Prevenir el scroll bounce en iOS cuando se navega */
+  body {
+    overscroll-behavior-y: contain;
+  }
+  
+  /* Asegurar que los iconos sean claramente visibles */
+  nav svg {
+    flex-shrink: 0;
+  }
+}
+
+/* Animación sutil para los iconos activos en móvil */
+@media (max-width: 767px) {
+  @keyframes mobileNavPulse {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+  
+  nav a[aria-current="page"] svg,
+  nav a.active svg {
+    animation: mobileNavPulse 2s ease-in-out infinite;
+  }
+}
+
+/* Mejorar la legibilidad del texto pequeño en navegación móvil */
+@media (max-width: 767px) {
+  nav span {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+/* ==================== FLOATING ACTION BUTTONS (MOBILE) ==================== */
+/* Botones flotantes de tema e idioma en móvil */
+@media (max-width: 767px) {
+  /* Animación de entrada para los botones flotantes */
+  @keyframes floatingButtonsIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Aplicar animación a los botones flotantes */
+  .fixed.bottom-6.left-4 {
+    animation: floatingButtonsIn 0.5s ease-out 0.3s both;
+  }
+  
+  /* Efecto de backdrop blur para los botones */
+  .fixed.bottom-6.left-4 button {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  /* Sombra mejorada para modo oscuro */
+  .dark .fixed.bottom-6.left-4 button {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Sombra mejorada para modo claro */
+  html:not(.dark) .fixed.bottom-6.left-4 button {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Hover mejorado */
+  .fixed.bottom-6.left-4 button:hover {
+    box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -2px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dark .fixed.bottom-6.left-4 button:hover {
+    box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -2px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* ==================== CIRCUIT BOOT SCREEN ==================== */
+
+/* Container — black background, full viewport */
+.cb {
+  position: fixed;
+  inset: 0;
+  background: #000000;
+  overflow: hidden;
+  z-index: 9999;
+}
+
+.cb--visible { opacity: 1; }
+.cb--fade-out { animation: cbFadeOut 1.5s ease-in-out forwards; }
+
+@keyframes cbFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* SVG circuit layer */
+.cb__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Glow layer on traces (wider, blurred) */
+.cb__trace-glow {
+  filter: blur(3px);
+}
+
+/* Central Orb — intensity driven by JS via --orb-intensity (0→1) */
+.cb__orb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 100px;
+  z-index: 10;
+  --orb-intensity: 0;
+}
+
+.cb__orb-core {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, calc(var(--orb-intensity) * 0.95)) 0%,
+    rgba(255, 255, 255, calc(var(--orb-intensity) * 0.35)) 40%,
+    rgba(255, 255, 255, calc(var(--orb-intensity) * 0.05)) 70%,
+    transparent 100%
+  );
+  border: 1px solid rgba(255, 255, 255, calc(var(--orb-intensity) * 0.3));
+  box-shadow:
+    0 0 var(--orb-glow, 0px) rgba(255, 255, 255, calc(var(--orb-intensity) * 0.7)),
+    0 0 var(--orb-glow2, 0px) rgba(255, 255, 255, calc(var(--orb-intensity) * 0.3)),
+    0 0 var(--orb-glow3, 0px) rgba(255, 255, 255, calc(var(--orb-intensity) * 0.1));
+}
+
+/* Typewriter text — appears below orb after activation */
+.cb__text {
+  position: absolute;
+  top: calc(50% + 45px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  letter-spacing: 3px;
+  color: rgba(255, 255, 255, 0.75);
+  white-space: nowrap;
+  z-index: 10;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.3));
+}
+
+/* Progress bar */
+.cb__progress {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(400px, calc(100% - 40px));
+  text-align: center;
+  z-index: 20;
+}
+
+.cb__progress-track {
+  width: 100%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.cb__progress-fill {
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+  transition: width 0.1s linear;
+}
+
+.cb__progress-label {
+  display: block;
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.3);
+  margin-top: 8px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .cb__orb {
+    width: 72px;
+    height: 72px;
+  }
+
+  .cb__text {
+    font-size: 10px;
+    letter-spacing: 2px;
+    top: calc(50% + 32px);
+  }
+}
