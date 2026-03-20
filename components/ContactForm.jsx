@@ -111,7 +111,7 @@ const ContactForm = memo(() => {
           className={`w-full px-4 py-3 bg-white dark:bg-[var(--bg-elevated-50)] border rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 transition-all duration-300 ${
             errors.name
               ? 'border-red-500 focus:ring-red-500'
-              : 'border-slate-300 dark:border-slate-700 focus:ring-blue-500 focus:border-blue-500'
+              : 'border-slate-300 dark:border-slate-700 focus:ring-[var(--accent-from-strong)] focus:border-[var(--accent-from-strong)]'
           }`}
         />
         {errors.name && (
@@ -135,7 +135,7 @@ const ContactForm = memo(() => {
           className={`w-full px-4 py-3 bg-white dark:bg-[var(--bg-elevated-50)] border rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 transition-all duration-300 ${
             errors.subject
               ? 'border-red-500 focus:ring-red-500'
-              : 'border-slate-300 dark:border-slate-700 focus:ring-blue-500 focus:border-blue-500'
+              : 'border-slate-300 dark:border-slate-700 focus:ring-[var(--accent-from-strong)] focus:border-[var(--accent-from-strong)]'
           }`}
         />
         {errors.subject && (
@@ -158,7 +158,7 @@ const ContactForm = memo(() => {
           className={`w-full h-32 md:h-40 lg:h-44 px-4 py-3 bg-white dark:bg-[var(--bg-elevated-50)] border rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 transition-all duration-300 resize-none ${
             errors.message
               ? 'border-red-500 focus:ring-red-500'
-              : 'border-slate-300 dark:border-slate-700 focus:ring-blue-500 focus:border-blue-500'
+              : 'border-slate-300 dark:border-slate-700 focus:ring-[var(--accent-from-strong)] focus:border-[var(--accent-from-strong)]'
           }`}
         />
         {errors.message && (
@@ -169,7 +169,7 @@ const ContactForm = memo(() => {
       {/* Submit Button */}
       <button
         type="submit"
-        className="w-full py-3 md:py-4 px-6 bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-500 dark:to-purple-500 hover:from-red-600 hover:to-orange-600 dark:hover:from-blue-600 dark:hover:to-purple-600 rounded-xl font-semibold text-white text-base md:text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-red-500/50 dark:hover:shadow-blue-500/50 flex items-center justify-center gap-3 group"
+        className="w-full py-3 md:py-4 px-6 bg-gradient-to-r from-[var(--accent-from-strong)] to-[var(--accent-to-strong)] hover:from-[var(--accent-from-hover)] hover:to-[var(--accent-to-hover)] rounded-xl font-semibold text-white text-base md:text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-[var(--accent-glow)] flex items-center justify-center gap-3 group"
       >
         <span>{t('contact.form.submit')}</span>
         <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />

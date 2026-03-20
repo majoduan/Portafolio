@@ -60,9 +60,9 @@ const ModalVideoPlayer = ({ src, alt, className = '' }) => {
     <div className={`relative w-full h-full ${className}`}>
       {/* Loading Indicator */}
       {isLoading && !hasError && (
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-purple-600/20 flex items-center justify-center z-10 rounded-2xl">
+        <div className="absolute inset-0 bg-[var(--accent-bg-subtle)] flex items-center justify-center z-10 rounded-2xl">
           <div className="text-center">
-            <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500 dark:border-blue-400 mb-4"></div>
+            <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-[var(--accent-from-strong)] mb-4"></div>
             <p className="text-slate-600 dark:text-slate-300 font-medium">
               Cargando video...
             </p>

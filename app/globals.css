@@ -30,10 +30,32 @@ html {
   --bg-elevated-30: rgba(42, 45, 54, 0.3);
   --bg-elevated-70: rgba(42, 45, 54, 0.7);
 
-  /* Colores de acento */
-  --accent-blue: #6366f1;
-  --accent-purple: #a855f7;
-  --accent-pink: #ec4899;
+  /* Colores de acento — FUENTE DE VERDAD para gradientes y acentos
+     Cambiar estos valores actualiza todo el esquema de color accent del dark mode.
+     Dark: azul→púrpura | Light: rojo→naranja */
+  --accent-from: #60a5fa;          /* Gradient start — blue-400 */
+  --accent-to: #c084fc;            /* Gradient end — purple-400 */
+  --accent-via: #c084fc;           /* 3-color middle — purple-400 */
+  --accent-to-alt: #f472b6;        /* 3-color end — pink-400 */
+  --accent-solid: #60a5fa;         /* Solid accent text — blue-400 */
+  --accent-solid-alt: #c084fc;     /* Alt solid (purple side) — purple-400 */
+
+  /* Stronger variants for buttons/CTAs */
+  --accent-from-strong: #3b82f6;   /* blue-500 */
+  --accent-to-strong: #a855f7;     /* purple-500 */
+  --accent-from-hover: #2563eb;    /* blue-600 — hover state */
+  --accent-to-hover: #9333ea;      /* purple-600 — hover state */
+
+  /* Accent with opacity for borders, shadows, glows */
+  --accent-glow: rgba(59, 130, 246, 0.5);
+  --accent-glow-strong: rgba(59, 130, 246, 0.3);
+  --accent-border: rgba(59, 130, 246, 0.5);
+  --accent-border-hover: rgba(59, 130, 246, 0.7);
+  --accent-border-subtle: rgba(59, 130, 246, 0.3);
+  --accent-bg-subtle: rgba(59, 130, 246, 0.1);
+  --accent-bg-muted: rgba(30, 58, 138, 0.3);
+
+  /* Legacy — used by scrollbar, kept for compatibility */
   --accent-blue-alpha-10: rgba(99, 102, 241, 0.1);
   --accent-blue-alpha-30: rgba(99, 102, 241, 0.3);
   --accent-blue-alpha-50: rgba(99, 102, 241, 0.5);
@@ -60,6 +82,27 @@ html:not(.dark) {
   --bg-elevated-50: rgba(255, 255, 255, 0.5);
   --bg-elevated-30: rgba(255, 255, 255, 0.3);
   --bg-elevated-70: rgba(255, 255, 255, 0.7);
+
+  /* Accent colors — light mode: rojo→naranja */
+  --accent-from: #ef4444;          /* red-500 */
+  --accent-to: #f97316;            /* orange-500 */
+  --accent-via: #f97316;           /* orange-500 */
+  --accent-to-alt: #eab308;        /* yellow-500 */
+  --accent-solid: #dc2626;         /* red-600 */
+  --accent-solid-alt: #ea580c;     /* orange-600 */
+
+  --accent-from-strong: #ef4444;   /* red-500 */
+  --accent-to-strong: #f97316;     /* orange-500 */
+  --accent-from-hover: #dc2626;    /* red-600 */
+  --accent-to-hover: #ea580c;      /* orange-600 */
+
+  --accent-glow: rgba(239, 68, 68, 0.5);
+  --accent-glow-strong: rgba(239, 68, 68, 0.3);
+  --accent-border: rgba(239, 68, 68, 0.5);
+  --accent-border-hover: rgba(239, 68, 68, 0.7);
+  --accent-border-subtle: rgba(239, 68, 68, 0.3);
+  --accent-bg-subtle: rgba(239, 68, 68, 0.1);
+  --accent-bg-muted: rgba(239, 68, 68, 0.3);
 }
 
 /* Fondo con transición */

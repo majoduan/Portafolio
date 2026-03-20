@@ -63,7 +63,7 @@ const CertificatesSection = React.memo(() => {
     <section id="certificates" className="pt-20 bg-transparent relative z-10 overflow-hidden transition-colors duration-300">
       {/* Centered titles */}
       <div className="max-w-7xl mx-auto px-4 mb-12">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
+        <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)] bg-clip-text text-transparent">
           {t('certificates.title')}
         </h2>
       </div>
@@ -90,7 +90,7 @@ const CertificatesSection = React.memo(() => {
             {certificates.map((cert, i) => (
               <div
                 key={i}
-                className="certificate-card flex-shrink-0 bg-white/90 dark:bg-[var(--bg-secondary)] backdrop-blur-lg rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50 hover:border-red-500 dark:hover:border-blue-500/70 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-blue-500/40 group cursor-pointer"
+                className="certificate-card flex-shrink-0 bg-white/90 dark:bg-[var(--bg-secondary)] backdrop-blur-lg rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50 hover:border-[var(--accent-border)] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-[var(--accent-glow)] group cursor-pointer"
                 style={{
                   width: isMobileView ? '100%' : 'calc((100% - 24px) / 2)'
                 }}
@@ -142,7 +142,7 @@ const CertificatesSection = React.memo(() => {
 
                 {/* Certificate Info */}
                 <div className="p-6">
-                  <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white group-hover:text-red-600 dark:group-hover:text-blue-400 transition-colors leading-tight">
+                  <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white group-hover:text-[var(--accent-solid)] transition-colors leading-tight">
                     {cert.title}
                   </h3>
                   <div className="flex items-start gap-2 text-slate-600 dark:text-slate-400">
@@ -180,7 +180,7 @@ const CertificatesSection = React.memo(() => {
                   }}
                   className={`transition-all duration-300 rounded-full ${
                     isActive
-                      ? 'w-8 h-2 bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-400 dark:to-purple-400'
+                      ? 'w-8 h-2 bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)]'
                       : 'w-2 h-2 bg-slate-300 dark:bg-[var(--border-color)] hover:bg-slate-400 dark:hover:bg-[var(--bg-elevated)]'
                   }`}
                   aria-label={`Ver página ${pageIndex + 1}`}

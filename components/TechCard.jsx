@@ -101,7 +101,7 @@ const TechCard = memo(({ tech, index, animationState, onMouseEnter, onMouseLeave
           
           {/* Solo nivel en móvil */}
           <div className="text-right flex-shrink-0">
-            <div className="text-lg font-bold text-red-600 dark:text-purple-400">
+            <div className="text-lg font-bold text-[var(--accent-solid-alt)]">
               {tech.level}%
             </div>
           </div>
@@ -113,7 +113,7 @@ const TechCard = memo(({ tech, index, animationState, onMouseEnter, onMouseLeave
   // Renderizado desktop completo (con todas las animaciones)
   return (
     <div
-      className={`tech-card group bg-white/80 dark:bg-[var(--bg-elevated-50)] border border-slate-200 dark:border-slate-700/50 hover:border-purple-400/50 dark:hover:border-purple-500/40 transition-all duration-1000 rounded-lg shadow-md dark:shadow-lg hover:shadow-xl backdrop-blur-sm ${
+      className={`tech-card group bg-white/80 dark:bg-[var(--bg-elevated-50)] border border-slate-200 dark:border-slate-700/50 hover:border-purple-400/50 dark:hover:border-[var(--accent-border)] transition-all duration-1000 rounded-lg shadow-md dark:shadow-lg hover:shadow-xl backdrop-blur-sm ${
         isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
       }`}
       style={{
@@ -139,7 +139,7 @@ const TechCard = memo(({ tech, index, animationState, onMouseEnter, onMouseLeave
           </div>
 
           <div className="flex-1">
-            <h4 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-red-600 dark:group-hover:text-purple-400 transition-colors">
+            <h4 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-[var(--accent-solid-alt)] transition-colors">
               {tech.name}
             </h4>
             <p className="text-sm text-slate-600 dark:text-gray-400 transition-colors">
@@ -148,7 +148,7 @@ const TechCard = memo(({ tech, index, animationState, onMouseEnter, onMouseLeave
           </div>
 
           <div className="text-right">
-            <div className="text-2xl font-bold text-red-600 dark:text-purple-400 transition-colors">
+            <div className="text-2xl font-bold text-[var(--accent-solid-alt)] transition-colors">
               {shouldAnimate ? <AnimatedCounter value={tech.level} isTransitioning={false} /> : tech.level}%
             </div>
             <div className="text-xs text-slate-400 dark:text-gray-500 text-gray-600 transition-colors">
@@ -160,7 +160,7 @@ const TechCard = memo(({ tech, index, animationState, onMouseEnter, onMouseLeave
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
             <span className="text-slate-900 dark:text-gray-300 transition-colors">{t('techCard.masteryLevel')}</span>
-            <span className="text-red-600 dark:text-purple-300 font-medium transition-colors">
+            <span className="text-[var(--accent-solid)] dark:text-[var(--accent-solid-alt)] font-medium transition-colors">
               {shouldAnimate ? <AnimatedCounter value={tech.level} isTransitioning={false} /> : tech.level}%
             </span>
           </div>
@@ -177,7 +177,7 @@ const TechCard = memo(({ tech, index, animationState, onMouseEnter, onMouseLeave
         </div>
 
         <div className="mt-4 flex justify-between items-center">
-          <span className={`px-3 py-1 bg-gradient-to-r ${tech.color} bg-opacity-20 text-xs font-medium rounded-full border border-purple-400/20`}>
+          <span className={`px-3 py-1 bg-gradient-to-r ${tech.color} bg-opacity-20 text-xs font-medium rounded-full border border-[var(--accent-border-subtle)]`}>
             {t('techCard.experience')}: {tech.experience}
           </span>
           <div className="flex gap-1">

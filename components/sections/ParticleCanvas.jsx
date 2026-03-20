@@ -85,9 +85,9 @@ const ParticleCanvas = React.memo(() => {
       const particlesArray = particles.current;
       const len = particlesArray.length;
 
-      // Colores segun tema
-      const particleColor = isDark ? 'rgba(99, 102, 241, ' : 'rgba(51, 65, 85, ';
-      const lineColor = isDark ? 'rgba(99, 102, 241, ' : 'rgba(51, 65, 85, ';
+      // Colores segun tema (dark: blanco, light: gris oscuro)
+      const particleColor = isDark ? 'rgba(255, 255, 255, ' : 'rgba(51, 65, 85, ';
+      const lineColor = isDark ? 'rgba(255, 255, 255, ' : 'rgba(51, 65, 85, ';
       const opacityMultiplier = isDark ? 1 : 0.8;
 
       for (let i = 0; i < len; i++) {
@@ -112,9 +112,11 @@ const ParticleCanvas = React.memo(() => {
         p.vx *= 0.99;
         p.vy *= 0.99;
 
-        // Boundary check usando canvasWidth/canvasHeight actualizables
-        if (p.x < 0 || p.x > canvasWidth) p.vx = -p.vx;
-        if (p.y < 0 || p.y > canvasHeight) p.vy = -p.vy;
+        // Bounce off edges — clamp position and reverse velocity
+        if (p.x <= 0) { p.x = 0; p.vx = Math.abs(p.vx); }
+        else if (p.x >= canvasWidth) { p.x = canvasWidth; p.vx = -Math.abs(p.vx); }
+        if (p.y <= 0) { p.y = 0; p.vy = Math.abs(p.vy); }
+        else if (p.y >= canvasHeight) { p.y = canvasHeight; p.vy = -Math.abs(p.vy); }
 
         ctx.fillStyle = `${particleColor}${p.opacity * opacityMultiplier})`;
         ctx.fillRect(p.x - p.radius, p.y - p.radius, p.radius * 2, p.radius * 2);

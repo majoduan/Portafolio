@@ -82,13 +82,13 @@ const NavigationBar = React.memo(() => {
                   }}
                   className={`text-lg font-medium transition-all duration-300 relative group ${
                     activeSection === item
-                      ? 'text-red-600 dark:text-blue-400'
-                      : 'text-slate-700 dark:text-slate-300 hover:text-red-600 dark:hover:text-blue-400'
+                      ? 'text-[var(--accent-solid)]'
+                      : 'text-slate-700 dark:text-slate-300 hover:text-[var(--accent-solid)]'
                   }`}
                 >
                   {t(`nav.${item}`)}
                   <span
-                    className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-400 dark:to-purple-400 transition-all duration-300 ${
+                    className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)] transition-all duration-300 ${
                       activeSection === item ? 'w-full' : 'w-0 group-hover:w-full'
                     }`}
                   />
@@ -127,8 +127,8 @@ const NavigationBar = React.memo(() => {
                   }}
                   className={`flex flex-col items-center justify-center p-2 rounded-lg transition-all duration-300 ${
                     activeSection === id
-                      ? 'text-red-600 dark:text-blue-400 bg-red-50 dark:bg-blue-900/30'
-                      : 'text-slate-600 dark:text-slate-400 hover:text-red-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-[var(--bg-elevated-50)]'
+                      ? 'text-[var(--accent-solid)] bg-red-50 dark:bg-[var(--accent-bg-muted)]'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-[var(--accent-solid)] hover:bg-slate-100 dark:hover:bg-[var(--bg-elevated-50)]'
                   }`}
                   aria-label={t(`nav.${id}`)}
                 >

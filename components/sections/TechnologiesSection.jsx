@@ -149,7 +149,7 @@ const TechnologiesSection = React.memo(() => {
   return (
     <section id="technologies" className="pt-20 relative z-10 bg-transparent transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
+        <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)] bg-clip-text text-transparent">
           {t('technologies.title')}
         </h2>
         {/* Tab Navigation Bar - Estilo Facebook */}
@@ -161,7 +161,7 @@ const TechnologiesSection = React.memo(() => {
                 onClick={() => handleManualTabChange(index)}
                 className={`px-3 sm:px-6 md:px-8 py-3 md:py-4 font-medium relative transition-all duration-300 whitespace-nowrap text-xs sm:text-sm md:text-base ${
                   currentTechTab === index
-                    ? 'text-red-600 dark:text-blue-400'
+                    ? 'text-[var(--accent-solid)]'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-[var(--bg-elevated-30)]'
                 }`}
               >
@@ -170,7 +170,7 @@ const TechnologiesSection = React.memo(() => {
                 <span className="inline sm:hidden">{category.shortTitle}</span>
                 {/* Bottom indicator line with smooth transition */}
                 <div
-                  className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-500 dark:to-purple-500 transition-all duration-1000 ${
+                  className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[var(--accent-from-strong)] to-[var(--accent-to-strong)] transition-all duration-1000 ${
                     currentTechTab === index ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'
                   }`}
                 />

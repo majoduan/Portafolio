@@ -132,7 +132,7 @@ class ErrorBoundary extends Component {
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={this.handleReset}
-                  className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 rounded-xl font-semibold text-white transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2"
+                  className="flex-1 px-6 py-3 bg-gradient-to-r from-[var(--accent-from-strong)] to-[var(--accent-to-strong)] hover:from-[var(--accent-from-hover)] hover:to-[var(--accent-to-hover)] rounded-xl font-semibold text-white transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2"
                 >
                   <RefreshCw className="w-5 h-5" />
                   Intentar de nuevo

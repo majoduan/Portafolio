@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useRef, useMemo, useCallback, useEffect, lazy, Suspense } from 'react';
-import { ExternalLink, X, Code } from 'lucide-react';
+import { ExternalLink, Github, X, Code } from 'lucide-react';
 import { getProjectsData } from '../../data/projectTranslations';
 import { useTranslation } from '../../hooks/useTranslation';
 import { getOptimalVideoSource, getOptimalPoster } from '../../utils/adaptiveVideo';
@@ -8,21 +8,39 @@ import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 
 const ModalVideoPlayer = lazy(() => import('../ModalVideoPlayer'));
 
-// Componente ProjectCard separado para evitar violar reglas de hooks
-// Memoizado para evitar re-renders innecesarios
-// OPTIMIZADO v3.0: Desktop=hover-play, Tablet/Mobile=poster only (video en modal)
-const ProjectCard = React.memo(({ project, onProjectClick, t }) => {
+// Derive card links: max 2 buttons (demo + github)
+// If project has frontend+backend, github opens both
+const getCardLinks = (links) => {
+  const result = [];
+  if (links.demo) {
+    result.push({ type: 'demo', urls: [links.demo] });
+  }
+  const ghUrls = [];
+  if (links.github) ghUrls.push(links.github);
+  if (links.frontend) ghUrls.push(links.frontend);
+  if (links.backend) ghUrls.push(links.backend);
+  if (ghUrls.length > 0) {
+    result.push({ type: 'github', urls: ghUrls });
+  }
+  return result;
+};
+
+const ProjectCard = React.memo(({ project, onProjectClick }) => {
   const [isHovered, setIsHovered] = useState(false);
   const videoRef = useRef(null);
   const [isDesktop, setIsDesktop] = useState(false);
   useEffect(() => { setIsDesktop(window.innerWidth >= 1024); }, []);
 
-  // Pausar video al dejar de hacer hover
   const handleMouseLeave = useCallback(() => {
     setIsHovered(false);
-    if (videoRef.current) {
-      videoRef.current.pause();
-    }
+    if (videoRef.current) videoRef.current.pause();
+  }, []);
+
+  const cardLinks = useMemo(() => getCardLinks(project.links), [project.links]);
+
+  const handleLinkClick = useCallback((e, link) => {
+    e.stopPropagation();
+    link.urls.forEach(url => window.open(url, '_blank', 'noopener,noreferrer'));
   }, []);
 
   return (
@@ -30,73 +48,58 @@ const ProjectCard = React.memo(({ project, onProjectClick, t }) => {
       onClick={() => onProjectClick(project)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
-      className="project-card bg-white/90 dark:bg-[var(--bg-secondary-50)] backdrop-blur-lg rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-red-500 dark:hover:border-blue-500 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-blue-500/30 cursor-pointer group"
+      className="project-card relative rounded-2xl overflow-hidden cursor-pointer group aspect-video"
     >
-      <div className="bg-gradient-to-br from-blue-600 to-purple-600 h-48 flex items-center justify-center relative overflow-hidden">
-        {/* Poster siempre visible como base */}
-        <img
-          src={getOptimalPoster(project.video)}
-          alt={project.title}
-          className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-300"
-          loading="lazy"
-          decoding="async"
-          style={{ backgroundColor: 'rgba(59, 130, 246, 0.1)' }}
+      {/* Poster — always visible */}
+      <img
+        src={getOptimalPoster(project.video)}
+        alt={project.title}
+        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        loading="lazy"
+        decoding="async"
+      />
+
+      {/* Video — desktop hover only */}
+      {isDesktop && isHovered && (
+        <video
+          ref={videoRef}
+          src={getOptimalVideoSource(project.video)}
+          autoPlay loop muted playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ contentVisibility: 'auto' }}
         />
+      )}
 
-        {/* Video solo en desktop y solo durante hover */}
-        {isDesktop && isHovered && (
-          <video
-            ref={videoRef}
-            src={getOptimalVideoSource(project.video)}
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover opacity-80 transition-opacity duration-300"
-            style={{ contentVisibility: 'auto' }}
-          />
-        )}
+      {/* Bottom gradient overlay — stronger on hover for text legibility */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent transition-all duration-300 group-hover:from-black/85 group-hover:via-black/30" />
 
-        {/* Overlay con gradiente */}
-        <div className="absolute inset-0 bg-gradient-to-t from-transparent to-transparent dark:from-slate-900/80 dark:via-transparent dark:to-transparent" />
-
-        {/* Icono de play al hacer hover (desktop) */}
-        <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10">
-          <span className="text-white font-bold text-lg flex items-center gap-2">
-            <Code className="w-6 h-6" />
-            {t('projects.viewDemo')}
-          </span>
+      {/* Content overlay — title, description, buttons */}
+      <div className="absolute inset-x-0 bottom-0 p-5 flex items-end justify-between gap-3 z-10">
+        {/* Text block */}
+        <div className="flex-1 min-w-0">
+          <h3 className="text-white font-bold text-lg md:text-xl leading-tight transition-transform duration-300 group-hover:-translate-y-1">
+            {project.title}
+          </h3>
+          {/* Description — slides up on hover */}
+          <p className="text-white/0 group-hover:text-white/80 text-sm leading-relaxed mt-1 max-h-0 group-hover:max-h-20 overflow-hidden transition-all duration-400 ease-out">
+            {project.description}
+          </p>
         </div>
-      </div>
 
-      <div className="p-6">
-        <h3 className="text-2xl font-bold mb-3 text-slate-900 dark:text-white group-hover:text-red-600 dark:group-hover:text-blue-400 transition-colors">
-          {project.title}
-        </h3>
-        <p className="text-slate-600 dark:text-slate-300 mb-4">{project.description}</p>
-        <div className="flex flex-wrap gap-2 mb-4">
-          {project.tech.map((tech, j) => (
-            <span
-              key={j}
-              className="px-3 py-1 bg-red-50 dark:bg-[var(--bg-elevated)] text-xs rounded-full text-red-600 dark:text-blue-400 border border-red-200 dark:border-transparent"
+        {/* Icon buttons — stacked vertically */}
+        <div className="flex flex-col gap-2 flex-shrink-0">
+          {cardLinks.map((link) => (
+            <button
+              key={link.type}
+              onClick={(e) => handleLinkClick(e, link)}
+              className="w-10 h-10 rounded-full bg-gradient-to-r from-[var(--accent-from-strong)] to-[var(--accent-to-strong)] flex items-center justify-center text-white hover:scale-110 hover:shadow-lg hover:shadow-[var(--accent-glow)] transition-all duration-300"
+              aria-label={link.type}
             >
-              {tech}
-            </span>
-          ))}
-        </div>
-        <div className="flex flex-wrap gap-3">
-          {Object.entries(project.links).map(([key, url]) => (
-            <a
-              key={key}
-              href={url}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className="flex items-center space-x-1 px-4 py-2 bg-slate-100 dark:bg-[var(--bg-elevated)] text-slate-700 dark:text-white hover:bg-gradient-to-r hover:from-red-500 hover:to-orange-500 dark:hover:from-blue-500 dark:hover:to-purple-500 hover:text-white rounded-full text-sm transition-all duration-300 border border-slate-200 dark:border-transparent"
-            >
-              <span className="capitalize">{key}</span>
-              <ExternalLink className="w-4 h-4" />
-            </a>
+              {link.type === 'demo'
+                ? <ExternalLink className="w-4 h-4" />
+                : <Github className="w-4 h-4" />
+              }
+            </button>
           ))}
         </div>
       </div>
@@ -113,8 +116,6 @@ const ProjectsSection = React.memo(() => {
   const projectsSectionRef = useRef(null);
 
   const projects = useMemo(() => getProjectsData(t), [t]);
-
-  // Usar intersection observer para cargar videos solo cuando sean visibles
   const { hasIntersected: projectsVisible } = useIntersectionObserver(projectsSectionRef);
 
   const handleCloseModal = useCallback(() => {
@@ -131,11 +132,11 @@ const ProjectsSection = React.memo(() => {
     <>
       <section ref={projectsSectionRef} id="projects" className="py-20 relative z-10 bg-transparent transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)] bg-clip-text text-transparent">
             {t('projects.title')}
           </h2>
         </div>
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {projectsVisible ? (
               projects.map((project, i) => (
@@ -143,42 +144,32 @@ const ProjectsSection = React.memo(() => {
                   key={i}
                   project={project}
                   onProjectClick={handleProjectClick}
-                  t={t}
                 />
               ))
             ) : (
-              // Skeleton while section is not visible
-              projects.map((project, i) => (
+              projects.map((_project, i) => (
                 <div
                   key={i}
-                  className="project-card bg-white/90 dark:bg-[var(--bg-secondary-50)] backdrop-blur-lg rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-lg"
-                >
-                  <div className="bg-gradient-to-br from-blue-600/50 to-purple-600/50 h-48 animate-pulse" />
-                  <div className="p-6">
-                    <div className="h-6 bg-slate-300 dark:bg-[var(--border-color)] rounded mb-3 animate-pulse" />
-                    <div className="h-4 bg-slate-300 dark:bg-[var(--border-color)] rounded mb-2 animate-pulse" />
-                    <div className="h-4 bg-slate-300 dark:bg-[var(--border-color)] rounded w-2/3 animate-pulse" />
-                  </div>
-                </div>
+                  className="rounded-2xl overflow-hidden aspect-video bg-[var(--bg-secondary)] animate-pulse"
+                />
               ))
             )}
           </div>
         </div>
       </section>
 
-      {/* Modal for project videos - Two column layout */}
+      {/* Modal */}
       {isModalOpen && selectedProject && (
         <div
           className="fixed inset-0 bg-black/30 dark:bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn"
           onClick={handleCloseModal}
         >
           <div
-            className="project-modal bg-white dark:bg-[var(--bg-secondary)] rounded-3xl w-full max-h-[90vh] overflow-hidden border-2 border-slate-200 dark:border-blue-500/50 shadow-2xl dark:shadow-blue-500/30"
+            className="project-modal bg-white dark:bg-[var(--bg-secondary)] rounded-3xl w-full max-h-[90vh] overflow-hidden border-2 border-slate-200 dark:border-[var(--accent-border)] shadow-2xl shadow-[var(--accent-glow-strong)]"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Modal header - Sticky with close button */}
             <div className="sticky top-0 bg-white/95 dark:bg-[var(--bg-primary-95)] backdrop-blur-lg border-b border-slate-200 dark:border-slate-800 px-6 py-4 flex justify-between items-center z-20">
-              <h3 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
+              <h3 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)] bg-clip-text text-transparent">
                 {selectedProject.title}
               </h3>
               <button
@@ -190,14 +181,12 @@ const ProjectsSection = React.memo(() => {
               </button>
             </div>
 
-            {/* Main container - Two columns on desktop, one on mobile */}
             <div className="project-modal-content grid grid-cols-1 lg:grid-cols-[66.666%_33.334%] gap-0 h-[calc(90vh-80px)] overflow-hidden">
-              {/* Left Column - Video (2/3 width, fixed on desktop) */}
               <div className="project-modal-video-column bg-slate-50 dark:bg-black lg:h-full flex items-center justify-center p-4 lg:p-6 overflow-y-auto lg:overflow-hidden">
                 <Suspense fallback={
                   <div className="w-full h-full flex items-center justify-center">
                     <div className="text-center">
-                      <div className="inline-block w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                      <div className="inline-block w-16 h-16 border-4 border-[var(--accent-from-strong)] border-t-transparent rounded-full animate-spin mb-4"></div>
                       <p className="text-slate-600 dark:text-slate-300 font-medium">{t('projects.loading')}</p>
                     </div>
                   </div>
@@ -209,20 +198,17 @@ const ProjectsSection = React.memo(() => {
                 </Suspense>
               </div>
 
-              {/* Right Column - Info (1/3 width, independent scroll) */}
               <div className="project-modal-info-column bg-slate-50 dark:bg-[var(--bg-secondary)] p-6 lg:p-8 overflow-y-auto custom-scrollbar">
-                {/* Short description */}
                 <div className="mb-6">
                   <p className="text-slate-700 dark:text-slate-300 text-base md:text-lg leading-relaxed">
                     {selectedProject.description}
                   </p>
                 </div>
 
-                {/* Long description */}
                 {selectedProject.longDescription && (
                   <div className="mb-8">
                     <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                      <div className="w-1 h-6 bg-gradient-to-b from-red-500 to-orange-500 dark:from-blue-400 dark:to-purple-400 rounded-full"></div>
+                      <div className="w-1 h-6 bg-gradient-to-b from-[var(--accent-from)] to-[var(--accent-to)] rounded-full"></div>
                       {t('projects.modalTitle')}
                     </h4>
                     <p className="text-slate-700 dark:text-slate-300 text-sm md:text-base leading-relaxed text-justify">
@@ -231,17 +217,16 @@ const ProjectsSection = React.memo(() => {
                   </div>
                 )}
 
-                {/* Technologies Used */}
                 <div className="mb-8">
                   <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                    <div className="w-1 h-6 bg-gradient-to-b from-red-500 to-orange-500 dark:from-blue-400 dark:to-purple-400 rounded-full"></div>
+                    <div className="w-1 h-6 bg-gradient-to-b from-[var(--accent-from)] to-[var(--accent-to)] rounded-full"></div>
                     {t('projects.techUsed')}
                   </h4>
                   <div className="flex flex-wrap gap-3">
                     {selectedProject.tech.map((tech, j) => (
                       <span
                         key={j}
-                        className="px-4 py-2 bg-white dark:bg-[var(--bg-elevated-70)] backdrop-blur-sm rounded-full text-red-600 dark:text-blue-400 font-medium text-sm border border-red-300 dark:border-blue-500/30 hover:border-red-500 dark:hover:border-blue-500/60 hover:bg-slate-50 dark:hover:bg-[var(--bg-elevated)] transition-all duration-300"
+                        className="px-4 py-2 bg-white dark:bg-[var(--bg-elevated-70)] backdrop-blur-sm rounded-full text-[var(--accent-solid)] font-medium text-sm border border-red-300 dark:border-[var(--accent-border-subtle)] hover:border-[var(--accent-border)] hover:bg-slate-50 dark:hover:bg-[var(--bg-elevated)] transition-all duration-300"
                       >
                         {tech}
                       </span>
@@ -249,10 +234,9 @@ const ProjectsSection = React.memo(() => {
                   </div>
                 </div>
 
-                {/* Project links */}
                 <div className="mb-6">
                   <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                    <div className="w-1 h-6 bg-gradient-to-b from-red-500 to-orange-500 dark:from-blue-400 dark:to-purple-400 rounded-full"></div>
+                    <div className="w-1 h-6 bg-gradient-to-b from-[var(--accent-from)] to-[var(--accent-to)] rounded-full"></div>
                     {t('projects.projectLinks')}
                   </h4>
                   <div className="flex flex-col sm:flex-row flex-wrap gap-3">
@@ -262,7 +246,7 @@ const ProjectsSection = React.memo(() => {
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-500 dark:to-purple-500 hover:from-red-600 hover:to-orange-600 dark:hover:from-blue-600 dark:hover:to-purple-600 rounded-full text-white font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-500/50 dark:hover:shadow-blue-500/50"
+                        className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--accent-from-strong)] to-[var(--accent-to-strong)] hover:from-[var(--accent-from-hover)] hover:to-[var(--accent-to-hover)] rounded-full text-white font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-[var(--accent-glow)]"
                       >
                         <span className="capitalize">{key}</span>
                         <ExternalLink className="w-4 h-4" />
@@ -271,7 +255,6 @@ const ProjectsSection = React.memo(() => {
                   </div>
                 </div>
 
-                {/* Bottom spacing for better scrolling */}
                 <div className="h-4"></div>
               </div>
             </div>

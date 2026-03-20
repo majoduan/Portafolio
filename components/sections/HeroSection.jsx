@@ -82,7 +82,7 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Contenido de texto - Izquierda */}
           <div className="text-center lg:text-left">
-            <h1 className="text-5xl md:text-7xl font-bold mb-4 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent animate-pulse">
+            <h1 className="text-5xl md:text-7xl font-bold mb-4 bg-gradient-to-r from-[var(--accent-from)] via-[var(--accent-via)] to-[var(--accent-to-alt)] bg-clip-text text-transparent animate-pulse">
               {t('hero.name')}
             </h1>
             <p className="text-2xl md:text-3xl text-slate-700 dark:text-slate-100 mb-6 font-medium transition-colors duration-300">
@@ -98,7 +98,7 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
               <a
                 href="/cv/Mateo_Dueñas_CV.pdf"
                 download="Mateo_Dueñas_CV.pdf"
-                className="inline-block px-8 py-3 bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-500 dark:to-purple-500 rounded-full font-semibold text-white hover:shadow-lg hover:shadow-red-500/50 dark:hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-105"
+                className="inline-block px-8 py-3 bg-gradient-to-r from-[var(--accent-from-strong)] to-[var(--accent-to-strong)] rounded-full font-semibold text-white hover:shadow-lg hover:shadow-[var(--accent-glow)] transition-all duration-300 transform hover:scale-105"
               >
                 {t('hero.downloadCV')}
               </a>
@@ -109,7 +109,7 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
                   href="https://www.linkedin.com/in/mateo-dueñas"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 rounded-full bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-500 dark:to-purple-500 flex items-center justify-center hover:shadow-lg hover:shadow-red-500/50 dark:hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-105"
+                  className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--accent-from-strong)] to-[var(--accent-to-strong)] flex items-center justify-center hover:shadow-lg hover:shadow-[var(--accent-glow)] transition-all duration-300 transform hover:scale-105"
                 >
                   <Linkedin className="w-5 h-5 text-white" />
                 </a>
@@ -117,13 +117,13 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
                   href="https://github.com/mateo-dueñas"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 rounded-full bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-500 dark:to-purple-500 flex items-center justify-center hover:shadow-lg hover:shadow-red-500/50 dark:hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-105"
+                  className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--accent-from-strong)] to-[var(--accent-to-strong)] flex items-center justify-center hover:shadow-lg hover:shadow-[var(--accent-glow)] transition-all duration-300 transform hover:scale-105"
                 >
                   <Github className="w-5 h-5 text-white" />
                 </a>
                 <a
                   href="mailto:mateo.duenas@epn.edu.ec"
-                  className="w-12 h-12 rounded-full bg-gradient-to-r from-red-500 to-orange-500 dark:from-blue-500 dark:to-purple-500 flex items-center justify-center hover:shadow-lg hover:shadow-red-500/50 dark:hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-105"
+                  className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--accent-from-strong)] to-[var(--accent-to-strong)] flex items-center justify-center hover:shadow-lg hover:shadow-[var(--accent-glow)] transition-all duration-300 transform hover:scale-105"
                 >
                   <Mail className="w-5 h-5 text-white" />
                 </a>
@@ -138,7 +138,7 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
                 { value: '20+', label: t('hero.stats.technologies') }
               ].map((stat, i) => (
                 <div key={i} className="text-center">
-                  <div className="text-3xl font-bold bg-gradient-to-r from-orange-500 to-red-500 dark:from-purple-400 dark:to-blue-400 bg-clip-text text-transparent">
+                  <div className="text-3xl font-bold bg-gradient-to-r from-[var(--accent-to)] to-[var(--accent-from)] bg-clip-text text-transparent">
                     {stat.value}
                   </div>
                   <div className="text-sm text-slate-600 dark:text-slate-400 mt-1 transition-colors duration-300">
@@ -167,7 +167,7 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
                   <div className="w-[120%] h-[120%] -mt-[10%] -ml-[10%] -mb-[10%] -mr-[10%]">
                     <Suspense fallback={
                       <div className="w-full h-full flex items-center justify-center">
-                        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+                        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-[var(--accent-from-strong)]"></div>
                       </div>
                     }>
                       <Spline
