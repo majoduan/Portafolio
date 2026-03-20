@@ -1,4 +1,5 @@
-import React, { useState, useRef, useMemo, useCallback, lazy, Suspense } from 'react';
+'use client';
+import React, { useState, useRef, useMemo, useCallback, useEffect, lazy, Suspense } from 'react';
 import { ExternalLink, X, Code } from 'lucide-react';
 import { getProjectsData } from '../../data/projectTranslations';
 import { useTranslation } from '../../hooks/useTranslation';
@@ -13,7 +14,8 @@ const ModalVideoPlayer = lazy(() => import('../ModalVideoPlayer'));
 const ProjectCard = React.memo(({ project, onProjectClick, t }) => {
   const [isHovered, setIsHovered] = useState(false);
   const videoRef = useRef(null);
-  const isDesktop = window.innerWidth >= 1024;
+  const [isDesktop, setIsDesktop] = useState(false);
+  useEffect(() => { setIsDesktop(window.innerWidth >= 1024); }, []);
 
   // Pausar video al dejar de hacer hover
   const handleMouseLeave = useCallback(() => {

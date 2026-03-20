@@ -1,3 +1,4 @@
+'use client';
 import React, { useState, useRef, useEffect } from 'react';
 import { getOptimalVideoSource, getOptimalPoster } from '../utils/adaptiveVideo';
 import { trackVideoError, trackVideoEvent } from '../utils/telemetry';

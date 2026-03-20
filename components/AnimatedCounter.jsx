@@ -1,3 +1,4 @@
+'use client';
 import React, { useState, useEffect, memo } from 'react';
 
 const AnimatedCounter = memo(({ value, duration = 1800, isTransitioning, disabled = false }) => {

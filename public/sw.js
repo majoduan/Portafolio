@@ -11,7 +11,6 @@ const VIDEO_MOBILE_CACHE = `videos-mobile-cache-v${CACHE_VERSION}`;
 // Assets críticos para cachear inmediatamente - OPTIMIZADO
 const PRECACHE_ASSETS = [
   '/',
-  '/index.html',
   '/offline.html',
   '/images/foto-perfil.webp'
   // Certificados se cargan bajo demanda con stale-while-revalidate

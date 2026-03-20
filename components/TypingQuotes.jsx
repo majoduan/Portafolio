@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo, useCallback, memo } from 'react';
+'use client';
+import React, { useState, useEffect, useMemo, memo } from 'react';
 import { Code2 } from 'lucide-react';
 
 /**

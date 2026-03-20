@@ -1,3 +1,4 @@
+'use client';
 import { useState, useEffect } from 'react';
 
 // Hook personalizado para Intersection Observer (lazy loading inteligente)

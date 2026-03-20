@@ -1,3 +1,4 @@
+'use client';
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { getCertificatesData } from '../../data/projectTranslations';
 import { useTranslation } from '../../hooks/useTranslation';
@@ -7,7 +8,8 @@ const CertificatesSection = React.memo(() => {
 
   const [currentCertificateIndex, setCurrentCertificateIndex] = useState(0);
   const [isCertificateCarouselPaused, setIsCertificateCarouselPaused] = useState(false);
-  const [isMobileView, setIsMobileView] = useState(window.innerWidth < 768);
+  const [isMobileView, setIsMobileView] = useState(true);
+  useEffect(() => { setIsMobileView(window.innerWidth < 768); }, []);
 
   const certificateContainerRef = useRef(null);
 

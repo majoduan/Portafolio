@@ -1,3 +1,4 @@
+'use client';
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import TechCard from '../TechCard';
 import { getTechnologies } from '../../data/technologies';
@@ -8,7 +9,7 @@ const TechnologiesSection = React.memo(() => {
 
   // All tech-related state
   const [activeTab, setActiveTab] = useState(0);
-  const [isCarouselPaused, setIsCarouselPaused] = useState(false);
+  const [isCarouselPaused, _setIsCarouselPaused] = useState(false);
   const [isTechCardHovered, setIsTechCardHovered] = useState(false);
   const [lastManualChange, setLastManualChange] = useState(0);
   const [currentTechTab, setCurrentTechTab] = useState(0);

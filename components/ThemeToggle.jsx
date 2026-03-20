@@ -1,3 +1,4 @@
+'use client';
 import React, { memo, useContext } from 'react';
 import { Moon, Sun } from 'lucide-react';
 import { AppContext } from '../contexts/AppContext';

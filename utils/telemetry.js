@@ -1,3 +1,4 @@
+'use client';
 /**
  * Sistema de telemetría para monitorear performance y errores
  * Compatible con Google Analytics, Vercel Analytics, o custom endpoint
@@ -12,7 +13,7 @@
 
 // Configuración de telemetría
 const TELEMETRY_CONFIG = {
-  enabled: import.meta.env.PROD, // Solo habilitado en producción
+  enabled: process.env.NODE_ENV === 'production', // Solo habilitado en producción
   endpoint: null, // URL de endpoint custom (opcional)
   useConsole: false, // Log en consola desactivado
   sampleRate: 1.0 // 1.0 = 100% de usuarios (reducir en producción si es necesario)
@@ -79,7 +80,7 @@ export const initWebVitalsTracking = () => {
     });
     
     lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
-  } catch (e) {
+  } catch (_e) {
     // LCP observer not supported
   }
 
@@ -98,7 +99,7 @@ export const initWebVitalsTracking = () => {
     });
     
     fidObserver.observe({ type: 'first-input', buffered: true });
-  } catch (e) {
+  } catch (_e) {
     // FID observer not supported
   }
 
@@ -123,7 +124,7 @@ export const initWebVitalsTracking = () => {
         rating: clsValue < 0.1 ? 'good' : clsValue < 0.25 ? 'needs-improvement' : 'poor'
       });
     }, { once: true });
-  } catch (e) {
+  } catch (_e) {
     // CLS observer not supported
   }
 
@@ -141,7 +142,7 @@ export const initWebVitalsTracking = () => {
     });
     
     fcpObserver.observe({ type: 'paint', buffered: true });
-  } catch (e) {
+  } catch (_e) {
     // FCP observer not supported
   }
 
@@ -157,7 +158,7 @@ export const initWebVitalsTracking = () => {
         rating: ttfb < 600 ? 'good' : ttfb < 1500 ? 'needs-improvement' : 'poor'
       });
     }
-  } catch (e) {
+  } catch (_e) {
     // TTFB not available
   }
 };

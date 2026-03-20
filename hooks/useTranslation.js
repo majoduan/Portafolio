@@ -1,3 +1,4 @@
+'use client';
 import { useContext, useMemo } from 'react';
 import { AppContext } from '../contexts/AppContext';
 import enTranslations from '../locales/en.json';

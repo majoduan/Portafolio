@@ -1,3 +1,4 @@
+'use client';
 import React, { useState, useCallback, useMemo, memo } from 'react';
 import { Mail, Send, User } from 'lucide-react';
 import TypingQuotes from './TypingQuotes';

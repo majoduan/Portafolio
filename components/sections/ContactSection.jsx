@@ -1,3 +1,4 @@
+'use client';
 import React, { lazy, Suspense } from 'react';
 import { Mail, Linkedin, Github } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';

@@ -1,5 +1,5 @@
+'use client';
 import React, { useState, useEffect, useRef, useMemo, memo } from 'react';
-import './HUDBootScreen.css';
 import { 
   HardDrive, 
   Zap, 
@@ -214,13 +214,6 @@ const HUDBootScreen = memo(({ onComplete, splineReady = false }) => {
       hour: '2-digit', 
       minute: '2-digit',
       hour12: false 
-    });
-  };
-
-  const formatDate = (date) => {
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric' 
     });
   };
 

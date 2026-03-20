@@ -1,3 +1,4 @@
+'use client';
 /**
  * Precarga inteligente de recursos críticos
  * Se ejecuta DESPUÉS del boot screen para evitar referencias circulares

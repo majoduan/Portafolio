@@ -1,3 +1,4 @@
+'use client';
 import { Component } from 'react';
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
 
@@ -17,7 +18,7 @@ class ErrorBoundary extends Component {
     };
   }
 
-  static getDerivedStateFromError(error) {
+  static getDerivedStateFromError(_error) {
     // Actualizar estado para mostrar UI de fallback
     return { hasError: true };
   }
@@ -25,7 +26,8 @@ class ErrorBoundary extends Component {
   componentDidCatch(error, errorInfo) {
     // Ignorar errores de caché de Spline en desarrollo (React Strict Mode)
     // Estos errores no afectan la funcionalidad y son causados por double-mounting
-    const isSplineCacheError = 
+    // eslint-disable-next-line no-undef
+    const isSplineCacheError =
       process.env.NODE_ENV === 'development' &&
       error?.message?.includes('Failed to fetch') &&
       errorInfo?.componentStack?.includes('Spline');
@@ -93,6 +95,7 @@ class ErrorBoundary extends Component {
               </div>
 
               {/* Mensaje de error (solo en desarrollo) */}
+              {/* eslint-disable-next-line no-undef */}
               {process.env.NODE_ENV === 'development' && this.state.error && (
                 <div className="mb-6 p-4 bg-slate-800/50 border border-slate-700 rounded-lg">
                   <p className="text-xs font-mono text-red-400 mb-2">

@@ -1,3 +1,4 @@
+'use client';
 import React, { useEffect, useRef, useContext } from 'react';
 import { AppContext } from '../../contexts/AppContext';
 

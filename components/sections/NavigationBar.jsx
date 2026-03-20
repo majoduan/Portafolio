@@ -1,3 +1,4 @@
+'use client';
 import React, { useState, useEffect, useContext } from 'react';
 import { Home, Cpu, Award, Briefcase, MessageCircle, Sun, Moon } from 'lucide-react';
 import LanguageToggle from '../LanguageToggle';
@@ -112,6 +113,7 @@ const NavigationBar = React.memo(() => {
                 { id: 'certificates', icon: Award },
                 { id: 'projects', icon: Briefcase },
                 { id: 'contact', icon: MessageCircle }
+              // eslint-disable-next-line no-unused-vars
               ].map(({ id, icon: Icon }) => (
                 <a
                   key={id}

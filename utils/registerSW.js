@@ -1,9 +1,10 @@
+'use client';
 // Registro del Service Worker para Portfolio
 // Version 1.0.0
 
 export function registerServiceWorker() {
   // Solo en producción y si el navegador lo soporta
-  if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
     window.addEventListener('load', () => {
       navigator.serviceWorker
         .register('/sw.js')
@@ -42,7 +43,7 @@ export function registerServiceWorker() {
 }
 
 // Función para mostrar notificación de actualización (opcional)
-function showUpdateNotification(newWorker) {
+function showUpdateNotification(_newWorker) {
   // Puedes personalizar esto con un toast/banner elegante
   const updateMessage = document.createElement('div');
   updateMessage.innerHTML = `

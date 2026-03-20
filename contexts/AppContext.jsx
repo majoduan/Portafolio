@@ -1,3 +1,4 @@
+'use client';
 import { createContext, useState, useEffect, useMemo } from 'react';
 
 // Create context for app-wide state (language and theme)
@@ -7,6 +8,7 @@ export const AppContext = createContext();
 export const AppContextProvider = ({ children }) => {
   // Initialize language from localStorage or browser preference
   const getInitialLanguage = () => {
+    if (typeof window === 'undefined') return 'en';
     // Check localStorage first
     const savedLanguage = localStorage.getItem('portfolio-language');
     if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'es')) {
@@ -25,6 +27,7 @@ export const AppContextProvider = ({ children }) => {
 
   // Initialize theme from localStorage or default to dark
   const getInitialTheme = () => {
+    if (typeof window === 'undefined') return 'dark';
     const savedTheme = localStorage.getItem('portfolio-theme');
     if (savedTheme && (savedTheme === 'dark' || savedTheme === 'light')) {
       return savedTheme;

@@ -1,3 +1,4 @@
+'use client';
 /**
  * Utilidades para servir videos con calidad adaptativa
  * Basado en device capabilities y velocidad de conexión

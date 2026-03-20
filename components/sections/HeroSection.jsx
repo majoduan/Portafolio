@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback, lazy, Suspense, Component } from 'react';
+'use client';
+import React, { useState, useEffect, useRef, useMemo, useCallback, Suspense, Component } from 'react';
 import { Mail, Linkedin, Github, Code } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 
-// Lazy load Spline para mejorar el tiempo de carga inicial
-const Spline = lazy(() => import('@splinetool/react-spline'));
+// Dynamic import Spline with SSR disabled for Next.js
+import dynamic from 'next/dynamic';
+const Spline = dynamic(() => import('@splinetool/react-spline'), { ssr: false });
 
 // Error boundary local para Spline - si falla, muestra fallback CSS sin romper la página
 class SplineErrorBoundary extends Component {

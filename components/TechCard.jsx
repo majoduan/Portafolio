@@ -1,11 +1,13 @@
+'use client';
 import React, { useState, useEffect, useMemo, memo } from 'react';
 import AnimatedCounter from './AnimatedCounter';
 import { useTranslation } from '../hooks/useTranslation';
 
 // Hook para detectar si es dispositivo móvil
 const useIsMobile = () => {
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  
+  const [isMobile, setIsMobile] = useState(true);
+  useEffect(() => { setIsMobile(window.innerWidth < 768); }, []);
+
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener('resize', handleResize, { passive: true });
@@ -23,7 +25,7 @@ const TechCard = memo(({ tech, index, animationState, onMouseEnter, onMouseLeave
   const [isVisible, setIsVisible] = useState(animationState === 'exiting');
   
   // Memoizar cálculos que no cambian - optimizado con dependencias específicas
-  const { experienceYears, dots, shapeStyle, shouldAnimate } = useMemo(() => {
+  const { dots, shapeStyle, shouldAnimate } = useMemo(() => {
     const years = parseFloat(tech.experience);
     const dotsCount = Math.min(5, Math.ceil(years));
     
@@ -39,7 +41,6 @@ const TechCard = memo(({ tech, index, animationState, onMouseEnter, onMouseLeave
     const animate = !isMobile && (animationState === 'idle' || animationState === 'entering');
     
     return {
-      experienceYears: years,
       dots: dotsCount,
       shapeStyle: shape,
       shouldAnimate: animate
