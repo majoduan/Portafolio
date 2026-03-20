@@ -264,7 +264,8 @@
   },
   "techCard": {
     "masteryLevel": "Nivel de dominio",
-    "experience": "Experiencia"
+    "experience": "Experiencia",
+    "experienceShort": "Exp"
   },
   "contact": {
     "title": "Conectemos",

@@ -61,10 +61,10 @@ const TypingQuotes = memo(() => {
   }, [displayedText, isDeleting, currentQuoteIndex, typingSpeed, quotes]);
 
   return (
-    <div className="hidden lg:block mt-6" style={{ contentVisibility: 'auto' }}>
+    <div className="mt-6" style={{ contentVisibility: 'auto' }}>
       <div className="relative bg-white/80 dark:bg-[var(--bg-elevated-30)] border border-slate-200 dark:border-slate-700/50 rounded-xl p-4 min-h-[80px] flex items-center transition-all duration-300">
         {/* Code icon */}
-        <div className="absolute -top-3 -left-3 w-8 h-8 bg-gradient-to-r from-[var(--accent-from-strong)] to-[var(--accent-to-strong)] rounded-full flex items-center justify-center shadow-lg">
+        <div className="absolute -top-3 -left-3 w-8 h-8 bg-[var(--btn-primary)] rounded-full flex items-center justify-center shadow-[0_4px_4px_rgba(0,0,0,0.25)]">
           <Code2 className="w-4 h-4 text-white" />
         </div>
         

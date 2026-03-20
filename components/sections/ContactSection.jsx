@@ -15,7 +15,7 @@ const ContactSection = React.memo(() => {
         <div className="max-w-7xl mx-auto px-4">
           {/* Section Title */}
           <div className="text-center mb-8 md:mb-12 lg:mb-16">
-            <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4 bg-gradient-to-r from-[var(--accent-from)] via-[var(--accent-via)] to-[var(--accent-to-alt)] bg-clip-text text-transparent">
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4 text-black dark:text-white">
               {t('contact.title')}
             </h2>
             <p className="text-slate-600 dark:text-slate-300 text-base md:text-lg lg:text-xl max-w-2xl mx-auto px-4">
@@ -70,7 +70,7 @@ const ContactSection = React.memo(() => {
 
                 {/* Info Section */}
                 <div className="p-6 md:p-8 flex-1 flex flex-col">
-                  <h3 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4 bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)] bg-clip-text text-transparent">
+                  <h3 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4 text-black dark:text-white">
                     {t('contact.profile.name')}
                   </h3>
                   <p className="text-slate-600 dark:text-slate-300 mb-4 md:mb-6 text-base md:text-lg leading-relaxed flex-1">
@@ -83,8 +83,8 @@ const ContactSection = React.memo(() => {
                       href="mailto:mate.due02@gmail.com"
                       className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-[var(--bg-elevated-50)] hover:bg-slate-100 dark:hover:bg-[var(--bg-elevated)] rounded-xl transition-all duration-300 group/link border border-slate-200 dark:border-slate-700/50 hover:border-[var(--accent-border)]"
                     >
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--accent-from-strong)] to-[var(--accent-to-strong)] flex items-center justify-center group-hover/link:scale-110 transition-transform duration-300">
-                        <Mail className="w-6 h-6 text-white" />
+                      <div className="w-12 h-12 rounded-full border-2 border-black dark:border-white flex items-center justify-center group-hover/link:scale-110 transition-all duration-300 group-hover/link:bg-black dark:group-hover/link:bg-white">
+                        <Mail className="w-6 h-6 text-black dark:text-white group-hover/link:text-white dark:group-hover/link:text-black" />
                       </div>
                       <div className="flex-1">
                         <p className="text-sm text-slate-600 dark:text-slate-400">{t('contact.profile.emailLabel')}</p>
@@ -98,8 +98,8 @@ const ContactSection = React.memo(() => {
                       rel="noopener noreferrer"
                       className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-[var(--bg-elevated-50)] hover:bg-slate-100 dark:hover:bg-[var(--bg-elevated)] rounded-xl transition-all duration-300 group/link border border-slate-200 dark:border-slate-700/50 hover:border-[var(--accent-border)]"
                     >
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--accent-from-strong)] to-[var(--accent-to-strong)] flex items-center justify-center group-hover/link:scale-110 transition-transform duration-300">
-                        <Linkedin className="w-6 h-6 text-white" />
+                      <div className="w-12 h-12 rounded-full border-2 border-black dark:border-white flex items-center justify-center group-hover/link:scale-110 transition-all duration-300 group-hover/link:bg-black dark:group-hover/link:bg-white">
+                        <Linkedin className="w-6 h-6 text-black dark:text-white group-hover/link:text-white dark:group-hover/link:text-black" />
                       </div>
                       <div className="flex-1">
                         <p className="text-sm text-slate-600 dark:text-slate-400">{t('contact.profile.linkedinLabel')}</p>
@@ -113,8 +113,8 @@ const ContactSection = React.memo(() => {
                       rel="noopener noreferrer"
                       className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-[var(--bg-elevated-50)] hover:bg-slate-100 dark:hover:bg-[var(--bg-elevated)] rounded-xl transition-all duration-300 group/link border border-slate-200 dark:border-slate-700/50 hover:border-[var(--accent-border)]"
                     >
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--accent-from-strong)] to-[var(--accent-to-strong)] flex items-center justify-center group-hover/link:scale-110 transition-transform duration-300">
-                        <Github className="w-6 h-6 text-white" />
+                      <div className="w-12 h-12 rounded-full border-2 border-black dark:border-white flex items-center justify-center group-hover/link:scale-110 transition-all duration-300 group-hover/link:bg-black dark:group-hover/link:bg-white">
+                        <Github className="w-6 h-6 text-black dark:text-white group-hover/link:text-white dark:group-hover/link:text-black" />
                       </div>
                       <div className="flex-1">
                         <p className="text-sm text-slate-600 dark:text-slate-400">{t('contact.profile.githubLabel')}</p>
@@ -129,7 +129,7 @@ const ContactSection = React.memo(() => {
             {/* Right Column - Contact Form */}
             <div className="contact-right-column">
               <div className="bg-white/90 dark:bg-[var(--bg-secondary)] backdrop-blur-lg rounded-2xl md:rounded-3xl p-6 md:p-8 lg:p-10 border border-slate-200 dark:border-slate-700/50 hover:border-purple-400 dark:hover:border-[var(--accent-border-hover)] transition-all duration-500 shadow-lg dark:shadow-2xl h-full">
-                <h3 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)] bg-clip-text text-transparent">
+                <h3 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4 md:mb-6 text-black dark:text-white">
                   {t('contact.form.title')}
                 </h3>
                 <p className="text-slate-600 dark:text-slate-400 text-sm md:text-base mb-6 md:mb-8">

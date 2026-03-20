@@ -264,7 +264,8 @@
   },
   "techCard": {
     "masteryLevel": "Mastery level",
-    "experience": "Experience"
+    "experience": "Experience",
+    "experienceShort": "Exp"
   },
   "contact": {
     "title": "Let's Connect",

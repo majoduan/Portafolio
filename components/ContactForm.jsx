@@ -169,10 +169,22 @@ const ContactForm = memo(() => {
       {/* Submit Button */}
       <button
         type="submit"
-        className="w-full py-3 md:py-4 px-6 bg-gradient-to-r from-[var(--accent-from-strong)] to-[var(--accent-to-strong)] hover:from-[var(--accent-from-hover)] hover:to-[var(--accent-to-hover)] rounded-xl font-semibold text-white text-base md:text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-[var(--accent-glow)] flex items-center justify-center gap-3 group"
+        className="swap-btn swap-btn-wide"
+        ref={(el) => {
+          if (el) {
+            const text = el.querySelector('.swap-btn-text');
+            if (text) el.style.setProperty('--swap-text-w', `${text.offsetWidth}px`);
+            el.style.setProperty('--swap-btn-w', `${el.offsetWidth}px`);
+          }
+        }}
       >
-        <span>{t('contact.form.submit')}</span>
-        <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+        <span className="swap-btn-bg" />
+        <span className="swap-btn-icon">
+          <Send className="w-5 h-5 text-white" />
+        </span>
+        <span className="swap-btn-text">
+          {t('contact.form.submit')}
+        </span>
       </button>
 
       {/* Helper text */}

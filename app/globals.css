@@ -10,25 +10,28 @@ html {
    Para cambiar el fondo oscuro de toda la app, editar solo --bg-primary aquí.
    Los colores derivados (secondary, elevated, alpha variants) se basan en esta paleta. */
 :root {
-  /* Modo oscuro (default) — Paleta basada en #1A1D25 */
-  --bg-primary: #1A1D25;
-  --bg-secondary: #22252E;
-  --bg-elevated: #2A2D36;
-  --bg-primary-rgb: 26, 29, 37;
+  /* Modo oscuro (default) — Paleta basada en #171717 */
+  --bg-primary: #171717;
+  --bg-secondary: #1f1f1f;
+  --bg-elevated: #272727;
+  --bg-primary-rgb: 23, 23, 23;
   --text-primary: #ffffff;
   --text-secondary: #e2e8f0;
   --text-tertiary: #cbd5e1;
-  --border-color: #3A3D46;
-  --nav-bg: rgba(26, 29, 37, 0.85);
-  --card-bg: rgba(34, 37, 46, 0.5);
+  --border-color: #333333;
+  --nav-bg: rgba(23, 23, 23, 0.85);
+  --card-bg: rgba(31, 31, 31, 0.5);
   --quote-text-color: #cbd5e1;
 
+  /* Color primario de botones/CTAs — dark: slate, light: rojo */
+  --btn-primary: #1E293B;
+
   /* Alpha variants — derivadas de la paleta */
-  --bg-secondary-50: rgba(34, 37, 46, 0.5);
-  --bg-primary-95: rgba(26, 29, 37, 0.95);
-  --bg-elevated-50: rgba(42, 45, 54, 0.5);
-  --bg-elevated-30: rgba(42, 45, 54, 0.3);
-  --bg-elevated-70: rgba(42, 45, 54, 0.7);
+  --bg-secondary-50: rgba(31, 31, 31, 0.5);
+  --bg-primary-95: rgba(23, 23, 23, 0.95);
+  --bg-elevated-50: rgba(39, 39, 39, 0.5);
+  --bg-elevated-30: rgba(39, 39, 39, 0.3);
+  --bg-elevated-70: rgba(39, 39, 39, 0.7);
 
   /* Colores de acento — FUENTE DE VERDAD para gradientes y acentos
      Cambiar estos valores actualiza todo el esquema de color accent del dark mode.
@@ -68,6 +71,7 @@ html:not(.dark) {
   --bg-secondary: #ffffff;
   --bg-elevated: #ffffff;
   --bg-primary-rgb: 248, 250, 252;
+  --btn-primary: #DC0500;
   --text-primary: #0f172a;
   --text-secondary: #334155;
   --text-tertiary: #64748b;
@@ -176,6 +180,124 @@ html:not(.dark) .spline-container > div {
 
 .progress-bar-animate {
   animation: progressBarFill 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Experience tag fill animation */
+.exp-tag-fill {
+  animation: progressBarFill 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.exp-tag-fill ~ .z-10 {
+  animation: expTagTextColor 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes expTagTextColor {
+  0% { color: inherit; }
+  40% { color: white; }
+  100% { color: white; }
+}
+
+/* Swap Button - icon/text swap on hover */
+.swap-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+
+.swap-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.swap-btn-wide {
+  width: 50%;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+/* Background fill that slides in from left */
+.swap-btn-bg {
+  position: absolute;
+  inset: 0;
+  background: var(--btn-primary);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease-out;
+}
+
+.swap-btn:hover .swap-btn-bg {
+  transform: translateX(0);
+}
+
+/* Icon circle - starts left, moves right on hover */
+.swap-btn-icon {
+  position: relative;
+  z-index: 10;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--btn-primary);
+  border-radius: 9999px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  transition: transform 0.5s ease-out, box-shadow 0.3s;
+}
+
+.swap-btn:hover .swap-btn-icon {
+  transform: translateX(var(--swap-text-w, 100px));
+  box-shadow: none;
+}
+
+.swap-btn-wide .swap-btn-icon {
+  border-radius: 9999px;
+}
+
+/* Text - starts right, moves left on hover */
+.swap-btn-text {
+  position: relative;
+  z-index: 10;
+  padding: 0.75rem 1.25rem;
+  font-weight: 600;
+  color: black;
+  white-space: nowrap;
+  transition: transform 0.5s ease-out, color 0.3s;
+}
+
+.dark .swap-btn-text {
+  color: white;
+}
+
+.swap-btn:hover .swap-btn-text {
+  color: white;
+  transform: translateX(-3rem);
+}
+
+/* Wide variant */
+.swap-btn-wide .swap-btn-text {
+  flex: 1;
+  text-align: center;
+  font-size: 1rem;
+  padding: 0.75rem 1.25rem 0.75rem 0;
+}
+
+.swap-btn-wide:hover .swap-btn-icon {
+  transform: translateX(calc(var(--swap-btn-w, 300px) - 3rem - 4px));
+}
+
+.swap-btn-wide:hover .swap-btn-text {
+  transform: translateX(-3rem);
+}
+
+@media (min-width: 768px) {
+  .swap-btn-wide .swap-btn-text {
+    font-size: 1.125rem;
+    padding: 1rem 1.5rem 1rem 0;
+  }
 }
 
 /* Animaciones para las transiciones de tecnologías */

@@ -63,7 +63,7 @@ const CertificatesSection = React.memo(() => {
     <section id="certificates" className="pt-20 bg-transparent relative z-10 overflow-hidden transition-colors duration-300">
       {/* Centered titles */}
       <div className="max-w-7xl mx-auto px-4 mb-12">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)] bg-clip-text text-transparent">
+        <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight text-black dark:text-white">
           {t('certificates.title')}
         </h2>
       </div>

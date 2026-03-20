@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import { Pause, Play } from 'lucide-react';
 import TechCard from '../TechCard';
 import { getTechnologies } from '../../data/technologies';
 import { useTranslation } from '../../hooks/useTranslation';
@@ -9,7 +10,7 @@ const TechnologiesSection = React.memo(() => {
 
   // All tech-related state
   const [activeTab, setActiveTab] = useState(0);
-  const [isCarouselPaused, _setIsCarouselPaused] = useState(false);
+  const [isManuallyPaused, setIsManuallyPaused] = useState(false);
   const [isTechCardHovered, setIsTechCardHovered] = useState(false);
   const [lastManualChange, setLastManualChange] = useState(0);
   const [currentTechTab, setCurrentTechTab] = useState(0);
@@ -55,13 +56,13 @@ const TechnologiesSection = React.memo(() => {
 
   // Auto-rotate tech categories
   useEffect(() => {
-    if (!isCarouselPaused && !isTechCardHovered) {
+    if (!isManuallyPaused && !isTechCardHovered) {
       const interval = setInterval(() => {
         setActiveTab((prev) => (prev + 1) % techCategories.length);
       }, 7000);
       return () => clearInterval(interval);
     }
-  }, [isCarouselPaused, isTechCardHovered, lastManualChange, techCategories.length]);
+  }, [isManuallyPaused, isTechCardHovered, lastManualChange, techCategories.length]);
 
   // State machine for tech transitions
   useEffect(() => {
@@ -149,34 +150,45 @@ const TechnologiesSection = React.memo(() => {
   return (
     <section id="technologies" className="pt-20 relative z-10 bg-transparent transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)] bg-clip-text text-transparent">
+        <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight text-black dark:text-white">
           {t('technologies.title')}
         </h2>
         {/* Tab Navigation Bar - Estilo Facebook */}
-        <div className="flex justify-center mb-12 border-b border-slate-300 dark:border-slate-700/50 transition-colors duration-300">
-          <div className="flex gap-1 sm:gap-2">
+        <div className="relative flex justify-center mb-12 border-b border-slate-300 dark:border-slate-700/50 transition-colors duration-300">
+          <div className="flex gap-1 md:gap-2 pr-10">
             {techCategories.map((category, index) => (
               <button
                 key={category.id}
                 onClick={() => handleManualTabChange(index)}
-                className={`px-3 sm:px-6 md:px-8 py-3 md:py-4 font-medium relative transition-all duration-300 whitespace-nowrap text-xs sm:text-sm md:text-base ${
+                className={`px-2 md:px-6 lg:px-8 py-3 md:py-4 relative transition-all duration-300 text-xs md:text-sm lg:text-base max-[374px]:max-w-[72px] max-[374px]:truncate ${
                   currentTechTab === index
-                    ? 'text-[var(--accent-solid)]'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-[var(--bg-elevated-30)]'
+                    ? 'text-black dark:text-white font-bold'
+                    : 'text-gray-400 dark:text-gray-400 font-medium group'
                 }`}
               >
-                {/* Show short title on mobile, full on desktop */}
-                <span className="hidden sm:inline">{category.title}</span>
-                <span className="inline sm:hidden">{category.shortTitle}</span>
+                {/* Show short title on mobile/tablet, full on desktop */}
+                <span className="hidden md:inline">{category.title}</span>
+                <span className="inline md:hidden">{category.shortTitle}</span>
                 {/* Bottom indicator line with smooth transition */}
                 <div
-                  className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[var(--accent-from-strong)] to-[var(--accent-to-strong)] transition-all duration-1000 ${
-                    currentTechTab === index ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'
+                  className={`absolute bottom-0 left-0 right-0 h-0.5 transition-all duration-1000 ${
+                    currentTechTab === index ? 'bg-black dark:bg-white opacity-100 scale-x-100' : 'bg-gray-400 opacity-0 scale-x-0 group-hover:opacity-100 group-hover:scale-x-100'
                   }`}
                 />
               </button>
             ))}
           </div>
+          {/* Pause/Play button */}
+          <button
+            onClick={() => setIsManuallyPaused((prev) => !prev)}
+            className="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full border border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-400 hover:text-black dark:hover:text-white hover:border-black dark:hover:border-white transition-all duration-300"
+            aria-label={isManuallyPaused || isTechCardHovered ? 'Play carousel' : 'Pause carousel'}
+          >
+            {isManuallyPaused || isTechCardHovered
+              ? <Play className="w-3.5 h-3.5" />
+              : <Pause className="w-3.5 h-3.5" />
+            }
+          </button>
         </div>
 
         {/* Technology Cards Container with dynamic height */}

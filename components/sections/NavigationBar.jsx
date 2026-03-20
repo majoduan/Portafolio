@@ -80,16 +80,16 @@ const NavigationBar = React.memo(() => {
                       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
                   }}
-                  className={`text-lg font-medium transition-all duration-300 relative group ${
+                  className={`text-lg transition-all duration-300 relative group ${
                     activeSection === item
-                      ? 'text-[var(--accent-solid)]'
-                      : 'text-slate-700 dark:text-slate-300 hover:text-[var(--accent-solid)]'
+                      ? 'text-black dark:text-white font-bold'
+                      : 'text-gray-400 dark:text-gray-400 font-medium'
                   }`}
                 >
                   {t(`nav.${item}`)}
                   <span
-                    className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)] transition-all duration-300 ${
-                      activeSection === item ? 'w-full' : 'w-0 group-hover:w-full'
+                    className={`absolute -bottom-1 left-0 h-0.5 bg-gray-400 transition-all duration-300 ${
+                      activeSection === item ? '!bg-black dark:!bg-white w-full' : 'w-0 group-hover:w-full'
                     }`}
                   />
                 </a>
@@ -127,8 +127,8 @@ const NavigationBar = React.memo(() => {
                   }}
                   className={`flex flex-col items-center justify-center p-2 rounded-lg transition-all duration-300 ${
                     activeSection === id
-                      ? 'text-[var(--accent-solid)] bg-red-50 dark:bg-[var(--accent-bg-muted)]'
-                      : 'text-slate-600 dark:text-slate-400 hover:text-[var(--accent-solid)] hover:bg-slate-100 dark:hover:bg-[var(--bg-elevated-50)]'
+                      ? 'text-black dark:text-white font-bold bg-gray-100 dark:bg-white/10'
+                      : 'text-gray-400 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/5'
                   }`}
                   aria-label={t(`nav.${id}`)}
                 >

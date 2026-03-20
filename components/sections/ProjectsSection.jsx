@@ -92,7 +92,7 @@ const ProjectCard = React.memo(({ project, onProjectClick }) => {
             <button
               key={link.type}
               onClick={(e) => handleLinkClick(e, link)}
-              className="w-10 h-10 rounded-full bg-gradient-to-r from-[var(--accent-from-strong)] to-[var(--accent-to-strong)] flex items-center justify-center text-white hover:scale-110 hover:shadow-lg hover:shadow-[var(--accent-glow)] transition-all duration-300"
+              className="w-10 h-10 rounded-full bg-[var(--btn-primary)] flex items-center justify-center text-white hover:scale-110 hover:shadow-lg transition-all duration-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)]"
               aria-label={link.type}
             >
               {link.type === 'demo'
@@ -132,7 +132,7 @@ const ProjectsSection = React.memo(() => {
     <>
       <section ref={projectsSectionRef} id="projects" className="py-20 relative z-10 bg-transparent transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)] bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight text-black dark:text-white">
             {t('projects.title')}
           </h2>
         </div>
@@ -169,7 +169,7 @@ const ProjectsSection = React.memo(() => {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="sticky top-0 bg-white/95 dark:bg-[var(--bg-primary-95)] backdrop-blur-lg border-b border-slate-200 dark:border-slate-800 px-6 py-4 flex justify-between items-center z-20">
-              <h3 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)] bg-clip-text text-transparent">
+              <h3 className="text-2xl md:text-3xl font-bold text-black dark:text-white">
                 {selectedProject.title}
               </h3>
               <button

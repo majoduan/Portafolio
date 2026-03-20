@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect, useRef, useMemo, useCallback, Suspense, Component } from 'react';
-import { Mail, Linkedin, Github, Code } from 'lucide-react';
+import { Mail, Linkedin, Github, Code, Briefcase } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 
 // Dynamic import Spline with SSR disabled for Next.js
@@ -82,7 +82,7 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Contenido de texto - Izquierda */}
           <div className="text-center lg:text-left">
-            <h1 className="text-5xl md:text-7xl font-bold mb-4 bg-gradient-to-r from-[var(--accent-from)] via-[var(--accent-via)] to-[var(--accent-to-alt)] bg-clip-text text-transparent animate-pulse">
+            <h1 className="text-5xl md:text-7xl font-bold mb-4 text-black dark:text-white animate-pulse">
               {t('hero.name')}
             </h1>
             <p className="text-2xl md:text-3xl text-slate-700 dark:text-slate-100 mb-6 font-medium transition-colors duration-300">
@@ -98,9 +98,21 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
               <a
                 href="/cv/Mateo_Dueñas_CV.pdf"
                 download="Mateo_Dueñas_CV.pdf"
-                className="inline-block px-8 py-3 bg-gradient-to-r from-[var(--accent-from-strong)] to-[var(--accent-to-strong)] rounded-full font-semibold text-white hover:shadow-lg hover:shadow-[var(--accent-glow)] transition-all duration-300 transform hover:scale-105"
+                className="swap-btn"
+                ref={(el) => {
+                  if (el) {
+                    const text = el.querySelector('.swap-btn-text');
+                    if (text) el.style.setProperty('--swap-text-w', `${text.offsetWidth}px`);
+                  }
+                }}
               >
-                {t('hero.downloadCV')}
+                <span className="swap-btn-bg" />
+                <span className="swap-btn-icon">
+                  <Briefcase className="w-5 h-5 text-white" />
+                </span>
+                <span className="swap-btn-text">
+                  {t('hero.downloadCV')}
+                </span>
               </a>
 
               {/* Iconos sociales */}
@@ -109,23 +121,23 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
                   href="https://www.linkedin.com/in/mateo-dueñas"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--accent-from-strong)] to-[var(--accent-to-strong)] flex items-center justify-center hover:shadow-lg hover:shadow-[var(--accent-glow)] transition-all duration-300 transform hover:scale-105"
+                  className="w-12 h-12 rounded-full border-2 border-black dark:border-white flex items-center justify-center transition-all duration-300 transform hover:scale-105 hover:bg-black dark:hover:bg-white group/icon shadow-[0_4px_4px_rgba(0,0,0,0.25)]"
                 >
-                  <Linkedin className="w-5 h-5 text-white" />
+                  <Linkedin className="w-5 h-5 text-black dark:text-white group-hover/icon:text-white dark:group-hover/icon:text-black" />
                 </a>
                 <a
                   href="https://github.com/mateo-dueñas"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--accent-from-strong)] to-[var(--accent-to-strong)] flex items-center justify-center hover:shadow-lg hover:shadow-[var(--accent-glow)] transition-all duration-300 transform hover:scale-105"
+                  className="w-12 h-12 rounded-full border-2 border-black dark:border-white flex items-center justify-center transition-all duration-300 transform hover:scale-105 hover:bg-black dark:hover:bg-white group/icon shadow-[0_4px_4px_rgba(0,0,0,0.25)]"
                 >
-                  <Github className="w-5 h-5 text-white" />
+                  <Github className="w-5 h-5 text-black dark:text-white group-hover/icon:text-white dark:group-hover/icon:text-black" />
                 </a>
                 <a
                   href="mailto:mateo.duenas@epn.edu.ec"
-                  className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--accent-from-strong)] to-[var(--accent-to-strong)] flex items-center justify-center hover:shadow-lg hover:shadow-[var(--accent-glow)] transition-all duration-300 transform hover:scale-105"
+                  className="w-12 h-12 rounded-full border-2 border-black dark:border-white flex items-center justify-center transition-all duration-300 transform hover:scale-105 hover:bg-black dark:hover:bg-white group/icon shadow-[0_4px_4px_rgba(0,0,0,0.25)]"
                 >
-                  <Mail className="w-5 h-5 text-white" />
+                  <Mail className="w-5 h-5 text-black dark:text-white group-hover/icon:text-white dark:group-hover/icon:text-black" />
                 </a>
               </div>
             </div>
@@ -138,7 +150,7 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
                 { value: '20+', label: t('hero.stats.technologies') }
               ].map((stat, i) => (
                 <div key={i} className="text-center">
-                  <div className="text-3xl font-bold bg-gradient-to-r from-[var(--accent-to)] to-[var(--accent-from)] bg-clip-text text-transparent">
+                  <div className="text-3xl font-bold text-black dark:text-white">
                     {stat.value}
                   </div>
                   <div className="text-sm text-slate-600 dark:text-slate-400 mt-1 transition-colors duration-300">
