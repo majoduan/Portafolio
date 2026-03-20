@@ -197,6 +197,23 @@ html:not(.dark) .spline-container > div {
   100% { color: white; }
 }
 
+/* Hero title — large bold display */
+.hero-title {
+  font-weight: 700;
+  font-size: clamp(3.5rem, 8vw, 8rem);
+  line-height: 90%;
+  letter-spacing: -0.03em;
+  text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .hero-title {
+    font-size: clamp(3.5rem, 6vw, 8rem);
+  }
+}
+
 /* Swap Button - icon/text swap on hover */
 .swap-btn {
   position: relative;

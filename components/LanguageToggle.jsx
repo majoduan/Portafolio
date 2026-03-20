@@ -14,34 +14,13 @@ const LanguageToggle = memo(() => {
   return (
     <button
       onClick={toggleLanguage}
-      className="relative flex items-center gap-2 px-4 py-2 rounded-lg bg-white/50 dark:bg-[var(--bg-elevated-50)] hover:bg-white/80 dark:hover:bg-[var(--bg-elevated)] border border-slate-300 dark:border-slate-700/50 hover:border-[var(--accent-border)] transition-all duration-300 group"
+      className="w-10 h-10 rounded-full border-2 border-black dark:border-white flex items-center justify-center transition-all duration-300 hover:scale-105 hover:bg-black dark:hover:bg-white group/toggle"
       aria-label={`Switch to ${language === 'en' ? 'Spanish' : 'English'}`}
       title={`Switch to ${language === 'en' ? 'Spanish' : 'English'}`}
     >
-      {/* Language Icon with animation */}
-      <Languages
-        className="w-5 h-5 text-slate-700 dark:text-slate-300 group-hover:text-[var(--accent-solid)] transition-colors duration-300"
-      />
-      
-      {/* Language Flag and Text */}
-      <span className="flex items-center gap-1.5 font-medium text-sm">
-        {language === 'en' ? (
-          <>
-            <span className="text-2xl leading-none" role="img" aria-label="English">🇺🇸</span>
-            <span className="text-slate-700 dark:text-slate-300 group-hover:text-[var(--accent-solid)] transition-colors duration-300">EN</span>
-          </>
-        ) : (
-          <>
-            <span className="text-2xl leading-none" role="img" aria-label="Español">🇪🇸</span>
-            <span className="text-slate-700 dark:text-slate-300 group-hover:text-[var(--accent-solid)] transition-colors duration-300">ES</span>
-          </>
-        )}
+      <span className="text-sm font-bold text-black dark:text-white group-hover/toggle:text-white dark:group-hover/toggle:text-black transition-colors duration-300">
+        {language === 'en' ? 'EN' : 'ES'}
       </span>
-
-      {/* Subtle hover effect */}
-      <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-        <div className="absolute inset-0 rounded-lg bg-[var(--accent-bg-subtle)]"></div>
-      </div>
     </button>
   );
 });

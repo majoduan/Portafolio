@@ -82,13 +82,13 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Contenido de texto - Izquierda */}
           <div className="text-center lg:text-left">
-            <h1 className="text-5xl md:text-7xl font-bold mb-4 text-black dark:text-white animate-pulse">
+            <p className="text-2xl md:text-3xl text-slate-700 dark:text-slate-100 mb-2 font-medium transition-colors duration-300">
               {t('hero.name')}
-            </h1>
-            <p className="text-2xl md:text-3xl text-slate-700 dark:text-slate-100 mb-6 font-medium transition-colors duration-300">
-              {t('hero.title')}
             </p>
-            <p className="text-lg md:text-xl text-slate-600 dark:text-slate-100 max-w-2xl mx-auto lg:mx-0 mb-8 leading-relaxed min-h-[120px] text-justify transition-colors duration-300">
+            <h1 className="hero-title text-black dark:text-white mb-6">
+              {t('hero.title')}
+            </h1>
+            <p className="text-lg md:text-xl text-slate-600 dark:text-slate-100 max-w-2xl mx-auto lg:mx-0 mb-8 leading-relaxed min-h-[80px] text-justify transition-colors duration-300">
               {typewriterText}
               <span className="animate-pulse">|</span>
             </p>

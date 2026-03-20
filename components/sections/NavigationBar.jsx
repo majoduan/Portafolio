@@ -63,7 +63,7 @@ const NavigationBar = React.memo(() => {
   return (
     <>
       {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-white/90 dark:bg-[var(--nav-bg)] backdrop-blur-lg border-b border-slate-200 dark:border-slate-800 z-50 transition-colors duration-300">
+      <nav className="fixed top-0 w-full bg-white/90 dark:bg-[var(--nav-bg)] backdrop-blur-lg border-b border-slate-200 dark:border-white/20 z-50 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center justify-between h-16">
