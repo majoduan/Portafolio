@@ -1,26 +1,10 @@
 'use client';
-import React, { useState, useEffect, useMemo, memo } from 'react';
+import React, { useMemo, memo } from 'react';
 import { useTranslation } from '../hooks/useTranslation';
 
-// Hook para detectar si es dispositivo móvil
-const useIsMobile = () => {
-  const [isMobile, setIsMobile] = useState(true);
-  useEffect(() => { setIsMobile(window.innerWidth < 768); }, []);
-
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener('resize', handleResize, { passive: true });
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  return isMobile;
-};
-
-const TechCard = memo(({ tech, index, animationState, onMouseEnter, onMouseLeave }) => {
+const TechCard = memo(({ tech, index, isMobile, animationState, onMouseEnter, onMouseLeave }) => {
   const { t } = useTranslation();
-  const isMobile = useIsMobile();
 
-  // Memoizar cálculos que no cambian
   const shapeStyle = useMemo(() => {
     const shapes = [
       { clipPath: 'none', rounded: 'rounded-xl' },
@@ -33,12 +17,13 @@ const TechCard = memo(({ tech, index, animationState, onMouseEnter, onMouseLeave
 
   const IconComponent = useMemo(() => tech.icon, [tech.icon]);
 
-  // CSS animation class based on animationState
+  // CSS animation class — tech-card-idle prevents glitch when entering→idle
   const animationClass =
     animationState === 'entering' ? 'tech-card-entering' :
-    animationState === 'exiting' ? 'tech-card-exiting' : '';
+    animationState === 'exiting' ? 'tech-card-exiting' :
+    'tech-card-idle';
 
-  // Animation style with staggered delay — duration/stagger match constants in TechnologiesSection
+  // Animation style with staggered delay
   const animationStyle = animationState !== 'idle' ? {
     animationDelay: `${index * (isMobile ? 70 : 100)}ms`,
     animationDuration: '700ms',

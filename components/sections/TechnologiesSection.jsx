@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef, useMemo, useCallback } from 'react';
 import { Pause, Play } from 'lucide-react';
 import TechCard from '../TechCard';
 import { getTechnologies } from '../../data/technologies';
@@ -13,6 +13,18 @@ const ANIM_BUFFER = 80;             // small buffer after last card finishes
 
 const TechnologiesSection = React.memo(() => {
   const { t } = useTranslation();
+
+  // Mobile detection — single source of truth for all TechCards
+  // useLayoutEffect runs BEFORE browser paint, preventing mobile→desktop flash
+  const [isMobile, setIsMobile] = useState(true);
+  useLayoutEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+  }, []);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize, { passive: true });
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Tab state
   const [activeTab, setActiveTab] = useState(0);
@@ -55,10 +67,6 @@ const TechnologiesSection = React.memo(() => {
     }
   ], [t]);
 
-  // Detect mobile for stagger calculation
-  const isMobileRef = useRef(true);
-  useEffect(() => { isMobileRef.current = window.innerWidth < 768; }, []);
-
   // Manual tab change handler
   const handleManualTabChange = useCallback((index) => {
     setActiveTab(index);
@@ -82,12 +90,17 @@ const TechnologiesSection = React.memo(() => {
     setTransition({ phase: 'transitioning', fromTab: currentTechTab, toTab: activeTab });
   }, [activeTab, currentTechTab, transition.phase]);
 
-  // Calculated timeout to complete transition (replaces unreliable onAnimationEnd)
+  // Calculated timeout to complete transition
+  // Fix: dependencies are PRIMITIVES (not object references) to prevent spurious cleanup/recreation
   useEffect(() => {
     if (transition.phase !== 'transitioning') return;
 
-    const enteringCards = technologies[techCategories[transition.toTab].id];
-    const stagger = isMobileRef.current ? STAGGER_MOBILE : STAGGER_DESKTOP;
+    const toTabId = techCategories[transition.toTab]?.id;
+    if (!toTabId) return;
+    const enteringCards = technologies[toTabId];
+    if (!enteringCards) return;
+
+    const stagger = isMobile ? STAGGER_MOBILE : STAGGER_DESKTOP;
     const totalTime = ANIM_DURATION + (enteringCards.length - 1) * stagger + ANIM_BUFFER;
 
     const timer = setTimeout(() => {
@@ -96,7 +109,7 @@ const TechnologiesSection = React.memo(() => {
     }, totalTime);
 
     return () => clearTimeout(timer);
-  }, [transition, technologies, techCategories]);
+  }, [transition.phase, transition.toTab, isMobile, technologies, techCategories]);
 
   // Calculate and cache tech container height
   useEffect(() => {
@@ -216,6 +229,7 @@ const TechnologiesSection = React.memo(() => {
                   key={`exit-${transition.fromTab}-${tech.name}`}
                   tech={tech}
                   index={index}
+                  isMobile={isMobile}
                   animationState="exiting"
                 />
               ))}
@@ -231,6 +245,7 @@ const TechnologiesSection = React.memo(() => {
                 key={`current-${transition.phase === 'transitioning' ? transition.toTab : currentTechTab}-${tech.name}`}
                 tech={tech}
                 index={index}
+                isMobile={isMobile}
                 animationState={transition.phase === 'transitioning' ? 'entering' : 'idle'}
                 onMouseEnter={() => setIsTechCardHovered(true)}
                 onMouseLeave={() => setIsTechCardHovered(false)}

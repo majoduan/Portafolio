@@ -391,6 +391,12 @@ html:not(.dark) .spline-container > div {
   pointer-events: none;
 }
 
+/* Stable state when animation class is removed (entering→idle) —
+   prevents transition-all from animating the removal of animation properties */
+.tech-card-idle {
+  opacity: 1;
+}
+
 /* Mobile: opacity only (transform: none !important blocks scale) */
 @media (max-width: 768px) {
   @keyframes techCardFadeIn {
