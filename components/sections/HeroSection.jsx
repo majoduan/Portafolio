@@ -187,7 +187,6 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
 
           {/* Animacion 3D de Spline - Desktop/tablet only, fallback CSS en movil */}
           <div className="relative h-[400px] lg:h-[600px] w-full overflow-hidden rounded-2xl mt-8 lg:mt-0">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 blur-3xl"></div>
             {shouldLoadSpline ? (
               <SplineErrorBoundary fallback={
                 <div className="relative w-full h-full">
