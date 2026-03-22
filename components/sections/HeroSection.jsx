@@ -24,6 +24,7 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
   const [typewriterText, setTypewriterText] = useState('');
   const splineRef = useRef(null);
   const splineLoadingRef = useRef(false);
+  const themeRef = useRef(theme);
 
   // Texto completo para el efecto typewriter - traducido
   const fullText = useMemo(() => t('hero.description'), [t]);
@@ -48,6 +49,11 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
     return () => clearInterval(typeInterval);
   }, [fullText]);
 
+  // Mantener themeRef sincronizado
+  useEffect(() => {
+    themeRef.current = theme;
+  }, [theme]);
+
   // Funcion para manejar el evento de carga de Spline - optimizada con prevencion de duplicados
   const onSplineLoad = useCallback((spline) => {
     // Prevenir procesamiento duplicado en React Strict Mode
@@ -59,10 +65,10 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
     splineRef.current = spline;
 
     // Aplicar tema inicial al cargar la escena
-    if (theme === 'light') {
+    if (themeRef.current === 'light') {
       spline.emitEvent('keyDown', 'Sphere');
     }
-  }, [theme]);
+  }, []);
 
   // Reaccionar a cambios de tema en la escena Spline
   useEffect(() => {

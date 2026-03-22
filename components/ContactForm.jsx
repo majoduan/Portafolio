@@ -86,7 +86,7 @@ const ContactForm = memo(() => {
     
     // Optional: Clear form after sending (commented out to preserve data in case of email client issues)
     // setFormData({ name: '', subject: '', message: '' });
-  }, [formData, validateForm, emailAddress]);
+  }, [formData, validateForm, emailAddress, t]);
 
   return (
     <form 

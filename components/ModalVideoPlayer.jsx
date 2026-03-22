@@ -54,7 +54,7 @@ const ModalVideoPlayer = ({ src, alt, className = '' }) => {
       video.removeEventListener('loadeddata', handleLoadedData);
       video.removeEventListener('error', handleError);
     };
-  }, []);
+  }, [optimalSrc, alt]);
 
   return (
     <div className={`relative w-full h-full ${className}`}>
