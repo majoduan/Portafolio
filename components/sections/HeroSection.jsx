@@ -71,13 +71,15 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
   }, []);
 
   // Reaccionar a cambios de tema en la escena Spline
+  // keyDown: State base (blanco) → State 2 (negro) para light mode
+  // keyUp: State 2 (negro) → State base (blanco) para dark mode
   useEffect(() => {
     if (!splineRef.current) return;
 
     if (theme === 'light') {
       splineRef.current.emitEvent('keyDown', 'Sphere');
     } else {
-      splineRef.current.emitEventReverse('keyDown', 'Sphere');
+      splineRef.current.emitEvent('keyUp', 'Sphere');
     }
   }, [theme]);
 
