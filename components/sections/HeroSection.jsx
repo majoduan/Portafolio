@@ -1,7 +1,8 @@
 'use client';
-import React, { useState, useEffect, useRef, useMemo, useCallback, Suspense, Component } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback, useContext, Suspense, Component } from 'react';
 import { Mail, Linkedin, Github, Code, Briefcase } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
+import { AppContext } from '../../contexts/AppContext';
 
 // Dynamic import Spline with SSR disabled for Next.js
 import dynamic from 'next/dynamic';
@@ -19,6 +20,7 @@ class SplineErrorBoundary extends Component {
 
 const HeroSection = React.memo(({ shouldLoadSpline }) => {
   const { t } = useTranslation();
+  const { theme } = useContext(AppContext);
   const [typewriterText, setTypewriterText] = useState('');
   const splineRef = useRef(null);
   const splineLoadingRef = useRef(false);
@@ -55,7 +57,23 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
 
     splineLoadingRef.current = true;
     splineRef.current = spline;
-  }, []);
+
+    // Aplicar tema inicial al cargar la escena
+    if (theme === 'light') {
+      spline.emitEvent('keyDown', 'Sphere');
+    }
+  }, [theme]);
+
+  // Reaccionar a cambios de tema en la escena Spline
+  useEffect(() => {
+    if (!splineRef.current) return;
+
+    if (theme === 'light') {
+      splineRef.current.emitEvent('keyDown', 'Sphere');
+    } else {
+      splineRef.current.emitEventReverse('keyDown', 'Sphere');
+    }
+  }, [theme]);
 
   // Funcion para manejar el movimiento del mouse sobre Spline - optimizada
   const onSplineMouseMove = useCallback(() => {
