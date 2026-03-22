@@ -1,10 +1,13 @@
 'use client';
 /**
  * Precarga inteligente de recursos críticos
- * Se ejecuta DESPUÉS del boot screen para evitar referencias circulares
+ * Se ejecuta DURANTE el boot screen (3s delay) para aprovechar el tiempo muerto
  * OPTIMIZADO: Adaptativo según dispositivo y velocidad de conexión
  */
 export const preloadCriticalResources = () => {
+  // Prefetch below-fold component chunks (download without executing)
+  import('../components/sections/ProjectsSection').catch(() => {});
+  import('../components/sections/ContactSection').catch(() => {});
   // Debug mode - cambiar a true para ver logs detallados
   const DEBUG = false;
   

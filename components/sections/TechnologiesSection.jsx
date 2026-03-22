@@ -5,18 +5,25 @@ import TechCard from '../TechCard';
 import { getTechnologies } from '../../data/technologies';
 import { useTranslation } from '../../hooks/useTranslation';
 
+// Animation timing constants
+const ANIM_DURATION = 700;          // ms per card animation
+const STAGGER_DESKTOP = 100;        // ms between each card (desktop)
+const STAGGER_MOBILE = 70;          // ms between each card (mobile)
+const ANIM_BUFFER = 80;             // small buffer after last card finishes
+
 const TechnologiesSection = React.memo(() => {
   const { t } = useTranslation();
 
-  // All tech-related state
+  // Tab state
   const [activeTab, setActiveTab] = useState(0);
   const [isManuallyPaused, setIsManuallyPaused] = useState(false);
   const [isTechCardHovered, setIsTechCardHovered] = useState(false);
   const [lastManualChange, setLastManualChange] = useState(0);
   const [currentTechTab, setCurrentTechTab] = useState(0);
-  const [previousTechTab, setPreviousTechTab] = useState(null);
-  const [techTransitionState, setTechTransitionState] = useState('idle'); // 'idle', 'exiting', 'entering'
   const [containerHeight, setContainerHeight] = useState('auto');
+
+  // Crossfade transition state
+  const [transition, setTransition] = useState({ phase: 'idle', fromTab: null, toTab: null });
 
   // Refs
   const techContainerRef = useRef(null);
@@ -48,6 +55,10 @@ const TechnologiesSection = React.memo(() => {
     }
   ], [t]);
 
+  // Detect mobile for stagger calculation
+  const isMobileRef = useRef(true);
+  useEffect(() => { isMobileRef.current = window.innerWidth < 768; }, []);
+
   // Manual tab change handler
   const handleManualTabChange = useCallback((index) => {
     setActiveTab(index);
@@ -64,44 +75,40 @@ const TechnologiesSection = React.memo(() => {
     }
   }, [isManuallyPaused, isTechCardHovered, lastManualChange, techCategories.length]);
 
-  // State machine for tech transitions
+  // Trigger crossfade when activeTab changes
   useEffect(() => {
     if (activeTab === currentTechTab) return;
+    if (transition.phase === 'transitioning') return;
+    setTransition({ phase: 'transitioning', fromTab: currentTechTab, toTab: activeTab });
+  }, [activeTab, currentTechTab, transition.phase]);
 
-    // Phase 1: Start exit
-    setTechTransitionState('exiting');
-    setPreviousTechTab(currentTechTab);
+  // Calculated timeout to complete transition (replaces unreliable onAnimationEnd)
+  useEffect(() => {
+    if (transition.phase !== 'transitioning') return;
 
-    // Phase 2: After 1000ms, switch content and prepare entry
-    const exitTimer = setTimeout(() => {
-      setCurrentTechTab(activeTab);
-      setTechTransitionState('entering');
+    const enteringCards = technologies[techCategories[transition.toTab].id];
+    const stagger = isMobileRef.current ? STAGGER_MOBILE : STAGGER_DESKTOP;
+    const totalTime = ANIM_DURATION + (enteringCards.length - 1) * stagger + ANIM_BUFFER;
 
-      // Phase 3: After 100ms, mark as idle
-      const enterTimer = setTimeout(() => {
-        setTechTransitionState('idle');
-        setPreviousTechTab(null);
-      }, 100);
+    const timer = setTimeout(() => {
+      setCurrentTechTab(transition.toTab);
+      setTransition({ phase: 'idle', fromTab: null, toTab: null });
+    }, totalTime);
 
-      return () => clearTimeout(enterTimer);
-    }, 1000);
-
-    return () => clearTimeout(exitTimer);
-  }, [activeTab, currentTechTab]);
+    return () => clearTimeout(timer);
+  }, [transition, technologies, techCategories]);
 
   // Calculate and cache tech container height
   useEffect(() => {
-    if (!techContainerRef.current || techTransitionState !== 'idle') return;
+    if (!techContainerRef.current || transition.phase !== 'idle') return;
 
     const categoryId = techCategories[currentTechTab].id;
 
-    // Use cached height if available
     if (cachedHeights.current[categoryId]) {
       setContainerHeight(cachedHeights.current[categoryId]);
       return;
     }
 
-    // Calculate height only the first time for this category
     const measureHeight = () => {
       const grid = techContainerRef.current?.querySelector('.tech-cards-grid');
       if (grid) {
@@ -116,9 +123,9 @@ const TechnologiesSection = React.memo(() => {
     });
 
     return () => cancelAnimationFrame(rafId);
-  }, [currentTechTab, techTransitionState, techCategories]);
+  }, [currentTechTab, transition.phase, techCategories]);
 
-  // Recalculate heights on resize (clear cache and recalculate)
+  // Recalculate heights on resize
   useEffect(() => {
     let resizeTimeout;
 
@@ -127,7 +134,7 @@ const TechnologiesSection = React.memo(() => {
       resizeTimeout = setTimeout(() => {
         cachedHeights.current = {};
 
-        if (techContainerRef.current && techTransitionState === 'idle') {
+        if (techContainerRef.current && transition.phase === 'idle') {
           const grid = techContainerRef.current.querySelector('.tech-cards-grid');
           if (grid) {
             const height = grid.offsetHeight;
@@ -145,7 +152,10 @@ const TechnologiesSection = React.memo(() => {
       window.removeEventListener('resize', handleResize);
       clearTimeout(resizeTimeout);
     };
-  }, [currentTechTab, techTransitionState, techCategories]);
+  }, [currentTechTab, transition.phase, techCategories]);
+
+  // Determine which tab index to show in the tab bar as active
+  const displayTab = transition.phase === 'transitioning' ? transition.toTab : currentTechTab;
 
   return (
     <section id="technologies" className="pt-20 relative z-10 bg-transparent transition-colors duration-300">
@@ -153,7 +163,7 @@ const TechnologiesSection = React.memo(() => {
         <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight text-black dark:text-white">
           {t('technologies.title')}
         </h2>
-        {/* Tab Navigation Bar - Estilo Facebook */}
+        {/* Tab Navigation Bar */}
         <div className="relative flex justify-center mb-12 border-b border-slate-300 dark:border-slate-700/50 transition-colors duration-300">
           <div className="flex gap-1 md:gap-2 pr-10">
             {techCategories.map((category, index) => (
@@ -161,18 +171,16 @@ const TechnologiesSection = React.memo(() => {
                 key={category.id}
                 onClick={() => handleManualTabChange(index)}
                 className={`px-2 md:px-6 lg:px-8 py-3 md:py-4 relative transition-all duration-300 text-xs md:text-sm lg:text-base max-[374px]:max-w-[72px] max-[374px]:truncate ${
-                  currentTechTab === index
+                  displayTab === index
                     ? 'text-black dark:text-white font-bold'
                     : 'text-gray-400 dark:text-gray-400 font-medium group'
                 }`}
               >
-                {/* Show short title on mobile/tablet, full on desktop */}
                 <span className="hidden md:inline">{category.title}</span>
                 <span className="inline md:hidden">{category.shortTitle}</span>
-                {/* Bottom indicator line with smooth transition */}
                 <div
                   className={`absolute bottom-0 left-0 right-0 h-0.5 transition-all duration-1000 ${
-                    currentTechTab === index ? 'bg-black dark:bg-white opacity-100 scale-x-100' : 'bg-gray-400 opacity-0 scale-x-0 group-hover:opacity-100 group-hover:scale-x-100'
+                    displayTab === index ? 'bg-black dark:bg-white opacity-100 scale-x-100' : 'bg-gray-400 opacity-0 scale-x-0 group-hover:opacity-100 group-hover:scale-x-100'
                   }`}
                 />
               </button>
@@ -196,38 +204,39 @@ const TechnologiesSection = React.memo(() => {
           ref={techContainerRef}
           className="tech-cards-container"
           style={{ height: containerHeight }}
+          aria-live="polite"
+          role="region"
+          aria-label={t('technologies.title')}
         >
-          {/* Previous tab cards (exiting) */}
-          {techTransitionState === 'exiting' && previousTechTab !== null && (
-            <div className="tech-cards-grid grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8">
-              {technologies[techCategories[previousTechTab].id].map((tech, index) => (
+          {/* Exiting grid (fades out underneath) */}
+          {transition.phase === 'transitioning' && transition.fromTab !== null && (
+            <div className="tech-cards-grid grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8" style={{ zIndex: 1 }}>
+              {technologies[techCategories[transition.fromTab].id].map((tech, index) => (
                 <TechCard
-                  key={`exiting-${previousTechTab}-${tech.name}`}
+                  key={`exit-${transition.fromTab}-${tech.name}`}
                   tech={tech}
                   index={index}
                   animationState="exiting"
-                  onMouseEnter={() => setIsTechCardHovered(true)}
-                  onMouseLeave={() => setIsTechCardHovered(false)}
                 />
               ))}
             </div>
           )}
 
-          {/* Current tab cards */}
-          {(techTransitionState === 'entering' || techTransitionState === 'idle') && (
-            <div className="tech-cards-grid grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8">
-              {technologies[techCategories[currentTechTab].id].map((tech, index) => (
-                <TechCard
-                  key={`current-${currentTechTab}-${tech.name}`}
-                  tech={tech}
-                  index={index}
-                  animationState={techTransitionState}
-                  onMouseEnter={() => setIsTechCardHovered(true)}
-                  onMouseLeave={() => setIsTechCardHovered(false)}
-                />
-              ))}
-            </div>
-          )}
+          {/* Current / entering grid */}
+          <div className="tech-cards-grid grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8" style={{ zIndex: 2 }}>
+            {technologies[techCategories[
+              transition.phase === 'transitioning' ? transition.toTab : currentTechTab
+            ].id].map((tech, index) => (
+              <TechCard
+                key={`current-${transition.phase === 'transitioning' ? transition.toTab : currentTechTab}-${tech.name}`}
+                tech={tech}
+                index={index}
+                animationState={transition.phase === 'transitioning' ? 'entering' : 'idle'}
+                onMouseEnter={() => setIsTechCardHovered(true)}
+                onMouseLeave={() => setIsTechCardHovered(false)}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>

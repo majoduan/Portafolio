@@ -5,6 +5,7 @@ import { getProjectsData } from '../../data/projectTranslations';
 import { useTranslation } from '../../hooks/useTranslation';
 import { getOptimalVideoSource, getOptimalPoster } from '../../utils/adaptiveVideo';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
+import useFocusTrap from '../../hooks/useFocusTrap';
 
 const ModalVideoPlayer = lazy(() => import('../ModalVideoPlayer'));
 
@@ -117,11 +118,20 @@ const ProjectsSection = React.memo(() => {
 
   const projects = useMemo(() => getProjectsData(t), [t]);
   const { hasIntersected: projectsVisible } = useIntersectionObserver(projectsSectionRef);
+  const modalRef = useFocusTrap(isModalOpen);
 
   const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);
     setSelectedProject(null);
   }, []);
+
+  // Close modal on Escape key
+  useEffect(() => {
+    if (!isModalOpen) return;
+    const handleEscape = (e) => { if (e.key === 'Escape') handleCloseModal(); };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isModalOpen, handleCloseModal]);
 
   const handleProjectClick = useCallback((proj) => {
     setSelectedProject(proj);
@@ -165,6 +175,10 @@ const ProjectsSection = React.memo(() => {
           onClick={handleCloseModal}
         >
           <div
+            ref={modalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={selectedProject.title}
             className="project-modal bg-white dark:bg-[var(--bg-secondary)] rounded-3xl w-full max-h-[90vh] overflow-hidden border-2 border-slate-200 dark:border-[var(--accent-border)] shadow-2xl shadow-[var(--accent-glow-strong)]"
             onClick={(e) => e.stopPropagation()}
           >

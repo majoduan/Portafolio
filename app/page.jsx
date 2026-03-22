@@ -14,8 +14,14 @@ import NavigationBar from '../components/sections/NavigationBar';
 import HeroSection from '../components/sections/HeroSection';
 import TechnologiesSection from '../components/sections/TechnologiesSection';
 import CertificatesSection from '../components/sections/CertificatesSection';
-import ProjectsSection from '../components/sections/ProjectsSection';
-import ContactSection from '../components/sections/ContactSection';
+
+// Lazy-load below-fold sections — chunks prefetched during boot screen
+const ProjectsSection = dynamic(() => import('../components/sections/ProjectsSection'), {
+  loading: () => <div className="py-20 min-h-[400px]" />,
+});
+const ContactSection = dynamic(() => import('../components/sections/ContactSection'), {
+  loading: () => <div className="py-20 min-h-[400px]" />,
+});
 
 export default function HomePage() {
   const [loading, setLoading] = useState(true);
@@ -38,13 +44,16 @@ export default function HomePage() {
       .catch(() => setSplineReady(true));
   }, [shouldLoadSpline]);
 
+  // Preload critical resources during boot screen idle time (3s delay gives Spline priority)
+  useEffect(() => {
+    const timer = setTimeout(() => preloadCriticalResources(), 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
   if (loading) {
     return (
       <HUDBootScreen
-        onComplete={() => {
-          setLoading(false);
-          setTimeout(() => preloadCriticalResources(), 500);
-        }}
+        onComplete={() => setLoading(false)}
         splineReady={splineReady}
       />
     );

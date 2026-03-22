@@ -26,6 +26,9 @@ const nextConfig = {
         headers: [
           {
             key: 'Content-Security-Policy',
+            // CSP Note: 'unsafe-inline' and 'unsafe-eval' are required by @splinetool/runtime
+            // which uses eval() for WebGL shader compilation. This is a known limitation.
+            // Risk mitigated by: no user-generated content, no API routes, static deployment.
             value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://prod.spline.design; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://prod.spline.design; font-src 'self' data:; connect-src 'self' https://prod.spline.design wss://prod.spline.design; media-src 'self' blob:; worker-src 'self' blob:; child-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; frame-ancestors 'none'; upgrade-insecure-requests",
           },
           { key: 'X-Content-Type-Options', value: 'nosniff' },

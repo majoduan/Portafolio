@@ -352,7 +352,56 @@ html:not(.dark) .spline-container > div {
   }
 }
 
-/* Las transiciones ahora se manejan directamente en los componentes con transition-all */
+/* Tech card enter/exit animations — CSS @keyframes guarantee initial frame paint */
+@keyframes techCardFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes techCardFadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+.tech-card-entering {
+  animation-name: techCardFadeIn;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  /* Disable CSS transitions during keyframe animation to prevent conflicts */
+  transition: none !important;
+}
+
+.tech-card-exiting {
+  animation-name: techCardFadeOut;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition: none !important;
+  pointer-events: none;
+}
+
+/* Mobile: opacity only (transform: none !important blocks scale) */
+@media (max-width: 768px) {
+  @keyframes techCardFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes techCardFadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+}
 
 /* Ocultar scrollbar del carrusel de certificados y tecnologías */
 .overflow-x-hidden,

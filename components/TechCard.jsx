@@ -12,18 +12,15 @@ const useIsMobile = () => {
     window.addEventListener('resize', handleResize, { passive: true });
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-  
+
   return isMobile;
 };
 
 const TechCard = memo(({ tech, index, animationState, onMouseEnter, onMouseLeave }) => {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
-  
-  // Si está saliendo, comienza visible. Si está entrando, comienza invisible
-  const [isVisible, setIsVisible] = useState(animationState === 'exiting');
-  
-  // Memoizar cálculos que no cambian - optimizado con dependencias específicas
+
+  // Memoizar cálculos que no cambian
   const shapeStyle = useMemo(() => {
     const shapes = [
       { clipPath: 'none', rounded: 'rounded-xl' },
@@ -34,52 +31,37 @@ const TechCard = memo(({ tech, index, animationState, onMouseEnter, onMouseLeave
     return shapes[randomIndex];
   }, [tech.name]);
 
-  // Memoizar el nombre del componente de icono para evitar re-renders
   const IconComponent = useMemo(() => tech.icon, [tech.icon]);
 
-  // Determinar si debe animar (solo desktop, entering o idle)
-  const shouldAnimate = !isMobile && (animationState === 'idle' || animationState === 'entering');
+  // CSS animation class based on animationState
+  const animationClass =
+    animationState === 'entering' ? 'tech-card-entering' :
+    animationState === 'exiting' ? 'tech-card-exiting' : '';
 
-  // Forzar la transición al montar el componente
-  useEffect(() => {
-    if (animationState === 'entering') {
-      // Pequeño delay para forzar el reflow y que la transición funcione
-      const timer = setTimeout(() => {
-        setIsVisible(true);
-      }, 10);
-      return () => clearTimeout(timer);
-    } else if (animationState === 'idle') {
-      setIsVisible(true);
-    } else if (animationState === 'exiting') {
-      // Pequeño delay y luego se oculta
-      const timer = setTimeout(() => {
-        setIsVisible(false);
-      }, 10);
-      return () => clearTimeout(timer);
-    }
-  }, [animationState]);
+  // Animation style with staggered delay — duration/stagger match constants in TechnologiesSection
+  const animationStyle = animationState !== 'idle' ? {
+    animationDelay: `${index * (isMobile ? 70 : 100)}ms`,
+    animationDuration: '700ms',
+  } : undefined;
 
-  // Renderizado móvil compacto (optimizado para performance)
+  // exp-tag-fill only triggers when idle (after enter animation completes)
+  const shouldAnimate = !isMobile && animationState === 'idle';
+
+  // Renderizado móvil compacto
   if (isMobile) {
     return (
       <div
-        className={`tech-card group bg-white/80 dark:bg-[var(--bg-elevated-50)] border border-slate-200 dark:border-slate-700/50 transition-opacity duration-500 rounded-lg shadow-md backdrop-blur-sm ${
-          isVisible ? 'opacity-100' : 'opacity-0'
-        }`}
-        style={{
-          transitionDelay: `${index * 50}ms`
-        }}
+        className={`tech-card group bg-white/80 dark:bg-[var(--bg-elevated-50)] border border-slate-200 dark:border-slate-700/50 rounded-lg shadow-md backdrop-blur-sm ${animationClass}`}
+        style={animationStyle}
       >
         <div className="p-3 flex items-center gap-3">
-          {/* Icono compacto */}
           <div
             className={`w-12 h-12 flex-shrink-0 bg-gradient-to-r ${tech.color} ${shapeStyle.rounded} flex items-center justify-center shadow-md p-2`}
             style={{ clipPath: shapeStyle.clipPath }}
           >
             <IconComponent className="w-full h-full text-white" />
           </div>
-          
-          {/* Info compacta */}
+
           <div className="flex-1 min-w-0">
             <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">
               {tech.name}
@@ -88,8 +70,7 @@ const TechCard = memo(({ tech, index, animationState, onMouseEnter, onMouseLeave
               {tech.experience}
             </p>
           </div>
-          
-          {/* Solo nivel en móvil */}
+
           <div className="text-right flex-shrink-0">
             <div className="text-lg font-bold text-[var(--accent-solid-alt)]">
               {tech.level}%
@@ -99,16 +80,12 @@ const TechCard = memo(({ tech, index, animationState, onMouseEnter, onMouseLeave
       </div>
     );
   }
-  
-  // Renderizado desktop completo (con todas las animaciones)
+
+  // Renderizado desktop completo
   return (
     <div
-      className={`tech-card group bg-white/80 dark:bg-[var(--bg-elevated-50)] border border-slate-200 dark:border-slate-700/50 hover:border-black dark:hover:border-white transition-all duration-300 rounded-lg shadow-md dark:shadow-lg hover:shadow-xl backdrop-blur-sm hover:scale-[1.03] ${
-        isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-      }`}
-      style={{
-        transitionDelay: `${index * 80}ms`
-      }}
+      className={`tech-card group bg-white/80 dark:bg-[var(--bg-elevated-50)] border border-slate-200 dark:border-slate-700/50 hover:border-black dark:hover:border-white transition-all duration-300 rounded-lg shadow-md dark:shadow-lg hover:shadow-xl backdrop-blur-sm hover:scale-[1.03] ${animationClass}`}
+      style={animationStyle}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
