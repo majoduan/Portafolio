@@ -55,12 +55,6 @@ const TechCard = memo(({ tech, index, isMobile, animationState, onMouseEnter, on
               {tech.experience}
             </p>
           </div>
-
-          <div className="text-right flex-shrink-0">
-            <div className="text-lg font-bold text-[var(--accent-solid-alt)]">
-              {tech.level}%
-            </div>
-          </div>
         </div>
       </div>
     );
