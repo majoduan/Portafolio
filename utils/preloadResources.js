@@ -21,12 +21,12 @@ export const preloadCriticalResources = () => {
     connection.saveData === true  // Usuario activó "ahorro de datos"
   );
 
-  // NIVEL 1: CRÍTICO - Imágenes de certificados (siempre precargar, son ligeras)
+  // NIVEL 1: CRÍTICO - Imágenes de certificados optimizadas AVIF (siempre precargar, son ligeras)
   const certificateImages = [
-    '/images/certificates/epn-award.webp',
-    '/images/certificates/cisco-networking.webp',
-    '/images/certificates/digital-transformation.webp',
-    '/images/certificates/scrum-foundation.webp'
+    '/images/optimized/epn-award-800w.avif',
+    '/images/optimized/cisco-networking-800w.avif',
+    '/images/optimized/digital-transformation-800w.avif',
+    '/images/optimized/scrum-foundation-800w.avif'
   ];
 
   certificateImages.forEach(src => {
@@ -39,14 +39,14 @@ export const preloadCriticalResources = () => {
 
   // NIVEL 2: Posters de videos (ligeros, útiles para móvil)
   const posters = [
-    '/videos/poa-management-poster.webp',
-    '/videos/epn-certificates-poster.webp',
-    '/videos/travel-allowance-poster.webp',
-    '/videos/storycraft-poster.webp',
-    '/videos/fitness-tracker-poster.webp',
-    '/videos/space-invaders-poster.webp',
-    '/videos/godot-game-2d-poster.webp',
-    '/videos/godot-game-3d-poster.webp'
+    '/videos/poa-management-poster.avif',
+    '/videos/epn-certificates-poster.avif',
+    '/videos/travel-allowance-poster.avif',
+    '/videos/storycraft-poster.avif',
+    '/videos/fitness-tracker-poster.avif',
+    '/videos/space-invaders-poster.avif',
+    '/videos/godot-game-2d-poster.avif',
+    '/videos/godot-game-3d-poster.avif'
   ];
 
   posters.forEach(posterSrc => {

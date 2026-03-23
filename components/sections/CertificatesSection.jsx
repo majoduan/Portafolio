@@ -82,7 +82,7 @@ const CertificatesSection = React.memo(() => {
             scrollBehavior: 'smooth',
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',
-            maxWidth: isMobileView ? 'min(90vw, 420px)' : 'min(98vw, 1400px)'
+            maxWidth: isMobileView ? 'min(90vw, 26.25rem)' : 'min(98vw, 87.5rem)'
           }}
         >
           {/* Certificate grid */}
@@ -102,22 +102,12 @@ const CertificatesSection = React.memo(() => {
               >
                 {/* Certificate Image — full card with overlay */}
                 <div className="relative h-72 overflow-hidden bg-gradient-to-br from-blue-900/30 to-purple-900/30">
-                  <picture>
-                    <source
+                  <img
+                      src={`/images/optimized/${cert.image.split('/').pop().replace('.jpg', '').replace('.webp', '')}-800w.avif`}
                       srcSet={`
                         /images/optimized/${cert.image.split('/').pop().replace('.jpg', '').replace('.webp', '')}-400w.avif 400w,
                         /images/optimized/${cert.image.split('/').pop().replace('.jpg', '').replace('.webp', '')}-800w.avif 800w,
                         /images/optimized/${cert.image.split('/').pop().replace('.jpg', '').replace('.webp', '')}-1200w.avif 1200w
-                      `}
-                      sizes="(max-width: 640px) 400px, 800px"
-                      type="image/avif"
-                    />
-                    <img
-                      src={`/images/optimized/${cert.image.split('/').pop().replace('.jpg', '').replace('.webp', '')}-800w.webp`}
-                      srcSet={`
-                        /images/optimized/${cert.image.split('/').pop().replace('.jpg', '').replace('.webp', '')}-400w.webp 400w,
-                        /images/optimized/${cert.image.split('/').pop().replace('.jpg', '').replace('.webp', '')}-800w.webp 800w,
-                        /images/optimized/${cert.image.split('/').pop().replace('.jpg', '').replace('.webp', '')}-1200w.webp 1200w
                       `}
                       sizes="(max-width: 640px) 400px, 800px"
                       alt={cert.title}
@@ -131,7 +121,6 @@ const CertificatesSection = React.memo(() => {
                         e.target.parentElement.innerHTML = `<div class="w-full h-full flex items-center justify-center text-6xl">${cert.icon}</div>`;
                       }}
                     />
-                  </picture>
 
                   {/* Bottom gradient overlay — stronger on hover for text legibility */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent transition-all duration-300 group-hover:from-black/85 group-hover:via-black/30" />

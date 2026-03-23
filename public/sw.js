@@ -12,7 +12,7 @@ const VIDEO_MOBILE_CACHE = `videos-mobile-cache-v${CACHE_VERSION}`;
 const PRECACHE_ASSETS = [
   '/',
   '/offline.html',
-  '/images/foto-perfil.webp'
+  '/images/optimized/foto-perfil-800w.avif'
   // Certificados se cargan bajo demanda con stale-while-revalidate
 ];
 

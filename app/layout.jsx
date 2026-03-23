@@ -13,7 +13,7 @@ export const metadata = {
     url: 'https://mateoduenas.vercel.app/',
     title: 'Mateo Dueñas | Full Stack Developer Portfolio',
     description: 'Portfolio profesional de Mateo Dueñas, Full Stack Software Engineer especializado en React, Node.js y tecnologías web modernas',
-    images: [{ url: '/images/foto-perfil.webp', width: 800, height: 1000 }],
+    images: [{ url: '/images/optimized/foto-perfil-1200w.avif', width: 800, height: 1000 }],
     locale: 'es_ES',
     alternateLocale: 'en_US',
   },
@@ -21,7 +21,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'Mateo Dueñas | Full Stack Developer Portfolio',
     description: 'Portfolio profesional de Mateo Dueñas, Full Stack Software Engineer especializado en React, Node.js y tecnologías web modernas',
-    images: ['/images/foto-perfil.webp'],
+    images: ['/images/optimized/foto-perfil-1200w.avif'],
     creator: '@mateoduenas',
   },
   manifest: '/manifest.json',
@@ -67,7 +67,7 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://prod.spline.design" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://prod.spline.design" />
         {/* Prefetch profile image used in contact section */}
-        <link rel="prefetch" href="/images/optimized/foto-perfil-800w.webp" as="image" />
+        <link rel="prefetch" href="/images/optimized/foto-perfil-800w.avif" as="image" type="image/avif" />
       </head>
       <body>
         <Providers>

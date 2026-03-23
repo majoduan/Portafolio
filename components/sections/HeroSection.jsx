@@ -129,6 +129,7 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
                   if (el) {
                     const text = el.querySelector('.swap-btn-text');
                     if (text) el.style.setProperty('--swap-text-w', `${text.offsetWidth}px`);
+                    el.style.setProperty('--swap-btn-w', `${el.offsetWidth}px`);
                   }
                 }}
               >
@@ -188,7 +189,7 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
           </div>
 
           {/* Animacion 3D de Spline - Desktop/tablet only, fallback CSS en movil */}
-          <div className="relative h-[400px] lg:h-[600px] w-full overflow-hidden rounded-2xl mt-8 lg:mt-0">
+          <div className="relative h-[25rem] lg:h-[37.5rem] w-full overflow-hidden rounded-2xl mt-8 lg:mt-0">
             {shouldLoadSpline ? (
               <SplineErrorBoundary fallback={
                 <div className="relative w-full h-full">

@@ -83,9 +83,6 @@ const ContactForm = memo(() => {
     
     // Open email client
     window.location.href = mailtoLink;
-    
-    // Optional: Clear form after sending (commented out to preserve data in case of email client issues)
-    // setFormData({ name: '', subject: '', message: '' });
   }, [formData, validateForm, emailAddress, t]);
 
   return (
@@ -108,10 +105,10 @@ const ContactForm = memo(() => {
           onChange={handleChange}
           placeholder={t('contact.form.name.placeholder')}
           style={{ backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}
-          className={`w-full px-4 py-3 bg-white dark:bg-[var(--bg-elevated-50)] border rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 transition-all duration-300 ${
+          className={`w-full px-4 py-3 bg-white dark:bg-[var(--bg-elevated-50)] border rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-inset transition-all duration-300 ${
             errors.name
               ? 'border-red-500 focus:ring-red-500'
-              : 'border-slate-300 dark:border-slate-700 focus:ring-[var(--accent-from-strong)] focus:border-[var(--accent-from-strong)]'
+              : 'border-slate-300 dark:border-slate-700 focus:ring-black dark:focus:ring-white focus:border-black dark:focus:border-white'
           }`}
         />
         {errors.name && (
@@ -132,10 +129,10 @@ const ContactForm = memo(() => {
           value={formData.subject}
           onChange={handleChange}
           placeholder={t('contact.form.subject.placeholder')}
-          className={`w-full px-4 py-3 bg-white dark:bg-[var(--bg-elevated-50)] border rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 transition-all duration-300 ${
+          className={`w-full px-4 py-3 bg-white dark:bg-[var(--bg-elevated-50)] border rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-inset transition-all duration-300 ${
             errors.subject
               ? 'border-red-500 focus:ring-red-500'
-              : 'border-slate-300 dark:border-slate-700 focus:ring-[var(--accent-from-strong)] focus:border-[var(--accent-from-strong)]'
+              : 'border-slate-300 dark:border-slate-700 focus:ring-black dark:focus:ring-white focus:border-black dark:focus:border-white'
           }`}
         />
         {errors.subject && (
@@ -155,10 +152,10 @@ const ContactForm = memo(() => {
           value={formData.message}
           onChange={handleChange}
           placeholder={t('contact.form.message.placeholder')}
-          className={`w-full h-32 md:h-40 lg:h-44 px-4 py-3 bg-white dark:bg-[var(--bg-elevated-50)] border rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 transition-all duration-300 resize-none ${
+          className={`w-full h-32 md:h-40 lg:h-44 px-4 py-3 bg-white dark:bg-[var(--bg-elevated-50)] border rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-inset transition-all duration-300 resize-none ${
             errors.message
               ? 'border-red-500 focus:ring-red-500'
-              : 'border-slate-300 dark:border-slate-700 focus:ring-[var(--accent-from-strong)] focus:border-[var(--accent-from-strong)]'
+              : 'border-slate-300 dark:border-slate-700 focus:ring-black dark:focus:ring-white focus:border-black dark:focus:border-white'
           }`}
         />
         {errors.message && (

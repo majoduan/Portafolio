@@ -192,6 +192,12 @@
     "techUsed": "Technologies Used",
     "projectLinks": "Project Links",
     "loading": "Loading video...",
+    "linkLabels": {
+      "demo": "Live Demo",
+      "frontend": "Frontend Code",
+      "backend": "Backend Code",
+      "github": "Source Code"
+    },
     "items": {
       "poa": {
         "title": "POA Management System",
@@ -263,7 +269,6 @@
     }
   },
   "techCard": {
-    "masteryLevel": "Mastery level",
     "experience": "Experience",
     "experienceShort": "Exp"
   },

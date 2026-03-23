@@ -57,6 +57,7 @@ html {
   --accent-border-subtle: rgba(59, 130, 246, 0.3);
   --accent-bg-subtle: rgba(59, 130, 246, 0.1);
   --accent-bg-muted: rgba(30, 58, 138, 0.3);
+  --tag-glow-color: rgba(30, 58, 138, 0.85);
 
   /* Legacy — used by scrollbar, kept for compatibility */
   --accent-blue-alpha-10: rgba(99, 102, 241, 0.1);
@@ -107,6 +108,7 @@ html:not(.dark) {
   --accent-border-subtle: rgba(239, 68, 68, 0.3);
   --accent-bg-subtle: rgba(239, 68, 68, 0.1);
   --accent-bg-muted: rgba(239, 68, 68, 0.3);
+  --tag-glow-color: rgba(220, 5, 0, 0.35);
 }
 
 /* Fondo con transición */
@@ -119,13 +121,19 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Configuración para Spline */
+/* Ultra-wide display scaling (1440px+) */
+@media (min-width: 1441px) {
+  html {
+    font-size: clamp(16px, 1.111vw, 24px);
+  }
+}
+
 /* Configuración para Spline */
 .spline-container {
   position: relative;
   overflow: hidden;
   width: 100%;
-  height: 600px;
+  height: 37.5rem;
 }
 
 /* Ocultar elementos adicionales que puedan aparecer */
@@ -176,10 +184,6 @@ html:not(.dark) .spline-container > div {
   0% {
     width: 0%;
   }
-}
-
-.progress-bar-animate {
-  animation: progressBarFill 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 /* Experience tag fill animation */
@@ -266,7 +270,7 @@ html:not(.dark) .spline-container > div {
 }
 
 .swap-btn:hover .swap-btn-icon {
-  transform: translateX(var(--swap-text-w, 100px));
+  transform: translateX(calc(var(--swap-btn-w, 200px) - 3rem));
   box-shadow: none;
 }
 
@@ -302,10 +306,6 @@ html:not(.dark) .spline-container > div {
   padding: 0.75rem 1.25rem 0.75rem 0;
 }
 
-.swap-btn-wide:hover .swap-btn-icon {
-  transform: translateX(calc(var(--swap-btn-w, 300px) - 3rem - 4px));
-}
-
 .swap-btn-wide:hover .swap-btn-text {
   transform: translateX(-3rem);
 }
@@ -321,7 +321,7 @@ html:not(.dark) .spline-container > div {
 /* Estados de las cards */
 .tech-cards-container {
   position: relative;
-  min-height: 400px;
+  min-height: 25rem;
   transition: height 0.5s ease-in-out;
   width: 100%;
 }
@@ -337,7 +337,7 @@ html:not(.dark) .spline-container > div {
 /* Responsive para contenedor de tecnologías */
 @media (max-width: 768px) {
   .tech-cards-container {
-    min-height: 200px; /* Reducido de 300px a 200px para cards compactas */
+    min-height: 12.5rem; /* Reducido para cards compactas en mobile */
   }
   
   /* Optimizaciones adicionales para móvil */
@@ -538,12 +538,12 @@ section {
 
 /* Contact left column - profile card optimizations */
 .contact-left-column {
-  content-visibility: auto;
+  content-visibility: visible;
 }
 
 /* Contact right column - form card optimizations */
 .contact-right-column {
-  content-visibility: auto;
+  content-visibility: visible;
 }
 
 /* Optimized hover effects - only apply will-change on hover */
@@ -668,7 +668,7 @@ section {
 
 /* Modal container optimizations */
 .project-modal {
-  max-width: 1400px;
+  max-width: 87.5rem;
   content-visibility: auto;
   contain: layout style paint;
 }
@@ -707,7 +707,7 @@ section {
 /* Custom scrollbar para la columna de información */
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: var(--accent-blue-alpha-50) var(--bg-secondary);
+  scrollbar-color: var(--border-color) var(--bg-primary);
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -715,18 +715,18 @@ section {
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
+  background: var(--bg-primary);
   border-radius: 4px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: var(--accent-blue-alpha-50);
+  background: var(--border-color);
   border-radius: 4px;
   transition: background 0.3s ease;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-blue-alpha-70);
+  background: var(--text-tertiary);
 }
 
 /* Smooth scrolling en la columna de info */
@@ -737,9 +737,7 @@ section {
 
 /* Hardware acceleration para elementos del modal */
 .project-modal h4,
-.project-modal p,
-.project-modal span,
-.project-modal a {
+.project-modal p {
   backface-visibility: hidden;
   transform: translateZ(0);
 }
@@ -751,6 +749,11 @@ section {
 
 .project-modal-info-column a:not(:hover) {
   will-change: auto;
+}
+
+/* Disable scale on swap-btn inside modal to prevent clipping */
+.project-modal-info-column .swap-btn:hover {
+  transform: none;
 }
 
 /* Responsive: Layout vertical en móviles y tablets */
@@ -771,8 +774,17 @@ section {
     border-bottom: 1px solid var(--accent-blue-alpha-30);
   }
 
+  .project-modal-content {
+    grid-template-columns: 1fr;
+    max-height: calc(90vh - 80px);
+    overflow-y: auto;
+  }
+
   .project-modal-info-column {
-    max-height: calc(50vh - 80px);
+    max-height: none;
+    flex: 1;
+    min-height: 0;
+    overflow-y: visible;
   }
 }
 
@@ -781,16 +793,12 @@ section {
   .project-modal-video-column {
     max-height: 45vh;
   }
-
-  .project-modal-info-column {
-    max-height: calc(45vh - 80px);
-  }
 }
 
 /* Desktop grande - ajustar tamaños */
 @media (min-width: 1400px) {
   .project-modal {
-    max-width: 1600px;
+    max-width: 100rem;
   }
 }
 
@@ -824,6 +832,10 @@ section {
     transform: none;
     will-change: auto;
   }
+
+  .project-modal-info-column > div {
+    animation: none !important;
+  }
 }
 
 /* Contenido del modal - optimización de renderizado */
@@ -831,6 +843,40 @@ section {
   content-visibility: auto;
   contain-intrinsic-size: auto 100px;
 }
+
+/* Tech tags flashlight hover effect — glow only inside each tag */
+.tech-tag {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  isolation: isolate;
+}
+
+.tech-tag::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    150px circle at var(--tag-x, -200px) var(--tag-y, -200px),
+    var(--tag-glow-color),
+    transparent 70%
+  );
+  opacity: var(--tag-active, 0);
+  transition: opacity 0.3s;
+  pointer-events: none;
+  z-index: -1;
+}
+
+
+/* Stagger entrance for info panel sections */
+.project-modal-info-column > div:nth-child(1) { animation: fadeIn 0.3s ease-out 0.1s both; }
+.project-modal-info-column > div:nth-child(2) { animation: fadeIn 0.3s ease-out 0.15s both; }
+.project-modal-info-column > div:nth-child(3) { animation: fadeIn 0.3s ease-out 0.2s both; }
+.project-modal-info-column > div:nth-child(4) { animation: fadeIn 0.3s ease-out 0.25s both; }
+.project-modal-info-column > div:nth-child(5) { animation: fadeIn 0.3s ease-out 0.3s both; }
+.project-modal-info-column > div:nth-child(6) { animation: fadeIn 0.3s ease-out 0.35s both; }
+.project-modal-info-column > div:nth-child(7) { animation: fadeIn 0.3s ease-out 0.4s both; }
 
 /* ==================== MOBILE NAVIGATION STYLES ==================== */
 /* Navegación móvil compacta con iconos */

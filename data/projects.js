@@ -6,8 +6,10 @@ export const projects = [
     tech: ["React", "TypeScript", "FastAPI", "PostgreSQL", "Docker"],
     video: "/videos/poa-management.mp4",
     links: {
-      frontend: "https://github.com/majoduan/Software_Seguro_Grupo_4_Front.git",
-      backend: "https://github.com/majoduan/Software_Seguro_Grupo_4_Back.git",
+      github: [
+        "https://github.com/majoduan/Software_Seguro_Grupo_4_Front.git",
+        "https://github.com/majoduan/Software_Seguro_Grupo_4_Back.git"
+      ],
       demo: "https://software-seguro-grupo-4-front.vercel.app/login"
     }
   },

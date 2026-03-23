@@ -62,8 +62,8 @@ export const getOptimalVideoSource = (videoPath) => {
  * @returns {string} Ruta del poster optimizado
  */
 export const getOptimalPoster = (videoPath) => {
-  // Poster siempre es webp (ya optimizado)
-  return videoPath.replace('.mp4', '-poster.webp');
+  // Poster siempre es avif (ya optimizado)
+  return videoPath.replace('.mp4', '-poster.avif');
 };
 
 /**

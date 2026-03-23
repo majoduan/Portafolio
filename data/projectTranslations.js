@@ -7,9 +7,11 @@ export const getProjectsData = (t) => [
     tech: ["React", "TypeScript", "FastAPI", "PostgreSQL", "Docker"],
     video: "/videos/poa-management.mp4",
     links: {
-      [t('projects.items.poa.links.frontend')]: "https://github.com/majoduan/Software_Seguro_Grupo_4_Front.git",
-      [t('projects.items.poa.links.backend')]: "https://github.com/majoduan/Software_Seguro_Grupo_4_Back.git",
-      [t('projects.items.poa.links.demo')]: "https://software-seguro-grupo-4-front.vercel.app/login"
+      github: [
+        "https://github.com/majoduan/Software_Seguro_Grupo_4_Front.git",
+        "https://github.com/majoduan/Software_Seguro_Grupo_4_Back.git"
+      ],
+      demo: "https://software-seguro-grupo-4-front.vercel.app/login"
     }
   },
   {
