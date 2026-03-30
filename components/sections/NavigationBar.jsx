@@ -82,28 +82,28 @@ const NavigationBar = React.memo(() => {
       </nav>
 
       {/* Floating Action Buttons - Mobile Only (bottom-left) */}
-      <div className="md:hidden fixed bottom-6 left-4 z-50 flex flex-col gap-3">
+      <div className="md:hidden fixed bottom-6 left-4 z-50 flex flex-col gap-2">
         {/* Theme Toggle Button */}
         <button
           onClick={toggleTheme}
-          className="w-14 h-14 rounded-full bg-white dark:bg-[var(--bg-elevated)] shadow-lg hover:shadow-xl border-2 border-slate-200 dark:border-slate-700 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95"
+          className="group/toggle w-10 h-10 rounded-full border-2 border-black dark:border-white shadow-lg flex items-center justify-center transition-all duration-300 hover:bg-black dark:hover:bg-white hover:scale-105 active:scale-95"
           aria-label="Toggle theme"
         >
           {theme === 'dark' ? (
-            <Moon className="w-6 h-6 text-slate-300" />
+            <Moon className="w-4 h-4 text-white group-hover/toggle:text-black transition-colors duration-300" fill="currentColor" />
           ) : (
-            <Sun className="w-6 h-6 text-amber-500" />
+            <Sun className="w-4 h-4 text-black group-hover/toggle:text-white transition-colors duration-300" />
           )}
         </button>
 
         {/* Language Toggle Button */}
         <button
           onClick={toggleLanguage}
-          className="w-14 h-14 rounded-full bg-white dark:bg-[var(--bg-elevated)] shadow-lg hover:shadow-xl border-2 border-slate-200 dark:border-slate-700 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95"
+          className="group/toggle w-10 h-10 rounded-full border-2 border-black dark:border-white shadow-lg flex items-center justify-center transition-all duration-300 hover:bg-black dark:hover:bg-white hover:scale-105 active:scale-95"
           aria-label="Toggle language"
         >
-          <span className="text-2xl leading-none flex items-center justify-center h-full" role="img" aria-label={language === 'en' ? 'English' : 'Español'}>
-            {language === 'en' ? '🇺🇸' : '🇪🇸'}
+          <span className="text-sm font-bold text-black dark:text-white group-hover/toggle:text-white dark:group-hover/toggle:text-black transition-colors duration-300">
+            {language === 'en' ? 'EN' : 'ES'}
           </span>
         </button>
       </div>
