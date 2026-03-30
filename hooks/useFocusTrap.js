@@ -18,7 +18,7 @@ export default function useFocusTrap(isActive) {
     const focusable = container.querySelectorAll(
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
     );
-    if (focusable.length > 0) focusable[0].focus();
+    if (focusable.length > 0) focusable[0].focus({ preventScroll: true });
 
     const handleKeyDown = (e) => {
       if (e.key !== 'Tab') return;

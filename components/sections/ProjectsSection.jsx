@@ -6,6 +6,7 @@ import { useTranslation } from '../../hooks/useTranslation';
 import { getOptimalVideoSource, getOptimalPoster } from '../../utils/adaptiveVideo';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import useFocusTrap from '../../hooks/useFocusTrap';
+import Link from 'next/link';
 
 const ModalVideoPlayer = lazy(() => import('../ModalVideoPlayer'));
 
@@ -95,15 +96,24 @@ const ProjectCard = React.memo(({ project, onProjectClick }) => {
               link.type === 'github-frontend' ? <Monitor className="w-4 h-4" /> :
               link.type === 'github-backend' ? <Server className="w-4 h-4" /> :
               <Github className="w-4 h-4" />;
+            const label =
+              link.type === 'demo' ? 'Live Demo' :
+              link.type === 'github-frontend' ? 'Frontend' :
+              link.type === 'github-backend' ? 'Backend' :
+              'Source';
             return (
-              <button
-                key={link.type}
-                onClick={(e) => handleLinkClick(e, link)}
-                className="w-10 h-10 rounded-full bg-[var(--btn-primary)] flex items-center justify-center text-white hover:scale-110 hover:shadow-lg transition-all duration-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)]"
-                aria-label={link.type}
-              >
-                {icon}
-              </button>
+              <div key={link.type} className="group/btn relative">
+                <button
+                  onClick={(e) => handleLinkClick(e, link)}
+                  className="w-10 h-10 rounded-full bg-[var(--btn-primary)] flex items-center justify-center text-white hover:scale-110 hover:shadow-lg transition-all duration-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)]"
+                  aria-label={label}
+                >
+                  {icon}
+                </button>
+                <span className="absolute top-1/2 -translate-y-1/2 right-full mr-2 px-2 py-1 text-xs font-medium bg-gray-900 text-white rounded opacity-0 group-hover/btn:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                  {label}
+                </span>
+              </div>
             );
           })}
         </div>
@@ -129,12 +139,16 @@ const ProjectsSection = React.memo(() => {
     setSelectedProject(null);
   }, []);
 
-  // Close modal on Escape key
+  // Close modal on Escape key + lock body scroll
   useEffect(() => {
     if (!isModalOpen) return;
+    document.body.style.overflow = 'hidden';
     const handleEscape = (e) => { if (e.key === 'Escape') handleCloseModal(); };
     document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
+    return () => {
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', handleEscape);
+    };
   }, [isModalOpen, handleCloseModal]);
 
   const handleProjectClick = useCallback((proj) => {
@@ -175,7 +189,7 @@ const ProjectsSection = React.memo(() => {
       {/* Modal */}
       {isModalOpen && selectedProject && (
         <div
-          className="fixed inset-0 bg-black/40 dark:bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fadeIn"
+          className="fixed inset-0 top-14 bg-black/40 dark:bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fadeIn"
           onClick={handleCloseModal}
         >
           <div
@@ -292,9 +306,10 @@ const ProjectsSection = React.memo(() => {
                       });
                     })}
 
-                    {/* Dive Deeper button — navigates to /projects page */}
-                    <a
+                    {/* Dive Deeper button — SPA navigation to /projects page */}
+                    <Link
                       href={`/projects#project-${selectedProject.slug}`}
+                      onClick={handleCloseModal}
                       className="swap-btn"
                       ref={(el) => {
                         if (el) {
@@ -312,7 +327,7 @@ const ProjectsSection = React.memo(() => {
                       <span className="swap-btn-text">
                         {t('projects.diveDeeper')}
                       </span>
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
