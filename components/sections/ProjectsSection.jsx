@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useRef, useMemo, useCallback, useEffect, lazy, Suspense } from 'react';
-import { ExternalLink, Github, X, Monitor, Server } from 'lucide-react';
+import { ExternalLink, Github, X, Monitor, Server, Layers } from 'lucide-react';
 import { getProjectsData } from '../../data/projectTranslations';
 import { useTranslation } from '../../hooks/useTranslation';
 import { getOptimalVideoSource, getOptimalPoster } from '../../utils/adaptiveVideo';
@@ -226,58 +226,20 @@ const ProjectsSection = React.memo(() => {
 
                 <div className="h-px bg-gradient-to-r from-transparent via-[var(--border-color)] to-transparent my-5" />
 
-                {/* About the Project */}
-                {selectedProject.longDescription && (
+                {/* About the Project — shortened summary */}
+                {selectedProject.summary && (
                   <>
                     <div className="mb-4">
                       <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-3">
                         {t('projects.modalTitle')}
                       </h4>
                       <p className="text-slate-600 dark:text-slate-400 text-sm md:text-base leading-relaxed text-justify">
-                        {selectedProject.longDescription}
+                        {selectedProject.summary}
                       </p>
                     </div>
                     <div className="h-px bg-gradient-to-r from-transparent via-[var(--border-color)] to-transparent my-5" />
                   </>
                 )}
-
-                {/* Technologies */}
-                <div className="mb-4">
-                  <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-3">
-                    {t('projects.techUsed')}
-                  </h4>
-                  <div
-                    className="flex flex-wrap gap-2 md:gap-2.5"
-                    onMouseMove={(e) => {
-                      const tags = e.currentTarget.querySelectorAll('.tech-tag');
-                      tags.forEach((tag) => {
-                        const rect = tag.getBoundingClientRect();
-                        const x = e.clientX - rect.left;
-                        const y = e.clientY - rect.top;
-                        tag.style.setProperty('--tag-x', `${x}px`);
-                        tag.style.setProperty('--tag-y', `${y}px`);
-                        tag.style.setProperty('--tag-active', '1');
-                      });
-                    }}
-                    onMouseLeave={(e) => {
-                      const tags = e.currentTarget.querySelectorAll('.tech-tag');
-                      tags.forEach((tag) => {
-                        tag.style.setProperty('--tag-active', '0');
-                      });
-                    }}
-                  >
-                    {selectedProject.tech.map((tech, j) => (
-                      <span
-                        key={j}
-                        className="tech-tag px-4 py-1.5 rounded-full text-sm font-medium border border-black dark:border-white text-black dark:text-white cursor-default"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="h-px bg-gradient-to-r from-transparent via-[var(--border-color)] to-transparent my-5" />
 
                 {/* Project Links */}
                 <div className="mb-4 pb-2">
@@ -329,6 +291,28 @@ const ProjectsSection = React.memo(() => {
                         );
                       });
                     })}
+
+                    {/* Dive Deeper button — navigates to /projects page */}
+                    <a
+                      href={`/projects#project-${selectedProject.slug}`}
+                      className="swap-btn"
+                      ref={(el) => {
+                        if (el) {
+                          const text = el.querySelector('.swap-btn-text');
+                          if (text) el.style.setProperty('--swap-text-w', `${text.offsetWidth}px`);
+                          el.style.setProperty('--swap-btn-w', `${el.offsetWidth}px`);
+                        }
+                      }}
+                      aria-label={t('projects.diveDeeper')}
+                    >
+                      <span className="swap-btn-bg" />
+                      <span className="swap-btn-icon">
+                        <Layers className="w-5 h-5 text-white" />
+                      </span>
+                      <span className="swap-btn-text">
+                        {t('projects.diveDeeper')}
+                      </span>
+                    </a>
                   </div>
                 </div>
               </div>

@@ -30,6 +30,11 @@ import {
   FirebirdIcon,
   VercelIcon,
   RedhatIcon,
+  PandasIcon,
+  SeleniumIcon,
+  JupyterIcon,
+  PygameIcon,
+  NlayerIcon,
 } from '../components/icons/tech';
 
 // Helper function to get translated technology data
@@ -74,3 +79,25 @@ export const getTechnologies = (t) => ({
     { name: t('technologies.skills.unity.name'), description: t('technologies.skills.unity.description'), experience: "1/2 years", icon: UnityIcon, color: "from-gray-600 to-gray-800", tagColor: "from-gray-600 to-gray-600" }
   ]
 });
+
+// Static lookup: project tech name → icon component + gradient color.
+// Keys match the English names used in projectTranslations.js tech arrays.
+export const TECH_ICON_MAP = {
+  'React':                { icon: ReactLogo,     color: 'from-cyan-500 to-cyan-700' },
+  'TypeScript':           { icon: TSIcon,        color: 'from-blue-500 to-blue-700' },
+  'JavaScript':           { icon: JSIcon,        color: 'from-yellow-400 to-yellow-600' },
+  'FastAPI':              { icon: FastAPIIcon,    color: 'from-teal-700 to-teal-900' },
+  'PostgreSQL':           { icon: PostgreSQLIcon, color: 'from-blue-500 to-blue-700' },
+  'Docker':               { icon: DockerIcon,     color: 'from-blue-500 to-blue-700' },
+  'Python':               { icon: PythonIcon,     color: 'from-blue-400 to-blue-500' },
+  'Node.js':              { icon: NodeIcon,       color: 'from-green-400 to-green-500' },
+  'NestJS':               { icon: NestIcon,       color: 'from-red-700 to-red-900' },
+  'SQL Server':           { icon: SQLServerIcon,  color: 'from-red-500 to-orange-600' },
+  'Godot':                { icon: GodotIcon,      color: 'from-blue-800 to-blue-900' },
+  'ASP.NET':              { icon: DotNetIcon,     color: 'from-indigo-300 to-indigo-400' },
+  'Pandas':               { icon: PandasIcon,     color: 'from-blue-800 to-indigo-900' },
+  'Selenium':             { icon: SeleniumIcon,   color: 'from-red-400 to-red-500' },
+  'Jupyter':              { icon: JupyterIcon,    color: 'from-orange-300 to-orange-400' },
+  'Pygame':               { icon: PygameIcon,     color: 'from-green-400 to-green-600' },
+  'N-Layer architecture': { icon: NlayerIcon,     color: 'from-slate-500 to-slate-700' },
+};

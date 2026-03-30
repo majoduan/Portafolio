@@ -218,8 +218,12 @@ html:not(.dark) .spline-container > div {
   }
 }
 
-/* Swap Button - icon/text swap on hover */
+/* Swap Button - icon/text swap on hover
+   Uses --swap-dir (1 or -1) to control animation direction.
+   Normal: icon left→right, bg from left, text shifts left.
+   Reversed (--swap-dir: -1): icon right→left, bg from right, text shifts right. */
 .swap-btn {
+  --swap-dir: 1;
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -240,12 +244,12 @@ html:not(.dark) .spline-container > div {
   margin: 0 auto;
 }
 
-/* Background fill that slides in from left */
+/* Background fill — slides in from left (or right when reversed) */
 .swap-btn-bg {
   position: absolute;
   inset: 0;
   background: var(--btn-primary);
-  transform: translateX(-100%);
+  transform: translateX(calc(-100% * var(--swap-dir)));
   transition: transform 0.5s ease-out;
 }
 
@@ -253,7 +257,7 @@ html:not(.dark) .spline-container > div {
   transform: translateX(0);
 }
 
-/* Icon circle - starts left, moves right on hover */
+/* Icon circle — starts on one side, sweeps to the other on hover */
 .swap-btn-icon {
   position: relative;
   z-index: 10;
@@ -270,7 +274,7 @@ html:not(.dark) .spline-container > div {
 }
 
 .swap-btn:hover .swap-btn-icon {
-  transform: translateX(calc(var(--swap-btn-w, 200px) - 3rem));
+  transform: translateX(calc((var(--swap-btn-w, 200px) - 3rem) * var(--swap-dir)));
   box-shadow: none;
 }
 
@@ -278,7 +282,7 @@ html:not(.dark) .spline-container > div {
   border-radius: 9999px;
 }
 
-/* Text - starts right, moves left on hover */
+/* Text — shifts in the opposite direction of the icon on hover */
 .swap-btn-text {
   position: relative;
   z-index: 10;
@@ -295,7 +299,7 @@ html:not(.dark) .spline-container > div {
 
 .swap-btn:hover .swap-btn-text {
   color: white;
-  transform: translateX(-3rem);
+  transform: translateX(calc(-3rem * var(--swap-dir)));
 }
 
 /* Wide variant */
@@ -307,7 +311,7 @@ html:not(.dark) .spline-container > div {
 }
 
 .swap-btn-wide:hover .swap-btn-text {
-  transform: translateX(-3rem);
+  transform: translateX(calc(-3rem * var(--swap-dir)));
 }
 
 @media (min-width: 768px) {
@@ -315,6 +319,24 @@ html:not(.dark) .spline-container > div {
     font-size: 1.125rem;
     padding: 1rem 1.5rem 1rem 0;
   }
+}
+
+/* Reversed variant — flip direction + layout (desktop only) */
+@media (min-width: 1024px) {
+  .swap-btn-reversed {
+    --swap-dir: -1;
+    flex-direction: row-reverse;
+  }
+}
+
+/* Vertical LINKS title */
+.links-title-vertical-right {
+  writing-mode: vertical-rl;
+}
+
+.links-title-vertical-left {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
 }
 
 /* Animaciones para las transiciones de tecnologías */
@@ -525,6 +547,23 @@ section {
   }
   100% {
     opacity: 1;
+  }
+}
+
+/* ==================== PAGE TRANSITION ==================== */
+
+.page-transition {
+  animation: pageTransitionIn 0.6s ease-out forwards;
+}
+
+@keyframes pageTransitionIn {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

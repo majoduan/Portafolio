@@ -30,3 +30,8 @@ export { default as SqliteIcon } from './SqliteIcon';
 export { default as FirebirdIcon } from './FirebirdIcon';
 export { default as VercelIcon } from './VercelIcon';
 export { default as RedhatIcon } from './RedhatIcon';
+export { default as PandasIcon } from './PandasIcon';
+export { default as SeleniumIcon } from './SeleniumIcon';
+export { default as JupyterIcon } from './JupyterIcon';
+export { default as PygameIcon } from './PygameIcon';
+export { default as NlayerIcon } from './NlayerIcon';

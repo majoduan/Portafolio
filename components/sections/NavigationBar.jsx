@@ -1,64 +1,23 @@
 'use client';
-import React, { useState, useEffect, useContext } from 'react';
-import { Home, Cpu, Award, Briefcase, MessageCircle, Sun, Moon } from 'lucide-react';
+import React, { useContext } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Home, User, Briefcase, Sun, Moon } from 'lucide-react';
 import LanguageToggle from '../LanguageToggle';
 import ThemeToggle from '../ThemeToggle';
 import { useTranslation } from '../../hooks/useTranslation';
 import { AppContext } from '../../contexts/AppContext';
 
+const navItems = [
+  { id: 'home', href: '/', icon: Home },
+  { id: 'about', href: '/about', icon: User },
+  { id: 'projects', href: '/projects', icon: Briefcase },
+];
+
 const NavigationBar = React.memo(() => {
   const { t } = useTranslation();
   const { theme, toggleTheme, language, toggleLanguage } = useContext(AppContext);
-  const [activeSection, setActiveSection] = useState('home');
-
-  // Detect active section on scroll - optimizado con throttle
-  useEffect(() => {
-    let ticking = false;
-
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const sections = ['home', 'technologies', 'certificates', 'projects', 'contact'];
-          const scrollPosition = window.scrollY + 150;
-
-          if (window.scrollY < 100) {
-            setActiveSection('home');
-            ticking = false;
-            return;
-          }
-
-          const windowHeight = window.innerHeight;
-          const documentHeight = document.documentElement.scrollHeight;
-          const isAtBottom = windowHeight + window.scrollY >= documentHeight - 50;
-
-          if (isAtBottom) {
-            setActiveSection('contact');
-            ticking = false;
-            return;
-          }
-
-          for (let i = sections.length - 1; i >= 0; i--) {
-            const section = sections[i];
-            const element = document.getElementById(section);
-            if (element) {
-              const { offsetTop } = element;
-              if (scrollPosition >= offsetTop) {
-                setActiveSection(section);
-                break;
-              }
-            }
-          }
-
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const pathname = usePathname();
 
   return (
     <>
@@ -69,30 +28,23 @@ const NavigationBar = React.memo(() => {
           <div className="hidden md:flex items-center justify-between h-16">
             {/* Desktop menu - Centrado */}
             <div className="flex space-x-10 flex-1 justify-center">
-              {['home', 'technologies', 'certificates', 'projects', 'contact'].map((item) => (
-                <a
-                  key={item}
-                  href={`#${item}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    const element = document.getElementById(item);
-                    if (element) {
-                      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                  }}
+              {navItems.map(({ id, href }) => (
+                <Link
+                  key={id}
+                  href={href}
                   className={`text-lg transition-all duration-300 relative group ${
-                    activeSection === item
+                    pathname === href
                       ? 'text-black dark:text-white font-bold'
                       : 'text-gray-400 dark:text-gray-400 font-medium'
                   }`}
                 >
-                  {t(`nav.${item}`)}
+                  {t(`nav.${id}`)}
                   <span
                     className={`absolute -bottom-1 left-0 h-0.5 bg-gray-400 transition-all duration-300 ${
-                      activeSection === item ? '!bg-black dark:!bg-white w-full' : 'w-0 group-hover:w-full'
+                      pathname === href ? '!bg-black dark:!bg-white w-full' : 'w-0 group-hover:w-full'
                     }`}
                   />
-                </a>
+                </Link>
               ))}
             </div>
 
@@ -107,36 +59,22 @@ const NavigationBar = React.memo(() => {
           <div className="md:hidden flex items-center justify-center h-14 px-1">
             {/* Navigation Icons - Centered */}
             <div className="flex items-center justify-around gap-1">
-              {[
-                { id: 'home', icon: Home },
-                { id: 'technologies', icon: Cpu },
-                { id: 'certificates', icon: Award },
-                { id: 'projects', icon: Briefcase },
-                { id: 'contact', icon: MessageCircle }
-              // eslint-disable-next-line no-unused-vars
-              ].map(({ id, icon: Icon }) => (
-                <a
+              {navItems.map(({ id, href, icon: Icon }) => (
+                <Link
                   key={id}
-                  href={`#${id}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    const element = document.getElementById(id);
-                    if (element) {
-                      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                  }}
+                  href={href}
                   className={`flex flex-col items-center justify-center p-2 rounded-lg transition-all duration-300 ${
-                    activeSection === id
+                    pathname === href
                       ? 'text-black dark:text-white font-bold bg-gray-100 dark:bg-white/10'
                       : 'text-gray-400 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/5'
                   }`}
                   aria-label={t(`nav.${id}`)}
                 >
-                  <Icon className="w-5 h-5" strokeWidth={activeSection === id ? 2.5 : 2} />
+                  <Icon className="w-5 h-5" strokeWidth={pathname === href ? 2.5 : 2} />
                   <span className="text-[10px] font-medium mt-0.5 leading-tight">
                     {t(`nav.${id}`).split(' ')[0]}
                   </span>
-                </a>
+                </Link>
               ))}
             </div>
           </div>

@@ -1,6 +1,7 @@
 {
   "nav": {
     "home": "Inicio",
+    "about": "Acerca de",
     "technologies": "Tecnologías",
     "certificates": "Certificados",
     "projects": "Proyectos",
@@ -187,22 +188,49 @@
   },
   "projects": {
     "title": "Proyectos Destacados",
+    "pageTitle": "Mis Proyectos",
     "viewDemo": "Ver Demo Completo",
     "modalTitle": "Acerca del Proyecto",
     "techUsed": "Tecnologías Utilizadas",
     "projectLinks": "Enlaces del Proyecto",
+    "linksTitle": "ENLACES",
+    "techTitle": "TECH",
     "loading": "Cargando video...",
+    "diveDeeper": "Ver en Detalle",
+    "overview": "Resumen",
+    "keyFeatures": "Características Principales",
+    "techImpl": "Implementación Técnica",
     "linkLabels": {
       "demo": "Demo en Vivo",
       "frontend": "Código Frontend",
       "backend": "Código Backend",
-      "github": "Código Fuente"
+      "github": "Código Fuente",
+      "demoShort": "Live",
+      "frontendShort": "Frontend",
+      "backendShort": "Backend",
+      "githubShort": "Fuente"
     },
     "items": {
       "poa": {
         "title": "Sistema de Gestión POA",
         "description": "Plataforma integral para planificación y gestión presupuestaria con modelo RBAC",
+        "summary": "Una aplicación empresarial full-stack para planificación institucional y gestión presupuestaria. Implementa RBAC con autenticación JWT, hashing bcrypt y prevención de inyección SQL. Incluye seguimiento presupuestario en tiempo real, planificación colaborativa, paneles de informes y registro de auditoría.",
         "longDescription": "Una aplicación empresarial full-stack diseñada para la planificación institucional y gestión presupuestaria. El sistema implementa un modelo robusto de Control de Acceso Basado en Roles (RBAC) con múltiples jerarquías de usuarios. Construido con prácticas modernas de seguridad que incluyen autenticación JWT, hashing de contraseñas con bcrypt y prevención de inyección SQL. Las características incluyen seguimiento presupuestario en tiempo real, herramientas de planificación colaborativa, paneles de informes completos y registro de auditoría para cumplimiento normativo. El frontend usa React con TypeScript para seguridad de tipos, mientras que el backend aprovecha las capacidades asíncronas de FastAPI para un rendimiento óptimo. PostgreSQL maneja datos relacionales complejos y Docker asegura implementación consistente entre entornos.",
+        "keyFeatures": {
+          "RBAC": "Control de acceso basado en roles con múltiples jerarquías",
+          "Budget Tracking": "Monitoreo en tiempo real y planificación colaborativa",
+          "Reporting": "Paneles completos para visualización de datos",
+          "Audit Logging": "Seguimiento detallado de actividad para cumplimiento normativo",
+          "JWT Auth": "Autenticación basada en tokens con hashing bcrypt"
+        },
+        "techDescriptions": {
+          "React": "Biblioteca UI con seguridad de tipos",
+          "TypeScript": "JavaScript tipado para confiabilidad frontend",
+          "FastAPI": "API Python asíncrona para rendimiento óptimo",
+          "PostgreSQL": "Gestión de datos relacionales complejos",
+          "Docker": "Despliegue consistente entre entornos"
+        },
+        "techImpl": "Frontend React + TypeScript combinado con las capacidades asíncronas de FastAPI para rendimiento óptimo. PostgreSQL maneja datos relacionales complejos con normalización adecuada. Docker asegura despliegue consistente entre entornos. Seguridad implementada mediante autenticación JWT, hashing bcrypt y consultas parametrizadas para prevención de inyección SQL.",
         "links": {
           "frontend": "frontend",
           "backend": "backend",
@@ -212,7 +240,22 @@
       "certificates": {
         "title": "Automatización de Certificados EPN",
         "description": "Herramienta Python para generación automática de certificados con web scraping y procesamiento de datos",
+        "summary": "Una herramienta de automatización inteligente que agiliza la generación de certificados para instituciones educativas. Usa Selenium para web scraping, Pandas para procesamiento de datos y llenado automatizado de plantillas. Redujo el tiempo de generación de 3 horas a 15 minutos.",
         "longDescription": "Una herramienta de automatización inteligente desarrollada para agilizar el proceso de generación de certificados para instituciones educativas. El sistema utiliza Selenium para web scraping para extraer datos de estudiantes, Pandas para procesamiento y validación eficiente de datos, y llenado automatizado de plantillas para generación de certificados. Las características incluyen procesamiento por lotes de cientos de certificados, validación de datos y manejo de errores, detección de duplicados y exportación a múltiples formatos (PDF, Excel). El entorno Jupyter notebook proporciona una interfaz interactiva para monitorear el proceso y depuración. Esta herramienta redujo el tiempo de generación de certificados de 3 horas a 15 minutos, mejorando significativamente la eficiencia administrativa.",
+        "keyFeatures": {
+          "Batch Processing": "Manejo de cientos de certificados en una sola ejecución",
+          "Web Scraping": "Extracción automatizada de datos estudiantiles del sistema institucional",
+          "Data Validation": "Detección de duplicados y pipelines de manejo de errores",
+          "Multi-format Export": "Salida en formatos PDF y Excel",
+          "Jupyter Interface": "Entorno interactivo de monitoreo y depuración"
+        },
+        "techDescriptions": {
+          "Python": "Lenguaje principal para scripting y automatización",
+          "Pandas": "Pipelines eficientes de procesamiento y validación de datos",
+          "Selenium": "Web scraping y automatización de navegador",
+          "Jupyter": "Interfaz interactiva de monitoreo y depuración"
+        },
+        "techImpl": "Selenium automatiza el navegador para extraer registros de estudiantes de sistemas institucionales. Los pipelines de Pandas limpian, validan y deduplicatan datos antes del procesamiento. El motor de plantillas rellena certificados en modo batch, reduciendo el procesamiento manual de 3 horas a 15 minutos.",
         "links": {
           "github": "github"
         }
@@ -220,7 +263,20 @@
       "travel": {
         "title": "Calculadora de Viáticos",
         "description": "Sistema de estimación presupuestaria con sugerencias inteligentes y capacidades de exportación",
+        "summary": "Una aplicación sofisticada de planificación presupuestaria para viajes de negocios y gastos institucionales. Proporciona estimación inteligente de costos con cálculos en tiempo real, soporte multi-moneda y exportación PDF. Construida con hooks de React y Context API.",
         "longDescription": "Una aplicación sofisticada de planificación presupuestaria para viajes de negocios y gastos institucionales. El sistema proporciona estimación inteligente de costos basada en destino, duración y categoría de viaje, con cálculos en tiempo real y validación dinámica de formularios. Las características incluyen soporte multi-moneda, seguimiento de datos históricos para mejores estimaciones, exportación PDF con desglose detallado e integración con sistemas presupuestarios institucionales. La interfaz está diseñada para facilidad de uso con asistentes paso a paso, funcionalidad de autoguardado y diseño responsive para flujos de aprobación móvil. Construida con prácticas modernas de React incluyendo hooks y Context API para gestión de estado.",
+        "keyFeatures": {
+          "Cost Estimation": "Cálculos inteligentes por destino, duración y categoría",
+          "Multi-currency": "Conversión y cálculos de divisas en tiempo real",
+          "Historical Data": "Seguimiento de gastos pasados para mejores estimaciones futuras",
+          "PDF Export": "Desglose detallado de gastos en informes descargables",
+          "Step-by-step Wizard": "Flujo guiado con funcionalidad de autoguardado"
+        },
+        "techDescriptions": {
+          "React": "Framework UI con hooks y Context API para gestión de estado",
+          "JavaScript": "Lógica de cálculos dinámicos y validación de formularios"
+        },
+        "techImpl": "Construida sobre React con hooks (useState, useContext, useEffect) para gestión de estado reactiva. La validación dinámica de formularios se ejecuta en cada cambio de entrada para retroalimentación inmediata. La biblioteca de generación PDF produce informes de gastos formateados. El diseño responsive asegura usabilidad en dispositivos móviles para aprobaciones en campo.",
         "links": {
           "demo": "demo",
           "github": "github"
@@ -229,7 +285,23 @@
       "storycraft": {
         "title": "Plataforma StoryCraft",
         "description": "Narración colaborativa con arquitecturas monolíticas y de microservicios",
+        "summary": "Una plataforma innovadora de escritura colaborativa que demuestra arquitecturas monolíticas y de microservicios. Incluye coautoría en tiempo real vía WebSocket, microservicios NestJS, gestión de estado React+Redux y contenedorización con Docker Compose.",
         "longDescription": "Una plataforma innovadora para escritura creativa colaborativa que demuestra patrones arquitectónicos tanto monolíticos como de microservicios. Los usuarios pueden crear, compartir y coescribir historias en tiempo real con control de versiones y narrativas ramificadas. La plataforma implementa WebSocket para colaboración en tiempo real, microservicios NestJS para escalabilidad (servicio de autenticación, servicio de historias, servicio de notificaciones), React con Redux para gestión compleja de estado y SQL Server para integridad transaccional de datos. Las características incluyen herramientas de gestión de personajes y tramas, sugerencias de escritura impulsadas por IA, flujos de trabajo de publicación y características comunitarias como comentarios y calificaciones. El proyecto muestra principios modernos de arquitectura de software incluyendo patrón API Gateway, comunicación basada en eventos y contenedorización con Docker Compose.",
+        "keyFeatures": {
+          "Real-time Co-authoring": "Escritura colaborativa de historias vía WebSocket",
+          "Version Control": "Narrativas ramificadas con seguimiento de historial",
+          "Microservices": "Servicios NestJS para autenticación, historias y notificaciones",
+          "Story Management": "Herramientas de organización de personajes y tramas",
+          "Community": "Comentarios, calificaciones y flujos de publicación"
+        },
+        "techDescriptions": {
+          "Node.js": "Runtime JavaScript para servicios backend",
+          "NestJS": "Framework de microservicios escalable con inyección de dependencias",
+          "React": "Frontend con Redux para gestión compleja de estado",
+          "SQL Server": "Integridad transaccional de datos para historias y usuarios",
+          "Docker": "Orquestación multi-contenedor con Docker Compose"
+        },
+        "techImpl": "Arquitectura de microservicios con servicios separados de autenticación, historias y notificaciones que se comunican mediante mensajes basados en eventos. El patrón API Gateway enruta las solicitudes del cliente. WebSocket habilita la colaboración en tiempo real. Docker Compose orquesta el stack completo de múltiples servicios para desarrollo local y despliegue.",
         "links": {
           "github": "github"
         }
@@ -237,7 +309,21 @@
       "fitness": {
         "title": "Rastreador de Fitness",
         "description": "Una aplicación web construida para gestionar rutinas de ejercicio y seguimiento de progreso físico.",
+        "summary": "Una aplicación integral de gestión de fitness construida con ASP.NET Web Forms usando arquitectura estricta de N-Capas. Incluye creación de rutinas, seguimiento de progreso con gráficos, registro de calorías y compartición social. Implementa procedimientos almacenados y Entity Framework ORM.",
         "longDescription": "Una aplicación integral de gestión de fitness construida con ASP.NET Web Forms demostrando patrones de arquitectura de nivel empresarial. La aplicación utiliza una arquitectura estricta de N-Capas separando las capas de Presentación, Lógica de Negocio y Acceso a Datos para mantenibilidad y testabilidad. Las características incluyen creación personalizada de rutinas de ejercicio con bibliotecas de ejercicios, seguimiento de progreso con gráficos y estadísticas, registro de calorías y nutrición, establecimiento de metas y seguimiento de logros, y características sociales para compartir progreso. El backend implementa procedimientos almacenados para operaciones de datos, Entity Framework para ORM e incluye manejo apropiado de excepciones y registro. Las características de seguridad incluyen validación de entrada, prevención de inyección SQL y gestión de sesiones.",
+        "keyFeatures": {
+          "Workout Routines": "Creación personalizada con biblioteca de ejercicios",
+          "Progress Tracking": "Gráficos y estadísticas de rendimiento",
+          "Nutrition Logging": "Seguimiento de calorías con gestión de metas",
+          "Social Sharing": "Compartir progreso y logros con otros",
+          "Stored Procedures": "Operaciones de base de datos parametrizadas"
+        },
+        "techDescriptions": {
+          "ASP.NET": "Framework Web Forms para renderizado del lado del servidor",
+          "N-Layer architecture": "Separación estricta de capas de Presentación, Lógica de Negocio y Acceso a Datos",
+          "SQL Server": "Base de datos relacional empresarial con procedimientos almacenados"
+        },
+        "techImpl": "La arquitectura N-Capas separa responsabilidades: Presentación (Web Forms), Lógica de Negocio (clases C#) y Acceso a Datos (Entity Framework + procedimientos almacenados). Todas las operaciones de base de datos usan procedimientos almacenados parametrizados para prevenir inyección SQL. La gestión de sesiones y validación de entrada aseguran la capa de aplicación.",
         "links": {
           "github": "github"
         }
@@ -245,7 +331,20 @@
       "spaceInvaders": {
         "title": "Space Invaders",
         "description": "Juego clásico de Space Invaders.",
+        "summary": "Una recreación fiel del clásico juego arcade Space Invaders en Python con Pygame. Presenta jugabilidad fluida a 60 FPS, gráficos por sprites, dificultad progresiva, power-ups, persistencia de puntuación máxima y efectos de sonido.",
         "longDescription": "Una recreación fiel del icónico juego arcade Space Invaders usando Python y Pygame, demostrando fundamentos de desarrollo de juegos y programación orientada a objetos. El juego presenta jugabilidad fluida a 60 FPS, gráficos basados en sprites con recursos personalizados, sistemas de detección de colisiones, dificultad progresiva con velocidad alienígena creciente, mecánicas de power-ups, persistencia de puntuación máxima y efectos de sonido. Los aspectos técnicos destacados incluyen gestión de estado del juego, sistema de componentes de entidad para objetos del juego, renderizado optimizado con grupos de sprites y manejo de entrada con controles configurables. El proyecto muestra comprensión de bucles de juego, movimiento independiente de cuadros y patrones clásicos de diseño de juegos arcade.",
+        "keyFeatures": {
+          "60 FPS Gameplay": "Sistema de movimiento fluido independiente de cuadros",
+          "Progressive Difficulty": "Velocidad alienígena creciente y escalado de desafío",
+          "Power-ups": "Mecánicas coleccionables con persistencia de puntuación",
+          "Sound & Collision": "Efectos de audio y sistemas de detección precisos",
+          "Entity Components": "Sistema de componentes para objetos del juego organizados"
+        },
+        "techDescriptions": {
+          "Python": "Lenguaje principal para lógica de juego y arquitectura OOP",
+          "Pygame": "Biblioteca de desarrollo de juegos 2D con soporte de sprites y audio"
+        },
+        "techImpl": "El bucle de juego corre a 60 FPS con delta-time para movimiento independiente de cuadros. El sistema de componentes de entidad gestiona todos los objetos del juego (jugador, alienígenas, balas, power-ups) a través de grupos de sprites para renderizado y detección de colisiones optimizados. La máquina de estados del juego maneja transiciones entre menú, jugabilidad y pantallas de fin de juego.",
         "links": {
           "github": "github"
         }
@@ -253,7 +352,19 @@
       "godot2d": {
         "title": "Juego Godot 2D",
         "description": "Juego con trampas, frutas que dan puntos y un trofeo final que felicita al jugador.",
+        "summary": "Un juego de plataformas 2D en Godot Engine que muestra movimiento de personaje basado en física, puntuación por coleccionables, mecánicas de peligros, puntos de control y efectos de partículas. Construido con GDScript, diseño de niveles con tilemap y máquinas de estados de animación.",
         "longDescription": "Un juego de plataformas 2D desarrollado en Godot Engine que muestra mecánicas fundamentales de juego y principios de diseño de niveles. El juego presenta movimiento de personaje basado en física con mecánicas de salto, sistema de coleccionables con puntuación, mecánicas de peligros y trampas que requieren tiempo y habilidad, sistema de puntos de control para progresión del jugador y efectos de partículas para retroalimentación visual. Construido usando el sistema de escenas basado en nodos de Godot, GDScript para lógica del juego, sistema de tilemap para diseño de niveles y máquinas de estados de animación para estados del personaje. El proyecto demuestra comprensión de física de juegos 2D, capas de colisión, sistema de señales para manejo de eventos y sensación del juego a través del ajuste cuidadoso de parámetros de movimiento.",
+        "keyFeatures": {
+          "Physics Movement": "Controlador de personaje con mecánicas de salto",
+          "Collectibles": "Sistema de puntuación con objetos en los niveles",
+          "Hazards & Traps": "Obstáculos que requieren timing y habilidad precisos",
+          "Checkpoints": "Puntos de guardado para progresión del jugador",
+          "Particle Effects": "Retroalimentación visual para acciones y eventos"
+        },
+        "techDescriptions": {
+          "Godot": "Motor de juegos basado en nodos con física, animación y gestión de escenas integradas"
+        },
+        "techImpl": "El árbol de escenas basado en nodos de Godot estructura los objetos del juego con relaciones padre-hijo. GDScript maneja la lógica del controlador de personaje con movimiento basado en física. El sistema de tilemap permite diseño rápido de niveles. Las máquinas de estados de animación gestionan estados del personaje (idle, correr, saltar, herido). El sistema de señales habilita manejo de eventos desacoplado entre nodos del juego.",
         "links": {
           "github": "github"
         }
@@ -261,11 +372,34 @@
       "godot3d": {
         "title": "Juego Godot 3D",
         "description": "Juego donde controlas un cubo, escalas una montaña y recoges monedas en la cima.",
+        "summary": "Una experiencia de escalada de montaña en 3D con Godot Engine, movimiento basado en física, coleccionables 3D, iluminación dinámica y un sistema de recompensas de victoria. Explora control de personaje 3D, algoritmos de cámara y matemáticas vectoriales.",
         "longDescription": "Una exploración del desarrollo de juegos 3D usando Godot Engine, presentando una experiencia desafiante de escalada de montaña con movimiento basado en física. El juego implementa controlador de personaje 3D con sistema de seguimiento de cámara, generación de terreno y diseño ambiental, sistema de coleccionables con conciencia espacial 3D, efectos de iluminación y sombras para atmósfera y condición de victoria con retroalimentación de recompensa. Los aspectos técnicos incluyen motor de física 3D de Godot, nodos y transformaciones espaciales, algoritmos de posicionamiento de cámara, sistemas de malla y material y detección de colisiones 3D. El proyecto explora conceptos fundamentales del desarrollo de juegos 3D incluyendo matemáticas vectoriales, rotaciones de cuaterniones y diseño de niveles en tres dimensiones.",
+        "keyFeatures": {
+          "3D Controller": "Movimiento de personaje con sistema de cámara",
+          "Environment Design": "Generación de terreno y construcción del mundo",
+          "3D Collectibles": "Sistema de conciencia espacial para objetos",
+          "Lighting & Shadows": "Efectos dinámicos para inmersión atmosférica",
+          "Victory System": "Condición de triunfo con retroalimentación de recompensa"
+        },
+        "techDescriptions": {
+          "Godot": "Motor de juegos 3D con física, renderizado espacial y sistemas de cámara"
+        },
+        "techImpl": "El motor de física 3D de Godot impulsa el movimiento del personaje con detección de colisiones adecuada en mallas de terreno. El algoritmo de seguimiento de cámara usa Lerp para seguimiento suave con lag configurable. Las rotaciones de cuaterniones manejan la orientación del personaje 3D. Los sistemas de malla y material crean el entorno visual con iluminación dinámica para atmósfera.",
         "links": {
           "github": "github"
         }
       }
+    }
+  },
+  "about": {
+    "experience": {
+      "title": "Experiencia Laboral"
+    },
+    "education": {
+      "title": "Educación"
+    },
+    "skills": {
+      "title": "Habilidades Técnicas"
     }
   },
   "techCard": {
