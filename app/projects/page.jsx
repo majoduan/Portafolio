@@ -555,7 +555,7 @@ const ProjectRow = React.memo(({ project, index, t }) => {
           </h2>
 
           {/* Video — preserves 16:9 aspect ratio */}
-          <div className="w-full aspect-video bg-black">
+          <div className="w-full aspect-video bg-black relative z-10">
             <ProjectVideo
               src={project.video}
               poster={poster}
