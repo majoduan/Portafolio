@@ -392,14 +392,85 @@
     }
   },
   "about": {
+    "intro": {
+      "bio": "I design and build full-stack systems that are secure, scalable, and ready for production — from SaaS platforms and mobile apps to institutional tools and corporate websites. My work bridges frontend craft with backend robustness, delivering solutions that perform under real-world pressure."
+    },
+    "companies": {
+      "title": "Companies I've Worked With"
+    },
     "experience": {
-      "title": "Work Experience"
+      "title": "Work Experience",
+      "present": "Present",
+      "items": {
+        "bridge": {
+          "role": "Fullstack Developer",
+          "company": "Bridge Staff International",
+          "tag": "ACR Developer",
+          "location": "Hybrid",
+          "period": "Jan 2026",
+          "bullets": [
+            "Built and stabilized a full-stack SaaS monorepo (React, Node.js/Express, React Native/Expo, Supabase, Drizzle ORM, Stripe, Turborepo) achieving full production readiness across web, mobile, and backend.",
+            "Executed phased security hardening on a fintech investment platform: IDOR, CSRF, CORS, Zod validation, audit trails — directly reducing operational risk in live financial operations.",
+            "Delivered a corporate marketing website using Next.js, TypeScript, Bootstrap 5, and a full CI/CD pipeline with security scanning via GitHub Actions."
+          ]
+        },
+        "epnIntern": {
+          "role": "Software Engineer Intern",
+          "company": "Escuela Politécnica Nacional",
+          "location": "Quito, Ecuador",
+          "period": "Jan 2025 – Jul 2025",
+          "bullets": [
+            "Designed and operated backend services, frontend modules, and data pipelines (Python, FastAPI, SQLAlchemy, React) supporting institutional planning workflows.",
+            "Implemented role-based access control and data validation rules, improving data consistency and reducing rework during reporting cycles.",
+            "Consolidated bug fixes, dependency upgrades, and input sanitization, restoring 100% platform availability."
+          ]
+        },
+        "digitalInclusion": {
+          "role": "Digital Inclusion Program Instructor",
+          "company": "Escuela Politécnica Nacional",
+          "location": "Quito, Ecuador",
+          "period": "Feb 2024 – Aug 2024",
+          "bullets": [
+            "Delivered hands-on training in digital productivity tools to rural educators and senior adults, contributing to an 85% completion rate across 200+ participants.",
+            "Supervised 70+ instructors and validated weekly deliverables for 120+ learners, ensuring curriculum compliance and instructional quality."
+          ]
+        },
+        "ieee": {
+          "role": "Computer Society EPN Chapter Chair",
+          "company": "IEEE",
+          "location": "Quito, Ecuador",
+          "period": "Jan 2025 – Jan 2026",
+          "bullets": [
+            "Led the IEEE Computer Society chapter, organizing 30+ technical events (workshops, coding sessions, competitions), significantly increasing student engagement.",
+            "Coordinated collaboration between universities, international and local speakers, and sponsors across events."
+          ]
+        }
+      }
     },
     "education": {
-      "title": "Education"
-    },
-    "skills": {
-      "title": "Technical Skills"
+      "title": "Education",
+      "items": {
+        "epn": {
+          "degree": "Bachelor of Software Engineering",
+          "institution": "Escuela Politécnica Nacional",
+          "location": "Quito, Ecuador",
+          "period": "Oct 2020 – Feb 2026",
+          "highlights": [
+            "Highest GPA in mid-program evaluation (Feb 2025)",
+            "Highest GPA in end-program evaluation (Feb 2026)"
+          ],
+          "coursework": "Data Structures & Algorithms, Databases, Software Architecture, Web Development, Services & APIs, Agile Methodologies"
+        },
+        "english": {
+          "degree": "English Sufficiency — B2 Level",
+          "institution": "Centro de Educación Continua",
+          "location": "Quito, Ecuador",
+          "period": "Jul 2017 – Dec 2018",
+          "highlights": [
+            "English Sufficiency Exam (B2) completed"
+          ]
+        }
+      }
     }
   },
   "techCard": {

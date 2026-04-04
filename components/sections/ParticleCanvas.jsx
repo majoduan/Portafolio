@@ -29,6 +29,11 @@ const ParticleCanvas = React.memo(() => {
     const particleCount = isMobile ? 8 : 20;
     const maxDistance = 80;
     const maxDistanceSq = maxDistance * maxDistance;
+    const MIN_SPEED = 0.15;
+    const MIN_SPEED_SQ = MIN_SPEED * MIN_SPEED;
+    const BASE_SPEED = 0.25;
+    const BASE_SPEED_SQ = BASE_SPEED * BASE_SPEED;
+    const TRAIL_ALPHA = 0.88;
 
     particles.current = Array.from({ length: particleCount }, () => ({
       x: Math.random() * canvas.width,
@@ -36,7 +41,7 @@ const ParticleCanvas = React.memo(() => {
       vx: (Math.random() - 0.5) * 0.5,
       vy: (Math.random() - 0.5) * 0.5,
       radius: Math.random() * 2 + 1,
-      opacity: Math.random() * 0.5 + 0.2
+      opacity: Math.random() * 0.4 + 0.5
     }));
 
     let mouseX = 0;
@@ -57,6 +62,8 @@ const ParticleCanvas = React.memo(() => {
     const handleVisibilityChange = () => {
       isTabVisible = !document.hidden;
       if (isTabVisible) {
+        // Limpiar trails stale acumulados mientras el tab estaba oculto
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         animationFrameId = requestAnimationFrame(animate);
       }
     };
@@ -79,16 +86,19 @@ const ParticleCanvas = React.memo(() => {
       // Leer tema actual desde ref (sin dependency en theme -> no destruye particulas)
       const isDark = themeRef.current === 'dark';
 
-      // Limpiar canvas completamente (canvas es transparente, el fondo CSS se ve a través)
-      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+      // Trail effect: fade pixeles existentes reduciendo su alpha (preserva transparencia del canvas)
+      ctx.globalCompositeOperation = 'destination-in';
+      ctx.fillStyle = `rgba(0, 0, 0, ${TRAIL_ALPHA})`;
+      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+      ctx.globalCompositeOperation = 'source-over';
 
       const particlesArray = particles.current;
       const len = particlesArray.length;
 
-      // Colores segun tema (dark: blanco, light: gris oscuro)
-      const particleColor = isDark ? 'rgba(255, 255, 255, ' : 'rgba(51, 65, 85, ';
-      const lineColor = isDark ? 'rgba(255, 255, 255, ' : 'rgba(51, 65, 85, ';
-      const opacityMultiplier = isDark ? 1 : 0.8;
+      // Colores segun tema (dark: blanco brillante, light: negro puro)
+      const particleColor = isDark ? 'rgba(255, 255, 255, ' : 'rgba(0, 0, 0, ';
+      const lineColor = isDark ? 'rgba(255, 255, 255, ' : 'rgba(0, 0, 0, ';
+      const opacityMultiplier = isDark ? 1 : 0.9;
 
       for (let i = 0; i < len; i++) {
         const p = particlesArray[i];
@@ -109,8 +119,29 @@ const ParticleCanvas = React.memo(() => {
 
         p.x += p.vx;
         p.y += p.vy;
-        p.vx *= 0.99;
-        p.vy *= 0.99;
+
+        // Friccion adaptiva: fuerte cuando rapido (post-mouse), suave cerca de velocidad base
+        const speedSq = p.vx * p.vx + p.vy * p.vy;
+        if (speedSq > BASE_SPEED_SQ) {
+          p.vx *= 0.96;
+          p.vy *= 0.96;
+        } else {
+          p.vx *= 0.99;
+          p.vy *= 0.99;
+        }
+
+        // Velocidad minima — las particulas nunca se detienen
+        if (speedSq < MIN_SPEED_SQ) {
+          if (speedSq > 0) {
+            const scale = MIN_SPEED / Math.sqrt(speedSq);
+            p.vx *= scale;
+            p.vy *= scale;
+          } else {
+            const angle = Math.random() * Math.PI * 2;
+            p.vx = Math.cos(angle) * MIN_SPEED;
+            p.vy = Math.sin(angle) * MIN_SPEED;
+          }
+        }
 
         // Bounce off edges — clamp position and reverse velocity
         if (p.x <= 0) { p.x = 0; p.vx = Math.abs(p.vx); }
@@ -125,7 +156,7 @@ const ParticleCanvas = React.memo(() => {
       // Conectar particulas cada 2 frames - BATCHED en un solo path por opacidad
       if (frameCount % 2 === 0) {
         ctx.lineWidth = 0.5;
-        ctx.strokeStyle = `${lineColor}${isDark ? 0.08 : 0.12})`;
+        ctx.strokeStyle = `${lineColor}${isDark ? 0.12 : 0.18})`;
         ctx.beginPath();
         for (let i = 0; i < len; i++) {
           const p1 = particlesArray[i];

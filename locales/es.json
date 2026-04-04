@@ -392,14 +392,85 @@
     }
   },
   "about": {
+    "intro": {
+      "bio": "Diseño y construyo sistemas full-stack que son seguros, escalables y listos para producción — desde plataformas SaaS y aplicaciones móviles hasta herramientas institucionales y sitios web corporativos. Mi trabajo conecta la precisión del frontend con la robustez del backend, entregando soluciones que funcionan bajo presión real."
+    },
+    "companies": {
+      "title": "Empresas con las que he Trabajado"
+    },
     "experience": {
-      "title": "Experiencia Laboral"
+      "title": "Experiencia Laboral",
+      "present": "Presente",
+      "items": {
+        "bridge": {
+          "role": "Desarrollador Fullstack",
+          "company": "Bridge Staff International",
+          "tag": "ACR Developer",
+          "location": "Híbrido",
+          "period": "Ene 2026",
+          "bullets": [
+            "Construí y estabilicé un monorepo SaaS full-stack (React, Node.js/Express, React Native/Expo, Supabase, Drizzle ORM, Stripe, Turborepo) logrando preparación completa para producción en web, móvil y backend.",
+            "Ejecuté endurecimiento de seguridad por fases en una plataforma fintech de inversión: IDOR, CSRF, CORS, validación Zod, registros de auditoría — reduciendo directamente el riesgo operacional en operaciones financieras en vivo.",
+            "Entregué un sitio web corporativo de marketing usando Next.js, TypeScript, Bootstrap 5, y un pipeline CI/CD completo con escaneo de seguridad vía GitHub Actions."
+          ]
+        },
+        "epnIntern": {
+          "role": "Pasante de Ingeniería de Software",
+          "company": "Escuela Politécnica Nacional",
+          "location": "Quito, Ecuador",
+          "period": "Ene 2025 – Jul 2025",
+          "bullets": [
+            "Diseñé y operé servicios backend, módulos frontend y pipelines de datos (Python, FastAPI, SQLAlchemy, React) apoyando flujos de trabajo de planificación institucional.",
+            "Implementé control de acceso basado en roles y reglas de validación de datos, mejorando la consistencia de datos y reduciendo retrabajo durante ciclos de reportes.",
+            "Consolidé correcciones de errores, actualizaciones de dependencias y sanitización de entradas, restaurando 100% de disponibilidad de la plataforma."
+          ]
+        },
+        "digitalInclusion": {
+          "role": "Instructor del Programa de Inclusión Digital",
+          "company": "Escuela Politécnica Nacional",
+          "location": "Quito, Ecuador",
+          "period": "Feb 2024 – Ago 2024",
+          "bullets": [
+            "Impartí capacitación práctica en herramientas de productividad digital a educadores rurales y adultos mayores, contribuyendo a una tasa de finalización del 85% en más de 200 participantes.",
+            "Supervisé a más de 70 instructores y validé entregables semanales para más de 120 aprendices, asegurando cumplimiento curricular y calidad instruccional."
+          ]
+        },
+        "ieee": {
+          "role": "Presidente del Capítulo Computer Society EPN",
+          "company": "IEEE",
+          "location": "Quito, Ecuador",
+          "period": "Ene 2025 – Ene 2026",
+          "bullets": [
+            "Lideré el capítulo IEEE Computer Society, organizando más de 30 eventos técnicos (talleres, sesiones de programación, competencias), aumentando significativamente la participación estudiantil.",
+            "Coordiné la colaboración entre universidades, ponentes internacionales y locales, y patrocinadores en múltiples eventos."
+          ]
+        }
+      }
     },
     "education": {
-      "title": "Educación"
-    },
-    "skills": {
-      "title": "Habilidades Técnicas"
+      "title": "Educación",
+      "items": {
+        "epn": {
+          "degree": "Ingeniería en Software",
+          "institution": "Escuela Politécnica Nacional",
+          "location": "Quito, Ecuador",
+          "period": "Oct 2020 – Feb 2026",
+          "highlights": [
+            "Mejor promedio en evaluación de mitad de carrera (Feb 2025)",
+            "Mejor promedio en evaluación de fin de carrera (Feb 2026)"
+          ],
+          "coursework": "Estructuras de Datos y Algoritmos, Bases de Datos, Arquitectura de Software, Desarrollo Web, Servicios y APIs, Metodologías Ágiles"
+        },
+        "english": {
+          "degree": "Suficiencia en Inglés — Nivel B2",
+          "institution": "Centro de Educación Continua",
+          "location": "Quito, Ecuador",
+          "period": "Jul 2017 – Dic 2018",
+          "highlights": [
+            "Examen de Suficiencia en Inglés (B2) completado"
+          ]
+        }
+      }
     }
   },
   "techCard": {
