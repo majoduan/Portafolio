@@ -416,7 +416,7 @@
         },
         "epnIntern": {
           "role": "Software Engineer Intern",
-          "company": "Escuela Politécnica Nacional",
+          "company": "EPN Research Directorate",
           "location": "Quito, Ecuador",
           "period": "Jan 2025 – Jul 2025",
           "bullets": [
@@ -427,7 +427,7 @@
         },
         "digitalInclusion": {
           "role": "Digital Inclusion Program Instructor",
-          "company": "Escuela Politécnica Nacional",
+          "company": "Ludolab EPN",
           "location": "Quito, Ecuador",
           "period": "Feb 2024 – Aug 2024",
           "bullets": [
@@ -467,8 +467,10 @@
           "location": "Quito, Ecuador",
           "period": "Jul 2017 – Dec 2018",
           "highlights": [
-            "English Sufficiency Exam (B2) completed"
-          ]
+            "English Sufficiency Exam (B2) completed",
+            "Beginner, Intermediate, Advanced and Academic course completed"
+          ],
+          "coursework": "Speaking, Listening, Reading, Writing"
         }
       }
     }

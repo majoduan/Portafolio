@@ -195,11 +195,11 @@ export default function AboutPage() {
 
       {/* ── SECTION 3: Achievement Cards Education ── */}
       <section className="py-20 relative z-10 bg-transparent transition-colors duration-300">
-        <div className="max-w-4xl mx-auto px-4">
+        <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 pb-2 leading-tight text-black dark:text-white">
             {t('about.education.title')}
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-6 items-stretch">
+          <div className="grid grid-cols-1 lg:grid-cols-[11fr_9fr] gap-10 items-stretch">
             {educationItems.map((item, index) => {
               const highlights = t(`about.education.items.${item.key}.highlights`);
               const coursework = t(`about.education.items.${item.key}.coursework`);
@@ -210,20 +210,19 @@ export default function AboutPage() {
               return (
                 <div
                   key={item.key}
-                  className="about-card flex flex-col relative overflow-hidden bg-white/80 dark:bg-[var(--bg-elevated-50)] backdrop-blur-lg rounded-2xl border border-slate-200 dark:border-slate-700/50 hover:border-black dark:hover:border-white transition-all duration-300 shadow-md hover:shadow-xl"
+                  className="flex flex-col relative"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  {/* Horizontal gradient top strip */}
-                  <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)]" />
-
-                  <div className="p-5 md:p-6 flex flex-col flex-1 pt-6">
+                  <div className="flex flex-col flex-1">
                     {/* Logo + degree header */}
                     <div className="flex items-start gap-4">
-                      <img
-                        src={item.logos[0]}
-                        alt=""
-                        className="w-12 h-12 md:w-14 md:h-14 rounded-xl object-contain bg-slate-100 dark:bg-slate-800 p-1.5 flex-shrink-0"
-                      />
+                      <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white p-2.5 flex-shrink-0 flex items-center justify-center">
+                        <img
+                          src={item.logos[0]}
+                          alt=""
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
                       <div className="flex-1 min-w-0">
                         <h3 className="text-lg md:text-xl font-bold text-black dark:text-white">
                           {t(`about.education.items.${item.key}.degree`)}
@@ -258,7 +257,7 @@ export default function AboutPage() {
 
                     {/* Coursework as pill tags */}
                     {courseworkTags.length > 0 && (
-                      <div className="mt-auto pt-4">
+                      <div className="mt-6 pt-2">
                         <p className="text-xs font-semibold text-slate-500 dark:text-slate-500 uppercase tracking-wider mb-2">
                           Coursework
                         </p>

@@ -62,7 +62,7 @@ const ProjectVideo = React.memo(({ src, poster, title }) => {
       document.removeEventListener('fullscreenchange', onChange);
       document.removeEventListener('webkitfullscreenchange', onChange);
     };
-  }, []);
+  }, [resetControlsTimer]);
 
   // ── Controls auto-hide timer ──
   const resetControlsTimer = useCallback(() => {

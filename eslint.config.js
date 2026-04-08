@@ -1,6 +1,7 @@
 import js from '@eslint/js'
 import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
+import nextPlugin from '@next/eslint-plugin-next'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
@@ -11,6 +12,9 @@ export default defineConfig([
       js.configs.recommended,
       reactHooks.configs['recommended-latest'],
     ],
+    plugins: {
+      '@next/next': nextPlugin,
+    },
     languageOptions: {
       ecmaVersion: 2020,
       globals: {
@@ -29,6 +33,8 @@ export default defineConfig([
         argsIgnorePattern: '^_|^[A-Z]',
         caughtErrorsIgnorePattern: '^_',
       }],
+      ...nextPlugin.configs.recommended.rules,
+      ...nextPlugin.configs['core-web-vitals'].rules,
     },
   },
 ])

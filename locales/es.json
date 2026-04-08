@@ -416,7 +416,7 @@
         },
         "epnIntern": {
           "role": "Pasante de Ingeniería de Software",
-          "company": "Escuela Politécnica Nacional",
+          "company": "Dirección de Investigación EPN",
           "location": "Quito, Ecuador",
           "period": "Ene 2025 – Jul 2025",
           "bullets": [
@@ -427,7 +427,7 @@
         },
         "digitalInclusion": {
           "role": "Instructor del Programa de Inclusión Digital",
-          "company": "Escuela Politécnica Nacional",
+          "company": "Ludolab EPN",
           "location": "Quito, Ecuador",
           "period": "Feb 2024 – Ago 2024",
           "bullets": [
@@ -467,8 +467,10 @@
           "location": "Quito, Ecuador",
           "period": "Jul 2017 – Dic 2018",
           "highlights": [
-            "Examen de Suficiencia en Inglés (B2) completado"
-          ]
+            "Examen de Suficiencia en Inglés (B2) completado",
+            "Curso Inicial, Intermedio, Avanzado y Académico completado"
+          ],
+          "coursework": "Speaking, Listening, Reading, Writing"
         }
       }
     }
