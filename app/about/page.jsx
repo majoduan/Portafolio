@@ -1,18 +1,18 @@
 'use client';
 
 import { useTranslation } from '../../hooks/useTranslation';
-import { Trophy, Briefcase, Linkedin, Github, Mail } from 'lucide-react';
+import { Trophy, Briefcase, Linkedin, Github, Mail, Calendar, MapPin } from 'lucide-react';
 
 const experienceItems = [
-  { key: 'bridge', logo: '/images/ACR.svg', present: true },
-  { key: 'epnIntern', logo: '/images/epn-seeklogo 1.svg' },
-  { key: 'digitalInclusion', logo: '/images/epn-seeklogo 1.svg' },
-  { key: 'ieee', logo: '/images/IEEE.svg' },
+  { key: 'bridge',           logos: ['/images/bridge-staff.svg', '/images/acr.svg'], present: true },
+  { key: 'epnIntern',        logos: ['/images/direc_investigacion.svg'] },
+  { key: 'digitalInclusion', logos: ['/images/ludolab.svg'] },
+  { key: 'ieee',             logos: ['/images/ieee.svg'] },
 ];
 
 const educationItems = [
-  { key: 'epn', logo: '/images/epn-seeklogo 1.svg', primary: true },
-  { key: 'english', logo: '/images/epn-seeklogo 1.svg' },
+  { key: 'epn',     logos: ['/images/epn.svg'],     primary: true },
+  { key: 'english', logos: ['/images/cec-epn.svg'] },
 ];
 
 export default function AboutPage() {
@@ -20,6 +20,7 @@ export default function AboutPage() {
 
   return (
     <main className="pt-20">
+
       {/* Intro */}
       <section className="py-20 relative z-10 bg-transparent transition-colors duration-300">
         <div className="max-w-4xl mx-auto px-4 text-center">
@@ -84,7 +85,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Companies - hidden until ready */}
+      {/* Companies — hidden until ready */}
       <section className="hidden">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight text-black dark:text-white">
@@ -93,72 +94,106 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Work Experience */}
+      {/* ── SECTION 2: Timeline Work Experience ── */}
       <section className="py-20 relative z-10 bg-transparent transition-colors duration-300">
         <div className="max-w-4xl mx-auto px-4">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 pb-2 leading-tight text-black dark:text-white">
             {t('about.experience.title')}
           </h2>
-          <div className="space-y-6">
-            {experienceItems.map((item, index) => {
-              const bullets = t(`about.experience.items.${item.key}.bullets`);
-              const tag = t(`about.experience.items.${item.key}.tag`);
-              return (
-                <div
-                  key={item.key}
-                  className="about-card bg-white/80 dark:bg-[var(--bg-elevated-50)] backdrop-blur-lg rounded-2xl border border-slate-200 dark:border-slate-700/50 hover:border-black dark:hover:border-white transition-all duration-300 shadow-md hover:shadow-xl p-5 md:p-6"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  {/* Header: Logo + Title + Period */}
-                  <div className="flex items-start gap-4">
-                    <img
-                      src={item.logo}
-                      alt=""
-                      className="w-10 h-10 md:w-12 md:h-12 rounded-xl object-contain bg-slate-100 dark:bg-slate-800 p-1.5 flex-shrink-0"
-                    />
-                    <div className="flex-1 min-w-0">
-                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+
+          <div className="relative">
+            {/* Vertical line — md+ only, black in light / white in dark, thicker */}
+            <div className="hidden md:block absolute left-[3.5rem] top-0 bottom-0 w-0.5 bg-black dark:bg-white" />
+
+            <div className="space-y-16">
+              {experienceItems.map((item) => {
+                const bullets = t(`about.experience.items.${item.key}.bullets`);
+                const tag = t(`about.experience.items.${item.key}.tag`);
+                const safeTag = tag && !tag.includes('.') ? tag : null;
+
+                return (
+                  <div key={item.key} className="grid grid-cols-1 md:grid-cols-[7rem_1fr] md:gap-10 items-start">
+
+                    {/* Left: logo circles on the line — md+ */}
+                    <div className="hidden md:flex flex-col items-center gap-4 relative z-10">
+                      {item.logos.map((logo, li) => (
+                        <div key={li} className="w-28 h-28 rounded-full bg-white flex items-center justify-center shadow-md flex-shrink-0">
+                          <img
+                            src={logo}
+                            alt=""
+                            className="w-20 h-20 object-contain"
+                          />
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Mobile logos — visible only on mobile, smaller, horizontal */}
+                    <div className="md:hidden flex gap-3 mb-4">
+                      {item.logos.map((logo, li) => (
+                        <div key={li} className="w-14 h-14 rounded-full bg-white flex items-center justify-center shadow-md flex-shrink-0">
+                          <img src={logo} alt="" className="w-10 h-10 object-contain" />
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Right: content (no card) */}
+                    <div className="pt-1">
+                      {/* Role + period */}
+                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 flex-wrap">
                         <h3 className="text-lg md:text-xl font-bold text-black dark:text-white">
                           {t(`about.experience.items.${item.key}.role`)}
                         </h3>
-                        <span className="text-sm text-slate-500 dark:text-slate-500 whitespace-nowrap">
-                          {t(`about.experience.items.${item.key}.period`)}
-                          {item.present ? ` – ${t('about.experience.present')}` : ''}
-                        </span>
-                      </div>
-                      <p className="text-sm md:text-base text-slate-600 dark:text-slate-400">
-                        {t(`about.experience.items.${item.key}.company`)}
-                        {tag && (
-                          <span className="text-xs bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full ml-2">
-                            {tag}
+                        <div className="flex items-center gap-1.5 flex-shrink-0">
+                          <Calendar className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 flex-shrink-0" />
+                          <span className="text-sm text-slate-500 dark:text-slate-500 whitespace-nowrap">
+                            {t(`about.experience.items.${item.key}.period`)}
+                            {item.present && ` – ${t('about.experience.present')}`}
                           </span>
-                        )}
-                      </p>
-                      <p className="text-xs text-slate-500 dark:text-slate-500 mt-0.5">
-                        {t(`about.experience.items.${item.key}.location`)}
-                      </p>
+                          {item.present && (
+                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse flex-shrink-0" />
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Company + tag | Location */}
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mt-1">
+                        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400">
+                          {t(`about.experience.items.${item.key}.company`)}
+                          {safeTag && (
+                            <span className="text-xs bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full ml-2">
+                              {safeTag}
+                            </span>
+                          )}
+                        </p>
+                        <div className="flex items-center gap-1 flex-shrink-0">
+                          <MapPin className="w-3 h-3 text-slate-400 dark:text-slate-500 flex-shrink-0" />
+                          <span className="text-xs text-slate-500 dark:text-slate-500">
+                            {t(`about.experience.items.${item.key}.location`)}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Bullets */}
+                      {Array.isArray(bullets) && bullets.length > 0 && (
+                        <ul className="mt-4 space-y-2 text-sm md:text-base text-slate-600 dark:text-slate-400">
+                          {bullets.map((bullet, i) => (
+                            <li key={i} className="flex gap-2.5 items-start pl-3">
+                              <span className="mt-2 w-1.5 h-1.5 rounded-full bg-black dark:bg-white flex-shrink-0" />
+                              <span className="text-justify">{bullet}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </div>
                   </div>
-
-                  {/* Bullets */}
-                  {Array.isArray(bullets) && bullets.length > 0 && (
-                    <ul className="mt-4 space-y-2 text-sm md:text-base text-slate-600 dark:text-slate-400">
-                      {bullets.map((bullet, i) => (
-                        <li key={i} className="flex gap-2">
-                          <span className="text-slate-400 dark:text-slate-600 mt-1 flex-shrink-0">•</span>
-                          <span>{bullet}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Education */}
+      {/* ── SECTION 3: Achievement Cards Education ── */}
       <section className="py-20 relative z-10 bg-transparent transition-colors duration-300">
         <div className="max-w-4xl mx-auto px-4">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 pb-2 leading-tight text-black dark:text-white">
@@ -168,59 +203,85 @@ export default function AboutPage() {
             {educationItems.map((item, index) => {
               const highlights = t(`about.education.items.${item.key}.highlights`);
               const coursework = t(`about.education.items.${item.key}.coursework`);
+              const courseworkTags = coursework && !coursework.includes('about.')
+                ? coursework.split(', ')
+                : [];
+
               return (
                 <div
                   key={item.key}
-                  className="about-card flex flex-col bg-white/80 dark:bg-[var(--bg-elevated-50)] backdrop-blur-lg rounded-2xl border border-slate-200 dark:border-slate-700/50 hover:border-black dark:hover:border-white transition-all duration-300 shadow-md hover:shadow-xl p-5 md:p-6"
+                  className="about-card flex flex-col relative overflow-hidden bg-white/80 dark:bg-[var(--bg-elevated-50)] backdrop-blur-lg rounded-2xl border border-slate-200 dark:border-slate-700/50 hover:border-black dark:hover:border-white transition-all duration-300 shadow-md hover:shadow-xl"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <div className="flex items-start gap-4">
-                    <img
-                      src={item.logo}
-                      alt=""
-                      className="w-10 h-10 md:w-12 md:h-12 rounded-xl object-contain bg-slate-100 dark:bg-slate-800 p-1.5 flex-shrink-0"
-                    />
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-lg md:text-xl font-bold text-black dark:text-white">
-                        {t(`about.education.items.${item.key}.degree`)}
-                      </h3>
-                      <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 mt-1">
-                        {t(`about.education.items.${item.key}.institution`)}
-                      </p>
-                      <p className="text-xs text-slate-500 dark:text-slate-500 mt-0.5">
-                        {t(`about.education.items.${item.key}.location`)} · {t(`about.education.items.${item.key}.period`)}
-                      </p>
+                  {/* Horizontal gradient top strip */}
+                  <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)]" />
+
+                  <div className="p-5 md:p-6 flex flex-col flex-1 pt-6">
+                    {/* Logo + degree header */}
+                    <div className="flex items-start gap-4">
+                      <img
+                        src={item.logos[0]}
+                        alt=""
+                        className="w-12 h-12 md:w-14 md:h-14 rounded-xl object-contain bg-slate-100 dark:bg-slate-800 p-1.5 flex-shrink-0"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-lg md:text-xl font-bold text-black dark:text-white">
+                          {t(`about.education.items.${item.key}.degree`)}
+                        </h3>
+                        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 mt-0.5">
+                          {t(`about.education.items.${item.key}.institution`)}
+                        </p>
+                        {/* Period pill */}
+                        <div className="inline-flex items-center gap-1.5 mt-2 px-2.5 py-0.5 rounded-full border border-[var(--accent-border-subtle)] bg-[var(--accent-bg-subtle)]">
+                          <Calendar className="w-3 h-3 text-[var(--accent-solid)]" />
+                          <span className="text-xs font-medium text-[var(--accent-solid)]">
+                            {t(`about.education.items.${item.key}.period`)}
+                          </span>
+                        </div>
+                      </div>
                     </div>
+
+                    {/* Trophy highlight badges */}
+                    {Array.isArray(highlights) && highlights.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-4">
+                        {highlights.map((highlight, i) => (
+                          <span
+                            key={i}
+                            className="inline-flex items-center gap-1.5 text-xs md:text-sm font-medium bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 px-3 py-1 rounded-full border border-amber-200 dark:border-amber-800/50"
+                          >
+                            <Trophy className="w-3.5 h-3.5" />
+                            {highlight}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Coursework as pill tags */}
+                    {courseworkTags.length > 0 && (
+                      <div className="mt-auto pt-4">
+                        <p className="text-xs font-semibold text-slate-500 dark:text-slate-500 uppercase tracking-wider mb-2">
+                          Coursework
+                        </p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {courseworkTags.map((tag, i) => (
+                            <span
+                              key={i}
+                              className="text-xs px-2 py-0.5 rounded-full border border-[var(--accent-border-subtle)] bg-[var(--accent-bg-subtle)] text-[var(--accent-solid)]"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
-
-                  {/* Highlights as badges */}
-                  {Array.isArray(highlights) && highlights.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mt-4">
-                      {highlights.map((highlight, i) => (
-                        <span
-                          key={i}
-                          className="inline-flex items-center gap-1.5 text-xs md:text-sm font-medium bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 px-3 py-1 rounded-full border border-amber-200 dark:border-amber-800/50"
-                        >
-                          <Trophy className="w-3.5 h-3.5" />
-                          {highlight}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Coursework */}
-                  {coursework && (
-                    <p className="mt-auto pt-3 text-sm text-slate-500 dark:text-slate-500">
-                      <span className="font-medium text-slate-600 dark:text-slate-400">Coursework: </span>
-                      {coursework}
-                    </p>
-                  )}
                 </div>
               );
             })}
           </div>
         </div>
       </section>
+
     </main>
   );
 }

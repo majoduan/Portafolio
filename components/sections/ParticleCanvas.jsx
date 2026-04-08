@@ -34,6 +34,12 @@ const ParticleCanvas = React.memo(() => {
     const BASE_SPEED = 0.25;
     const BASE_SPEED_SQ = BASE_SPEED * BASE_SPEED;
     const TRAIL_ALPHA = 0.88;
+    const MAX_SPEED = 3;
+    const MAX_SPEED_SQ = MAX_SPEED * MAX_SPEED;
+    const CYCLE_FRAMES = 1200;      // ~20s at 60fps (~40s on mobile at 30fps)
+    const FADE_START_FRAME = 1170;  // Inicio del fade acelerado (~19.5s)
+    const FADE_FRAMES = CYCLE_FRAMES - FADE_START_FRAME;
+    const FADE_MIN_ALPHA = 0.4;
 
     particles.current = Array.from({ length: particleCount }, () => ({
       x: Math.random() * canvas.width,
@@ -44,14 +50,15 @@ const ParticleCanvas = React.memo(() => {
       opacity: Math.random() * 0.4 + 0.5
     }));
 
-    let mouseX = 0;
-    let mouseY = 0;
+    let mouseX = -200;
+    let mouseY = -200;
     let animationFrameId;
     let frameCount = 0;
     // Usar let para que handleResize pueda actualizarlas (fix del bug de resize)
     let canvasWidth = canvas.width;
     let canvasHeight = canvas.height;
     let isTabVisible = true;
+    let cycleFrame = 0;
 
     const handleMouseMove = (e) => {
       mouseX = e.clientX;
@@ -62,9 +69,14 @@ const ParticleCanvas = React.memo(() => {
     const handleVisibilityChange = () => {
       isTabVisible = !document.hidden;
       if (isTabVisible) {
+        // Cancelar frame pendiente para evitar loops de animacion duplicados
+        cancelAnimationFrame(animationFrameId);
         // Limpiar trails stale acumulados mientras el tab estaba oculto
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        cycleFrame = 0;
         animationFrameId = requestAnimationFrame(animate);
+      } else {
+        cancelAnimationFrame(animationFrameId);
       }
     };
 
@@ -86,9 +98,18 @@ const ParticleCanvas = React.memo(() => {
       // Leer tema actual desde ref (sin dependency en theme -> no destruye particulas)
       const isDark = themeRef.current === 'dark';
 
-      // Trail effect: fade pixeles existentes reduciendo su alpha (preserva transparencia del canvas)
+      // Trail effect con ciclo de fade periodico (~3s) para evitar acumulacion indefinida
+      cycleFrame++;
+      if (cycleFrame >= CYCLE_FRAMES) cycleFrame = 0;
+
+      let effectiveAlpha = TRAIL_ALPHA;
+      if (cycleFrame >= FADE_START_FRAME) {
+        const fadeProgress = (cycleFrame - FADE_START_FRAME) / FADE_FRAMES;
+        effectiveAlpha = TRAIL_ALPHA - (TRAIL_ALPHA - FADE_MIN_ALPHA) * fadeProgress;
+      }
+
       ctx.globalCompositeOperation = 'destination-in';
-      ctx.fillStyle = `rgba(0, 0, 0, ${TRAIL_ALPHA})`;
+      ctx.fillStyle = `rgba(0, 0, 0, ${effectiveAlpha})`;
       ctx.fillRect(0, 0, canvasWidth, canvasHeight);
       ctx.globalCompositeOperation = 'source-over';
 
@@ -128,6 +149,13 @@ const ParticleCanvas = React.memo(() => {
         } else {
           p.vx *= 0.99;
           p.vy *= 0.99;
+        }
+
+        // Safety cap: evitar velocidad desbocada (e.g. loops duplicados residuales)
+        if (speedSq > MAX_SPEED_SQ) {
+          const scale = MAX_SPEED / Math.sqrt(speedSq);
+          p.vx *= scale;
+          p.vy *= scale;
         }
 
         // Velocidad minima — las particulas nunca se detienen

@@ -2,6 +2,7 @@ import './globals.css';
 import Providers from './providers';
 import ClientInit from './client-init';
 import BootScreenWrapper from './BootScreenWrapper';
+import Footer from '../components/Footer';
 
 export const metadata = {
   metadataBase: new URL('https://mateoduenas.vercel.app'),
@@ -73,7 +74,7 @@ export default function RootLayout({ children }) {
       <body>
         <Providers>
           <ClientInit />
-          <BootScreenWrapper>{children}</BootScreenWrapper>
+          <BootScreenWrapper footer={<Footer />}>{children}</BootScreenWrapper>
         </Providers>
       </body>
     </html>

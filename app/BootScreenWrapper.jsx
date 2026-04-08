@@ -15,7 +15,7 @@ const HUDBootScreen = dynamic(() => import('../components/HUDBootScreen'), {
 // Survives client-side (SPA) navigations, resets on full page reload
 let introShown = false;
 
-export default function BootScreenWrapper({ children }) {
+export default function BootScreenWrapper({ children, footer }) {
   const pathname = usePathname();
   const isHome = pathname === '/';
 
@@ -67,6 +67,7 @@ export default function BootScreenWrapper({ children }) {
       <ParticleCanvas />
       <NavigationBar />
       {children}
+      {footer}
     </div>
   );
 }
