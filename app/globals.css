@@ -228,6 +228,30 @@ html:not(.dark) .spline-container > div {
   }
 }
 
+/* Rotating title slide animations */
+@keyframes titleSlideOutLeft {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-110%); }
+}
+@keyframes titleSlideInRight {
+  from { transform: translateX(110%); }
+  to   { transform: translateX(0); }
+}
+
+.rotating-title-exiting {
+  animation: titleSlideOutLeft 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+.rotating-title-entering {
+  animation: titleSlideInRight 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+.rotating-title-idle {
+  transform: translateX(0);
+}
+
 /* Swap Button - icon/text swap on hover
    Uses --swap-dir (1 or -1) to control animation direction.
    Normal: icon left→right, bg from left, text shifts left.

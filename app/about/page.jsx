@@ -2,6 +2,7 @@
 
 import { useTranslation } from '../../hooks/useTranslation';
 import { Trophy, Briefcase, Linkedin, Github, Mail, Calendar, MapPin } from 'lucide-react';
+import RotatingTitle from '../../components/RotatingTitle';
 
 const experienceItems = [
   { key: 'bridge',           logos: ['/images/optimized/bridge-staff-120w.avif', '/images/optimized/acr-120w.avif'], present: true },
@@ -22,14 +23,12 @@ export default function AboutPage() {
     <main className="pt-20">
 
       {/* Intro */}
-      <section className="py-20 relative z-10 bg-transparent transition-colors duration-300">
+      <section className="py-10 relative z-10 bg-transparent transition-colors duration-300">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <p className="text-2xl md:text-3xl text-slate-700 dark:text-slate-100 mb-2 font-medium transition-colors duration-300">
             {t('hero.name')}
           </p>
-          <h1 className="hero-title text-black dark:text-white mb-8">
-            {t('hero.title')}
-          </h1>
+          <RotatingTitle titles={t('hero.titles')} />
           <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-10 leading-relaxed transition-colors duration-300">
             {t('about.intro.bio')}
           </p>
@@ -95,7 +94,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── SECTION 2: Timeline Work Experience ── */}
-      <section className="py-20 relative z-10 bg-transparent transition-colors duration-300">
+      <section className="py-10 relative z-10 bg-transparent transition-colors duration-300">
         <div className="max-w-4xl mx-auto px-4">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 pb-2 leading-tight text-black dark:text-white">
             {t('about.experience.title')}

@@ -10,6 +10,7 @@
   "hero": {
     "name": "Mateo Dueñas",
     "title": "Desarrollador Full-Stack",
+    "titles": ["Desarrollador\nFull-Stack", "Ingeniero de\nSoftware", "Desarrollador\nWeb", "Desarrollador\nMóvil", "Analista de\nDatos"],
     "description": "Transformando problemas complejos en soluciones full-stack elegantes. Diseño, construyo y entrego — del píxel a la base de datos.",
     "downloadCV": "Descargar mi CV",
     "stats": {

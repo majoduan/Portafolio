@@ -10,6 +10,7 @@
   "hero": {
     "name": "Mateo Dueñas",
     "title": "Full-Stack Developer",
+    "titles": ["Full-Stack\nDeveloper", "Software\nEngineer", "Web\nDeveloper", "Mobile\nDeveloper", "Data\nAnalyst"],
     "description": "Turning complex problems into elegant, full-stack solutions. I design, build, and ship — from pixel to database.",
     "downloadCV": "Download my CV",
     "stats": {
