@@ -4,15 +4,15 @@ import { useTranslation } from '../../hooks/useTranslation';
 import { Trophy, Briefcase, Linkedin, Github, Mail, Calendar, MapPin } from 'lucide-react';
 
 const experienceItems = [
-  { key: 'bridge',           logos: ['/images/bridge-staff.svg', '/images/acr.svg'], present: true },
-  { key: 'epnIntern',        logos: ['/images/direc_investigacion.svg'] },
-  { key: 'digitalInclusion', logos: ['/images/ludolab.svg'] },
-  { key: 'ieee',             logos: ['/images/ieee.svg'] },
+  { key: 'bridge',           logos: ['/images/optimized/bridge-staff-120w.avif', '/images/optimized/acr-120w.avif'], present: true },
+  { key: 'epnIntern',        logos: ['/images/optimized/direc_investigacion-120w.avif'] },
+  { key: 'digitalInclusion', logos: ['/images/optimized/ludolab-120w.avif'] },
+  { key: 'ieee',             logos: ['/images/optimized/ieee-120w.avif'] },
 ];
 
 const educationItems = [
-  { key: 'epn',     logos: ['/images/epn.svg'],     primary: true },
-  { key: 'english', logos: ['/images/cec-epn.svg'] },
+  { key: 'epn',     logos: ['/images/optimized/epn-120w.avif'],     primary: true },
+  { key: 'english', logos: ['/images/optimized/cec-epn-120w.avif'] },
 ];
 
 export default function AboutPage() {
