@@ -113,6 +113,14 @@ const patternTree = (sx, sy, cx, cy, rng, reach, isMobile) => {
 
 const ORB_RADIUS = 50; // Radius of the central orb (visual size)
 
+// Exclusion zone: bottom area where the INITIALIZING progress bar sits
+const isInProgressBarZone = (x, y, w, h) => {
+  if (y < h - 60) return false;
+  if (w < 1024) return true; // mobile/tablet: entire bottom blocked
+  const cx = w / 2;
+  return x > cx - 220 && x < cx + 220; // desktop: center 440px
+};
+
 const generateCircuits = (w, h) => {
   const cx = w / 2;
   const cy = h / 2;
@@ -135,6 +143,16 @@ const generateCircuits = (w, h) => {
       case 1: sx = w; sy = rng() * h * 0.9 + h * 0.05; break;
       case 2: sx = rng() * w * 0.9 + w * 0.05; sy = h; break;
       default: sx = 0; sy = rng() * h * 0.9 + h * 0.05; break;
+    }
+
+    // Redirect bottom-edge spawns away from progress bar zone
+    if (edge === 2 && isInProgressBarZone(sx, sy, w, h)) {
+      if (w < 1024) {
+        if (sx < cx) { sx = 0; sy = h * 0.7 + (sy / h) * h * 0.25; }
+        else { sx = w; sy = h * 0.7 + (sy / h) * h * 0.25; }
+      } else {
+        sx = sx < cx ? cx - 230 : cx + 230;
+      }
     }
 
     const maxReach = connectsToOrb ? 0.92 + rng() * 0.06 : 0.15 + rng() * 0.45;
@@ -199,13 +217,15 @@ const generateCircuits = (w, h) => {
 
     // Add tree branches as separate circuits
     extraBranches.forEach((brPts, bi) => {
+      const dur = 0.3 + rng() * 0.4; // always consume rng to preserve sequence
+      if (brPts.some(p => isInProgressBarZone(p.x, p.y, w, h))) return;
       circuits.push({
         id: `t${i}-${bi}`,
         points: brPts,
         connectsToOrb: false,
         activateAt: Math.floor(normDist * 45) + 12,
         delay: normDist * 2.5 + 0.6,
-        duration: 0.3 + rng() * 0.4,
+        duration: dur,
       });
     });
   }
@@ -232,6 +252,9 @@ const generateCircuits = (w, h) => {
         y: ey + [0, 0, subLen, -subLen][subDir],
       });
     }
+
+    // Skip branches in the progress bar zone (rng calls already consumed)
+    if (branchPts.some(p => isInProgressBarZone(p.x, p.y, w, h))) continue;
 
     circuits.push({
       id: `b${i}`,
@@ -412,6 +435,10 @@ const HUDBootScreen = memo(({ onComplete, splineReady = false }) => {
         '--orb-glow': `${orbIntensity * 30}px`,
         '--orb-glow2': `${orbIntensity * 70}px`,
         '--orb-glow3': `${orbIntensity * 120}px`,
+        '--orb-g0': Math.min(1, orbIntensity * 0.95 + Math.pow(orbIntensity, 3) * 0.05),
+        '--orb-g1': Math.min(1, orbIntensity * 0.35 + Math.pow(orbIntensity, 3) * 0.65),
+        '--orb-g2': Math.min(1, orbIntensity * 0.05 + Math.pow(orbIntensity, 3) * 0.95),
+        '--orb-g3': Math.min(1, Math.pow(orbIntensity, 4)),
       }}>
         <div className="cb__orb-core" />
       </div>
