@@ -582,6 +582,10 @@ section {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+  .work-timeline-path {
+    stroke-dashoffset: 0 !important;
+    stroke-dasharray: none !important;
+  }
 }
 
 /* ─── Custom Video Player ─────────────────────────────────── */

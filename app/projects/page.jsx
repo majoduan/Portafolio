@@ -34,6 +34,13 @@ const ProjectVideo = React.memo(({ src, poster, title }) => {
 
   const pct = duration > 0 ? (currentTime / duration) * 100 : 0;
 
+  // ── Controls auto-hide timer ──
+  const resetControlsTimer = useCallback(() => {
+    setShowControls(true);
+    clearTimeout(controlsTimeoutRef.current);
+    controlsTimeoutRef.current = setTimeout(() => setShowControls(false), 3000);
+  }, []);
+
   // ── IntersectionObserver — auto-play/pause on scroll ──
   useEffect(() => {
     const video = videoRef.current;
@@ -63,13 +70,6 @@ const ProjectVideo = React.memo(({ src, poster, title }) => {
       document.removeEventListener('webkitfullscreenchange', onChange);
     };
   }, [resetControlsTimer]);
-
-  // ── Controls auto-hide timer ──
-  const resetControlsTimer = useCallback(() => {
-    setShowControls(true);
-    clearTimeout(controlsTimeoutRef.current);
-    controlsTimeoutRef.current = setTimeout(() => setShowControls(false), 3000);
-  }, []);
 
   // ── Request fullscreen on container ──
   const enterFullscreen = useCallback(() => {

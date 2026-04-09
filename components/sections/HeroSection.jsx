@@ -22,6 +22,7 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
   const { t } = useTranslation();
   const { theme } = useContext(AppContext);
   const [typewriterText, setTypewriterText] = useState('');
+  const [isSplineReady, setIsSplineReady] = useState(false);
   const splineRef = useRef(null);
   const splineLoadingRef = useRef(false);
   const themeRef = useRef(theme);
@@ -54,34 +55,47 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
     themeRef.current = theme;
   }, [theme]);
 
-  // Funcion para manejar el evento de carga de Spline - optimizada con prevencion de duplicados
-  const onSplineLoad = useCallback((spline) => {
-    // Prevenir procesamiento duplicado en React Strict Mode
-    if (splineLoadingRef.current) {
-      return;
-    }
+  // Helper: emitir eventos de teclado reales para Spline
+  const dispatchKeyboardEvent = useCallback((eventType, key = '0') => {
+    const event = new KeyboardEvent(eventType, {
+      key,
+      code: key === '0' ? 'Digit0' : key,
+      bubbles: true,
+      cancelable: true,
+    });
+    document.dispatchEvent(event);
+  }, []);
 
+  // Funcion para manejar el evento de carga de Spline
+  const onSplineLoad = useCallback((spline) => {
+    if (splineLoadingRef.current) return;
     splineLoadingRef.current = true;
     splineRef.current = spline;
 
-    // Aplicar tema inicial al cargar la escena
-    if (themeRef.current === 'light') {
-      spline.emitEvent('keyDown', 'Sphere');
-    }
+    // Solo marcar que Spline está listo - el tema se aplica en el useEffect
+    setIsSplineReady(true);
   }, []);
 
-  // Reaccionar a cambios de tema en la escena Spline
-  // keyDown: State base (blanco) → State 2 (negro) para light mode
-  // keyUp: State 2 (negro) → State base (blanco) para dark mode
+  // Aplicar tema SIEMPRE que Spline esté listo y el tema cambie
+  // Esto garantiza que funcione en mount inicial, cambios de tema y re-navegaciones
   useEffect(() => {
-    if (!splineRef.current) return;
+    if (!isSplineReady || !splineRef.current) return;
 
     if (theme === 'light') {
-      splineRef.current.emitEvent('keyDown', 'Sphere');
+      dispatchKeyboardEvent('keydown', '0');
     } else {
-      splineRef.current.emitEvent('keyUp', 'Sphere');
+      dispatchKeyboardEvent('keyup', '0');
     }
-  }, [theme]);
+  }, [theme, isSplineReady, dispatchKeyboardEvent]);
+
+  // Limpiar cuando el componente se desmonta
+  useEffect(() => {
+    return () => {
+      splineLoadingRef.current = false;
+      splineRef.current = null;
+      setIsSplineReady(false);
+    };
+  }, []);
 
   // Funcion para manejar el movimiento del mouse sobre Spline - optimizada
   const onSplineMouseMove = useCallback(() => {

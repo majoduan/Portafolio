@@ -3,6 +3,7 @@
 import { useTranslation } from '../../hooks/useTranslation';
 import { Trophy, Briefcase, Linkedin, Github, Mail, Calendar, MapPin } from 'lucide-react';
 import RotatingTitle from '../../components/RotatingTitle';
+import WorkTimeline from '../../components/WorkTimeline';
 
 const experienceItems = [
   { key: 'bridge',           logos: ['/images/optimized/bridge-staff-120w.avif', '/images/optimized/acr-120w.avif'], present: true },
@@ -94,103 +95,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── SECTION 2: Timeline Work Experience ── */}
-      <section className="py-10 relative z-10 bg-transparent transition-colors duration-300">
-        <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 pb-2 leading-tight text-black dark:text-white">
-            {t('about.experience.title')}
-          </h2>
-
-          <div className="relative">
-            {/* Vertical line — md+ only, black in light / white in dark, thicker */}
-            <div className="hidden md:block absolute left-[3.5rem] top-0 bottom-0 w-0.5 bg-black dark:bg-white" />
-
-            <div className="space-y-16">
-              {experienceItems.map((item) => {
-                const bullets = t(`about.experience.items.${item.key}.bullets`);
-                const tag = t(`about.experience.items.${item.key}.tag`);
-                const safeTag = tag && !tag.includes('.') ? tag : null;
-
-                return (
-                  <div key={item.key} className="grid grid-cols-1 md:grid-cols-[7rem_1fr] md:gap-10 items-start">
-
-                    {/* Left: logo circles on the line — md+ */}
-                    <div className="hidden md:flex flex-col items-center gap-4 relative z-10">
-                      {item.logos.map((logo, li) => (
-                        <div key={li} className="w-28 h-28 rounded-full bg-white flex items-center justify-center shadow-md flex-shrink-0">
-                          <img
-                            src={logo}
-                            alt=""
-                            className="w-20 h-20 object-contain"
-                          />
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Mobile logos — visible only on mobile, smaller, horizontal */}
-                    <div className="md:hidden flex gap-3 mb-4">
-                      {item.logos.map((logo, li) => (
-                        <div key={li} className="w-14 h-14 rounded-full bg-white flex items-center justify-center shadow-md flex-shrink-0">
-                          <img src={logo} alt="" className="w-10 h-10 object-contain" />
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Right: content (no card) */}
-                    <div className="pt-1">
-                      {/* Role + period */}
-                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 flex-wrap">
-                        <h3 className="text-lg md:text-xl font-bold text-black dark:text-white">
-                          {t(`about.experience.items.${item.key}.role`)}
-                        </h3>
-                        <div className="flex items-center gap-1.5 flex-shrink-0">
-                          <Calendar className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 flex-shrink-0" />
-                          <span className="text-sm text-slate-500 dark:text-slate-500 whitespace-nowrap">
-                            {t(`about.experience.items.${item.key}.period`)}
-                            {item.present && ` – ${t('about.experience.present')}`}
-                          </span>
-                          {item.present && (
-                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse flex-shrink-0" />
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Company + tag | Location */}
-                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mt-1">
-                        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400">
-                          {t(`about.experience.items.${item.key}.company`)}
-                          {safeTag && (
-                            <span className="text-xs bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full ml-2">
-                              {safeTag}
-                            </span>
-                          )}
-                        </p>
-                        <div className="flex items-center gap-1 flex-shrink-0">
-                          <MapPin className="w-3 h-3 text-slate-400 dark:text-slate-500 flex-shrink-0" />
-                          <span className="text-xs text-slate-500 dark:text-slate-500">
-                            {t(`about.experience.items.${item.key}.location`)}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Bullets */}
-                      {Array.isArray(bullets) && bullets.length > 0 && (
-                        <ul className="mt-4 space-y-2 text-sm md:text-base text-slate-600 dark:text-slate-400">
-                          {bullets.map((bullet, i) => (
-                            <li key={i} className="flex gap-2.5 items-start pl-3">
-                              <span className="mt-2 w-1.5 h-1.5 rounded-full bg-black dark:bg-white flex-shrink-0" />
-                              <span className="text-justify">{bullet}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </section>
+      <WorkTimeline items={experienceItems} t={t} />
 
       {/* ── SECTION 3: Achievement Cards Education ── */}
       <section className="py-20 relative z-10 bg-transparent transition-colors duration-300">
