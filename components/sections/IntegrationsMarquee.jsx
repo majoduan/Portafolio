@@ -11,6 +11,7 @@ const SIZE_OVERRIDES = {
   Twilio:   'h-14 md:h-20',
   PostHog:  'h-14 md:h-20',
   Sentry:   'h-14 md:h-20',
+  Anthropic: 'h-14 md:h-20',
   OpenAI:   'h-8 md:h-10',
 };
 
