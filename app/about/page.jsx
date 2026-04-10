@@ -169,7 +169,7 @@ export default function AboutPage() {
                           {courseworkTags.map((tag, i) => (
                             <span
                               key={i}
-                              className="text-xs px-2 py-0.5 rounded-full border border-[var(--accent-border-subtle)] bg-[var(--accent-bg-subtle)] text-[var(--accent-solid)]"
+                              className="text-xs px-2 py-1 rounded-full border border-black dark:border-white text-black dark:text-white bg-transparent flex items-center"
                             >
                               {tag}
                             </span>

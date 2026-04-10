@@ -80,9 +80,17 @@
         "name": "React",
         "description": "Biblioteca de componentes UI"
       },
-      "vue": {
-        "name": "Vue.js",
-        "description": "Framework progresivo"
+      "nextjs": {
+        "name": "Next.js",
+        "description": "Framework React full-stack"
+      },
+      "reactnative": {
+        "name": "React Native",
+        "description": "Mobile multiplataforma"
+      },
+      "expo": {
+        "name": "Expo",
+        "description": "Plataforma React Native"
       },
       "javascript": {
         "name": "JavaScript",
@@ -116,6 +124,14 @@
         "name": "SQL Server",
         "description": "Base de datos empresarial"
       },
+      "supabase": {
+        "name": "Supabase",
+        "description": "Backend con Postgres"
+      },
+      "drizzle": {
+        "name": "Drizzle ORM",
+        "description": "ORM tipado"
+      },
       "mongodb": {
         "name": "MongoDB",
         "description": "Base de datos NoSQL"
@@ -140,9 +156,9 @@
         "name": "Git",
         "description": "Control de versiones"
       },
-      "redhat": {
-        "name": "Red Hat",
-        "description": "Linux empresarial"
+      "githubactions": {
+        "name": "GitHub Actions",
+        "description": "Automatización CI/CD"
       },
       "vercel": {
         "name": "Vercel",
@@ -156,15 +172,22 @@
         "name": "AWS",
         "description": "Servicios en la nube"
       },
-      "godot": {
-        "name": "Godot",
-        "description": "Motor de juegos"
+      "turborepo": {
+        "name": "Turborepo",
+        "description": "Sistema de build monorepo"
       },
-      "unity": {
-        "name": "Unity",
-        "description": "Desarrollo de juegos"
+      "pnpm": {
+        "name": "pnpm",
+        "description": "Gestor de paquetes eficiente"
+      },
+      "stripe": {
+        "name": "Stripe",
+        "description": "Procesamiento de pagos"
       }
     }
+  },
+  "integrations": {
+    "title": "Más allá del stack"
   },
   "certificates": {
     "title": "Certificados y Reconocimientos",

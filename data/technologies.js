@@ -9,7 +9,6 @@ import {
   NestIcon,
   FastAPIIcon,
   ReactIcon as ReactLogo,
-  VueIcon,
   JSIcon,
   TSIcon,
   HTMLIcon,
@@ -24,17 +23,24 @@ import {
   AWSIcon,
   FigmaIcon,
   GodotIcon,
-  UnityIcon,
   OracleIcon,
   SqliteIcon,
   FirebirdIcon,
   VercelIcon,
-  RedhatIcon,
   PandasIcon,
   SeleniumIcon,
   JupyterIcon,
   PygameIcon,
   NlayerIcon,
+  NextjsIcon,
+  ReactNativeIcon,
+  ExpoIcon,
+  SupabaseIcon,
+  DrizzleIcon,
+  TurborepoIcon,
+  PnpmIcon,
+  StripeIcon,
+  GithubActionsIcon,
 } from '../components/icons/tech';
 
 // Helper function to get translated technology data
@@ -51,8 +57,10 @@ export const getTechnologies = (t) => ({
     { name: t('technologies.skills.fastapi.name'), description: t('technologies.skills.fastapi.description'), experience: "2+ years", icon: FastAPIIcon, color: "from-teal-700 to-teal-900" }
   ],
   frontend: [
-    { name: t('technologies.skills.react.name'), description: t('technologies.skills.react.description'), experience: "2+ years", icon: ReactLogo, color: "from-cyan-500 to-cyan-700" },
-    { name: t('technologies.skills.vue.name'), description: t('technologies.skills.vue.description'), experience: "2+ years", icon: VueIcon, color: "from-green-600 to-green-800" },
+    { name: t('technologies.skills.react.name'), description: t('technologies.skills.react.description'), experience: "2+ years", icon: ReactLogo, color: "from-[#1D253A] to-[#1D253A]", tagColor: "from-[#61DAFB] to-[#61DAFB]" },
+    { name: t('technologies.skills.nextjs.name'), description: t('technologies.skills.nextjs.description'), experience: "2+ years", icon: NextjsIcon, color: "from-slate-800 to-black", tagColor: "from-slate-700 to-slate-700" },
+    { name: t('technologies.skills.reactnative.name'), description: t('technologies.skills.reactnative.description'), experience: "1+ years", icon: ReactNativeIcon, color: "from-[#62DAFC] to-[#62DAFC]", tagColor: "from-[#1D253A] to-[#1D253A]" },
+    { name: t('technologies.skills.expo.name'), description: t('technologies.skills.expo.description'), experience: "1+ years", icon: ExpoIcon, color: "from-slate-100 to-slate-200", tagColor: "from-slate-700 to-slate-700" },
     { name: t('technologies.skills.javascript.name'), description: t('technologies.skills.javascript.description'), experience: "3+ years", icon: JSIcon, color: "from-yellow-400 to-yellow-600" },
     { name: t('technologies.skills.typescript.name'), description: t('technologies.skills.typescript.description'), experience: "2+ years", icon: TSIcon, color: "from-blue-500 to-blue-700" },
     { name: t('technologies.skills.html5.name'), description: t('technologies.skills.html5.description'), experience: "3+ years", icon: HTMLIcon, color: "from-orange-400 to-orange-500" },
@@ -63,6 +71,8 @@ export const getTechnologies = (t) => ({
     { name: t('technologies.skills.postgresql.name'), description: t('technologies.skills.postgresql.description'), experience: "3+ years", icon: PostgreSQLIcon, color: "from-blue-500 to-blue-700" },
     { name: t('technologies.skills.mysql.name'), description: t('technologies.skills.mysql.description'), experience: "3+ years", icon: MySQLIcon, color: "from-blue-900 to-blue-1000", tagColor: "from-blue-700 to-blue-700" },
     { name: t('technologies.skills.sqlserver.name'), description: t('technologies.skills.sqlserver.description'), experience: "3+ years", icon: SQLServerIcon, color: "from-red-500 to-orange-600" },
+    { name: t('technologies.skills.supabase.name'), description: t('technologies.skills.supabase.description'), experience: "1+ years", icon: SupabaseIcon, color: "from-slate-900 to-black", tagColor: "from-emerald-600 to-emerald-600" },
+    { name: t('technologies.skills.drizzle.name'), description: t('technologies.skills.drizzle.description'), experience: "1+ years", icon: DrizzleIcon, color: "from-slate-900 to-black", tagColor: "from-lime-500 to-lime-500" },
     { name: t('technologies.skills.mongodb.name'), description: t('technologies.skills.mongodb.description'), experience: "1/2 years", icon: MongoDBIcon, color: "from-green-700 to-green-900" },
     { name: t('technologies.skills.oracle.name'), description: t('technologies.skills.oracle.description'), experience: "1+ years", icon: OracleIcon, color: "from-slate-100 to-slate-300", tagColor: "from-red-600 to-red-600" },
     { name: t('technologies.skills.sqlite.name'), description: t('technologies.skills.sqlite.description'), experience: "3+ years", icon: SqliteIcon, color: "from-sky-400 to-blue-600" },
@@ -71,12 +81,13 @@ export const getTechnologies = (t) => ({
   devops: [
     { name: t('technologies.skills.docker.name'), description: t('technologies.skills.docker.description'), experience: "2+ years", icon: DockerIcon, color: "from-blue-500 to-blue-700" },
     { name: t('technologies.skills.git.name'), description: t('technologies.skills.git.description'), experience: "3+ years", icon: GitIcon, color: "from-orange-700 to-orange-900" },
-    { name: t('technologies.skills.redhat.name'), description: t('technologies.skills.redhat.description'), experience: "2+ years", icon: RedhatIcon, color: "from-red-600 to-red-800" },
+    { name: t('technologies.skills.githubactions.name'), description: t('technologies.skills.githubactions.description'), experience: "2+ years", icon: GithubActionsIcon, color: "from-slate-700 to-slate-900", tagColor: "from-slate-600 to-slate-600" },
     { name: t('technologies.skills.vercel.name'), description: t('technologies.skills.vercel.description'), experience: "2+ years", icon: VercelIcon, color: "from-slate-100 to-slate-300", tagColor: "from-gray-700 to-gray-700" },
     { name: t('technologies.skills.figma.name'), description: t('technologies.skills.figma.description'), experience: "3+ years", icon: FigmaIcon, color: "from-purple-700 to-pink-800" },
     { name: t('technologies.skills.aws.name'), description: t('technologies.skills.aws.description'), experience: "1/2 years", icon: AWSIcon, color: "from-orange-300 to-yellow-400", tagColor: "from-amber-500 to-amber-500" },
-    { name: t('technologies.skills.godot.name'), description: t('technologies.skills.godot.description'), experience: "2+ years", icon: GodotIcon, color: "from-blue-800 to-blue-900" },
-    { name: t('technologies.skills.unity.name'), description: t('technologies.skills.unity.description'), experience: "1/2 years", icon: UnityIcon, color: "from-gray-600 to-gray-800", tagColor: "from-gray-600 to-gray-600" }
+    { name: t('technologies.skills.turborepo.name'), description: t('technologies.skills.turborepo.description'), experience: "1+ years", icon: TurborepoIcon, color: "from-slate-50 to-white", tagColor: "from-red-600 to-red-600" },
+    { name: t('technologies.skills.pnpm.name'), description: t('technologies.skills.pnpm.description'), experience: "1+ years", icon: PnpmIcon, color: "from-amber-100 to-yellow-200", tagColor: "from-amber-600 to-amber-600" },
+    { name: t('technologies.skills.stripe.name'), description: t('technologies.skills.stripe.description'), experience: "1+ years", icon: StripeIcon, color: "from-indigo-500 to-purple-700" }
   ]
 });
 

@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 
 import HeroSection from '../components/sections/HeroSection';
 import TechnologiesSection from '../components/sections/TechnologiesSection';
+import IntegrationsMarquee from '../components/sections/IntegrationsMarquee';
 import CertificatesSection from '../components/sections/CertificatesSection';
 
 // Lazy-load below-fold sections
@@ -27,6 +28,7 @@ export default function HomePage() {
     <>
       <HeroSection shouldLoadSpline={shouldLoadSpline} />
       <TechnologiesSection />
+      <IntegrationsMarquee />
       <CertificatesSection />
       <ProjectsSection />
       <ContactSection />

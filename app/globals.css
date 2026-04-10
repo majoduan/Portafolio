@@ -1317,3 +1317,35 @@ section {
     top: calc(50% + 32px);
   }
 }
+
+/* ───── Integrations marquee ─────
+ * Seamless infinite horizontal loop. The track contains the logos list duplicated;
+ * translating from 0 → -50% lands on an identical position, producing zero seam.
+ * GPU-accelerated via transform; pauses on hover and respects prefers-reduced-motion.
+ */
+@keyframes integrations-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.integrations-track {
+  width: max-content;
+  animation: integrations-marquee 50s linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .integrations-track {
+    animation: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .integrations-track {
+    animation-duration: 35s;
+  }
+}
