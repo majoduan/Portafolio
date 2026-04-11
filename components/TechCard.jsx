@@ -7,9 +7,9 @@ const TechCard = memo(({ tech, index, isMobile, animationState, onMouseEnter, on
 
   const shapeStyle = useMemo(() => {
     const shapes = [
-      { clipPath: 'none', rounded: 'rounded-xl' },
       { clipPath: 'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)', rounded: '' },
-      { clipPath: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)', rounded: '' }
+      { clipPath: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)', rounded: '' },
+      { clipPath: 'polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%)', rounded: '' }
     ];
     const randomIndex = tech.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % shapes.length;
     return shapes[randomIndex];

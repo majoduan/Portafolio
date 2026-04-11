@@ -247,8 +247,18 @@ const ProjectVideo = React.memo(({ src, poster, title }) => {
         preload="metadata"
         className="w-full h-full object-cover"
         aria-label={title}
-        onTimeUpdate={() => { if (!seekingRef.current) setCurrentTime(videoRef.current?.currentTime || 0); }}
+        onTimeUpdate={() => {
+          if (!seekingRef.current) setCurrentTime(videoRef.current?.currentTime || 0);
+          if (duration === 0) {
+            const d = videoRef.current?.duration;
+            if (d && isFinite(d)) setDuration(d);
+          }
+        }}
         onLoadedMetadata={() => setDuration(videoRef.current?.duration || 0)}
+        onDurationChange={() => {
+          const d = videoRef.current?.duration;
+          if (d && isFinite(d)) setDuration(d);
+        }}
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
       />

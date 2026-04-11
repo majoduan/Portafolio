@@ -256,7 +256,8 @@ export default function WorkTimeline({ items, t }) {
       const containerH = containerHeightRef.current;
       if (len === 0 || !samples || containerH === 0) return;
 
-      const targetScroll = progress * containerH;
+      const mobileProgress = Math.min(1, progress * 1.3);
+      const targetScroll = mobileProgress * containerH;
 
       let lenAtTarget = 0;
       for (let i = 0; i < samples.length; i++) {
@@ -322,21 +323,21 @@ export default function WorkTimeline({ items, t }) {
               return (
                 <div
                   key={item.key}
-                  className={`grid grid-cols-1 ${
-                    hasMultipleLogos
-                      ? 'md:grid-cols-[15rem_1fr] md:gap-5'
-                      : 'md:grid-cols-[7rem_1fr] md:gap-10'
-                  } items-start`}
+                  className="grid grid-cols-1 md:grid-cols-[7rem_1fr] md:gap-10 items-start"
                 >
                   {/* ── Desktop logos (md+) ── */}
-                  <div className={`hidden md:flex ${hasMultipleLogos ? 'flex-row' : 'flex-col'} items-center gap-4 relative z-10`}>
+                  <div className={`hidden md:flex ${hasMultipleLogos ? 'flex-row justify-center' : 'flex-col'} items-center ${hasMultipleLogos ? 'gap-2' : 'gap-4'} relative z-10`}>
                     {item.logos.map((logo, li) => (
                       <div
                         key={li}
                         ref={el => { logoRefs.current[`d-${index}-${li}`] = el; }}
-                        className="w-28 h-28 rounded-full bg-white flex items-center justify-center shadow-md flex-shrink-0"
+                        className={`rounded-full bg-white flex items-center justify-center shadow-md flex-shrink-0 ${
+                          hasMultipleLogos ? 'w-20 h-20' : 'w-28 h-28'
+                        }`}
                       >
-                        <img src={logo} alt="" className="w-20 h-20 object-contain" />
+                        <img src={logo} alt="" className={`object-contain ${
+                          hasMultipleLogos ? 'w-14 h-14' : 'w-20 h-20'
+                        }`} />
                       </div>
                     ))}
                   </div>
