@@ -7,6 +7,7 @@ import { getOptimalVideoSource, getOptimalPoster } from '../../utils/adaptiveVid
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import useFocusTrap from '../../hooks/useFocusTrap';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const ModalVideoPlayer = lazy(() => import('../ModalVideoPlayer'));
 
@@ -53,12 +54,13 @@ const ProjectCard = React.memo(({ project, onProjectClick }) => {
       className="project-card relative rounded-2xl overflow-hidden cursor-pointer group aspect-video"
     >
       {/* Poster — always visible */}
-      <img
+      <Image
         src={getOptimalPoster(project.video)}
         alt={project.title}
-        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-        loading="lazy"
-        decoding="async"
+        fill
+        sizes="(max-width: 768px) 100vw, 50vw"
+        unoptimized
+        className="object-cover transition-transform duration-500 group-hover:scale-105"
       />
 
       {/* Video — desktop hover only */}

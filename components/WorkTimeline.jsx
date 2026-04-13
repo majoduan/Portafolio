@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
+import Image from 'next/image';
 import { Calendar, MapPin } from 'lucide-react';
 import { useScrollPaint } from '../hooks/useScrollPaint';
 
@@ -334,7 +335,7 @@ export default function WorkTimeline({ items, t }) {
                         ref={el => { logoRefs.current[`d-${index}-${li}`] = el; }}
                         className="w-28 h-28 rounded-full bg-white flex items-center justify-center shadow-md flex-shrink-0"
                       >
-                        <img src={logo} alt="" className="w-20 h-20 object-contain" />
+                        <Image src={logo} alt="" width={80} height={80} unoptimized className="w-20 h-20 object-contain" />
                       </div>
                     ))}
                   </div>
@@ -347,7 +348,7 @@ export default function WorkTimeline({ items, t }) {
                         ref={el => { logoRefs.current[`m-${index}-${li}`] = el; }}
                         className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-white flex items-center justify-center shadow-md flex-shrink-0"
                       >
-                        <img src={logo} alt="" className="w-10 h-10 md:w-14 md:h-14 object-contain" />
+                        <Image src={logo} alt="" width={56} height={56} unoptimized className="w-10 h-10 md:w-14 md:h-14 object-contain" />
                       </div>
                     ))}
                   </div>

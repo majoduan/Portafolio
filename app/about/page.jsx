@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useTranslation } from '../../hooks/useTranslation';
 import { Trophy, Briefcase, Linkedin, Github, Mail, Calendar, MapPin } from 'lucide-react';
 import RotatingTitle from '../../components/RotatingTitle';
@@ -121,9 +122,12 @@ export default function AboutPage() {
                     {/* Logo + degree header */}
                     <div className="flex items-start gap-4">
                       <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white p-2.5 flex-shrink-0 flex items-center justify-center">
-                        <img
+                        <Image
                           src={item.logos[0]}
                           alt=""
+                          width={80}
+                          height={80}
+                          unoptimized
                           className="w-full h-full object-contain"
                         />
                       </div>

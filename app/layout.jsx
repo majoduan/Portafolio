@@ -68,8 +68,21 @@ export default function RootLayout({ children }) {
         {/* Resource hints for Spline 3D */}
         <link rel="preconnect" href="https://prod.spline.design" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://prod.spline.design" />
-        {/* Prefetch profile image used in contact section */}
-        <link rel="prefetch" href="/images/optimized/foto-perfil-800w.avif" as="image" type="image/avif" />
+        {/* Prefetch profile image used in contact section — variante por viewport */}
+        <link
+          rel="prefetch"
+          href="/images/optimized/foto-perfil-400w.avif"
+          as="image"
+          type="image/avif"
+          media="(max-width: 767px)"
+        />
+        <link
+          rel="prefetch"
+          href="/images/optimized/foto-perfil-800w.avif"
+          as="image"
+          type="image/avif"
+          media="(min-width: 768px)"
+        />
       </head>
       <body>
         <Providers>

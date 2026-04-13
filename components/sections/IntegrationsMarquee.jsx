@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import Image from 'next/image';
 import { integrations } from '../../data/integrations';
 import { useTranslation } from '../../hooks/useTranslation';
 
@@ -50,13 +51,16 @@ const IntegrationsMarquee = React.memo(() => {
               ? 'dark:[filter:invert(1)_hue-rotate(180deg)]'
               : '';
             return (
-              <img
+              <Image
                 key={`${logo.name}-${i}`}
                 src={logo.src}
                 alt={logo.alt}
-                className={`${size} w-auto select-none flex-shrink-0 ${invertClass}`}
+                width={160}
+                height={56}
+                unoptimized
                 loading="lazy"
-                draggable="false"
+                draggable={false}
+                className={`${size} w-auto select-none flex-shrink-0 ${invertClass}`}
                 aria-hidden={i >= integrations.length ? 'true' : 'false'}
               />
             );

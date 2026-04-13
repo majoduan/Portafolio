@@ -102,6 +102,8 @@ const CertificatesSection = React.memo(() => {
               >
                 {/* Certificate Image — full card with overlay */}
                 <div className="relative h-72 overflow-hidden bg-gradient-to-br from-blue-900/30 to-purple-900/30">
+                  {/* srcset AVIF manual, next/image unoptimized perderia srcset */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                       src={`/images/optimized/${cert.image.split('/').pop().replace('.jpg', '').replace('.webp', '')}-800w.avif`}
                       srcSet={`

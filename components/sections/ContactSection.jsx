@@ -31,7 +31,8 @@ const ContactSection = React.memo(() => {
               <div className="bg-white dark:bg-[var(--bg-secondary)] backdrop-blur-lg rounded-2xl md:rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-700/50 hover:border-black dark:hover:border-white transition-all duration-500 shadow-lg dark:shadow-2xl group h-full flex flex-col">
                 {/* Image Container with Gradient Overlay */}
                 <div className="relative h-64 sm:h-80 md:h-96 lg:h-[25rem] overflow-hidden bg-gradient-to-br from-blue-900/30 to-purple-900/30">
-                  {/* Profile Image */}
+                  {/* Profile Image — srcset AVIF manual, next/image unoptimized perderia srcset */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                       src="/images/optimized/foto-perfil-800w.avif"
                       srcSet="
