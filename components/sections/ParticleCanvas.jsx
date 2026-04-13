@@ -25,8 +25,10 @@ const ParticleCanvas = React.memo(() => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const isMobile = window.innerWidth < 768;
-    const particleCount = isMobile ? 8 : 20;
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let isMobile = window.innerWidth < 768;
+    let particleCount = isMobile ? 8 : 20;
     const maxDistance = 80;
     const maxDistanceSq = maxDistance * maxDistance;
     const MIN_SPEED = 0.15;
@@ -58,23 +60,35 @@ const ParticleCanvas = React.memo(() => {
     let canvasWidth = canvas.width;
     let canvasHeight = canvas.height;
     let isTabVisible = true;
+    let isCanvasVisible = true;
     let cycleFrame = 0;
+
+    const spawnParticle = () => ({
+      x: Math.random() * canvasWidth,
+      y: Math.random() * canvasHeight,
+      vx: (Math.random() - 0.5) * 0.5,
+      vy: (Math.random() - 0.5) * 0.5,
+      radius: Math.random() * 2 + 1,
+      opacity: Math.random() * 0.4 + 0.5,
+    });
 
     const handleMouseMove = (e) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
     };
 
+    const resumeAnimation = () => {
+      cancelAnimationFrame(animationFrameId);
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+      cycleFrame = 0;
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
     // Pausar animacion cuando la pestana no esta activa (ahorra bateria/CPU)
     const handleVisibilityChange = () => {
       isTabVisible = !document.hidden;
-      if (isTabVisible) {
-        // Cancelar frame pendiente para evitar loops de animacion duplicados
-        cancelAnimationFrame(animationFrameId);
-        // Limpiar trails stale acumulados mientras el tab estaba oculto
-        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-        cycleFrame = 0;
-        animationFrameId = requestAnimationFrame(animate);
+      if (isTabVisible && isCanvasVisible) {
+        resumeAnimation();
       } else {
         cancelAnimationFrame(animationFrameId);
       }
@@ -84,8 +98,8 @@ const ParticleCanvas = React.memo(() => {
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
     const animate = () => {
-      // No animar si tab no es visible
-      if (!isTabVisible) return;
+      // No animar si tab no es visible o canvas esta ocluido
+      if (!isTabVisible || !isCanvasVisible) return;
 
       frameCount++;
 
@@ -206,22 +220,79 @@ const ParticleCanvas = React.memo(() => {
       animationFrameId = requestAnimationFrame(animate);
     };
 
-    animate();
+    // Render estatico para prefers-reduced-motion (a11y): particulas visibles, sin animacion
+    const drawStaticFrame = () => {
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+      const isDark = themeRef.current === 'dark';
+      const particleColor = isDark ? 'rgba(255, 255, 255, ' : 'rgba(0, 0, 0, ';
+      const opacityMultiplier = isDark ? 1 : 0.9;
+      const arr = particles.current;
+      for (let i = 0; i < arr.length; i++) {
+        const p = arr[i];
+        ctx.fillStyle = `${particleColor}${p.opacity * opacityMultiplier})`;
+        ctx.fillRect(p.x - p.radius, p.y - p.radius, p.radius * 2, p.radius * 2);
+      }
+    };
 
+    if (prefersReduced) {
+      drawStaticFrame();
+    } else {
+      animate();
+    }
+
+    // Debounce resize: evita recalcs por frame al arrastrar borde; rebalance count al cruzar 768px
+    let resizeTimer;
     const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      // Actualizar las variables locales (fix del bug de resize)
-      canvasWidth = canvas.width;
-      canvasHeight = canvas.height;
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        canvasWidth = canvas.width;
+        canvasHeight = canvas.height;
+
+        const nextIsMobile = window.innerWidth < 768;
+        if (nextIsMobile !== isMobile) {
+          isMobile = nextIsMobile;
+          particleCount = isMobile ? 8 : 20;
+          const current = particles.current;
+          if (current.length < particleCount) {
+            while (current.length < particleCount) current.push(spawnParticle());
+          } else if (current.length > particleCount) {
+            current.length = particleCount;
+          }
+        }
+
+        if (prefersReduced) drawStaticFrame();
+      }, 150);
     };
 
     window.addEventListener('resize', handleResize, { passive: true });
+
+    // IntersectionObserver: pausar RAF cuando el canvas esta 100% ocluido (e.g. modal fullscreen)
+    let observer;
+    if (!prefersReduced && typeof IntersectionObserver !== 'undefined') {
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          const nowVisible = entry.isIntersecting;
+          if (nowVisible === isCanvasVisible) return;
+          isCanvasVisible = nowVisible;
+          if (isCanvasVisible && isTabVisible) {
+            resumeAnimation();
+          } else {
+            cancelAnimationFrame(animationFrameId);
+          }
+        },
+        { threshold: 0 }
+      );
+      observer.observe(canvas);
+    }
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', handleResize);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      clearTimeout(resizeTimer);
+      if (observer) observer.disconnect();
       if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
       }

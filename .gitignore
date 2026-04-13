@@ -33,3 +33,8 @@ stats.html
 # Next.js
 .next/
 out/
+
+# Benchmarks: ignorar reportes raw de Lighthouse (regenerables, ~10 MB),
+# conservar resumenes .md y build.log como documentacion comparativa
+.benchmarks/**/*.report.html
+.benchmarks/**/*.report.json
