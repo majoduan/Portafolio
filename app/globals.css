@@ -605,12 +605,22 @@ video[loading="lazy"] {
   contain: layout style paint;
 }
 
-/* Containment para secciones grandes */
+/* Containment para secciones grandes.
+ * contain-intrinsic-size actua como hint de altura cuando content-visibility: auto
+ * salta el render offscreen. Hints precisos por seccion mejoran estabilidad de
+ * scrollbar y anchor-scroll; el fallback generico cubre secciones no identificadas.
+ */
 section {
   contain: layout style;
   content-visibility: auto;
   contain-intrinsic-size: auto 800px;
 }
+
+section#home             { contain-intrinsic-size: auto 900px; }
+section#certificates     { contain-intrinsic-size: auto 700px; }
+section#projects         { contain-intrinsic-size: auto 900px; }
+section#contact          { contain-intrinsic-size: auto 900px; }
+section.integrations-marquee { contain-intrinsic-size: auto 220px; }
 
 /* Reducir repaints en animaciones - aumentar duración para menos frames */
 @media (prefers-reduced-motion: no-preference) {
