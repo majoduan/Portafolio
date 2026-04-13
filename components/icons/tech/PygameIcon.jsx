@@ -2,10 +2,10 @@ import Image from 'next/image';
 
 const PygameIcon = ({ className, ...props }) => (
   <Image
-    src="/images/tech-icons/pygame.svg"
+    src="/images/tech-icons/pygame.avif"
     alt=""
-    width={48}
-    height={48}
+    width={128}
+    height={128}
     unoptimized
     className={className}
     draggable={false}
