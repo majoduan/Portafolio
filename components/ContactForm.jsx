@@ -104,6 +104,8 @@ const ContactForm = memo(() => {
           value={formData.name}
           onChange={handleChange}
           placeholder={t('contact.form.name.placeholder')}
+          aria-invalid={errors.name ? 'true' : 'false'}
+          aria-describedby={errors.name ? 'name-error' : undefined}
           style={{ backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}
           className={`w-full px-4 py-3 bg-white dark:bg-[var(--bg-elevated-50)] border rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-inset transition-all duration-300 ${
             errors.name
@@ -112,7 +114,7 @@ const ContactForm = memo(() => {
           }`}
         />
         {errors.name && (
-          <p className="mt-1 text-sm text-red-400 animate-fadeIn">{errors.name}</p>
+          <p id="name-error" role="alert" className="mt-1 text-sm text-red-400 animate-fadeIn">{errors.name}</p>
         )}
       </div>
 
@@ -129,6 +131,8 @@ const ContactForm = memo(() => {
           value={formData.subject}
           onChange={handleChange}
           placeholder={t('contact.form.subject.placeholder')}
+          aria-invalid={errors.subject ? 'true' : 'false'}
+          aria-describedby={errors.subject ? 'subject-error' : undefined}
           className={`w-full px-4 py-3 bg-white dark:bg-[var(--bg-elevated-50)] border rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-inset transition-all duration-300 ${
             errors.subject
               ? 'border-red-500 focus:ring-red-500'
@@ -136,7 +140,7 @@ const ContactForm = memo(() => {
           }`}
         />
         {errors.subject && (
-          <p className="mt-1 text-sm text-red-400 animate-fadeIn">{errors.subject}</p>
+          <p id="subject-error" role="alert" className="mt-1 text-sm text-red-400 animate-fadeIn">{errors.subject}</p>
         )}
       </div>
 
@@ -152,6 +156,8 @@ const ContactForm = memo(() => {
           value={formData.message}
           onChange={handleChange}
           placeholder={t('contact.form.message.placeholder')}
+          aria-invalid={errors.message ? 'true' : 'false'}
+          aria-describedby={errors.message ? 'message-error' : undefined}
           className={`w-full h-32 md:h-40 lg:h-44 px-4 py-3 bg-white dark:bg-[var(--bg-elevated-50)] border rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-inset transition-all duration-300 resize-none ${
             errors.message
               ? 'border-red-500 focus:ring-red-500'
@@ -159,7 +165,7 @@ const ContactForm = memo(() => {
           }`}
         />
         {errors.message && (
-          <p className="mt-1 text-sm text-red-400 animate-fadeIn">{errors.message}</p>
+          <p id="message-error" role="alert" className="mt-1 text-sm text-red-400 animate-fadeIn">{errors.message}</p>
         )}
       </div>
 

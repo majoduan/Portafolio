@@ -141,14 +141,23 @@ const ProjectsSection = React.memo(() => {
     setSelectedProject(null);
   }, []);
 
-  // Close modal on Escape key + lock body scroll
+  // Close modal on Escape key + lock body scroll + inert background
   useEffect(() => {
     if (!isModalOpen) return;
     document.body.style.overflow = 'hidden';
+    const section = projectsSectionRef.current;
+    if (section) {
+      section.setAttribute('inert', '');
+      section.setAttribute('aria-hidden', 'true');
+    }
     const handleEscape = (e) => { if (e.key === 'Escape') handleCloseModal(); };
     document.addEventListener('keydown', handleEscape);
     return () => {
       document.body.style.overflow = '';
+      if (section) {
+        section.removeAttribute('inert');
+        section.removeAttribute('aria-hidden');
+      }
       document.removeEventListener('keydown', handleEscape);
     };
   }, [isModalOpen, handleCloseModal]);

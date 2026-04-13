@@ -292,6 +292,15 @@ const HUDBootScreen = memo(({ onComplete, splineReady = false }) => {
   const [orbActive, setOrbActive] = useState(false);
   const [orbIntensity, setOrbIntensity] = useState(0);
   const [dims, setDims] = useState({ w: 0, h: 0 });
+  const [prefersReduced, setPrefersReduced] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReduced(mq.matches);
+    const onChange = (e) => setPrefersReduced(e.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
 
   // Viewport dimensions
   useEffect(() => {
@@ -303,6 +312,12 @@ const HUDBootScreen = memo(({ onComplete, splineReady = false }) => {
 
   // Progress timer
   useEffect(() => {
+    if (prefersReduced) {
+      setProgress(100);
+      setFadeState('fade-out');
+      const t = setTimeout(() => onComplete(), 500);
+      return () => clearTimeout(t);
+    }
     const startTime = Date.now();
     const MAX_WAIT = 15000;
     const interval = setInterval(() => {
@@ -321,7 +336,7 @@ const HUDBootScreen = memo(({ onComplete, splineReady = false }) => {
       });
     }, 50);
     return () => clearInterval(interval);
-  }, [onComplete, splineReady]);
+  }, [onComplete, splineReady, prefersReduced]);
 
   // Orb activation — flicker then ramp up
   useEffect(() => {
@@ -330,6 +345,7 @@ const HUDBootScreen = memo(({ onComplete, splineReady = false }) => {
 
   useEffect(() => {
     if (!orbActive) return;
+    if (prefersReduced) { setOrbIntensity(1); return; }
     // Phase 1: flicker (rapid random intensity, 0-0.4)
     let frame;
     let elapsed = 0;
@@ -357,15 +373,16 @@ const HUDBootScreen = memo(({ onComplete, splineReady = false }) => {
     };
     frame = requestAnimationFrame(animate);
     return () => { if (frame) cancelAnimationFrame(frame); };
-  }, [orbActive]);
+  }, [orbActive, prefersReduced]);
 
   // No typewriter text — clean boot screen
 
-  // Generate circuits
+  // Generate circuits (skipped under reduced-motion for static screen)
   const circuits = useMemo(() => {
+    if (prefersReduced) return [];
     if (!dims.w || !dims.h) return [];
     return generateCircuits(dims.w, dims.h);
-  }, [dims.w, dims.h]);
+  }, [dims.w, dims.h, prefersReduced]);
 
   return (
     <div className={`cb cb--${fadeState}`}>
