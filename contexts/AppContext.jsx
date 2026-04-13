@@ -1,5 +1,6 @@
 'use client';
 import { createContext, useState, useEffect, useMemo } from 'react';
+import { flushSync } from 'react-dom';
 
 // Create context for app-wide state (language and theme)
 export const AppContext = createContext();
@@ -46,15 +47,10 @@ export const AppContextProvider = ({ children }) => {
     document.documentElement.lang = language;
   }, [language]);
 
-  // Persist theme changes to localStorage and update DOM
+  // Persist theme changes to localStorage (DOM class is handled imperatively in toggleTheme)
   useEffect(() => {
     localStorage.setItem('portfolio-theme', theme);
-    // Update HTML class for Tailwind dark mode
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+    document.documentElement.classList.toggle('dark', theme === 'dark');
   }, [theme]);
 
   // Toggle between English and Spanish
@@ -62,9 +58,22 @@ export const AppContextProvider = ({ children }) => {
     setLanguage(prev => prev === 'en' ? 'es' : 'en');
   };
 
-  // Toggle between dark and light theme
+  // Apply theme synchronously so the View Transitions snapshot captures the new state
+  const applyTheme = (next) => {
+    flushSync(() => setTheme(next));
+    document.documentElement.classList.toggle('dark', next === 'dark');
+  };
+
+  // Toggle between dark and light theme with polygon view-transition
   const toggleTheme = () => {
-    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+    const next = theme === 'dark' ? 'light' : 'dark';
+    const reduced = typeof window !== 'undefined'
+      && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (typeof document === 'undefined' || !document.startViewTransition || reduced) {
+      applyTheme(next);
+      return;
+    }
+    document.startViewTransition(() => applyTheme(next));
   };
 
   // Memoize context value to prevent unnecessary re-renders

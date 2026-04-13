@@ -26,11 +26,11 @@ export default function AboutPage() {
       {/* Intro */}
       <section className="py-10 relative z-10 bg-transparent transition-colors duration-300">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <p className="text-2xl md:text-3xl text-slate-700 dark:text-slate-100 mb-2 font-medium transition-colors duration-300">
+          <p className="text-xl md:text-2xl lg:text-3xl text-slate-700 dark:text-slate-100 mb-2 font-medium transition-colors duration-300">
             {t('hero.name')}
           </p>
           <RotatingTitle titles={t('hero.titles')} />
-          <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-10 leading-relaxed transition-colors duration-300">
+          <p className="text-base md:text-lg lg:text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto mb-10 leading-relaxed transition-colors duration-300">
             {t('about.intro.bio')}
           </p>
 

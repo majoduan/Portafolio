@@ -1,7 +1,7 @@
 // Service Worker para Portfolio - Cache Strategy OPTIMIZADO
-// Version 2.4.0 - Enhanced Video Caching + Adaptive Quality
+// Version 2.5.0 - Spline scene cache invalidation (SWR)
 
-const CACHE_VERSION = '2.4.0';
+const CACHE_VERSION = '2.5.0';
 const CACHE_NAME = `mateo-portfolio-v${CACHE_VERSION}`;
 const RUNTIME_CACHE = `runtime-cache-v${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-cache-v${CACHE_VERSION}`;
@@ -78,8 +78,10 @@ self.addEventListener('fetch', (event) => {
     // JS/CSS: Stale While Revalidate (mejor UX)
     event.respondWith(staleWhileRevalidateWithCache(request, RUNTIME_CACHE));
   } else if (request.url.includes('spline.design')) {
-    // Escena Spline: Cache First con larga expiración
-    event.respondWith(cacheFirstWithExpiry(request, RUNTIME_CACHE, 7 * 24 * 60 * 60 * 1000)); // 7 días
+    // Escena Spline: Stale While Revalidate
+    // Sirve cache inmediato para velocidad, pero revalida en background
+    // para que cualquier re-publish en Spline se propague en el siguiente load.
+    event.respondWith(staleWhileRevalidateWithCache(request, RUNTIME_CACHE));
   } else {
     // Otros: Network First con fallback a cache
     event.respondWith(networkFirst(request, RUNTIME_CACHE));

@@ -20,7 +20,7 @@ export default function WorkTimeline({ items, t }) {
 
   // ── Media query ──
   useEffect(() => {
-    const mql = window.matchMedia('(min-width: 768px)');
+    const mql = window.matchMedia('(min-width: 1024px)');
     setIsMd(mql.matches);
     isMdRef.current = mql.matches;
     const handler = (e) => { setIsMd(e.matches); isMdRef.current = e.matches; };
@@ -256,7 +256,8 @@ export default function WorkTimeline({ items, t }) {
       const containerH = containerHeightRef.current;
       if (len === 0 || !samples || containerH === 0) return;
 
-      const mobileProgress = Math.min(1, progress * 1.3);
+      const isTablet = window.innerWidth >= 768;
+      const mobileProgress = Math.min(1, progress * (isTablet ? 1.1 : 1.3));
       const targetScroll = mobileProgress * containerH;
 
       let lenAtTarget = 0;
@@ -317,40 +318,36 @@ export default function WorkTimeline({ items, t }) {
 
               // Mobile: add side padding so serpentine vertical doesn't cross text
               const mobilePadding = !isLast
-                ? (index % 2 === 0 ? 'pr-6 md:pr-0' : 'pl-6 md:pl-0')
+                ? (index % 2 === 0 ? 'pr-6 lg:pr-0' : 'pl-6 lg:pl-0')
                 : '';
 
               return (
                 <div
                   key={item.key}
-                  className="grid grid-cols-1 md:grid-cols-[7rem_1fr] md:gap-10 items-start"
+                  className="grid grid-cols-1 lg:grid-cols-[12rem_1fr] lg:gap-12 items-start"
                 >
                   {/* ── Desktop logos (md+) ── */}
-                  <div className={`hidden md:flex ${hasMultipleLogos ? 'flex-row justify-center' : 'flex-col'} items-center ${hasMultipleLogos ? 'gap-2' : 'gap-4'} relative z-10`}>
+                  <div className={`hidden lg:flex ${hasMultipleLogos ? 'flex-row justify-center gap-3' : 'flex-col gap-4'} items-center relative z-10`}>
                     {item.logos.map((logo, li) => (
                       <div
                         key={li}
                         ref={el => { logoRefs.current[`d-${index}-${li}`] = el; }}
-                        className={`rounded-full bg-white flex items-center justify-center shadow-md flex-shrink-0 ${
-                          hasMultipleLogos ? 'w-20 h-20' : 'w-28 h-28'
-                        }`}
+                        className="w-28 h-28 rounded-full bg-white flex items-center justify-center shadow-md flex-shrink-0"
                       >
-                        <img src={logo} alt="" className={`object-contain ${
-                          hasMultipleLogos ? 'w-14 h-14' : 'w-20 h-20'
-                        }`} />
+                        <img src={logo} alt="" className="w-20 h-20 object-contain" />
                       </div>
                     ))}
                   </div>
 
                   {/* ── Mobile logos (<md) ── */}
-                  <div className="md:hidden flex gap-3 mb-4 relative z-10">
+                  <div className="lg:hidden flex gap-3 mb-4 relative z-10">
                     {item.logos.map((logo, li) => (
                       <div
                         key={li}
                         ref={el => { logoRefs.current[`m-${index}-${li}`] = el; }}
-                        className="w-14 h-14 rounded-full bg-white flex items-center justify-center shadow-md flex-shrink-0"
+                        className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-white flex items-center justify-center shadow-md flex-shrink-0"
                       >
-                        <img src={logo} alt="" className="w-10 h-10 object-contain" />
+                        <img src={logo} alt="" className="w-10 h-10 md:w-14 md:h-14 object-contain" />
                       </div>
                     ))}
                   </div>

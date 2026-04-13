@@ -121,6 +121,53 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* ---------- View-Transition: Polygon theme reveal ---------- */
+:root {
+  --expo-out: linear(
+    0 0%, 0.1684 2.66%, 0.3165 5.49%, 0.4544 8.55%,
+    0.5711 11.77%, 0.6697 15.27%, 0.7518 19.08%,
+    0.8192 23.24%, 0.8729 27.82%, 0.9137 32.88%,
+    0.9431 38.51%, 0.9629 44.87%, 0.9755 52.24%,
+    0.9834 61.05%, 0.9883 72.19%, 0.9913 88.35%, 0.9935 100%
+  );
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-group(root) {
+    animation-duration: 0.7s;
+    animation-timing-function: var(--expo-out);
+  }
+  ::view-transition-new(root) {
+    animation-name: reveal-light;
+    animation-fill-mode: both;
+  }
+  ::view-transition-old(root),
+  .dark::view-transition-old(root) {
+    animation: none;
+    animation-fill-mode: both;
+    z-index: -1;
+  }
+  .dark::view-transition-new(root) {
+    animation-name: reveal-dark;
+    animation-fill-mode: both;
+  }
+
+  /* Suppress the 0.3s bg/color transition during the wipe to avoid double-fade */
+  html:active-view-transition,
+  body:active-view-transition {
+    transition: none;
+  }
+}
+
+@keyframes reveal-dark {
+  from { clip-path: polygon(50% -71%, -50% 71%, -50% 71%, 50% -71%); }
+  to   { clip-path: polygon(50% -71%, -50% 71%, 50% 171%, 171% 50%); }
+}
+@keyframes reveal-light {
+  from { clip-path: polygon(171% 50%, 50% 171%, 50% 171%, 171% 50%); }
+  to   { clip-path: polygon(171% 50%, 50% 171%, -50% 71%, 50% -71%); }
+}
+
 /* Ultra-wide display scaling (1440px+) */
 @media (min-width: 1441px) {
   html {
