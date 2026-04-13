@@ -127,47 +127,6 @@ async function networkFirst(request, cacheName = RUNTIME_CACHE) {
   }
 }
 
-// Cache First con expiración: Servir de cache, actualizar en background
-async function cacheFirstWithExpiry(request, cacheName, maxAge) {
-  const cache = await caches.open(cacheName);
-  const cachedResponse = await cache.match(request);
-
-  // Si está en cache y no ha expirado, servir de cache
-  if (cachedResponse) {
-    const cachedDate = new Date(cachedResponse.headers.get('date'));
-    const now = new Date();
-    const age = now - cachedDate;
-
-    if (age < maxAge) {
-      // Actualizar en background solo si está cerca de expirar (80% del maxAge)
-      if (age > maxAge * 0.8) {
-        fetch(request).then((networkResponse) => {
-          if (networkResponse.ok) {
-            cache.put(request, networkResponse.clone());
-          }
-        }).catch(() => {});
-      }
-      return cachedResponse;
-    }
-  }
-
-  // No está en cache o expiró, intentar red
-  try {
-    const networkResponse = await fetch(request);
-    // Solo cachear respuestas completas (no parciales como 206)
-    if (networkResponse.ok && networkResponse.status !== 206) {
-      cache.put(request, networkResponse.clone());
-    }
-    return networkResponse;
-  } catch (error) {
-    // Si falla la red, servir cache aunque haya expirado
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-    throw error;
-  }
-}
-
 // Stale While Revalidate: Servir cache inmediatamente, actualizar en background
 async function staleWhileRevalidateWithCache(request, cacheName) {
   const cache = await caches.open(cacheName);

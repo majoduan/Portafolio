@@ -1,5 +1,5 @@
 'use client';
-import { createContext, useState, useEffect, useMemo } from 'react';
+import { createContext, useState, useEffect, useMemo, useCallback } from 'react';
 import { flushSync } from 'react-dom';
 
 // Create context for app-wide state (language and theme)
@@ -54,18 +54,18 @@ export const AppContextProvider = ({ children }) => {
   }, [theme]);
 
   // Toggle between English and Spanish
-  const toggleLanguage = () => {
+  const toggleLanguage = useCallback(() => {
     setLanguage(prev => prev === 'en' ? 'es' : 'en');
-  };
+  }, []);
 
   // Apply theme synchronously so the View Transitions snapshot captures the new state
-  const applyTheme = (next) => {
+  const applyTheme = useCallback((next) => {
     flushSync(() => setTheme(next));
     document.documentElement.classList.toggle('dark', next === 'dark');
-  };
+  }, []);
 
   // Toggle between dark and light theme with polygon view-transition
-  const toggleTheme = () => {
+  const toggleTheme = useCallback(() => {
     const next = theme === 'dark' ? 'light' : 'dark';
     const reduced = typeof window !== 'undefined'
       && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -74,7 +74,7 @@ export const AppContextProvider = ({ children }) => {
       return;
     }
     document.startViewTransition(() => applyTheme(next));
-  };
+  }, [theme, applyTheme]);
 
   // Memoize context value to prevent unnecessary re-renders
   const value = useMemo(() => ({
@@ -84,7 +84,7 @@ export const AppContextProvider = ({ children }) => {
     theme,
     setTheme,
     toggleTheme
-  }), [language, theme]);
+  }), [language, theme, toggleLanguage, toggleTheme]);
 
   return (
     <AppContext.Provider value={value}>

@@ -12,6 +12,7 @@ export default function WorkTimeline({ items, t }) {
   const pathLengths = useRef({});
   const pathSamples = useRef({}); // sampled {len, cumScroll} pairs per path (for scroll-cost lookup)
   const containerHeightRef = useRef(0);
+  const rafRef = useRef(0);
   const isMdRef = useRef(false);
   const [isMd, setIsMd] = useState(false);
   const [ready, setReady] = useState(false);
@@ -135,8 +136,10 @@ export default function WorkTimeline({ items, t }) {
       }
     }
 
-    // Measure lengths & init dasharray
-    requestAnimationFrame(() => {
+    // Measure lengths & init dasharray (cancelable via rafRef)
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = 0;
       const newLengths = {};
       const newSamples = {};
       Object.entries(pathRefs.current).forEach(([key, el]) => {
@@ -218,7 +221,14 @@ export default function WorkTimeline({ items, t }) {
     ro.observe(container);
     // Compute after mount (slight delay for layout stabilization)
     const timer = setTimeout(computePaths, 50);
-    return () => { ro.disconnect(); clearTimeout(timer); };
+    return () => {
+      ro.disconnect();
+      clearTimeout(timer);
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = 0;
+      }
+    };
   }, [computePaths, isMd]);
 
   // ── Scroll-paint callback ──

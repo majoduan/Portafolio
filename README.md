@@ -194,6 +194,21 @@ Optimizaciones incluidas:
 
 Ver análisis detallado: [docs/TECHNICAL_DECISIONS.md](./docs/TECHNICAL_DECISIONS.md)
 
+### Auditoría integral v3.1.0 (Abril 2026)
+
+Ronda de optimización en 8 fases sobre el baseline v3.0.0. Cada fase es un commit aislado; resultados medibles por fase:
+
+| Fase | Área | Resultado |
+|------|------|-----------|
+| 1 | ParticleCanvas | Debounce resize 150ms, rebalance al cruzar 768px, `prefers-reduced-motion` estático, IntersectionObserver pausa RAF si ocluido |
+| 2 | Imágenes | `next/image` (unoptimized) con dims explícitas en marquee / timeline / about / projects; prefetch foto-perfil condicional por viewport |
+| 3 | CSS | `contain-intrinsic-size` por sección (#home 900px, #certificates 700px, #projects 900px, #contact 900px, marquee 220px) |
+| 4 | Assets | `pygame.svg` (72 KB, PNG raster embebido) → `pygame.avif` 128×128 (4.4 KB, **−94%**) |
+| 5 | A11y | `role="status"` + `aria-live` en TypingQuotes; `inert`/`aria-hidden` sobre fondo al abrir modal; `aria-invalid` + `aria-describedby` en ContactForm; HUDBootScreen fast-path <1s con reduced-motion |
+| 6 | Service Worker | v2.6.0: `networkFirst` con timeout 3s (Promise.race), precache amplía `/bow-and-arrow.svg` + `/manifest.json` |
+| 7 | Videos | 8 mp4 desktop re-encoded h264 CRF 28 + `+faststart`: 13.58 MB → 10.94 MB (**−19.5%**) |
+| 8 | Cleanup | `cacheFirstWithExpiry` dead code removido; `WorkTimeline` RAF cancelable; `AppContext` callbacks estabilizados con `useCallback` |
+
 ## 🔒 Seguridad
 
 Este proyecto implementa múltiples capas de seguridad:
