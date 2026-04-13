@@ -1,7 +1,8 @@
 // Service Worker para Portfolio - Cache Strategy OPTIMIZADO
-// Version 2.5.0 - Spline scene cache invalidation (SWR)
+// Version 2.6.0 - networkFirst con timeout 3s + precache ampliado
 
-const CACHE_VERSION = '2.5.0';
+const CACHE_VERSION = '2.6.0';
+const NETWORK_FIRST_TIMEOUT_MS = 3000;
 const CACHE_NAME = `mateo-portfolio-v${CACHE_VERSION}`;
 const RUNTIME_CACHE = `runtime-cache-v${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-cache-v${CACHE_VERSION}`;
@@ -12,7 +13,9 @@ const VIDEO_MOBILE_CACHE = `videos-mobile-cache-v${CACHE_VERSION}`;
 const PRECACHE_ASSETS = [
   '/',
   '/offline.html',
-  '/images/optimized/foto-perfil-800w.avif'
+  '/images/optimized/foto-perfil-800w.avif',
+  '/bow-and-arrow.svg',
+  '/manifest.json'
   // Certificados se cargan bajo demanda con stale-while-revalidate
 ];
 
@@ -88,10 +91,17 @@ self.addEventListener('fetch', (event) => {
   }
 });
 
-// Network First: Intentar red primero, fallback a cache
+// Network First con timeout: si la red tarda >3s caemos a cache.
+// Motivo: antes el browser esperaba su propio timeout (~30s) en 3G lento
+// antes de disparar el catch; ahora cortamos explicitamente.
 async function networkFirst(request, cacheName = RUNTIME_CACHE) {
   try {
-    const networkResponse = await fetch(request);
+    const networkResponse = await Promise.race([
+      fetch(request),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('network-timeout')), NETWORK_FIRST_TIMEOUT_MS)
+      ),
+    ]);
     if (networkResponse.ok) {
       const cache = await caches.open(cacheName);
       cache.put(request, networkResponse.clone());
