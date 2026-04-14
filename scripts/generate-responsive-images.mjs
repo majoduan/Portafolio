@@ -47,7 +47,8 @@ async function generateResponsiveVersions(inputPath, outputDir) {
   const filename = basename(inputPath, extname(inputPath));
   const ext = extname(inputPath);
   
-  if (ext.toLowerCase() !== '.webp') {
+  const SUPPORTED = ['.webp', '.avif', '.jpg', '.jpeg', '.png'];
+  if (!SUPPORTED.includes(ext.toLowerCase())) {
     return;
   }
 

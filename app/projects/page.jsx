@@ -523,12 +523,14 @@ const ProjectRow = React.memo(({ project, index, t }) => {
           </h2>
 
           {/* Video — preserves 16:9 aspect ratio */}
-          <div className="w-full aspect-video bg-black relative z-10">
-            <ProjectVideo
-              src={project.video}
-              poster={poster}
-              title={project.title}
-            />
+          <div className={`w-full px-3 md:px-4 lg:px-0 ${isEven ? 'lg:pr-[16px]' : 'lg:pl-[16px]'}`}>
+            <div className="w-full aspect-video bg-black relative z-10 rounded-lg overflow-hidden">
+              <ProjectVideo
+                src={project.video}
+                poster={poster}
+                title={project.title}
+              />
+            </div>
           </div>
 
           {/* Project Links */}

@@ -87,7 +87,9 @@ const CertificatesSection = React.memo(() => {
         >
           {/* Certificate grid */}
           <div className="flex gap-6">
-            {certificates.map((cert, i) => (
+            {certificates.map((cert, i) => {
+              const base = cert.image.split('/').pop().replace(/\.(jpg|jpeg|webp|avif|png)$/i, '');
+              return (
               <div
                 key={i}
                 className="certificate-card flex-shrink-0 bg-white/90 dark:bg-[var(--bg-secondary)] backdrop-blur-lg rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50 hover:border-[var(--btn-primary)] transition-all duration-300 transform hover:scale-105 shadow-[0_4px_4px_rgba(0,0,0,0.25)] hover:shadow-xl dark:hover:shadow-2xl group cursor-pointer"
@@ -105,11 +107,11 @@ const CertificatesSection = React.memo(() => {
                   {/* srcset AVIF manual, next/image unoptimized perderia srcset */}
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                      src={`/images/optimized/${cert.image.split('/').pop().replace('.jpg', '').replace('.webp', '')}-800w.avif`}
+                      src={`/images/optimized/${base}-800w.avif`}
                       srcSet={`
-                        /images/optimized/${cert.image.split('/').pop().replace('.jpg', '').replace('.webp', '')}-400w.avif 400w,
-                        /images/optimized/${cert.image.split('/').pop().replace('.jpg', '').replace('.webp', '')}-800w.avif 800w,
-                        /images/optimized/${cert.image.split('/').pop().replace('.jpg', '').replace('.webp', '')}-1200w.avif 1200w
+                        /images/optimized/${base}-400w.avif 400w,
+                        /images/optimized/${base}-800w.avif 800w,
+                        /images/optimized/${base}-1200w.avif 1200w
                       `}
                       sizes="(max-width: 640px) 400px, 800px"
                       alt={cert.title}
@@ -145,7 +147,8 @@ const CertificatesSection = React.memo(() => {
                   </div>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 

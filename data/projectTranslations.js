@@ -215,6 +215,12 @@ export const getCertificatesData = (t) => [
     image: "/images/certificates/epn-award.webp"
   },
   {
+    title: t('certificates.items.epnFinal.title'),
+    org: t('certificates.items.epnFinal.org'),
+    icon: "🎓",
+    image: "/images/certificates/epn-final-award.avif"
+  },
+  {
     title: t('certificates.items.cisco.title'),
     org: t('certificates.items.cisco.org'),
     icon: "🌐",
@@ -231,5 +237,11 @@ export const getCertificatesData = (t) => [
     org: t('certificates.items.scrum.org'),
     icon: "⚡",
     image: "/images/certificates/scrum-foundation.webp"
+  },
+  {
+    title: t('certificates.items.ieeextreme.title'),
+    org: t('certificates.items.ieeextreme.org'),
+    icon: "💻",
+    image: "/images/certificates/ieeextreme-certificate.avif"
   }
 ];

@@ -193,7 +193,11 @@
     "title": "Certificados y Reconocimientos",
     "items": {
       "epn": {
-        "title": "Premio a la Excelencia Académica EPN",
+        "title": "Premio a la Excelencia Académica de Media Carrera",
+        "org": "Escuela Politécnica Nacional"
+      },
+      "epnFinal": {
+        "title": "Premio a la Excelencia Académica de Fin de Carrera",
         "org": "Escuela Politécnica Nacional"
       },
       "cisco": {
@@ -207,6 +211,10 @@
       "scrum": {
         "title": "SCRUM Foundation",
         "org": "Certiprof - SFPC™"
+      },
+      "ieeextreme": {
+        "title": "Embajador IEEEXtreme",
+        "org": "IEEE"
       }
     }
   },
