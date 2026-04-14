@@ -13,26 +13,10 @@
   "categories": ["portfolio", "developer", "technology"],
   "icons": [
     {
-      "src": "/bow-and-arrow.svg",
+      "src": "/icons/bow-and-arrow.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "/images/screenshot-wide.webp",
-      "sizes": "1280x720",
-      "type": "image/webp",
-      "form_factor": "wide",
-      "label": "Portfolio Home - Desktop"
-    },
-    {
-      "src": "/images/screenshot-mobile.webp",
-      "sizes": "750x1334",
-      "type": "image/webp",
-      "form_factor": "narrow",
-      "label": "Portfolio Home - Mobile"
     }
   ],
   "shortcuts": [
@@ -43,7 +27,7 @@
       "url": "/#projects",
       "icons": [
         {
-          "src": "/bow-and-arrow.svg",
+          "src": "/icons/bow-and-arrow.svg",
           "sizes": "96x96"
         }
       ]
@@ -55,7 +39,7 @@
       "url": "/#contact",
       "icons": [
         {
-          "src": "/bow-and-arrow.svg",
+          "src": "/icons/bow-and-arrow.svg",
           "sizes": "96x96"
         }
       ]

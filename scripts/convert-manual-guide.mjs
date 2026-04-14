@@ -15,8 +15,8 @@ import { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const SVG_DIR = join(__dirname, '../public/images/work-education');
-const OUTPUT_DIR = join(__dirname, '../public/images/optimized');
+const SVG_DIR = join(__dirname, '../public/media/work-education');
+const OUTPUT_DIR = join(__dirname, '../public/media/certificates');
 
 console.log('❌ Este script requiere ImageMagick o ffmpeg instalados.');
 console.log('');
@@ -28,7 +28,7 @@ console.log('   - Input: SVG');
 console.log('   - Output: AVIF');
 console.log('   - Options: Resize 120x120px');
 console.log('3. Descarga con nombre: {nombre}-120w.avif');
-console.log('4. Guarda en: public/images/optimized/');
+console.log('4. Guarda en: public/media/certificates/');
 console.log('');
 console.log('📁 SVGs a convertir:');
 

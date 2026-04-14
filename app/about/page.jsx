@@ -7,15 +7,15 @@ import RotatingTitle from '../../components/RotatingTitle';
 import WorkTimeline from '../../components/WorkTimeline';
 
 const experienceItems = [
-  { key: 'bridge',           logos: ['/images/optimized/bridge-staff-120w.avif', '/images/optimized/acr-120w.avif'], present: true },
-  { key: 'epnIntern',        logos: ['/images/optimized/direc_investigacion-120w.avif'] },
-  { key: 'digitalInclusion', logos: ['/images/optimized/ludolab-120w.avif'] },
-  { key: 'ieee',             logos: ['/images/optimized/ieee-120w.avif'] },
+  { key: 'bridge',           logos: ['/media/work-education/bridge-staff-120w.avif', '/media/work-education/acr-120w.avif'], present: true },
+  { key: 'epnIntern',        logos: ['/media/work-education/direc-investigacion-120w.avif'] },
+  { key: 'digitalInclusion', logos: ['/media/work-education/ludolab-120w.avif'] },
+  { key: 'ieee',             logos: ['/media/work-education/ieee-120w.avif'] },
 ];
 
 const educationItems = [
-  { key: 'epn',     logos: ['/images/optimized/epn-120w.avif'],     primary: true },
-  { key: 'english', logos: ['/images/optimized/cec-epn-120w.avif'] },
+  { key: 'epn',     logos: ['/media/work-education/epn-120w.avif'],     primary: true },
+  { key: 'english', logos: ['/media/work-education/cec-epn-120w.avif'] },
 ];
 
 export default function AboutPage() {
@@ -38,7 +38,7 @@ export default function AboutPage() {
           {/* CV Button + Social Links */}
           <div className="flex flex-wrap items-center justify-center gap-4 max-[424px]:flex-col">
             <a
-              href="/cv/Mateo_Dueñas_CV.pdf"
+              href="/docs/Mateo_Duenas_CV.pdf"
               download="Mateo_Dueñas_CV.pdf"
               className="swap-btn"
               ref={(el) => {

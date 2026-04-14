@@ -14,8 +14,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Configuración
 const CONFIG = {
-  inputDir: path.join(__dirname, '../public/images/certificates'),
-  outputDir: path.join(__dirname, '../public/images/certificates/webp'),
+  inputDir: path.join(__dirname, '../public/media/certificates'),
+  outputDir: path.join(__dirname, '../public/media/certificates/webp'),
   quality: 85, // Calidad WebP (0-100)
   effort: 6,   // Esfuerzo de compresión (0-6, más alto = mejor compresión)
   supportedFormats: /\.(jpg|jpeg|png)$/i

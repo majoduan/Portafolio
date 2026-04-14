@@ -39,7 +39,7 @@ export const shouldUseMobileVideo = () => {
 /**
  * Obtiene la mejor fuente de video según device capabilities
  * 
- * @param {string} videoPath - Ruta original del video (ej: '/videos/project.mp4')
+ * @param {string} videoPath - Ruta original del video (ej: '/media/projects/videos/project.mp4')
  * @returns {string} Ruta optimizada del video
  */
 export const getOptimalVideoSource = (videoPath) => {
@@ -62,8 +62,10 @@ export const getOptimalVideoSource = (videoPath) => {
  * @returns {string} Ruta del poster optimizado
  */
 export const getOptimalPoster = (videoPath) => {
-  // Poster siempre es avif (ya optimizado)
-  return videoPath.replace('.mp4', '-poster.avif');
+  // Posters viven en /media/projects/posters/ (videos en /media/projects/videos/)
+  return videoPath
+    .replace('/videos/', '/posters/')
+    .replace('.mp4', '-poster.avif');
 };
 
 /**

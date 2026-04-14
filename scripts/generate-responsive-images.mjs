@@ -20,10 +20,10 @@ const SIZES = [400, 800, 1200, 1920];
 const WEBP_QUALITY = 85;
 const AVIF_QUALITY = 50;
 const INPUT_DIRS = [
-  join(__dirname, '../public/images'),
-  join(__dirname, '../public/images/certificates')
+  join(__dirname, '../public/media'),
+  join(__dirname, '../public/media/certificates')
 ];
-const OUTPUT_DIR = join(__dirname, '../public/images/optimized');
+const OUTPUT_DIR = join(__dirname, '../public/media/certificates');
 
 // Colores para console
 const colors = {
@@ -143,7 +143,7 @@ ${colors.reset}`);
   console.log(`\n${colors.green}
 ╔════════════════════════════════════════════════════════╗
 ║   ✅ Proceso completado exitosamente                  ║
-║   📁 Imágenes guardadas en: /public/images/optimized  ║
+║   📁 Imágenes guardadas en: /public/media/certificates  ║
 ╚════════════════════════════════════════════════════════╝
 ${colors.reset}`);
 

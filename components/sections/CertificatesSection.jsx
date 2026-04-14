@@ -88,7 +88,7 @@ const CertificatesSection = React.memo(() => {
           {/* Certificate grid */}
           <div className="flex gap-6">
             {certificates.map((cert, i) => {
-              const base = cert.image.split('/').pop().replace(/\.(jpg|jpeg|webp|avif|png)$/i, '');
+              const base = cert.slug;
               return (
               <div
                 key={i}
@@ -107,11 +107,11 @@ const CertificatesSection = React.memo(() => {
                   {/* srcset AVIF manual, next/image unoptimized perderia srcset */}
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                      src={`/images/optimized/${base}-800w.avif`}
+                      src={`/media/certificates/${base}-800w.avif`}
                       srcSet={`
-                        /images/optimized/${base}-400w.avif 400w,
-                        /images/optimized/${base}-800w.avif 800w,
-                        /images/optimized/${base}-1200w.avif 1200w
+                        /media/certificates/${base}-400w.avif 400w,
+                        /media/certificates/${base}-800w.avif 800w,
+                        /media/certificates/${base}-1200w.avif 1200w
                       `}
                       sizes="(max-width: 640px) 400px, 800px"
                       alt={cert.title}

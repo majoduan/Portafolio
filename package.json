@@ -1,7 +1,7 @@
 {
   "name": "mateo-portfolio",
   "private": true,
-  "version": "3.1.0",
+  "version": "3.2.0",
   "type": "module",
   "description": "Portfolio profesional optimizado con Next.js, React y Spline 3D",
   "author": "Mateo Dueñas <mate.due02@gmail.com>",

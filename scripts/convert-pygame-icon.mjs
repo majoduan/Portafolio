@@ -6,8 +6,8 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import sharp from 'sharp';
 
-const svgPath = resolve('public/images/tech-icons/pygame.svg');
-const outPath = resolve('public/images/tech-icons/pygame.avif');
+const svgPath = resolve('public/media/tech/pygame.svg');
+const outPath = resolve('public/media/tech/pygame.avif');
 
 const svg = readFileSync(svgPath, 'utf8');
 const match = svg.match(/xlink:href="data:image\/png;base64,([^"]+)"/);

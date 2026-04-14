@@ -7,7 +7,7 @@ import { execSync } from 'node:child_process';
 import { readdirSync, statSync, renameSync, unlinkSync, existsSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 
-const videosDir = resolve('public/videos');
+const videosDir = resolve('public/media/projects/videos');
 const files = readdirSync(videosDir)
   .filter((f) => f.endsWith('.mp4') && !f.endsWith('-mobile.mp4'));
 

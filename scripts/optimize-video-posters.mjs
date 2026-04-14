@@ -62,7 +62,7 @@ async function optimizePosters() {
 
     console.log('╔════════════════════════════════════════════════════════╗');
     console.log('║   ✅ Optimización completada                          ║');
-    console.log('║   📁 Posters WebP guardados en: /public/videos        ║');
+    console.log('║   📁 Posters WebP guardados en: /public/media/projects/videos        ║');
     console.log('╚════════════════════════════════════════════════════════╝\n');
 
     console.log('💡 Siguiente paso:');

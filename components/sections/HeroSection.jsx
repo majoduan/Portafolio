@@ -136,7 +136,7 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
             {/* Boton CV y Redes Sociales */}
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-8 max-[424px]:flex-col">
               <a
-                href="/cv/Mateo_Dueñas_CV.pdf"
+                href="/docs/Mateo_Duenas_CV.pdf"
                 download="Mateo_Dueñas_CV.pdf"
                 className="swap-btn"
                 ref={(el) => {

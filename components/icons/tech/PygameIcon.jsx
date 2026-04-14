@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 const PygameIcon = ({ className, ...props }) => (
   <Image
-    src="/images/tech-icons/pygame.avif"
+    src="/media/tech/pygame.avif"
     alt=""
     width={128}
     height={128}

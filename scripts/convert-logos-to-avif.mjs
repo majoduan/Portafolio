@@ -17,9 +17,9 @@ import { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const SVG_INPUT_DIR = join(__dirname, '../public/images/work-education');
-const OUTPUT_DIR = join(__dirname, '../public/images/optimized');
-const TEMP_DIR = join(__dirname, '../public/images/.temp-png');
+const SVG_INPUT_DIR = join(__dirname, '../public/media/work-education');
+const OUTPUT_DIR = join(__dirname, '../public/media/certificates');
+const TEMP_DIR = join(__dirname, '../public/media/.temp-png');
 
 const colors = {
   reset: '\x1b[0m',

@@ -23,10 +23,10 @@ export const preloadCriticalResources = () => {
 
   // NIVEL 1: CRÍTICO - Imágenes de certificados optimizadas AVIF (siempre precargar, son ligeras)
   const certificateImages = [
-    '/images/optimized/epn-award-800w.avif',
-    '/images/optimized/cisco-networking-800w.avif',
-    '/images/optimized/digital-transformation-800w.avif',
-    '/images/optimized/scrum-foundation-800w.avif'
+    '/media/certificates/epn-award-800w.avif',
+    '/media/certificates/cisco-networking-800w.avif',
+    '/media/certificates/digital-transformation-800w.avif',
+    '/media/certificates/scrum-foundation-800w.avif'
   ];
 
   certificateImages.forEach(src => {
@@ -39,14 +39,14 @@ export const preloadCriticalResources = () => {
 
   // NIVEL 2: Posters de videos (ligeros, útiles para móvil)
   const posters = [
-    '/videos/poa-management-poster.avif',
-    '/videos/epn-certificates-poster.avif',
-    '/videos/travel-allowance-poster.avif',
-    '/videos/storycraft-poster.avif',
-    '/videos/fitness-tracker-poster.avif',
-    '/videos/space-invaders-poster.avif',
-    '/videos/godot-game-2d-poster.avif',
-    '/videos/godot-game-3d-poster.avif'
+    '/media/projects/posters/poa-management-poster.avif',
+    '/media/projects/posters/epn-certificates-poster.avif',
+    '/media/projects/posters/travel-allowance-poster.avif',
+    '/media/projects/posters/storycraft-poster.avif',
+    '/media/projects/posters/fitness-tracker-poster.avif',
+    '/media/projects/posters/space-invaders-poster.avif',
+    '/media/projects/posters/godot-game-2d-poster.avif',
+    '/media/projects/posters/godot-game-3d-poster.avif'
   ];
 
   posters.forEach(posterSrc => {
@@ -63,8 +63,8 @@ export const preloadCriticalResources = () => {
     
     // 2A. Videos prioritarios - metadata only
     const priorityVideos = [
-      '/videos/poa-management.mp4',
-      '/videos/epn-certificates.mp4'
+      '/media/projects/videos/poa-management.mp4',
+      '/media/projects/videos/epn-certificates.mp4'
     ];
 
     priorityVideos.forEach(videoSrc => {
@@ -77,12 +77,12 @@ export const preloadCriticalResources = () => {
     // 2B. Resto de videos - prefetch después de 5s (no 3s)
     setTimeout(() => {
       const remainingVideos = [
-        '/videos/travel-allowance.mp4',
-        '/videos/storycraft.mp4',
-        '/videos/fitness-tracker.mp4',
-        '/videos/space-invaders.mp4',
-        '/videos/godot-game-2d.mp4',
-        '/videos/godot-game-3d.mp4'
+        '/media/projects/videos/travel-allowance.mp4',
+        '/media/projects/videos/storycraft.mp4',
+        '/media/projects/videos/fitness-tracker.mp4',
+        '/media/projects/videos/space-invaders.mp4',
+        '/media/projects/videos/godot-game-2d.mp4',
+        '/media/projects/videos/godot-game-3d.mp4'
       ];
 
       if (DEBUG && remainingVideos.length > 0) {

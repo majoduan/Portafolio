@@ -14,7 +14,7 @@ import { readdirSync, statSync, existsSync } from 'fs';
 import { join, basename, extname } from 'path';
 
 // Configuración
-const VIDEO_DIR = './public/videos';
+const VIDEO_DIR = './public/media/projects/videos';
 const MOBILE_SUFFIX = '-mobile.mp4';
 
 // Parámetros de conversión

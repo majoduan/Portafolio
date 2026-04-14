@@ -22,7 +22,7 @@ export const getProjectsData = (t) => [
     },
     techImpl: t('projects.items.poa.techImpl'),
     tech: ["React", "TypeScript", "FastAPI", "PostgreSQL", "Docker"],
-    video: "/videos/poa-management.mp4",
+    video: "/media/projects/videos/poa-management.mp4",
     links: {
       github: [
         "https://github.com/majoduan/Software_Seguro_Grupo_4_Front.git",
@@ -52,7 +52,7 @@ export const getProjectsData = (t) => [
     },
     techImpl: t('projects.items.certificates.techImpl'),
     tech: ["Python", "Pandas", "Selenium", "Jupyter"],
-    video: "/videos/epn-certificates.mp4",
+    video: "/media/projects/videos/epn-certificates.mp4",
     links: {
       github: "https://github.com/majoduan/epn-certificates-automation.git"
     }
@@ -76,7 +76,7 @@ export const getProjectsData = (t) => [
     },
     techImpl: t('projects.items.travel.techImpl'),
     tech: ["React", "JavaScript"],
-    video: "/videos/travel-allowance.mp4",
+    video: "/media/projects/videos/travel-allowance.mp4",
     links: {
       demo: "https://main.d2sfix2konl7t2.amplifyapp.com/Travel",
       github: "https://github.com/FormsDi/FormsDi"
@@ -104,7 +104,7 @@ export const getProjectsData = (t) => [
     },
     techImpl: t('projects.items.storycraft.techImpl'),
     tech: ["Node.js", "NestJS", "React", "SQL Server", "Docker"],
-    video: "/videos/storycraft.mp4",
+    video: "/media/projects/videos/storycraft.mp4",
     links: {
       github: "https://github.com/majoduan/StoryCraft-Project-.git"
     }
@@ -129,7 +129,7 @@ export const getProjectsData = (t) => [
     },
     techImpl: t('projects.items.fitness.techImpl'),
     tech: ["ASP.NET", "N-Layer architecture", "SQL Server"],
-    video: "/videos/fitness-tracker.mp4",
+    video: "/media/projects/videos/fitness-tracker.mp4",
     links: {
       github: "https://github.com/majoduan/Fitness-Tracker---ASP.NET-Web-Forms-Application.git"
     }
@@ -153,7 +153,7 @@ export const getProjectsData = (t) => [
     },
     techImpl: t('projects.items.spaceInvaders.techImpl'),
     tech: ["Python", "Pygame"],
-    video: "/videos/space-invaders.mp4",
+    video: "/media/projects/videos/space-invaders.mp4",
     links: {
       github: "https://github.com/majoduan/Space-Invaders---Python.git"
     }
@@ -176,7 +176,7 @@ export const getProjectsData = (t) => [
     },
     techImpl: t('projects.items.godot2d.techImpl'),
     tech: ["Godot"],
-    video: "/videos/godot-game-2d.mp4",
+    video: "/media/projects/videos/godot-game-2d.mp4",
     links: {
       github: "https://github.com/majoduan/Godot-Game-2D.git"
     }
@@ -199,7 +199,7 @@ export const getProjectsData = (t) => [
     },
     techImpl: t('projects.items.godot3d.techImpl'),
     tech: ["Godot"],
-    video: "/videos/godot-game-3d.mp4",
+    video: "/media/projects/videos/godot-game-3d.mp4",
     links: {
       github: "https://github.com/majoduan/Godot-Game-3D.git"
     }
@@ -212,36 +212,36 @@ export const getCertificatesData = (t) => [
     title: t('certificates.items.epn.title'),
     org: t('certificates.items.epn.org'),
     icon: "🏆",
-    image: "/images/certificates/epn-award.webp"
+    slug: "epn-award"
   },
   {
     title: t('certificates.items.epnFinal.title'),
     org: t('certificates.items.epnFinal.org'),
     icon: "🎓",
-    image: "/images/certificates/epn-final-award.avif"
+    slug: "epn-final-award"
   },
   {
     title: t('certificates.items.cisco.title'),
     org: t('certificates.items.cisco.org'),
     icon: "🌐",
-    image: "/images/certificates/cisco-networking.webp"
+    slug: "cisco-networking"
   },
   {
     title: t('certificates.items.digital.title'),
     org: t('certificates.items.digital.org'),
     icon: "🚀",
-    image: "/images/certificates/digital-transformation.webp"
+    slug: "digital-transformation"
   },
   {
     title: t('certificates.items.scrum.title'),
     org: t('certificates.items.scrum.org'),
     icon: "⚡",
-    image: "/images/certificates/scrum-foundation.webp"
+    slug: "scrum-foundation"
   },
   {
     title: t('certificates.items.ieeextreme.title'),
     org: t('certificates.items.ieeextreme.org'),
     icon: "💻",
-    image: "/images/certificates/ieeextreme-certificate.avif"
+    slug: "ieeextreme-certificate"
   }
 ];

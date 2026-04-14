@@ -1,7 +1,7 @@
 // Service Worker para Portfolio - Cache Strategy OPTIMIZADO
-// Version 2.6.0 - networkFirst con timeout 3s + precache ampliado
+// Version 2.7.0 - reestructura public/ por dominio (/media/, /docs/, /icons/)
 
-const CACHE_VERSION = '2.6.0';
+const CACHE_VERSION = '2.7.0';
 const NETWORK_FIRST_TIMEOUT_MS = 3000;
 const CACHE_NAME = `mateo-portfolio-v${CACHE_VERSION}`;
 const RUNTIME_CACHE = `runtime-cache-v${CACHE_VERSION}`;
@@ -13,8 +13,8 @@ const VIDEO_MOBILE_CACHE = `videos-mobile-cache-v${CACHE_VERSION}`;
 const PRECACHE_ASSETS = [
   '/',
   '/offline.html',
-  '/images/optimized/foto-perfil-800w.avif',
-  '/bow-and-arrow.svg',
+  '/media/profile/foto-perfil-800w.avif',
+  '/icons/bow-and-arrow.svg',
   '/manifest.json'
   // Certificados se cargan bajo demanda con stale-while-revalidate
 ];
@@ -68,14 +68,14 @@ self.addEventListener('fetch', (event) => {
   if (request.destination === 'document') {
     // HTML: Network First (siempre intentar red primero)
     event.respondWith(networkFirst(request, RUNTIME_CACHE));
-  } else if (request.url.includes('/videos/')) {
+  } else if (request.url.includes('/media/projects/videos/')) {
     // Videos: Cache on-demand con separación mobile/desktop
     // NUEVO: No pre-cachear, solo cachear después de primera visualización
     const isMobile = request.url.includes('-mobile.mp4');
     const cacheName = isMobile ? VIDEO_MOBILE_CACHE : VIDEO_CACHE;
     event.respondWith(cacheOnDemand(request, cacheName, 30 * 24 * 60 * 60 * 1000)); // 30 días
-  } else if (request.url.includes('/images/')) {
-    // Imágenes: Stale While Revalidate con cache dedicado
+  } else if (request.url.includes('/media/') || request.url.includes('/icons/')) {
+    // Imágenes y SVGs: Stale While Revalidate con cache dedicado
     event.respondWith(staleWhileRevalidateWithCache(request, IMAGE_CACHE));
   } else if (request.url.includes('.js') || request.url.includes('.css')) {
     // JS/CSS: Stale While Revalidate (mejor UX)

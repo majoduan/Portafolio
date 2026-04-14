@@ -54,30 +54,29 @@ const nextConfig = {
         ],
       },
       {
-        source: '/images/:path*',
+        source: '/media/:path*',
         headers: [
           { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
         ],
       },
       {
-        source: '/videos/:path*',
+        source: '/media/projects/videos/:path*',
         headers: [
-          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
           { key: 'Accept-Ranges', value: 'bytes' },
         ],
       },
       {
-        source: '/cv/:path*',
+        source: '/icons/:path*',
         headers: [
-          { key: 'Cache-Control', value: 'public, max-age=2592000' },
-          { key: 'Content-Type', value: 'application/pdf' },
-          { key: 'Content-Disposition', value: 'inline; filename="Mateo_Dueñas_CV.pdf"' },
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
         ],
       },
       {
-        source: '/assets/:path*',
+        source: '/docs/:path*',
         headers: [
-          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+          { key: 'Cache-Control', value: 'public, max-age=2592000' },
+          { key: 'Content-Type', value: 'application/pdf' },
+          { key: 'Content-Disposition', value: 'inline; filename="Mateo_Duenas_CV.pdf"' },
         ],
       },
     ];

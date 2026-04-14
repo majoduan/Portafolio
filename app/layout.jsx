@@ -15,7 +15,7 @@ export const metadata = {
     url: 'https://mateoduenas.vercel.app/',
     title: 'Mateo Dueñas | Full Stack Developer Portfolio',
     description: 'Portfolio profesional de Mateo Dueñas, Full Stack Software Engineer especializado en React, Node.js y tecnologías web modernas',
-    images: [{ url: '/images/optimized/foto-perfil-1200w.avif', width: 800, height: 1000 }],
+    images: [{ url: '/media/profile/foto-perfil-1200w.avif', width: 800, height: 1000 }],
     locale: 'es_ES',
     alternateLocale: 'en_US',
   },
@@ -23,7 +23,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'Mateo Dueñas | Full Stack Developer Portfolio',
     description: 'Portfolio profesional de Mateo Dueñas, Full Stack Software Engineer especializado en React, Node.js y tecnologías web modernas',
-    images: ['/images/optimized/foto-perfil-1200w.avif'],
+    images: ['/media/profile/foto-perfil-1200w.avif'],
     creator: '@mateoduenas',
   },
   manifest: '/manifest.json',
@@ -38,8 +38,8 @@ export const metadata = {
     canonical: 'https://mateoduenas.vercel.app/',
   },
   icons: {
-    icon: '/bow-and-arrow.svg',
-    apple: '/bow-and-arrow.svg',
+    icon: '/icons/bow-and-arrow.svg',
+    apple: '/icons/bow-and-arrow.svg',
   },
 };
 
@@ -71,14 +71,14 @@ export default function RootLayout({ children }) {
         {/* Prefetch profile image used in contact section — variante por viewport */}
         <link
           rel="prefetch"
-          href="/images/optimized/foto-perfil-400w.avif"
+          href="/media/profile/foto-perfil-400w.avif"
           as="image"
           type="image/avif"
           media="(max-width: 767px)"
         />
         <link
           rel="prefetch"
-          href="/images/optimized/foto-perfil-800w.avif"
+          href="/media/profile/foto-perfil-800w.avif"
           as="image"
           type="image/avif"
           media="(min-width: 768px)"

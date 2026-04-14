@@ -34,11 +34,11 @@ const ContactSection = React.memo(() => {
                   {/* Profile Image — srcset AVIF manual, next/image unoptimized perderia srcset */}
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                      src="/images/optimized/foto-perfil-800w.avif"
+                      src="/media/profile/foto-perfil-800w.avif"
                       srcSet="
-                        /images/optimized/foto-perfil-400w.avif 400w,
-                        /images/optimized/foto-perfil-800w.avif 800w,
-                        /images/optimized/foto-perfil-1200w.avif 1200w
+                        /media/profile/foto-perfil-400w.avif 400w,
+                        /media/profile/foto-perfil-800w.avif 800w,
+                        /media/profile/foto-perfil-1200w.avif 1200w
                       "
                       sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px"
                       alt="Mateo Dueñas - Software Engineer"
