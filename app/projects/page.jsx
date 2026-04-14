@@ -343,7 +343,6 @@ ProjectVideo.displayName = 'ProjectVideo';
 const ProjectLinks = React.memo(({ links, t, isEven }) => {
   const rowRef = useRef(null);
   const [compact, setCompact] = useState(false);
-  const [isWrapping, setIsWrapping] = useState(false);
   const tRef = useRef(t);
 
   const items = useMemo(() =>
@@ -394,7 +393,7 @@ const ProjectLinks = React.memo(({ links, t, isEven }) => {
       el.style.setProperty('--swap-btn-w', `${el.offsetWidth}px`);
     }
 
-    // Detect wrapping among buttons only (exclude the LINKS title span)
+    // Detect wrapping among buttons → shorten labels via compact mode
     const buttons = row.querySelectorAll('.swap-btn');
     if (buttons.length > 1) {
       const firstTop = buttons[0].getBoundingClientRect().top;
@@ -402,9 +401,6 @@ const ProjectLinks = React.memo(({ links, t, isEven }) => {
         btn => btn.getBoundingClientRect().top > firstTop + 4
       );
       if (!compact && wraps) setCompact(true);
-      setIsWrapping(wraps);
-    } else {
-      setIsWrapping(false);
     }
   }, [compact, items, t]);
 
@@ -415,45 +411,38 @@ const ProjectLinks = React.memo(({ links, t, isEven }) => {
 
   return (
     <div className="flex flex-col gap-1">
-      {/* Horizontal title: mobile always; desktop only when wrapping */}
-      <span
-        className={`text-sm font-bold tracking-[0.2em] text-slate-400 dark:text-slate-500 select-none ${
-          isWrapping ? 'block' : 'block lg:hidden'
-        }`}
-      >
+      {/* Horizontal title: mobile only (desktop shows vertical title alongside buttons) */}
+      <span className="text-sm font-bold tracking-[0.2em] text-slate-400 dark:text-slate-500 select-none block lg:hidden">
         {linksTitle}
       </span>
 
-      {/* Button row + vertical title on desktop */}
-      <div
-        ref={rowRef}
-        className={`flex flex-wrap gap-2 lg:gap-5 items-center ${
-          isEven ? 'lg:flex-row-reverse' : ''
-        }`}
-      >
-        {/* Vertical title: desktop only, when buttons fit in one row */}
-        {!isWrapping && (
-          <span
-            className={`hidden lg:flex items-center justify-center px-1 text-sm font-bold tracking-[0.2em] text-slate-400 dark:text-slate-500 select-none shrink-0 ${verticalClass}`}
-          >
-            {linksTitle}
-          </span>
-        )}
+      {/* Desktop: 2-column layout [vertical title | buttons wrap]. Mobile: only buttons wrap (title is lg:flex). */}
+      <div className={`flex gap-2 lg:gap-5 ${isEven ? 'lg:flex-row-reverse' : ''}`}>
+        {/* Vertical title: desktop only, always shown */}
+        <span className={`hidden lg:flex items-center justify-center px-1 text-sm font-bold tracking-[0.2em] text-slate-400 dark:text-slate-500 select-none shrink-0 self-stretch ${verticalClass}`}>
+          {linksTitle}
+        </span>
 
-        {items.map(({ key, url, icon, fullLabel, shortLabel }) => (
-          <a
-            key={key}
-            href={url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`swap-btn${isEven ? ' swap-btn-reversed' : ''}`}
-            aria-label={fullLabel}
-          >
-            <span className="swap-btn-bg" />
-            <span className="swap-btn-icon">{icon}</span>
-            <span className="swap-btn-text">{compact ? shortLabel : fullLabel}</span>
-          </a>
-        ))}
+        {/* Buttons wrap inside their own container so row 2 aligns with row 1 */}
+        <div
+          ref={rowRef}
+          className={`flex flex-wrap gap-2 lg:gap-5 items-center min-w-0 ${isEven ? 'lg:flex-row-reverse' : ''}`}
+        >
+          {items.map(({ key, url, icon, fullLabel, shortLabel }) => (
+            <a
+              key={key}
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`swap-btn${isEven ? ' swap-btn-reversed' : ''}`}
+              aria-label={fullLabel}
+            >
+              <span className="swap-btn-bg" />
+              <span className="swap-btn-icon">{icon}</span>
+              <span className="swap-btn-text">{compact ? shortLabel : fullLabel}</span>
+            </a>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -462,28 +451,9 @@ const ProjectLinks = React.memo(({ links, t, isEven }) => {
 ProjectLinks.displayName = 'ProjectLinks';
 
 // ─── ProjectTech ─────────────────────────────────────────────────────────────
-// Tech icon bubbles with vertical "TECH" title (same pattern as ProjectLinks).
+// Tech icon rectangles with vertical "TECH" title (same pattern as ProjectLinks).
 const ProjectTech = React.memo(({ techDescriptions, t, isEven }) => {
-  const rowRef = useRef(null);
-  const [isWrapping, setIsWrapping] = useState(false);
-
   const techNames = useMemo(() => Object.keys(techDescriptions), [techDescriptions]);
-
-  // Detect wrapping among bubbles (exclude the title span)
-  useLayoutEffect(() => {
-    const row = rowRef.current;
-    if (!row) return;
-    const bubbles = row.querySelectorAll('.tech-bubble');
-    if (bubbles.length > 1) {
-      const firstTop = bubbles[0].getBoundingClientRect().top;
-      const wraps = Array.from(bubbles).some(
-        b => b.getBoundingClientRect().top > firstTop + 4
-      );
-      setIsWrapping(wraps);
-    } else {
-      setIsWrapping(false);
-    }
-  }, [techNames]);
 
   const techTitle = t('projects.techTitle');
   const verticalClass = isEven
@@ -492,54 +462,42 @@ const ProjectTech = React.memo(({ techDescriptions, t, isEven }) => {
 
   return (
     <div className="flex flex-col gap-1">
-      {/* Horizontal title: mobile always; desktop only when wrapping */}
-      <span
-        className={`text-sm font-bold tracking-[0.2em] text-slate-400 dark:text-slate-500 select-none ${
-          isWrapping ? 'block' : 'block lg:hidden'
-        }`}
-      >
+      {/* Horizontal title: mobile only (desktop shows vertical title alongside rectangles) */}
+      <span className="text-sm font-bold tracking-[0.2em] text-slate-400 dark:text-slate-500 select-none block lg:hidden">
         {techTitle}
       </span>
 
-      {/* Bubble row + vertical title on desktop */}
-      <div
-        ref={rowRef}
-        className={`flex flex-wrap gap-2 md:gap-8 items-center ${
-          isEven ? 'lg:flex-row-reverse' : ''
-        }`}
-      >
-        {/* Vertical title: desktop only, when bubbles fit in one row */}
-        {!isWrapping && (
-          <span
-            className={`hidden lg:flex items-center justify-center px-1 text-sm font-bold tracking-[0.2em] text-slate-400 dark:text-slate-500 select-none shrink-0 ${verticalClass}`}
-          >
-            {techTitle}
-          </span>
-        )}
+      {/* Desktop: 2-column layout [vertical title | rectangles wrap]. Mobile: only rectangles wrap. */}
+      <div className={`flex gap-2 md:gap-3 ${isEven ? 'lg:flex-row-reverse' : ''}`}>
+        {/* Vertical title: desktop only, always shown */}
+        <span className={`hidden lg:flex items-center justify-center px-1 text-sm font-bold tracking-[0.2em] text-slate-400 dark:text-slate-500 select-none shrink-0 self-stretch ${verticalClass}`}>
+          {techTitle}
+        </span>
 
-        {techNames.map((name) => {
-          const tech = TECH_ICON_MAP[name];
-          if (tech) {
-            const IconComp = tech.icon;
-            return (
-              <div key={name} className="tech-bubble group relative">
-                <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br ${tech.color} flex items-center justify-center shadow-sm transition-all duration-300 group-hover:scale-110 group-hover:brightness-125`}>
-                  <IconComp className="w-5 h-5 md:w-6 md:h-6 transition-transform duration-300 group-hover:scale-110" />
+        {/* Rectangles wrap inside their own container so row 2 aligns with row 1 */}
+        <div className={`flex flex-wrap gap-2 md:gap-3 items-center min-w-0 ${isEven ? 'lg:flex-row-reverse' : ''}`}>
+          {techNames.map((name) => {
+            const tech = TECH_ICON_MAP[name];
+            if (tech) {
+              const IconComp = tech.icon;
+              return (
+                <div key={name} className="group relative">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-lg border border-black dark:border-white text-black dark:text-white transition-transform duration-300 group-hover:scale-110">
+                    <IconComp className="w-4 h-4 md:w-5 md:h-5 shrink-0" />
+                    <span className="text-xs md:text-sm font-medium whitespace-nowrap">{name}</span>
+                  </div>
                 </div>
-                <span className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 text-xs font-medium bg-gray-900 text-white rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
-                  {name}
-                </span>
+              );
+            }
+            return (
+              <div key={name} className="group relative">
+                <div className="inline-flex items-center px-3 py-1.5 md:px-4 md:py-2 rounded-lg border border-black dark:border-white text-black dark:text-white transition-transform duration-300 group-hover:scale-110">
+                  <span className="text-xs md:text-sm font-medium whitespace-nowrap">{name}</span>
+                </div>
               </div>
             );
-          }
-          return (
-            <div key={name} className="tech-bubble group relative">
-              <div className="h-10 md:h-12 px-3 md:px-4 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center">
-                <span className="text-xs font-medium text-slate-600 dark:text-slate-300">{name}</span>
-              </div>
-            </div>
-          );
-        })}
+          })}
+        </div>
       </div>
     </div>
   );
@@ -574,12 +532,12 @@ const ProjectRow = React.memo(({ project, index, t }) => {
           </div>
 
           {/* Project Links */}
-          <div className={`px-4 py-3 bg-[var(--bg-primary)] transition-colors duration-300 ${isEven ? 'lg:pl-12 xl:pl-16' : 'lg:pr-12 xl:pr-16'}`}>
+          <div className={`px-4 py-3 bg-[var(--bg-primary)] transition-colors duration-300 ${isEven ? 'lg:pl-6 xl:pl-8' : 'lg:pr-6 xl:pr-8'}`}>
             <ProjectLinks links={project.links} t={t} isEven={isEven} />
           </div>
 
           {/* Technologies Used */}
-          <div className={`px-4 py-3 bg-[var(--bg-primary)] transition-colors duration-300 ${isEven ? 'lg:pl-12 xl:pl-16' : 'lg:pr-12 xl:pr-16'}`}>
+          <div className={`px-4 py-3 bg-[var(--bg-primary)] transition-colors duration-300 ${isEven ? 'lg:pl-6 xl:pl-8' : 'lg:pr-6 xl:pr-8'}`}>
             <ProjectTech techDescriptions={project.techDescriptions} t={t} isEven={isEven} />
           </div>
 
