@@ -90,10 +90,10 @@ const CertificatesSection = React.memo(() => {
   }, [currentCertificateIndex, viewMode]);
 
   return (
-    <section id="certificates" className="pt-20 bg-transparent relative z-10 overflow-hidden transition-colors duration-300">
+    <section id="certificates" className="py-20 md:py-24 bg-transparent relative z-10 overflow-hidden transition-colors duration-300">
       {/* Title row with pause button (button absolute-positioned right, mirrors TechnologiesSection) */}
       <div className="max-w-7xl mx-auto px-4 mb-6 relative">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight text-black dark:text-white">
+        <h2 className="text-h2 font-bold text-center mb-4 pb-2 text-black dark:text-white">
           {t('certificates.title')}
         </h2>
         <button

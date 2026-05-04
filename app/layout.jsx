@@ -1,4 +1,5 @@
 import './globals.css';
+import { GeistSans } from 'geist/font/sans';
 import Providers from './providers';
 import ClientInit from './client-init';
 import BootScreenWrapper from './BootScreenWrapper';
@@ -54,7 +55,7 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={GeistSans.variable} suppressHydrationWarning>
       <head>
         {/* Detect saved language/theme BEFORE React hydrates to prevent flash */}
         <script

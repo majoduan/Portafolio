@@ -11,11 +11,11 @@ const ContactSection = React.memo(() => {
   return (
     <>
       {/* Contact Section */}
-      <section id="contact" className="py-12 md:py-16 lg:py-20 relative z-10 bg-transparent transition-colors duration-300">
+      <section id="contact" className="py-20 md:py-24 relative z-10 bg-transparent transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4">
           {/* Section Title */}
           <div className="text-center mb-8 md:mb-12 lg:mb-16">
-            <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4 text-black dark:text-white">
+            <h2 className="text-h2 font-bold mb-4 text-black dark:text-white">
               {t('contact.title')}
             </h2>
             <p className="text-slate-600 dark:text-slate-300 text-base md:text-lg lg:text-xl max-w-2xl mx-auto px-4">

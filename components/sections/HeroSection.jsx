@@ -2,6 +2,8 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback, useContext, Suspense, Component } from 'react';
 import { Mail, Linkedin, Github, Code, Briefcase } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
+import { useReversibleInView } from '../../hooks/useReversibleInView';
+import { useCountUp } from '../../hooks/useCountUp';
 import { AppContext } from '../../contexts/AppContext';
 
 // Dynamic import Spline with SSR disabled for Next.js
@@ -16,6 +18,23 @@ class SplineErrorBoundary extends Component {
     if (this.state.hasError) return this.props.fallback;
     return this.props.children;
   }
+}
+
+function StatNumber({ target, suffix, label }) {
+  const ref = useRef(null);
+  const inView = useReversibleInView(ref, { threshold: 0.4, rootMargin: '0px' });
+  const value = useCountUp({ end: target, duration: 1800, enabled: inView });
+
+  return (
+    <div ref={ref} className="text-center">
+      <div className="text-3xl font-bold text-black dark:text-white tabular-nums">
+        {value}{suffix}
+      </div>
+      <div className="text-sm text-slate-600 dark:text-slate-400 mt-1 transition-colors duration-300">
+        {label}
+      </div>
+    </div>
+  );
 }
 
 const HeroSection = React.memo(({ shouldLoadSpline }) => {
@@ -125,10 +144,10 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
             <p className="text-2xl md:text-3xl text-slate-700 dark:text-slate-100 mb-2 font-medium transition-colors duration-300">
               {t('hero.name')}
             </p>
-            <h1 className="hero-title text-black dark:text-white mb-6">
+            <h1 className="hero-title text-display text-black dark:text-white mb-6">
               {t('hero.title')}
             </h1>
-            <p className="text-lg md:text-xl text-slate-600 dark:text-slate-100 max-w-2xl mx-auto lg:mx-0 mb-8 leading-relaxed min-h-[80px] text-justify transition-colors duration-300">
+            <p className="text-body-lg text-slate-600 dark:text-slate-100 max-w-2xl mx-auto lg:mx-0 mb-8 min-h-[80px] text-justify transition-colors duration-300">
               {typewriterText}
               <span className="animate-pulse">|</span>
             </p>
@@ -156,8 +175,8 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
                 </span>
               </a>
 
-              {/* Iconos sociales */}
-              <div className="flex gap-3">
+              {/* Iconos sociales — ocultos en mobile (los hay en el footer) */}
+              <div className="hidden md:flex gap-3">
                 <a
                   href="https://www.linkedin.com/in/mateodue/"
                   target="_blank"
@@ -186,18 +205,11 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
             {/* Estadisticas */}
             <div className="grid grid-cols-3 gap-6 pt-8 border-t border-slate-300 dark:border-white/10 transition-colors duration-300">
               {[
-                { value: '2+', label: t('hero.stats.experience') },
-                { value: '15+', label: t('hero.stats.projects') },
-                { value: '20+', label: t('hero.stats.technologies') }
+                { target: 2, suffix: '+', label: t('hero.stats.experience') },
+                { target: 15, suffix: '+', label: t('hero.stats.projects') },
+                { target: 30, suffix: '+', label: t('hero.stats.technologies') }
               ].map((stat, i) => (
-                <div key={i} className="text-center">
-                  <div className="text-3xl font-bold text-black dark:text-white">
-                    {stat.value}
-                  </div>
-                  <div className="text-sm text-slate-600 dark:text-slate-400 mt-1 transition-colors duration-300">
-                    {stat.label}
-                  </div>
-                </div>
+                <StatNumber key={i} target={stat.target} suffix={stat.suffix} label={stat.label} />
               ))}
             </div>
           </div>

@@ -68,7 +68,7 @@ const TechCard = memo(({ tech, index, isMobile, animationState, onMouseEnter, on
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <div className="p-4 lg:p-6">
+      <div className="p-4">
         <div className="flex items-center gap-2 lg:gap-4">
           {/* Left section - 65% */}
           <div className="flex items-center gap-2 lg:gap-4 w-[65%] min-w-0">

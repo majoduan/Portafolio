@@ -1,6 +1,30 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+  --default-font-family: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --text-display: clamp(3.5rem, 8vw, 8rem);
+  --text-display--line-height: 0.9;
+  --text-display--letter-spacing: -0.035em;
+  --text-display--font-weight: 700;
+
+  --text-h1: clamp(2.5rem, 5vw, 3.75rem);
+  --text-h1--line-height: 1.05;
+  --text-h1--letter-spacing: -0.025em;
+
+  --text-h2: clamp(2.25rem, 4.5vw, 3rem);
+  --text-h2--line-height: 1.1;
+  --text-h2--letter-spacing: -0.02em;
+
+  --text-h3: clamp(1.125rem, 2vw, 1.5rem);
+  --text-h3--line-height: 1.2;
+  --text-h3--letter-spacing: -0.015em;
+
+  --text-body-lg: clamp(1.125rem, 1.5vw, 1.25rem);
+  --text-body-lg--line-height: 1.65;
+}
+
 /* Scroll suave para toda la página */
 html {
   scroll-behavior: smooth;
@@ -281,12 +305,8 @@ html:not(.dark) .spline-container > div {
   100% { color: white; }
 }
 
-/* Hero title — large bold display */
+/* Hero title — usa la utility text-display de @theme; aquí solo extras visuales */
 .hero-title {
-  font-weight: 700;
-  font-size: clamp(3.5rem, 8vw, 8rem);
-  line-height: 90%;
-  letter-spacing: -0.03em;
   text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   overflow-wrap: break-word;
   max-width: 100%;
@@ -328,20 +348,15 @@ html:not(.dark) .spline-container > div {
    Reversed (--swap-dir: -1): icon right→left, bg from right, text shifts right. */
 .swap-btn {
   --swap-dir: 1;
-  --swap-icon-size: 2.5rem;
+  --swap-icon-size: 3rem;
   position: relative;
   display: inline-flex;
   align-items: center;
   border-radius: 9999px;
-  overflow: hidden;
+  /* No overflow:hidden — clipearia el drop-shadow del icono en estado base.
+     El .swap-btn-bg usa clip-path para constrenirse a la pildora. */
   transition: transform 0.3s, box-shadow 0.3s;
   cursor: pointer;
-}
-
-@media (min-width: 768px) {
-  .swap-btn {
-    --swap-icon-size: 3rem;
-  }
 }
 
 .swap-btn:hover {
@@ -361,17 +376,19 @@ html:not(.dark) .spline-container > div {
   margin: 0 auto;
 }
 
-/* Background fill — slides in from left (or right when reversed) */
+/* Background fill — se revela desde la izquierda (o derecha si --swap-dir: -1).
+   Usa clip-path en lugar de translateX para que el padre no necesite overflow:hidden. */
 .swap-btn-bg {
   position: absolute;
   inset: 0;
   background: var(--btn-primary);
-  transform: translateX(calc(-100% * var(--swap-dir)));
-  transition: transform 0.5s ease-out;
+  border-radius: inherit;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.5s ease-out;
 }
 
 .swap-btn:hover .swap-btn-bg {
-  transform: translateX(0);
+  clip-path: inset(0 0 0 0);
 }
 
 /* Icon circle — starts on one side, sweeps to the other on hover */
@@ -403,19 +420,12 @@ html:not(.dark) .spline-container > div {
 .swap-btn-text {
   position: relative;
   z-index: 10;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.8125rem;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
   font-weight: 600;
   color: black;
   white-space: nowrap;
   transition: transform 0.5s ease-out, color 0.3s;
-}
-
-@media (min-width: 768px) {
-  .swap-btn-text {
-    padding: 0.75rem 1.25rem;
-    font-size: 1rem;
-  }
 }
 
 .dark .swap-btn-text {
@@ -435,19 +445,12 @@ html:not(.dark) .spline-container > div {
 .swap-btn-wide .swap-btn-text {
   flex: 1;
   text-align: center;
-  font-size: 1rem;
-  padding: 0.75rem 1.25rem;
+  font-size: 1.125rem;
+  padding: 1rem 1.5rem;
 }
 
 .swap-btn-wide:hover .swap-btn-text {
   transform: translateX(calc(var(--swap-icon-size) * var(--swap-dir) * -1));
-}
-
-@media (min-width: 768px) {
-  .swap-btn-wide .swap-btn-text {
-    font-size: 1.125rem;
-    padding: 1rem 1.5rem;
-  }
 }
 
 /* Reversed variant — flip direction + layout (desktop only) */
@@ -455,6 +458,12 @@ html:not(.dark) .spline-container > div {
   .swap-btn-reversed {
     --swap-dir: -1;
     flex-direction: row-reverse;
+  }
+  .swap-btn-reversed .swap-btn-bg {
+    clip-path: inset(0 0 0 100%);
+  }
+  .swap-btn-reversed:hover .swap-btn-bg {
+    clip-path: inset(0 0 0 0);
   }
 }
 

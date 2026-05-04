@@ -43,7 +43,7 @@ const RotatingTitle = memo(({ titles }) => {
   // Fallback for non-array
   if (!Array.isArray(titles)) {
     return (
-      <h1 className="hero-title text-black dark:text-white mb-8">
+      <h1 className="hero-title text-display text-black dark:text-white mb-8">
         {titles}
       </h1>
     );
@@ -55,7 +55,7 @@ const RotatingTitle = memo(({ titles }) => {
   return (
     <div className="overflow-hidden w-full">
       <h1
-        className={`hero-title text-black dark:text-white mb-8 rotating-title-${phase}`}
+        className={`hero-title text-display text-black dark:text-white mb-8 rotating-title-${phase}`}
         aria-live="polite"
         aria-atomic="true"
       >
