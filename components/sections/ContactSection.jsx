@@ -76,14 +76,14 @@ const ContactSection = React.memo(() => {
                       <div className="w-12 h-12 rounded-full border-2 border-black dark:border-white flex items-center justify-center group-hover/link:scale-110 transition-all duration-300 group-hover/link:bg-black dark:group-hover/link:bg-white">
                         <Mail className="w-6 h-6 text-black dark:text-white group-hover/link:text-white dark:group-hover/link:text-black" />
                       </div>
-                      <div className="flex-1">
+                      <div className="flex-1 min-w-0">
                         <p className="text-sm text-slate-600 dark:text-slate-400">{t('contact.profile.emailLabel')}</p>
-                        <p className="text-slate-900 dark:text-white font-medium">mate.due02@gmail.com</p>
+                        <p className="text-slate-900 dark:text-white font-medium truncate">mate.due02@gmail.com</p>
                       </div>
                     </a>
 
                     <a
-                      href="https://linkedin.com/in/mateo-dueñas-andrade"
+                      href="https://www.linkedin.com/in/mateodue/"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-[var(--bg-elevated-50)] hover:bg-slate-100 dark:hover:bg-[var(--bg-elevated)] rounded-xl transition-all duration-300 group/link border border-slate-200 dark:border-slate-700/50 hover:border-black dark:hover:border-white"
@@ -91,9 +91,9 @@ const ContactSection = React.memo(() => {
                       <div className="w-12 h-12 rounded-full border-2 border-black dark:border-white flex items-center justify-center group-hover/link:scale-110 transition-all duration-300 group-hover/link:bg-black dark:group-hover/link:bg-white">
                         <Linkedin className="w-6 h-6 text-black dark:text-white group-hover/link:text-white dark:group-hover/link:text-black" />
                       </div>
-                      <div className="flex-1">
+                      <div className="flex-1 min-w-0">
                         <p className="text-sm text-slate-600 dark:text-slate-400">{t('contact.profile.linkedinLabel')}</p>
-                        <p className="text-slate-900 dark:text-white font-medium">mateo-dueñas-andrade</p>
+                        <p className="text-slate-900 dark:text-white font-medium truncate">mateodue</p>
                       </div>
                     </a>
 
@@ -106,9 +106,9 @@ const ContactSection = React.memo(() => {
                       <div className="w-12 h-12 rounded-full border-2 border-black dark:border-white flex items-center justify-center group-hover/link:scale-110 transition-all duration-300 group-hover/link:bg-black dark:group-hover/link:bg-white">
                         <Github className="w-6 h-6 text-black dark:text-white group-hover/link:text-white dark:group-hover/link:text-black" />
                       </div>
-                      <div className="flex-1">
+                      <div className="flex-1 min-w-0">
                         <p className="text-sm text-slate-600 dark:text-slate-400">{t('contact.profile.githubLabel')}</p>
-                        <p className="text-slate-900 dark:text-white font-medium">majoduan</p>
+                        <p className="text-slate-900 dark:text-white font-medium truncate">majoduan</p>
                       </div>
                     </a>
                   </div>

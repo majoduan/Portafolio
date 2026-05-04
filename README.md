@@ -252,7 +252,7 @@ Este proyecto es de código abierto y está disponible bajo la licencia MIT.
 ## 👨‍💻 Autor
 
 **Mateo Dueñas**
-- LinkedIn: [mateo-dueñas-andrade](https://linkedin.com/in/mateo-dueñas-andrade)
+- LinkedIn: [mateodue](https://www.linkedin.com/in/mateodue/)
 - GitHub: [majoduan](https://github.com/majoduan)
 - Email: mate.due02@gmail.com
 

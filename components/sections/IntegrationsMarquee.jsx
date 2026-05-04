@@ -1,6 +1,5 @@
 'use client';
 import React from 'react';
-import Image from 'next/image';
 import { integrations } from '../../data/integrations';
 import { useTranslation } from '../../hooks/useTranslation';
 
@@ -51,14 +50,19 @@ const IntegrationsMarquee = React.memo(() => {
               ? 'dark:[filter:invert(1)_hue-rotate(180deg)]'
               : '';
             return (
-              <Image
+              // Plain <img> (not next/image): we already use unoptimized, and
+              // next/image's required width/height props force a fixed
+              // aspect-ratio at the placeholder stage. With heterogeneous logo
+              // aspects, that mismatch causes layout shift when each image
+              // loads — which de-syncs the marquee's -50% loop and produces
+              // the visible jump (desktop) and flicker (mobile).
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
                 key={`${logo.name}-${i}`}
                 src={logo.src}
                 alt={logo.alt}
-                width={160}
-                height={56}
-                unoptimized
-                loading="lazy"
+                loading="eager"
+                decoding="sync"
                 draggable={false}
                 className={`${size} w-auto select-none flex-shrink-0 ${invertClass}`}
                 aria-hidden={i >= integrations.length ? 'true' : 'false'}

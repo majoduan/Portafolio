@@ -33,26 +33,45 @@ const CertificatesSection = React.memo(() => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const visibleCards = viewMode === 'mobile' ? 1 : viewMode === 'tablet' ? 2 : 3;
   const step = viewMode === 'mobile' ? 1 : 2;
 
-  // Auto-advance certificates carousel with pagination
+  // Reachable carousel positions. The last position leaves the final
+  // `visibleCards` cards aligned with the viewport (math: target scrollLeft
+  // equals maxScroll exactly, so no browser clamping → no edge-card peek).
+  // If `step` doesn't naturally land on the last viewable index, append it.
+  const pageStops = useMemo(() => {
+    const lastViewable = Math.max(0, certificates.length - visibleCards);
+    const stops = [];
+    for (let i = 0; i <= lastViewable; i += step) stops.push(i);
+    if (stops[stops.length - 1] !== lastViewable) stops.push(lastViewable);
+    return stops;
+  }, [certificates.length, visibleCards, step]);
+
+  // Auto-advance carousel cycling through pageStops (shared with dots so
+  // automatic + manual stay in sync).
   useEffect(() => {
     if (!isManuallyPaused && !isCertificateCarouselPaused) {
       const interval = setInterval(() => {
         setCurrentCertificateIndex((prev) => {
-          const next = prev + step;
-          return next >= certificates.length ? 0 : next;
+          const idx = pageStops.indexOf(prev);
+          if (idx === -1) {
+            // prev not on a stop (e.g. user clicked a specific card) — jump to
+            // the next stop greater than prev, or wrap to first.
+            const nextStop = pageStops.find((s) => s > prev);
+            return nextStop ?? pageStops[0];
+          }
+          return pageStops[(idx + 1) % pageStops.length];
         });
       }, 4000);
 
       return () => clearInterval(interval);
     }
-  }, [isManuallyPaused, isCertificateCarouselPaused, certificates.length, step]);
+  }, [isManuallyPaused, isCertificateCarouselPaused, pageStops]);
 
-  // Auto scroll on index change — uses each card's actual offsetLeft (works
-  // across viewports). Subtracts the scroll container's padding-left so the
-  // target card lands with breathing room on the left, not flush with the
-  // viewport edge (otherwise hover shadows / scale get clipped).
+  // Auto scroll on index change. Subtracts container padding-left so the card
+  // lands with breathing room (not flush with the clipping edge), and clamps
+  // to maxScroll defensively in case of resize / arbitrary card click.
   useEffect(() => {
     if (certificateContainerRef.current) {
       const container = certificateContainerRef.current;
@@ -60,8 +79,10 @@ const CertificatesSection = React.memo(() => {
       const targetCard = cards[currentCertificateIndex];
       if (targetCard) {
         const padLeft = parseFloat(getComputedStyle(container).paddingLeft) || 0;
+        const maxScroll = container.scrollWidth - container.clientWidth;
+        const target = Math.min(targetCard.offsetLeft - padLeft, maxScroll);
         container.scrollTo({
-          left: targetCard.offsetLeft - padLeft,
+          left: Math.max(0, target),
           behavior: 'smooth'
         });
       }
@@ -77,12 +98,12 @@ const CertificatesSection = React.memo(() => {
         </h2>
         <button
           onClick={() => setIsManuallyPaused((prev) => !prev)}
-          className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full border border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-400 hover:text-black dark:hover:text-white hover:border-black dark:hover:border-white transition-all duration-300"
+          className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 max-[424px]:w-8 max-[424px]:h-8 rounded-full border border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-400 hover:text-black dark:hover:text-white hover:border-black dark:hover:border-white transition-all duration-300"
           aria-label={isManuallyPaused || isCertificateCarouselPaused ? 'Play carousel' : 'Pause carousel'}
         >
           {isManuallyPaused || isCertificateCarouselPaused
-            ? <Play className="w-4 h-4" />
-            : <Pause className="w-4 h-4" />
+            ? <Play className="w-4 h-4 max-[424px]:w-3.5 max-[424px]:h-3.5" />
+            : <Pause className="w-4 h-4 max-[424px]:w-3.5 max-[424px]:h-3.5" />
           }
         </button>
       </div>
@@ -173,16 +194,12 @@ const CertificatesSection = React.memo(() => {
         {/* Navigation dots */}
         <div className="flex justify-center items-center gap-2 mt-8 mb-4">
           {(() => {
-            // Dots track scroll steps: mobile advances 1 cert/click → 1 dot per
-            // cert; tablet+desktop advance 2 → ceil(N/2) dots.
-            const pageSize = step;
-            const totalPages = Math.ceil(certificates.length / pageSize);
-            const currentPage = Math.floor(currentCertificateIndex / pageSize);
+            // Dots map 1:1 to pageStops so dots and auto-advance stay in sync.
+            // Active dot = the one matching currentCertificateIndex.
+            const currentPage = pageStops.indexOf(currentCertificateIndex);
 
-            return Array.from({ length: totalPages }, (_, pageIndex) => {
+            return pageStops.map((targetIndex, pageIndex) => {
               const isActive = pageIndex === currentPage;
-              const targetIndex = pageIndex * pageSize;
-
               return (
                 <button
                   key={pageIndex}

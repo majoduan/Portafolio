@@ -159,7 +159,7 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
               {/* Iconos sociales */}
               <div className="flex gap-3">
                 <a
-                  href="https://www.linkedin.com/in/mateo-dueñas"
+                  href="https://www.linkedin.com/in/mateodue/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-12 h-12 rounded-full border-2 border-black dark:border-white flex items-center justify-center transition-all duration-300 transform hover:scale-105 hover:bg-black dark:hover:bg-white group/icon shadow-[0_4px_4px_rgba(0,0,0,0.25)]"

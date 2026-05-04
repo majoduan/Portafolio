@@ -351,6 +351,12 @@ html:not(.dark) .spline-container > div {
 
 .swap-btn-wide {
   width: 50%;
+  /* On narrow viewports the 50% can be smaller than the icon + text,
+     and `justify-content: center` would push the icon off the left edge
+     where `overflow: hidden` clips it (visible on mobile as a "diamond").
+     `min-width: max-content` guarantees the button is at least as wide
+     as its content, so on small screens it grows to fit instead of clipping. */
+  min-width: max-content;
   justify-content: center;
   margin: 0 auto;
 }
@@ -421,12 +427,16 @@ html:not(.dark) .spline-container > div {
   transform: translateX(calc(var(--swap-icon-size) * var(--swap-dir) * -1));
 }
 
-/* Wide variant */
+/* Wide variant — symmetric padding so the icon↔text gap stays consistent
+   across viewports. (Asymmetric padding-left:0 used to compensate for the
+   flex:1 + text-align:center "extra space"; but with `min-width: max-content`
+   in narrow viewports there is no extra space, so the asymmetry collapsed
+   into a near-zero gap on mobile.) */
 .swap-btn-wide .swap-btn-text {
   flex: 1;
   text-align: center;
   font-size: 1rem;
-  padding: 0.75rem 1.25rem 0.75rem 0;
+  padding: 0.75rem 1.25rem;
 }
 
 .swap-btn-wide:hover .swap-btn-text {
@@ -436,7 +446,7 @@ html:not(.dark) .spline-container > div {
 @media (min-width: 768px) {
   .swap-btn-wide .swap-btn-text {
     font-size: 1.125rem;
-    padding: 1rem 1.5rem 1rem 0;
+    padding: 1rem 1.5rem;
   }
 }
 

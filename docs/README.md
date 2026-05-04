@@ -174,7 +174,7 @@ npm run preview
 ## 🔗 Enlaces Importantes
 
 - [GitHub Repository](https://github.com/majoduan/mateo-portfolio)
-- [LinkedIn](https://linkedin.com/in/mateo-dueñas-andrade)
+- [LinkedIn](https://www.linkedin.com/in/mateodue/)
 - [Email](mailto:mate.due02@gmail.com)
 
 ## 📖 Recursos Adicionales

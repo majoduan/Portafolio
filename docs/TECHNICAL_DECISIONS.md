@@ -604,7 +604,7 @@ Para discusiones técnicas o preguntas sobre decisiones:
 
 **Mateo Dueñas**
 - Email: mate.due02@gmail.com
-- LinkedIn: [mateo-dueñas-andrade](https://linkedin.com/in/mateo-dueñas-andrade)
+- LinkedIn: [mateodue](https://www.linkedin.com/in/mateodue/)
 - GitHub: [majoduan](https://github.com/majoduan)
 
 ---

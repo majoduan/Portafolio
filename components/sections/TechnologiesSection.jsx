@@ -202,12 +202,12 @@ const TechnologiesSection = React.memo(() => {
           {/* Pause/Play button */}
           <button
             onClick={() => setIsManuallyPaused((prev) => !prev)}
-            className="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full border border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-400 hover:text-black dark:hover:text-white hover:border-black dark:hover:border-white transition-all duration-300"
+            className="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-8 max-[424px]:w-7 max-[424px]:h-7 rounded-full border border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-400 hover:text-black dark:hover:text-white hover:border-black dark:hover:border-white transition-all duration-300"
             aria-label={isManuallyPaused || isTechCardHovered ? 'Play carousel' : 'Pause carousel'}
           >
             {isManuallyPaused || isTechCardHovered
-              ? <Play className="w-3.5 h-3.5" />
-              : <Pause className="w-3.5 h-3.5" />
+              ? <Play className="w-3.5 h-3.5 max-[424px]:w-3 max-[424px]:h-3" />
+              : <Pause className="w-3.5 h-3.5 max-[424px]:w-3 max-[424px]:h-3" />
             }
           </button>
         </div>

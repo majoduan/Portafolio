@@ -58,7 +58,7 @@ export const getTechnologies = (t) => ({
   ],
   frontend: [
     { name: t('technologies.skills.react.name'), description: t('technologies.skills.react.description'), experience: "2+ years", icon: ReactLogo, color: "from-[#1D253A] to-[#1D253A]", tagColor: "from-[#2A3A5C] to-[#2A3A5C]" },
-    { name: t('technologies.skills.nextjs.name'), description: t('technologies.skills.nextjs.description'), experience: "2+ years", icon: NextjsIcon, color: "from-slate-800 to-black", tagColor: "from-slate-700 to-slate-700" },
+    { name: t('technologies.skills.nextjs.name'), description: t('technologies.skills.nextjs.description'), experience: "2+ years", icon: NextjsIcon, color: "from-slate-100 to-slate-200", tagColor: "from-slate-700 to-slate-700", iconColorClass: "text-black" },
     { name: t('technologies.skills.reactnative.name'), description: t('technologies.skills.reactnative.description'), experience: "1+ years", icon: ReactNativeIcon, color: "from-[#62DAFC] to-[#62DAFC]" },
     { name: t('technologies.skills.expo.name'), description: t('technologies.skills.expo.description'), experience: "1+ years", icon: ExpoIcon, color: "from-slate-100 to-slate-200", tagColor: "from-slate-700 to-slate-700" },
     { name: t('technologies.skills.javascript.name'), description: t('technologies.skills.javascript.description'), experience: "3+ years", icon: JSIcon, color: "from-yellow-400 to-yellow-600" },

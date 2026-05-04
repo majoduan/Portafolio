@@ -44,7 +44,7 @@ const TechCard = memo(({ tech, index, isMobile, animationState, onMouseEnter, on
             className={`w-12 h-12 flex-shrink-0 bg-gradient-to-r ${tech.color} ${shapeStyle.rounded} flex items-center justify-center shadow-md p-2`}
             style={{ clipPath: shapeStyle.clipPath }}
           >
-            <IconComponent className="w-full h-full text-white" />
+            <IconComponent className={`w-full h-full ${tech.iconColorClass || 'text-white'}`} />
           </div>
 
           <div className="flex-1 min-w-0">
@@ -78,7 +78,7 @@ const TechCard = memo(({ tech, index, isMobile, animationState, onMouseEnter, on
                 style={{ clipPath: shapeStyle.clipPath }}
               >
                 <div className="absolute inset-0 bg-white/10" style={{ clipPath: shapeStyle.clipPath }} />
-                <IconComponent className="w-full h-full text-white relative z-10" />
+                <IconComponent className={`w-full h-full ${tech.iconColorClass || 'text-white'} relative z-10`} />
               </div>
               <div
                 className={`absolute inset-0 bg-gradient-to-r ${tech.color} ${shapeStyle.rounded} opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur-sm`}
