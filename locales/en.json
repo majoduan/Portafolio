@@ -192,6 +192,26 @@
   "certificates": {
     "title": "Certificates & Recognition",
     "items": {
+      "claudeCode101": {
+        "title": "Claude Code 101",
+        "org": "Anthropic Academy"
+      },
+      "aiLimitations": {
+        "title": "AI Capabilities and Limitations",
+        "org": "Anthropic Academy"
+      },
+      "claudeCodeAction": {
+        "title": "Claude Code in Action",
+        "org": "Anthropic Academy"
+      },
+      "claudeCowork": {
+        "title": "Introduction to Claude Cowork",
+        "org": "Anthropic Academy"
+      },
+      "agentSkills": {
+        "title": "Introduction to Agent Skills",
+        "org": "Anthropic Academy"
+      },
       "epn": {
         "title": "Mid-Career Academic Excellence Award",
         "org": "Escuela Politécnica Nacional"

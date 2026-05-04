@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { Pause, Play } from 'lucide-react';
 import { getCertificatesData } from '../../data/projectTranslations';
 import { useTranslation } from '../../hooks/useTranslation';
 
@@ -8,19 +9,37 @@ const CertificatesSection = React.memo(() => {
 
   const [currentCertificateIndex, setCurrentCertificateIndex] = useState(0);
   const [isCertificateCarouselPaused, setIsCertificateCarouselPaused] = useState(false);
-  const [isMobileView, setIsMobileView] = useState(true);
-  useEffect(() => { setIsMobileView(window.innerWidth < 768); }, []);
+  const [isManuallyPaused, setIsManuallyPaused] = useState(false);
+  // viewMode drives carousel mechanics (step, dots count); the visible count
+  // (1/2/3) is handled purely via Tailwind responsive width classes.
+  const [viewMode, setViewMode] = useState('mobile');
 
   const certificateContainerRef = useRef(null);
 
   const certificates = useMemo(() => getCertificatesData(t), [t]);
 
+  // Mobile <768 (1 visible, step 1); tablet 768-1023 (2 visible, step 2);
+  // desktop ≥1024 (3 visible, step 2). Aligns with Tailwind md/lg breakpoints.
+  useEffect(() => {
+    const compute = () => {
+      const w = window.innerWidth;
+      if (w < 768) return 'mobile';
+      if (w < 1024) return 'tablet';
+      return 'desktop';
+    };
+    setViewMode(compute());
+    const handleResize = () => setViewMode(compute());
+    window.addEventListener('resize', handleResize, { passive: true });
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const step = viewMode === 'mobile' ? 1 : 2;
+
   // Auto-advance certificates carousel with pagination
   useEffect(() => {
-    if (!isCertificateCarouselPaused) {
+    if (!isManuallyPaused && !isCertificateCarouselPaused) {
       const interval = setInterval(() => {
         setCurrentCertificateIndex((prev) => {
-          const step = isMobileView ? 1 : 2;
           const next = prev + step;
           return next >= certificates.length ? 0 : next;
         });
@@ -28,44 +47,44 @@ const CertificatesSection = React.memo(() => {
 
       return () => clearInterval(interval);
     }
-  }, [isCertificateCarouselPaused, certificates.length, isMobileView]);
+  }, [isManuallyPaused, isCertificateCarouselPaused, certificates.length, step]);
 
-  // Auto scroll on index change
+  // Auto scroll on index change — uses each card's actual offsetLeft (works
+  // across viewports). Subtracts the scroll container's padding-left so the
+  // target card lands with breathing room on the left, not flush with the
+  // viewport edge (otherwise hover shadows / scale get clipped).
   useEffect(() => {
     if (certificateContainerRef.current) {
       const container = certificateContainerRef.current;
-      const card = container.querySelector('.certificate-card');
-      if (card) {
-        const cardWidth = card.offsetWidth;
-        const computedStyle = window.getComputedStyle(container.querySelector('.flex'));
-        const gap = parseInt(computedStyle.gap) || 0;
-        const scrollPosition = currentCertificateIndex * (cardWidth + gap);
-
+      const cards = container.querySelectorAll('.certificate-card');
+      const targetCard = cards[currentCertificateIndex];
+      if (targetCard) {
+        const padLeft = parseFloat(getComputedStyle(container).paddingLeft) || 0;
         container.scrollTo({
-          left: scrollPosition,
+          left: targetCard.offsetLeft - padLeft,
           behavior: 'smooth'
         });
       }
     }
-  }, [currentCertificateIndex, isMobileView]);
-
-  // Detect viewport changes to update isMobileView
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobileView(window.innerWidth < 768);
-    };
-
-    window.addEventListener('resize', handleResize, { passive: true });
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [currentCertificateIndex, viewMode]);
 
   return (
     <section id="certificates" className="pt-20 bg-transparent relative z-10 overflow-hidden transition-colors duration-300">
-      {/* Centered titles */}
-      <div className="max-w-7xl mx-auto px-4 mb-12">
+      {/* Title row with pause button (button absolute-positioned right, mirrors TechnologiesSection) */}
+      <div className="max-w-7xl mx-auto px-4 mb-6 relative">
         <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight text-black dark:text-white">
           {t('certificates.title')}
         </h2>
+        <button
+          onClick={() => setIsManuallyPaused((prev) => !prev)}
+          className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full border border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-400 hover:text-black dark:hover:text-white hover:border-black dark:hover:border-white transition-all duration-300"
+          aria-label={isManuallyPaused || isCertificateCarouselPaused ? 'Play carousel' : 'Pause carousel'}
+        >
+          {isManuallyPaused || isCertificateCarouselPaused
+            ? <Play className="w-4 h-4" />
+            : <Pause className="w-4 h-4" />
+          }
+        </button>
       </div>
 
       {/* Carousel Container - Responsive Grid */}
@@ -73,7 +92,7 @@ const CertificatesSection = React.memo(() => {
         {/* Scrollable container - Desktop: 2 cards, Mobile: 1 card */}
         <div
           ref={certificateContainerRef}
-          className="overflow-x-hidden py-4 scrollbar-hide mx-auto"
+          className="relative overflow-x-hidden py-4 px-4 scrollbar-hide mx-auto"
           onMouseEnter={() => setIsCertificateCarouselPaused(true)}
           onMouseLeave={() => setIsCertificateCarouselPaused(false)}
           onTouchStart={() => setIsCertificateCarouselPaused(true)}
@@ -82,7 +101,7 @@ const CertificatesSection = React.memo(() => {
             scrollBehavior: 'smooth',
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',
-            maxWidth: isMobileView ? 'min(90vw, 26.25rem)' : 'min(98vw, 87.5rem)'
+            maxWidth: viewMode === 'mobile' ? 'min(90vw, 26.25rem)' : 'min(98vw, 87.5rem)'
           }}
         >
           {/* Certificate grid */}
@@ -92,18 +111,17 @@ const CertificatesSection = React.memo(() => {
               return (
               <div
                 key={i}
-                className="certificate-card flex-shrink-0 bg-white/90 dark:bg-[var(--bg-secondary)] backdrop-blur-lg rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50 hover:border-[var(--btn-primary)] transition-all duration-300 transform hover:scale-105 shadow-[0_4px_4px_rgba(0,0,0,0.25)] hover:shadow-xl dark:hover:shadow-2xl group cursor-pointer"
-                style={{
-                  width: isMobileView ? '100%' : 'calc((100% - 24px) / 2)'
-                }}
+                className="certificate-card flex-shrink-0 w-full md:w-[calc((100%-24px)/2)] lg:w-[calc((100%-48px)/3)] bg-white/90 dark:bg-[var(--bg-secondary)] backdrop-blur-lg rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50 hover:border-[var(--btn-primary)] transition-all duration-300 transform hover:scale-105 shadow-[0_4px_4px_rgba(0,0,0,0.25)] hover:shadow-xl dark:hover:shadow-2xl group cursor-pointer"
                 onClick={() => {
                   setCurrentCertificateIndex(i);
                   setIsCertificateCarouselPaused(true);
                   setTimeout(() => setIsCertificateCarouselPaused(false), 3000);
                 }}
               >
-                {/* Certificate Image — full card with overlay */}
-                <div className="relative h-72 overflow-hidden bg-gradient-to-br from-blue-900/30 to-purple-900/30">
+                {/* Certificate Image — aspect 1.294 only; height auto-derives
+                    from the responsive card width above. No fixed height so
+                    cards never clip and the visible count fits exactly. */}
+                <div className="relative aspect-[1.294] overflow-hidden bg-white">
                   {/* srcset AVIF manual, next/image unoptimized perderia srcset */}
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
@@ -119,7 +137,7 @@ const CertificatesSection = React.memo(() => {
                       height="288"
                       loading="lazy"
                       decoding="async"
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                       onError={(e) => {
                         e.target.style.display = 'none';
                         e.target.parentElement.innerHTML = `<div class="w-full h-full flex items-center justify-center text-6xl">${cert.icon}</div>`;
@@ -152,10 +170,12 @@ const CertificatesSection = React.memo(() => {
           </div>
         </div>
 
-        {/* Navigation dots - Dynamic based on isMobileView */}
+        {/* Navigation dots */}
         <div className="flex justify-center items-center gap-2 mt-8 mb-4">
           {(() => {
-            const pageSize = isMobileView ? 1 : 2;
+            // Dots track scroll steps: mobile advances 1 cert/click → 1 dot per
+            // cert; tablet+desktop advance 2 → ceil(N/2) dots.
+            const pageSize = step;
             const totalPages = Math.ceil(certificates.length / pageSize);
             const currentPage = Math.floor(currentCertificateIndex / pageSize);
 

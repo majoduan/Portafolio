@@ -30,8 +30,10 @@ export function useScrollPaint(containerRef, onProgress) {
       const rect = container.getBoundingClientRect();
       const vh = window.innerHeight;
       // Total scroll distance: from "top just entered viewport bottom"
-      // to "bottom reached viewport center". = rect.height + vh/2
-      const total = rect.height + vh / 2;
+      // to "bottom reached ~25% from viewport top". = rect.height + vh*0.25
+      // Smaller denominator → line completes earlier in the scroll, painting
+      // feels brisker on desktop and mobile/tablet.
+      const total = rect.height + vh * 0.25;
       // How far we've scrolled into that range.
       const scrolled = vh - rect.top;
       const progress = Math.max(0, Math.min(1, scrolled / total));

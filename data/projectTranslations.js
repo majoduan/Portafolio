@@ -209,6 +209,36 @@ export const getProjectsData = (t) => [
 // Helper function to get translated certificates data
 export const getCertificatesData = (t) => [
   {
+    title: t('certificates.items.claudeCode101.title'),
+    org: t('certificates.items.claudeCode101.org'),
+    icon: "🤖",
+    slug: "anthropic-claude-code-101"
+  },
+  {
+    title: t('certificates.items.aiLimitations.title'),
+    org: t('certificates.items.aiLimitations.org'),
+    icon: "🧠",
+    slug: "anthropic-ai-limitations"
+  },
+  {
+    title: t('certificates.items.claudeCodeAction.title'),
+    org: t('certificates.items.claudeCodeAction.org'),
+    icon: "⚡",
+    slug: "anthropic-claude-code-action"
+  },
+  {
+    title: t('certificates.items.claudeCowork.title'),
+    org: t('certificates.items.claudeCowork.org'),
+    icon: "🤝",
+    slug: "anthropic-claude-cowork"
+  },
+  {
+    title: t('certificates.items.agentSkills.title'),
+    org: t('certificates.items.agentSkills.org'),
+    icon: "🛠️",
+    slug: "anthropic-agent-skills"
+  },
+  {
     title: t('certificates.items.epn.title'),
     org: t('certificates.items.epn.org'),
     icon: "🏆",

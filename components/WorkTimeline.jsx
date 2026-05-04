@@ -4,6 +4,104 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import Image from 'next/image';
 import { Calendar, MapPin } from 'lucide-react';
 import { useScrollPaint } from '../hooks/useScrollPaint';
+import { useReversibleInView } from '../hooks/useReversibleInView';
+
+function TimelineCard({ item, index, isLast, t, registerLogoRef }) {
+  const cardRef = useRef(null);
+  const inView = useReversibleInView(cardRef);
+  const bullets = t(`about.experience.items.${item.key}.bullets`);
+  const tag = t(`about.experience.items.${item.key}.tag`);
+  const safeTag = tag && !tag.includes('.') ? tag : null;
+  const hasMultipleLogos = item.logos.length > 1;
+  const mobilePadding = !isLast
+    ? (index % 2 === 0 ? 'pr-6 lg:pr-0' : 'pl-6 lg:pl-0')
+    : '';
+
+  return (
+    <div
+      ref={cardRef}
+      data-revealed={inView ? 'true' : 'false'}
+      style={{ transitionDelay: `${index * 150}ms` }}
+      className="timeline-card grid grid-cols-1 lg:grid-cols-[12rem_1fr] lg:gap-12 items-start"
+    >
+      {/* ── Desktop logos (md+) ── */}
+      <div className={`hidden lg:flex ${hasMultipleLogos ? 'flex-row justify-center gap-3' : 'flex-col gap-4'} items-center relative z-10`}>
+        {item.logos.map((logo, li) => (
+          <div
+            key={li}
+            ref={el => registerLogoRef(`d-${index}-${li}`, el)}
+            className="w-28 h-28 rounded-full bg-white flex items-center justify-center shadow-md flex-shrink-0"
+          >
+            <Image src={logo} alt="" width={80} height={80} unoptimized className="w-20 h-20 object-contain" />
+          </div>
+        ))}
+      </div>
+
+      {/* ── Mobile logos (<md) ── */}
+      <div className="lg:hidden flex gap-3 mb-4 relative z-10">
+        {item.logos.map((logo, li) => (
+          <div
+            key={li}
+            ref={el => registerLogoRef(`m-${index}-${li}`, el)}
+            className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-white flex items-center justify-center shadow-md flex-shrink-0"
+          >
+            <Image src={logo} alt="" width={56} height={56} unoptimized className="w-10 h-10 md:w-14 md:h-14 object-contain" />
+          </div>
+        ))}
+      </div>
+
+      {/* ── Content ── */}
+      <div className={`pt-1 ${mobilePadding}`}>
+        {/* Role + period */}
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 flex-wrap">
+          <h3 className="text-lg md:text-xl font-bold text-black dark:text-white">
+            {t(`about.experience.items.${item.key}.role`)}
+          </h3>
+          <div className="flex items-center gap-1.5 flex-shrink-0">
+            <Calendar className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 flex-shrink-0" />
+            <span className="text-sm text-slate-500 dark:text-slate-500 whitespace-nowrap">
+              {t(`about.experience.items.${item.key}.period`)}
+              {item.present && ` – ${t('about.experience.present')}`}
+            </span>
+            {item.present && (
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse flex-shrink-0" />
+            )}
+          </div>
+        </div>
+
+        {/* Company + tag | Location */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mt-1">
+          <p className="text-sm md:text-base text-slate-600 dark:text-slate-400">
+            {t(`about.experience.items.${item.key}.company`)}
+            {safeTag && (
+              <span className="text-xs bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full ml-2">
+                {safeTag}
+              </span>
+            )}
+          </p>
+          <div className="flex items-center gap-1 flex-shrink-0">
+            <MapPin className="w-3 h-3 text-slate-400 dark:text-slate-500 flex-shrink-0" />
+            <span className="text-xs text-slate-500 dark:text-slate-500">
+              {t(`about.experience.items.${item.key}.location`)}
+            </span>
+          </div>
+        </div>
+
+        {/* Bullets */}
+        {Array.isArray(bullets) && bullets.length > 0 && (
+          <ul className="mt-4 space-y-2 text-sm md:text-base text-slate-600 dark:text-slate-400">
+            {bullets.map((bullet, i) => (
+              <li key={i} className="flex gap-2.5 items-start pl-3">
+                <span className="mt-2 w-1.5 h-1.5 rounded-full bg-black dark:bg-white flex-shrink-0" />
+                <span className="text-justify">{bullet}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
+  );
+}
 
 export default function WorkTimeline({ items, t }) {
   const containerRef = useRef(null);
@@ -16,6 +114,12 @@ export default function WorkTimeline({ items, t }) {
   const isMdRef = useRef(false);
   const [isMd, setIsMd] = useState(false);
   const [ready, setReady] = useState(false);
+
+  // Stable callback so TimelineCard can register its logo refs into the
+  // shared logoRefs map without triggering re-renders.
+  const registerLogoRef = useCallback((key, el) => {
+    logoRefs.current[key] = el;
+  }, []);
 
   // Keep ref in sync with state
   useEffect(() => { isMdRef.current = isMd; }, [isMd]);
@@ -320,101 +424,16 @@ export default function WorkTimeline({ items, t }) {
           </svg>
 
           <div className="space-y-16">
-            {items.map((item, index) => {
-              const bullets = t(`about.experience.items.${item.key}.bullets`);
-              const tag = t(`about.experience.items.${item.key}.tag`);
-              const safeTag = tag && !tag.includes('.') ? tag : null;
-              const hasMultipleLogos = item.logos.length > 1;
-              const isLast = index === items.length - 1;
-
-              // Mobile: add side padding so serpentine vertical doesn't cross text
-              const mobilePadding = !isLast
-                ? (index % 2 === 0 ? 'pr-6 lg:pr-0' : 'pl-6 lg:pl-0')
-                : '';
-
-              return (
-                <div
-                  key={item.key}
-                  className="grid grid-cols-1 lg:grid-cols-[12rem_1fr] lg:gap-12 items-start"
-                >
-                  {/* ── Desktop logos (md+) ── */}
-                  <div className={`hidden lg:flex ${hasMultipleLogos ? 'flex-row justify-center gap-3' : 'flex-col gap-4'} items-center relative z-10`}>
-                    {item.logos.map((logo, li) => (
-                      <div
-                        key={li}
-                        ref={el => { logoRefs.current[`d-${index}-${li}`] = el; }}
-                        className="w-28 h-28 rounded-full bg-white flex items-center justify-center shadow-md flex-shrink-0"
-                      >
-                        <Image src={logo} alt="" width={80} height={80} unoptimized className="w-20 h-20 object-contain" />
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* ── Mobile logos (<md) ── */}
-                  <div className="lg:hidden flex gap-3 mb-4 relative z-10">
-                    {item.logos.map((logo, li) => (
-                      <div
-                        key={li}
-                        ref={el => { logoRefs.current[`m-${index}-${li}`] = el; }}
-                        className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-white flex items-center justify-center shadow-md flex-shrink-0"
-                      >
-                        <Image src={logo} alt="" width={56} height={56} unoptimized className="w-10 h-10 md:w-14 md:h-14 object-contain" />
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* ── Content ── */}
-                  <div className={`pt-1 ${mobilePadding}`}>
-                    {/* Role + period */}
-                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 flex-wrap">
-                      <h3 className="text-lg md:text-xl font-bold text-black dark:text-white">
-                        {t(`about.experience.items.${item.key}.role`)}
-                      </h3>
-                      <div className="flex items-center gap-1.5 flex-shrink-0">
-                        <Calendar className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 flex-shrink-0" />
-                        <span className="text-sm text-slate-500 dark:text-slate-500 whitespace-nowrap">
-                          {t(`about.experience.items.${item.key}.period`)}
-                          {item.present && ` – ${t('about.experience.present')}`}
-                        </span>
-                        {item.present && (
-                          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse flex-shrink-0" />
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Company + tag | Location */}
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mt-1">
-                      <p className="text-sm md:text-base text-slate-600 dark:text-slate-400">
-                        {t(`about.experience.items.${item.key}.company`)}
-                        {safeTag && (
-                          <span className="text-xs bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full ml-2">
-                            {safeTag}
-                          </span>
-                        )}
-                      </p>
-                      <div className="flex items-center gap-1 flex-shrink-0">
-                        <MapPin className="w-3 h-3 text-slate-400 dark:text-slate-500 flex-shrink-0" />
-                        <span className="text-xs text-slate-500 dark:text-slate-500">
-                          {t(`about.experience.items.${item.key}.location`)}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Bullets */}
-                    {Array.isArray(bullets) && bullets.length > 0 && (
-                      <ul className="mt-4 space-y-2 text-sm md:text-base text-slate-600 dark:text-slate-400">
-                        {bullets.map((bullet, i) => (
-                          <li key={i} className="flex gap-2.5 items-start pl-3">
-                            <span className="mt-2 w-1.5 h-1.5 rounded-full bg-black dark:bg-white flex-shrink-0" />
-                            <span className="text-justify">{bullet}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
+            {items.map((item, index) => (
+              <TimelineCard
+                key={item.key}
+                item={item}
+                index={index}
+                isLast={index === items.length - 1}
+                t={t}
+                registerLogoRef={registerLogoRef}
+              />
+            ))}
           </div>
         </div>
       </div>

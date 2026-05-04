@@ -192,6 +192,26 @@
   "certificates": {
     "title": "Certificados y Reconocimientos",
     "items": {
+      "claudeCode101": {
+        "title": "Claude Code 101",
+        "org": "Anthropic Academy"
+      },
+      "aiLimitations": {
+        "title": "Capacidades y Limitaciones de la IA",
+        "org": "Anthropic Academy"
+      },
+      "claudeCodeAction": {
+        "title": "Claude Code en Acción",
+        "org": "Anthropic Academy"
+      },
+      "claudeCowork": {
+        "title": "Introducción a Claude Cowork",
+        "org": "Anthropic Academy"
+      },
+      "agentSkills": {
+        "title": "Introducción a Agent Skills",
+        "org": "Anthropic Academy"
+      },
       "epn": {
         "title": "Premio a la Excelencia Académica de Media Carrera",
         "org": "Escuela Politécnica Nacional"

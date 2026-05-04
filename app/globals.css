@@ -24,7 +24,7 @@ html {
   --quote-text-color: #cbd5e1;
 
   /* Color primario de botones/CTAs — dark: slate, light: rojo */
-  --btn-primary: #1E293B;
+  --btn-primary: #253247;
 
   /* Alpha variants — derivadas de la paleta */
   --bg-secondary-50: rgba(31, 31, 31, 0.5);
@@ -234,6 +234,29 @@ html:not(.dark) .spline-container > div {
 
 .about-card {
   animation: fadeInUp 0.5s ease-out both;
+}
+
+/* Work timeline cards — bidirectional scroll-triggered reveal.
+   Driven by useReversibleInView (IntersectionObserver) toggling
+   data-revealed on each card; transitionDelay is set inline per index. */
+.timeline-card {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 550ms cubic-bezier(0.4, 0, 0.2, 1),
+              transform 550ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity, transform;
+}
+.timeline-card[data-revealed="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .timeline-card {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    transition-delay: 0ms !important;
+  }
 }
 
 /* Animación para las barras de progreso */
