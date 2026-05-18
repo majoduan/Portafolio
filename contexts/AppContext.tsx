@@ -1,44 +1,74 @@
 'use client';
-import { createContext, useState, useEffect, useMemo, useCallback } from 'react';
+import {
+  createContext,
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  type Dispatch,
+  type SetStateAction,
+  type ReactNode,
+} from 'react';
 import { flushSync } from 'react-dom';
 
+export type Language = 'en' | 'es';
+export type Theme = 'dark' | 'light';
+
+export interface AppContextValue {
+  language: Language;
+  setLanguage: Dispatch<SetStateAction<Language>>;
+  toggleLanguage: () => void;
+  theme: Theme;
+  setTheme: Dispatch<SetStateAction<Theme>>;
+  toggleTheme: () => void;
+}
+
+// Default value matches the shape for SSR — el real Provider monta el state
+// y reemplaza estos no-ops.
+const defaultContext: AppContextValue = {
+  language: 'en',
+  setLanguage: () => {},
+  toggleLanguage: () => {},
+  theme: 'dark',
+  setTheme: () => {},
+  toggleTheme: () => {},
+};
+
 // Create context for app-wide state (language and theme)
-export const AppContext = createContext();
+export const AppContext = createContext<AppContextValue>(defaultContext);
+
+interface AppContextProviderProps {
+  children: ReactNode;
+}
 
 // AppContext Provider Component
-export const AppContextProvider = ({ children }) => {
+export const AppContextProvider = ({ children }: AppContextProviderProps) => {
   // Initialize language from localStorage or browser preference
-  const getInitialLanguage = () => {
+  const getInitialLanguage = (): Language => {
     if (typeof window === 'undefined') return 'en';
-    // Check localStorage first
     const savedLanguage = localStorage.getItem('portfolio-language');
-    if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'es')) {
+    if (savedLanguage === 'en' || savedLanguage === 'es') {
       return savedLanguage;
     }
-    
-    // Fallback to browser language
     const browserLang = navigator.language.toLowerCase();
     if (browserLang.startsWith('es')) {
       return 'es';
     }
-    
-    // Default to English
     return 'en';
   };
 
   // Initialize theme from localStorage or default to dark
-  const getInitialTheme = () => {
+  const getInitialTheme = (): Theme => {
     if (typeof window === 'undefined') return 'dark';
     const savedTheme = localStorage.getItem('portfolio-theme');
-    if (savedTheme && (savedTheme === 'dark' || savedTheme === 'light')) {
+    if (savedTheme === 'dark' || savedTheme === 'light') {
       return savedTheme;
     }
-    // Default to system preference
     return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
   };
 
-  const [language, setLanguage] = useState(getInitialLanguage);
-  const [theme, setTheme] = useState(getInitialTheme);
+  const [language, setLanguage] = useState<Language>(getInitialLanguage);
+  const [theme, setTheme] = useState<Theme>(getInitialTheme);
 
   // Persist language changes to localStorage
   useEffect(() => {
@@ -55,20 +85,21 @@ export const AppContextProvider = ({ children }) => {
 
   // Toggle between English and Spanish
   const toggleLanguage = useCallback(() => {
-    setLanguage(prev => prev === 'en' ? 'es' : 'en');
+    setLanguage((prev) => (prev === 'en' ? 'es' : 'en'));
   }, []);
 
   // Apply theme synchronously so the View Transitions snapshot captures the new state
-  const applyTheme = useCallback((next) => {
+  const applyTheme = useCallback((next: Theme) => {
     flushSync(() => setTheme(next));
     document.documentElement.classList.toggle('dark', next === 'dark');
   }, []);
 
   // Toggle between dark and light theme with polygon view-transition
   const toggleTheme = useCallback(() => {
-    const next = theme === 'dark' ? 'light' : 'dark';
-    const reduced = typeof window !== 'undefined'
-      && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const next: Theme = theme === 'dark' ? 'light' : 'dark';
+    const reduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (typeof document === 'undefined' || !document.startViewTransition || reduced) {
       applyTheme(next);
       return;
@@ -77,18 +108,17 @@ export const AppContextProvider = ({ children }) => {
   }, [theme, applyTheme]);
 
   // Memoize context value to prevent unnecessary re-renders
-  const value = useMemo(() => ({
-    language,
-    setLanguage,
-    toggleLanguage,
-    theme,
-    setTheme,
-    toggleTheme
-  }), [language, theme, toggleLanguage, toggleTheme]);
-
-  return (
-    <AppContext.Provider value={value}>
-      {children}
-    </AppContext.Provider>
+  const value = useMemo<AppContextValue>(
+    () => ({
+      language,
+      setLanguage,
+      toggleLanguage,
+      theme,
+      setTheme,
+      toggleTheme,
+    }),
+    [language, theme, toggleLanguage, toggleTheme]
   );
+
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

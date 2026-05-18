@@ -1,4 +1,6 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type RefObject } from 'react';
+
+type ScrollProgressCallback = (progress: number) => void;
 
 /**
  * Returns a continuous 0→1 scroll progress for a container element.
@@ -17,10 +19,13 @@ import { useEffect, useRef } from 'react';
  * depende de containerRef; el callback se lee siempre desde el ref actualizado.
  * Ref: https://react.dev/learn/separating-events-from-effects
  */
-export function useScrollPaint(containerRef, onProgress) {
-  const rafId = useRef(null);
-  const ticking = useRef(false);
-  const onProgressRef = useRef(onProgress);
+export function useScrollPaint(
+  containerRef: RefObject<HTMLElement | null>,
+  onProgress: ScrollProgressCallback
+): void {
+  const rafId = useRef<number | null>(null);
+  const ticking = useRef<boolean>(false);
+  const onProgressRef = useRef<ScrollProgressCallback>(onProgress);
 
   // Mantener ref sincronizado sin disparar el efecto principal
   useEffect(() => {
