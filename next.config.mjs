@@ -9,6 +9,16 @@ const nextConfig = {
   eslint: {
     dirs: ['app', 'components', 'contexts', 'hooks', 'utils', 'data'],
   },
+  // Tree-shaking explícito para lucide-react. Sin esto, importar
+  // `{ Mail, Linkedin } from 'lucide-react'` puede arrastrar el barrel
+  // entero. Cada icono se resuelve a su archivo individual.
+  // https://nextjs.org/docs/app/api-reference/next-config-js/modularizeImports
+  modularizeImports: {
+    'lucide-react': {
+      transform: 'lucide-react/dist/esm/icons/{{kebabCase member}}',
+      preventFullImport: true,
+    },
+  },
   // @splinetool/react-spline exports only ESM "import" condition
   // which Next.js webpack can't resolve. Point directly to the file.
   webpack: (config) => {

@@ -10,10 +10,22 @@ import { useEffect, useRef } from 'react';
  * so the line is fully drawn by the time the user reads the last item.
  *   - 0 when container top is at the viewport bottom (just entering view)
  *   - 1 when container bottom reaches the viewport center
+ *
+ * Patrón ref para onProgress: si el caller no memoiza el callback con
+ * useCallback estable, antes el efecto se desmontaba/montaba en cada render,
+ * causando listener leaks y mediciones inconsistentes. Ahora el efecto solo
+ * depende de containerRef; el callback se lee siempre desde el ref actualizado.
+ * Ref: https://react.dev/learn/separating-events-from-effects
  */
 export function useScrollPaint(containerRef, onProgress) {
   const rafId = useRef(null);
   const ticking = useRef(false);
+  const onProgressRef = useRef(onProgress);
+
+  // Mantener ref sincronizado sin disparar el efecto principal
+  useEffect(() => {
+    onProgressRef.current = onProgress;
+  });
 
   useEffect(() => {
     const container = containerRef.current;
@@ -22,7 +34,7 @@ export function useScrollPaint(containerRef, onProgress) {
     // Reduced motion: reveal immediately
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     if (reducedMotion.matches) {
-      onProgress(1);
+      onProgressRef.current(1);
       return;
     }
 
@@ -37,7 +49,7 @@ export function useScrollPaint(containerRef, onProgress) {
       // How far we've scrolled into that range.
       const scrolled = vh - rect.top;
       const progress = Math.max(0, Math.min(1, scrolled / total));
-      onProgress(progress);
+      onProgressRef.current(progress);
       ticking.current = false;
     };
 
@@ -56,5 +68,5 @@ export function useScrollPaint(containerRef, onProgress) {
       window.removeEventListener('scroll', onScroll);
       if (rafId.current) cancelAnimationFrame(rafId.current);
     };
-  }, [containerRef, onProgress]);
+  }, [containerRef]);
 }
