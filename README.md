@@ -1,6 +1,6 @@
 # 🚀 Portfolio - Mateo Dueñas
 
-Portfolio profesional interactivo construido con React, Vite, Tailwind CSS y Spline 3D.
+Portfolio profesional interactivo construido con Next.js 15 (App Router), React 18, Tailwind CSS v4 y Spline 3D.
 
 ## ✨ Características
 
@@ -53,29 +53,37 @@ Portfolio profesional interactivo construido con React, Vite, Tailwind CSS y Spl
 
 ## 🛠️ Stack Tecnológico
 
-- **Frontend**: React 19, Tailwind CSS 3
-- **Build Tool**: Vite 7
-- **3D Graphics**: Spline
-- **Icons**: Lucide React
-- **Animations**: CSS custom animations, Canvas API
+- **Framework**: Next.js 15 (App Router) + React 18
+- **Styling**: Tailwind CSS v4 (`@theme` en CSS, sin `tailwind.config.js`)
+- **3D Graphics**: Spline (`@splinetool/react-spline`)
+- **Tipografía**: Geist Sans (variable, `next/font`)
+- **Icons**: Lucide React + 40+ icons SVG custom (`components/icons/tech/`)
+- **Animations**: CSS keyframes + View Transitions API + RAF (canvas)
+- **Package Manager**: pnpm
+- **Image pipeline**: Sharp + SVGO + AVIF/WebP responsive variants
+- **PWA**: Service Worker (`public/sw.js`) con estrategias multimodal
 
 ## 📦 Instalación
 
 ```bash
 # Clonar repositorio
 git clone https://github.com/majoduan/mateo-portfolio.git
+cd mateo-portfolio
 
 # Instalar dependencias
-npm install
+pnpm install
 
 # Desarrollo
-npm run dev
+pnpm dev
 
-# Build
-npm run build
+# Build de producción
+pnpm build
 
-# Preview
-npm run preview
+# Servir build
+pnpm start
+
+# Analizar bundle
+pnpm analyze
 ```
 
 ## 📚 Documentación Completa
@@ -94,10 +102,10 @@ La documentación del proyecto está organizada en el directorio `/docs`:
 ### Quick Performance Test
 ```bash
 # Build y analizar
-npm run build:analyze
+pnpm build:full
 
-# Preview local
-npm run preview
+# Servir build local
+pnpm start
 ```
 
 ### Validar con Chrome DevTools
@@ -116,41 +124,38 @@ npm run preview
 
 ```
 mateo-portfolio/
+├── app/                         # 🧭 Next.js App Router
+│   ├── layout.jsx               # Root layout + Providers + BootScreenWrapper
+│   ├── page.jsx                 # Home (/)
+│   ├── about/page.jsx           # About (/about)
+│   ├── projects/page.jsx        # Projects (/projects)
+│   ├── BootScreenWrapper.jsx    # Orquesta HUDBootScreen y preload de Spline
+│   ├── ClientInit.jsx           # Hidratación cliente
+│   ├── globals.css              # Tailwind v4 @theme + tokens + animations
+│   └── sitemap.js               # /sitemap.xml
+├── components/
+│   ├── HUDBootScreen.jsx        # Pantalla de inicio con circuit traces SVG
+│   ├── NavigationBar.jsx        # Nav fijo con LanguageToggle + ThemeToggle
+│   ├── WorkTimeline.jsx         # Timeline con scroll-paint SVG
+│   ├── RotatingTitle.jsx        # Hero rotating title
+│   ├── TypingQuotes.jsx         # Typewriter con quotes
+│   ├── sections/                # HeroSection, TechnologiesSection, etc.
+│   └── icons/tech/              # 40+ iconos SVG personalizados
+├── contexts/AppContext.jsx      # Context API (theme + i18n)
+├── hooks/                       # useScrollPaint, useReversibleInView, useCountUp
+├── data/projects.js, technologies.js
+├── locales/{en,es}.json         # Traducciones
+├── utils/                       # adaptiveVideo, telemetry, preload helpers
 ├── docs/                        # 📚 Documentación técnica
-│   ├── README.md                # Índice de documentación
-│   ├── GUIDE.md                 # Guía completa (desarrollo + optimizaciones + testing)
-│   ├── TECHNICAL_DECISIONS.md   # Decisiones arquitectónicas
-│   ├── I18N_IMPLEMENTATION.md   # Sistema i18n
-│   └── CHANGELOG.md             # Historial de cambios
-├── scripts/                     # 🛠️ Scripts de optimización
-│   └── README.md                # Documentación de scripts
-├── src/
-│   ├── components/
-│   │   ├── HUDBootScreen.jsx    # Pantalla de inicio
-│   │   ├── TechCard.jsx         # Cards de tecnologías
-│   │   ├── ContactForm.jsx      # Formulario de contacto
-│   │   └── icons/tech/          # Iconos SVG personalizados
-│   ├── contexts/
-│   │   └── AppContext.jsx       # Context API (theme + i18n)
-│   ├── data/
-│   │   ├── projects.js          # Datos de proyectos
-│   │   └── technologies.js      # Datos de skills
-│   ├── locales/
-│   │   ├── en.json              # Traducciones inglés
-│   │   └── es.json              # Traducciones español
-│   ├── utils/
-│   │   ├── preloadResources.js  # Sistema de precarga
-│   │   └── registerSW.js        # Service Worker
-│   ├── App.jsx                  # Componente principal
-│   ├── main.jsx                 # Entry point
-│   └── index.css                # Estilos globales
+├── scripts/                     # 🛠️ Sharp/SVGO + bundle analyzer
 ├── public/
-│   ├── videos/                  # Videos de proyectos (optimizados)
-│   ├── images/                  # Imágenes y certificados
-│   ├── cv/                      # CV en PDF
+│   ├── media/                   # Imágenes (AVIF/WebP responsive) + videos
+│   ├── icons/                   # Favicon + PWA icons
+│   ├── docs/                    # CV en PDF
 │   ├── manifest.json            # PWA manifest
 │   └── sw.js                    # Service Worker
-└── vite.config.js               # Configuración optimizada
+├── next.config.mjs              # Headers (CSP, HSTS), webpack alias Spline
+└── vercel.json                  # Headers redundantes para Vercel
 ```
 
 ## 🎨 Secciones
@@ -161,14 +166,14 @@ mateo-portfolio/
 4. **Projects**: Galería de proyectos con videos demostrativos
 5. **Contact**: Links a redes sociales y email
 
-## 🔧 Configuración de Vite
+## 🔧 Configuración Next.js
 
-Optimizaciones incluidas:
-- Code splitting manual para vendors
-- Terser con 2 passes de compresión
-- CSS code splitting habilitado
-- Asset inlining hasta 4KB
-- Sourcemaps deshabilitados en producción
+Optimizaciones incluidas en `next.config.mjs`:
+- Webpack alias `@splinetool/react-spline → dist/react-spline.js` (workaround ESM)
+- Headers HTTP estrictos (CSP, HSTS preload, Permissions-Policy, X-Frame-Options, Referrer-Policy)
+- Cache `immutable` 1 año para `/media/*` y `/icons/*`
+- Cache `must-revalidate` para `/sw.js`
+- `Content-Disposition: inline` forzado en CV PDF
 
 ## 📈 Performance Metrics (Production)
 
