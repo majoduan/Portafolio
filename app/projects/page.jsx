@@ -554,7 +554,7 @@ const ProjectRow = React.memo(({ project, index, t }) => {
 
           {/* Overview */}
           <div className="mb-6">
-            <p className="text-slate-600 dark:text-slate-400 text-sm md:text-base leading-relaxed text-justify">
+            <p className="text-slate-600 dark:text-slate-400 text-sm md:text-base leading-relaxed text-pretty hyphens-auto max-w-prose">
               {project.longDescription}
             </p>
           </div>
@@ -583,7 +583,7 @@ const ProjectRow = React.memo(({ project, index, t }) => {
             <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-3">
               {t('projects.techImpl')}
             </h3>
-            <p className="text-slate-600 dark:text-slate-400 text-sm md:text-base leading-relaxed text-justify">
+            <p className="text-slate-600 dark:text-slate-400 text-sm md:text-base leading-relaxed text-pretty hyphens-auto max-w-prose">
               {project.techImpl}
             </p>
           </div>
@@ -613,7 +613,7 @@ export default function ProjectsPage() {
   }, []);
 
   return (
-    <main className="pt-16">
+    <div className="pt-4 md:pt-16">
         {/* Page header */}
         <div className="py-16 relative z-10">
           <div className="max-w-7xl mx-auto px-4">
@@ -631,6 +631,6 @@ export default function ProjectsPage() {
             </React.Fragment>
           ))}
         </div>
-    </main>
+    </div>
   );
 }

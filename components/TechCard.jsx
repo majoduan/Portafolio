@@ -48,9 +48,9 @@ const TechCard = memo(({ tech, index, isMobile, animationState, onMouseEnter, on
           </div>
 
           <div className="flex-1 min-w-0">
-            <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white truncate">
               {tech.name}
-            </h4>
+            </h3>
             <p className="text-xs text-slate-600 dark:text-gray-400 truncate">
               {tech.experience}
             </p>
@@ -87,9 +87,9 @@ const TechCard = memo(({ tech, index, isMobile, animationState, onMouseEnter, on
             </div>
 
             <div className="min-w-0">
-              <h4 className="text-sm lg:text-lg font-bold text-slate-900 dark:text-white transition-colors truncate">
+              <h3 className="text-sm lg:text-lg font-bold text-slate-900 dark:text-white transition-colors truncate">
                 {tech.name}
-              </h4>
+              </h3>
               <p className="text-xs lg:text-sm text-slate-600 dark:text-gray-400 transition-colors break-words">
                 {tech.description}
               </p>

@@ -24,10 +24,15 @@ export default function BootScreenWrapper({ children, footer }) {
   const [splineReady, setSplineReady] = useState(!isHome);
   const [shouldLoadSpline, setShouldLoadSpline] = useState(false);
 
-  // SSR-safe: detect desktop viewport only on client (for Spline preload)
+  // SSR-safe: detect tablet+ viewport + reactivo a resize (rotacion mobile,
+  // resize ventana). matchMedia evita disparos por cada pixel del resize event.
   useEffect(() => {
     if (!isHome) return;
-    setShouldLoadSpline(window.innerWidth >= 768);
+    const mql = window.matchMedia('(min-width: 768px)');
+    setShouldLoadSpline(mql.matches);
+    const handler = (e) => setShouldLoadSpline(e.matches);
+    mql.addEventListener('change', handler);
+    return () => mql.removeEventListener('change', handler);
   }, [isHome]);
 
   // Pre-load Spline JS module during boot screen (home + desktop/tablet only)
@@ -66,7 +71,7 @@ export default function BootScreenWrapper({ children, footer }) {
     <div className={`min-h-screen bg-[var(--bg-primary)] text-slate-900 dark:text-white relative overflow-x-hidden transition-colors duration-300${justBooted ? ' portfolio-fade-in' : ''}`}>
       <ParticleCanvas />
       <NavigationBar />
-      {children}
+      <main id="main">{children}</main>
       {footer}
     </div>
   );
