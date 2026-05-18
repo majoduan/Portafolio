@@ -1,7 +1,15 @@
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
+import bundleAnalyzer from '@next/bundle-analyzer';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+
+// Activado con ANALYZE=true env var. Genera 3 HTML treemaps en .next/analyze/
+// (client, edge, nodejs). Reemplaza el legacy scripts/analyze-bundle.mjs que
+// solo sumaba bytes sin distinguir initial vs lazy chunks.
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+});
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -93,4 +101,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);
