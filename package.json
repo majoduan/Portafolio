@@ -11,10 +11,11 @@
     "start": "next start",
     "lint": "next lint",
     "analyze": "node scripts/analyze-bundle.mjs",
-    "build:analyze": "npm run build && npm run analyze",
+    "build:analyze": "pnpm build && pnpm analyze",
+    "a11y:prepare": "node scripts/copy-axe.mjs",
     "optimize-images": "node scripts/generate-responsive-images.mjs",
     "optimize-posters": "node scripts/optimize-video-posters.mjs",
-    "build:full": "npm run optimize-images && npm run build"
+    "build:full": "pnpm optimize-images && pnpm build"
   },
   "dependencies": {
     "@splinetool/react-spline": "^4.1.0",
@@ -31,6 +32,7 @@
     "@tailwindcss/postcss": "^4.2.2",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
+    "axe-core": "^4.11.4",
     "eslint": "^9.36.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "globals": "^16.4.0",

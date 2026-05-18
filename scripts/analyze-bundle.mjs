@@ -10,7 +10,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const distPath = path.join(__dirname, '../dist');
+// Next.js 15 emite a .next/static/. Antes (Vite) era ../dist.
+const distPath = path.join(__dirname, '../.next/static');
 
 // Colores para terminal
 const colors = {
@@ -58,7 +59,7 @@ function analyzeBundle() {
   console.log('━'.repeat(60));
   
   if (!fs.existsSync(distPath)) {
-    console.log(`${colors.red}❌ Build not found. Run 'npm run build' first.${colors.reset}`);
+    console.log(`${colors.red}❌ Build not found. Run 'pnpm build' first.${colors.reset}`);
     process.exit(1);
   }
   
@@ -68,10 +69,10 @@ function analyzeBundle() {
   const groups = {
     js: files.filter(f => f.ext === '.js'),
     css: files.filter(f => f.ext === '.css'),
-    images: files.filter(f => ['.jpg', '.jpeg', '.png', '.svg', '.webp', '.gif'].includes(f.ext)),
+    images: files.filter(f => ['.jpg', '.jpeg', '.png', '.svg', '.webp', '.gif', '.avif'].includes(f.ext)),
     videos: files.filter(f => f.ext === '.mp4'),
     fonts: files.filter(f => ['.woff', '.woff2', '.ttf', '.eot'].includes(f.ext)),
-    other: files.filter(f => !['.js', '.css', '.jpg', '.jpeg', '.png', '.svg', '.webp', '.gif', '.mp4', '.woff', '.woff2', '.ttf', '.eot'].includes(f.ext))
+    other: files.filter(f => !['.js', '.css', '.jpg', '.jpeg', '.png', '.svg', '.webp', '.gif', '.avif', '.mp4', '.woff', '.woff2', '.ttf', '.eot'].includes(f.ext))
   };
   
   // Calcular totales
@@ -133,13 +134,13 @@ function analyzeBundle() {
   // Check videos
   const largeVideos = groups.videos.filter(f => f.size > 10000000);
   if (largeVideos.length > 0) {
-    warnings.push(`${largeVideos.length} video(s) > 10MB (run optimize-videos.ps1)`);
+    warnings.push(`${largeVideos.length} video(s) > 10MB (re-encode con ffmpeg H.264/CRF 28)`);
   }
-  
-  // Check if WebP is being used
-  const jpgImages = groups.images.filter(f => ['.jpg', '.jpeg'].includes(f.ext));
-  if (jpgImages.length > 0 && !groups.images.some(f => f.ext === '.webp')) {
-    warnings.push(`${jpgImages.length} JPG image(s) not converted to WebP (run optimize-images.mjs)`);
+
+  // Check if AVIF/WebP is being used
+  const jpgImages = groups.images.filter(f => ['.jpg', '.jpeg', '.png'].includes(f.ext));
+  if (jpgImages.length > 0 && !groups.images.some(f => ['.avif', '.webp'].includes(f.ext))) {
+    warnings.push(`${jpgImages.length} JPG/PNG image(s) sin variante AVIF/WebP (run pnpm optimize-images)`);
   }
   
   if (warnings.length === 0) {
@@ -178,9 +179,9 @@ function analyzeBundle() {
   const fcp = jsTotal < 300000 ? '< 1.5s' : jsTotal < 500000 ? '< 2.5s' : '> 2.5s';
   const fcpColor = jsTotal < 300000 ? colors.green : jsTotal < 500000 ? colors.yellow : colors.red;
   
-  console.log(`  FCP (First Contentful Paint)  ${fcpColor}${fcp}${colors.reset}`);
-  console.log(`  LCP (Largest Contentful Paint) ${colors.green}< 2.5s${colors.reset} (with image optimization)`);
-  console.log(`  FID (First Input Delay)        ${colors.green}< 100ms${colors.reset}`);
+  console.log(`  FCP (First Contentful Paint)   ${fcpColor}${fcp}${colors.reset}`);
+  console.log(`  LCP (Largest Contentful Paint) ${colors.green}< 2.5s${colors.reset} (con AVIF + lazy)`);
+  console.log(`  INP (Interaction to Next Paint) ${colors.green}< 200ms${colors.reset} (reemplaza FID desde 2024)`);
   console.log(`  CLS (Cumulative Layout Shift)  ${colors.green}< 0.1${colors.reset}`);
   
   console.log(`\n${colors.bright}${colors.green}✨ Analysis Complete!${colors.reset}\n`);
