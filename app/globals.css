@@ -1,6 +1,14 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Sombra firma del proyecto — usada en botones sociales, CV, dots, cards.
+   Antes repetida como shadow-[0_4px_4px_rgba(0,0,0,0.25)] en 14+ lugares.
+   Centralizada como Tailwind v4 @utility. Ref:
+   https://tailwindcss.com/docs/adding-custom-styles#adding-custom-utilities */
+@utility shadow-card {
+  box-shadow: 0 4px 4px rgb(0 0 0 / 0.25);
+}
+
 @theme {
   --default-font-family: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 
@@ -199,12 +207,31 @@ body {
   }
 }
 
-/* Configuración para Spline */
+/* Configuración para Spline.
+   Antes height: 37.5rem fijo -> en viewports 1920+ la escena quedaba 720x720
+   centrada con whitespace muerto. aspect-ratio 1/1 hace que escale con el
+   ancho disponible. max-height limita en pantallas ultra-altas. */
 .spline-container {
   position: relative;
   overflow: hidden;
   width: 100%;
-  height: 37.5rem;
+  aspect-ratio: 1 / 1;
+  max-height: min(80vh, 50rem);
+}
+
+@media (min-width: 1440px) {
+  .spline-container {
+    max-height: 60rem;
+  }
+}
+
+/* Pausa el painting del canvas Spline cuando hero esta fuera del viewport.
+   content-visibility:hidden hace que el browser skip layout/paint del subtree
+   manteniendo el DOM (no se re-monta Spline al volver). contain-intrinsic-size
+   preserva el espacio reservado para evitar layout shift al alternar. */
+.spline-paused {
+  content-visibility: hidden;
+  contain-intrinsic-size: auto 600px;
 }
 
 /* Ocultar elementos adicionales que puedan aparecer */
@@ -264,6 +291,8 @@ html:not(.dark) .spline-container > div {
    Driven by useReversibleInView (IntersectionObserver) toggling
    data-revealed on each card; transitionDelay is set inline per index. */
 .timeline-card {
+  position: relative;
+  z-index: 10;
   opacity: 0;
   transform: translateY(28px);
   transition: opacity 550ms cubic-bezier(0.4, 0, 0.2, 1),
@@ -318,7 +347,9 @@ html:not(.dark) .spline-container > div {
   }
 }
 
-/* Rotating title slide animations */
+/* Rotating title slide animations.
+   Doble-render: durante 'transitioning' renderizamos leaving + incoming
+   superpuestos en grid 1x1 → ambos animan al mismo tiempo, sin dead frames. */
 @keyframes titleSlideOutLeft {
   from { transform: translateX(0); }
   to   { transform: translateX(-110%); }
@@ -328,12 +359,20 @@ html:not(.dark) .spline-container > div {
   to   { transform: translateX(0); }
 }
 
-.rotating-title-exiting {
+.rotating-title-stack {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.rotating-title-stack > h1 {
+  grid-area: 1 / 1; /* superponer leaving + incoming en la misma celda */
+}
+
+.rotating-title-leaving {
   animation: titleSlideOutLeft 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   will-change: transform;
   backface-visibility: hidden;
 }
-.rotating-title-entering {
+.rotating-title-incoming {
   animation: titleSlideInRight 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   will-change: transform;
   backface-visibility: hidden;
@@ -1208,6 +1247,9 @@ section.integrations-marquee { contain-intrinsic-size: auto 220px; }
   /* Prevenir el scroll bounce en iOS cuando se navega */
   body {
     overscroll-behavior-y: contain;
+    /* Padding-bottom para que el footer/contenido no quede oculto bajo
+       el nav inferior fijo (h-14 = 3.5rem + safe-area inset iOS) */
+    padding-bottom: calc(3.5rem + env(safe-area-inset-bottom));
   }
   
   /* Asegurar que los iconos sean claramente visibles */
@@ -1242,52 +1284,6 @@ section.integrations-marquee { contain-intrinsic-size: auto 220px; }
   }
 }
 
-/* ==================== FLOATING ACTION BUTTONS (MOBILE) ==================== */
-/* Botones flotantes de tema e idioma en móvil */
-@media (max-width: 767px) {
-  /* Animación de entrada para los botones flotantes */
-  @keyframes floatingButtonsIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  /* Aplicar animación a los botones flotantes */
-  .fixed.bottom-6.left-4 {
-    animation: floatingButtonsIn 0.5s ease-out 0.3s both;
-  }
-  
-  /* Efecto de backdrop blur para los botones */
-  .fixed.bottom-6.left-4 button {
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-  }
-  
-  /* Sombra mejorada para modo oscuro */
-  .dark .fixed.bottom-6.left-4 button {
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
-  }
-  
-  /* Sombra mejorada para modo claro */
-  html:not(.dark) .fixed.bottom-6.left-4 button {
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  }
-  
-  /* Hover mejorado */
-  .fixed.bottom-6.left-4 button:hover {
-    box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -2px rgba(0, 0, 0, 0.1);
-  }
-  
-  .dark .fixed.bottom-6.left-4 button:hover {
-    box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -2px rgba(0, 0, 0, 0.4);
-  }
-}
-
 /* ==================== CIRCUIT BOOT SCREEN ==================== */
 
 /* Container — black background, full viewport */
@@ -1300,7 +1296,7 @@ section.integrations-marquee { contain-intrinsic-size: auto 220px; }
 }
 
 .cb--visible { opacity: 1; }
-.cb--fade-out { animation: cbFadeOut 1.5s ease-in-out forwards; }
+.cb--fade-out { animation: cbFadeOut 0.8s ease-in-out forwards; }
 
 @keyframes cbFadeOut {
   from { opacity: 1; }
@@ -1447,4 +1443,38 @@ section.integrations-marquee { contain-intrinsic-size: auto 220px; }
   .integrations-track {
     animation-duration: 35s;
   }
+}
+
+/* ─── Global focus-visible — WCAG 2.4.7 + 1.4.11 ─────────────────────
+   Keyboard-only focus ring. Mouse clicks don't trigger :focus-visible,
+   so this only appears for keyboard nav (and screen readers when needed).
+   Inputs y textareas conservan su patron custom (border + bg) en .contact-form. */
+:where(a, button, [role="button"], summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent-from-strong);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.dark :where(a, button, [role="button"], summary, [tabindex]):focus-visible {
+  outline-color: #ffffff;
+}
+
+/* swap-btn excepcion: usa box-shadow para no romper su clip-path overflow */
+.swap-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-glow), 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+/* ─── Language toggle text (desktop nav) — hover scale-only ─────────
+   Default: texto solido en color del tema (heredado del button padre).
+   Hover (vía group/toggle del button padre): solo scale(1.1) — sin
+   cambio de color ni text-stroke. El button padre tiene tamano fijo
+   w-11 h-11, transform-origin center -> sin layout shift. */
+.nav-toggle-text {
+  display: inline-block;
+  transform-origin: center;
+  transition: transform 300ms ease;
+}
+.group\/toggle:hover .nav-toggle-text {
+  transform: scale(1.1);
 }
