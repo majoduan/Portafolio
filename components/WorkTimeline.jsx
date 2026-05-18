@@ -93,7 +93,7 @@ function TimelineCard({ item, index, isLast, t, registerLogoRef }) {
             {bullets.map((bullet, i) => (
               <li key={i} className="flex gap-2.5 items-start pl-3">
                 <span className="mt-2 w-1.5 h-1.5 rounded-full bg-black dark:bg-white flex-shrink-0" />
-                <span className="text-justify">{bullet}</span>
+                <span className="text-pretty hyphens-auto">{bullet}</span>
               </li>
             ))}
           </ul>
@@ -138,21 +138,41 @@ export default function WorkTimeline({ items, t }) {
   const computePaths = useCallback(() => {
     const container = containerRef.current;
     if (!container) return;
-    const cRect = container.getBoundingClientRect();
 
-    // Helper: get logo position relative to container
+    // Container size sin transforms — usamos offsetWidth/offsetHeight para
+    // que el calculo del path no dependa del estado transform (reveal animation).
+    const containerW = container.offsetWidth;
+    const containerH = container.offsetHeight;
+
+    // Helper: posicion del logo relativa al container, ignorando transforms.
+    // getBoundingClientRect() INCLUYE transforms — eso causa mediciones erroneas
+    // mientras el reveal animation (`transform: translateY(28px) -> 0`) esta
+    // en transicion o pendiente. offsetTop/offsetLeft son layout-only.
     const prefix = isMdRef.current ? 'd' : 'm';
     const getPos = (itemIdx, logoIdx) => {
       const el = logoRefs.current[`${prefix}-${itemIdx}-${logoIdx}`];
       if (!el) return null;
-      const r = el.getBoundingClientRect();
+
+      // Walk offsetParent chain hasta containerRef sumando offsets
+      let top = 0;
+      let left = 0;
+      let cur = el;
+      while (cur && cur !== container) {
+        top += cur.offsetTop;
+        left += cur.offsetLeft;
+        cur = cur.offsetParent;
+      }
+      if (cur !== container) return null; // container no esta en la chain
+
+      const w = el.offsetWidth;
+      const h = el.offsetHeight;
       return {
-        cx: +(r.left + r.width / 2 - cRect.left).toFixed(1),
-        cy: +(r.top + r.height / 2 - cRect.top).toFixed(1),
-        top: +(r.top - cRect.top).toFixed(1),
-        bottom: +(r.bottom - cRect.top).toFixed(1),
-        left: +(r.left - cRect.left).toFixed(1),
-        right: +(r.right - cRect.left).toFixed(1),
+        cx: +(left + w / 2).toFixed(1),
+        cy: +(top + h / 2).toFixed(1),
+        top: +top.toFixed(1),
+        bottom: +(top + h).toFixed(1),
+        left: +left.toFixed(1),
+        right: +(left + w).toFixed(1),
       };
     };
 
@@ -207,7 +227,7 @@ export default function WorkTimeline({ items, t }) {
       // ── Mobile: serpentine ──
       const pad = 12;
       const r = 10;
-      const right = cRect.width - pad;
+      const right = containerW - pad;
       const left = pad;
       const centers = items.map((_, i) => getPos(i, 0)).filter(Boolean);
 
@@ -286,7 +306,6 @@ export default function WorkTimeline({ items, t }) {
               // alpha = fraction of total scroll dedicated to horizontals.
               // Higher = horizontals paint slower, verticals catch up faster.
               const alpha = 0.28;
-              const containerH = cRect.height;
               const vBudget = (1 - alpha) * containerH;
               const hBudget = alpha * containerH;
 
@@ -310,7 +329,7 @@ export default function WorkTimeline({ items, t }) {
       });
       pathLengths.current = newLengths;
       pathSamples.current = newSamples;
-      containerHeightRef.current = cRect.height;
+      containerHeightRef.current = containerH;
       setReady(true);
       window.dispatchEvent(new Event('scroll'));
     });
