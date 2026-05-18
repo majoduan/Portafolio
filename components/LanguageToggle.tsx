@@ -5,9 +5,7 @@ import { AppContext } from '../contexts/AppContext';
 /**
  * LanguageToggle — sin burbuja.
  * Default: texto EN/ES solido en color del tema.
- * Hover: color -> transparent + -webkit-text-stroke aplicado al cuerpo del
- * texto (outline tight, no burbuja). Color del outline = --text-primary, que
- * ya es negro en light y blanco en dark.
+ * Hover: scale(1.1) feedback (sin cambio de color/contorno).
  */
 const LanguageToggle = memo(() => {
   const { language, toggleLanguage } = useContext(AppContext);
