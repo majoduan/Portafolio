@@ -311,6 +311,9 @@ const HUDBootScreen = memo(({ onComplete, splineReady = false }) => {
   }, []);
 
   // Progress timer
+  // Curva acelerada: 2%/50ms en fase 0-85% (2.1s) en lugar de 1%/50ms (4.25s).
+  // 85-92% gated en splineReady (preload del bundle). Fade-out 800ms (antes 1500ms).
+  // Tiempo percibido total: ~3.5s vs ~7s anteriores, sin tocar el contrato de preload.
   useEffect(() => {
     if (prefersReduced) {
       setProgress(100);
@@ -319,18 +322,18 @@ const HUDBootScreen = memo(({ onComplete, splineReady = false }) => {
       return () => clearTimeout(t);
     }
     const startTime = Date.now();
-    const MAX_WAIT = 15000;
+    const MAX_WAIT = 15000; // failsafe — no deberia disparar con red decente
     const interval = setInterval(() => {
       setProgress(prev => {
         if (prev >= 100) {
           clearInterval(interval);
           setFadeState('fade-out');
-          setTimeout(() => onComplete(), 1500);
+          setTimeout(() => onComplete(), 800);
           return 100;
         }
-        if (prev < 85) return prev + 1;
+        if (prev < 85) return prev + 2;
         const elapsed = Date.now() - startTime;
-        if (splineReady || elapsed > MAX_WAIT) return prev + 1;
+        if (splineReady || elapsed > MAX_WAIT) return prev + 2;
         if (prev < 92) return prev + 0.2;
         return prev;
       });
@@ -338,9 +341,13 @@ const HUDBootScreen = memo(({ onComplete, splineReady = false }) => {
     return () => clearInterval(interval);
   }, [onComplete, splineReady, prefersReduced]);
 
-  // Orb activation — flicker then ramp up
+  // Orb activation — flicker then ramp up.
+  // Con la curva acelerada (2%/50ms), bajamos threshold a 35% para que el orbe
+  // tenga tiempo de hacer su flicker+ramp antes del fade-out (~3.5s total).
+  // Antes: threshold 55% (t=1.4s) + flicker 1200ms + ramp 1000ms = orbe full a t=3.6s.
+  // Ahora: threshold 35% (t=0.9s) + flicker 700ms + ramp 500ms = orbe full a t=2.1s.
   useEffect(() => {
-    if (progress >= 55 && !orbActive) setOrbActive(true);
+    if (progress >= 35 && !orbActive) setOrbActive(true);
   }, [progress, orbActive]);
 
   useEffect(() => {
@@ -349,8 +356,8 @@ const HUDBootScreen = memo(({ onComplete, splineReady = false }) => {
     // Phase 1: flicker (rapid random intensity, 0-0.4)
     let frame;
     let elapsed = 0;
-    const flickerDuration = 1200; // ms
-    const rampDuration = 1000;   // ms
+    const flickerDuration = 700; // ms (antes 1200)
+    const rampDuration = 500;    // ms (antes 1000)
     let lastTime = performance.now();
 
     const animate = (now) => {
