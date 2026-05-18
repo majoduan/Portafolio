@@ -107,7 +107,7 @@ const ProjectCard = React.memo(({ project, onProjectClick }) => {
               <div key={link.type} className="group/btn relative">
                 <button
                   onClick={(e) => handleLinkClick(e, link)}
-                  className="w-10 h-10 rounded-full bg-[var(--btn-primary)] flex items-center justify-center text-white hover:scale-110 hover:shadow-lg transition-all duration-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)]"
+                  className="w-10 h-10 rounded-full bg-[var(--btn-primary)] flex items-center justify-center text-white hover:scale-110 hover:shadow-lg transition-all duration-300 shadow-card"
                   aria-label={label}
                 >
                   {icon}
@@ -258,7 +258,7 @@ const ProjectsSection = React.memo(() => {
                       <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-3">
                         {t('projects.modalTitle')}
                       </h4>
-                      <p className="text-slate-600 dark:text-slate-400 text-sm md:text-base leading-relaxed text-justify">
+                      <p className="text-slate-600 dark:text-slate-400 text-sm md:text-base leading-relaxed text-pretty hyphens-auto max-w-prose">
                         {selectedProject.summary}
                       </p>
                     </div>

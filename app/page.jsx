@@ -19,9 +19,16 @@ const ContactSection = dynamic(() => import('../components/sections/ContactSecti
 export default function HomePage() {
   const [shouldLoadSpline, setShouldLoadSpline] = useState(false);
 
-  // SSR-safe: detect desktop viewport only on client
+  // SSR-safe: detect tablet+/desktop viewport on client + reactivo a resize.
+  // matchMedia es mas eficiente que resize event (no se dispara en cada pixel,
+  // solo al cruzar el breakpoint). Se sincroniza correctamente al rotar
+  // dispositivo (portrait <-> landscape) o redimensionar ventana.
   useEffect(() => {
-    setShouldLoadSpline(window.innerWidth >= 768);
+    const mql = window.matchMedia('(min-width: 768px)');
+    setShouldLoadSpline(mql.matches);
+    const handler = (e) => setShouldLoadSpline(e.matches);
+    mql.addEventListener('change', handler);
+    return () => mql.removeEventListener('change', handler);
   }, []);
 
   return (

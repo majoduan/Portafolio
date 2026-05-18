@@ -132,7 +132,7 @@ const CertificatesSection = React.memo(() => {
               return (
               <div
                 key={i}
-                className="certificate-card flex-shrink-0 w-full md:w-[calc((100%-24px)/2)] lg:w-[calc((100%-48px)/3)] bg-white/90 dark:bg-[var(--bg-secondary)] backdrop-blur-lg rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50 hover:border-[var(--btn-primary)] transition-all duration-300 transform hover:scale-105 shadow-[0_4px_4px_rgba(0,0,0,0.25)] hover:shadow-xl dark:hover:shadow-2xl group cursor-pointer"
+                className="certificate-card flex-shrink-0 w-full md:w-[calc((100%-24px)/2)] lg:w-[calc((100%-48px)/3)] bg-white/90 dark:bg-[var(--bg-secondary)] backdrop-blur-lg rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50 hover:border-[var(--btn-primary)] transition-all duration-300 transform hover:scale-105 shadow-card hover:shadow-xl dark:hover:shadow-2xl group cursor-pointer"
                 onClick={() => {
                   setCurrentCertificateIndex(i);
                   setIsCertificateCarouselPaused(true);
@@ -180,7 +180,7 @@ const CertificatesSection = React.memo(() => {
                     </h3>
                     {/* Org — slides up on hover */}
                     <div className="flex items-center gap-2 text-white/0 group-hover:text-white/80 mt-1 max-h-0 group-hover:max-h-10 overflow-hidden transition-all duration-400 ease-out">
-                      <div className="w-2 h-2 bg-[var(--btn-primary)] rounded-full flex-shrink-0 shadow-[0_4px_4px_rgba(0,0,0,0.25)]"></div>
+                      <div className="w-2 h-2 bg-[var(--btn-primary)] rounded-full flex-shrink-0 shadow-card"></div>
                       <p className="text-sm leading-relaxed">{cert.org}</p>
                     </div>
                   </div>
@@ -210,7 +210,7 @@ const CertificatesSection = React.memo(() => {
                   }}
                   className={`transition-all duration-300 rounded-full ${
                     isActive
-                      ? 'w-8 h-2 bg-[var(--btn-primary)] shadow-[0_4px_4px_rgba(0,0,0,0.25)]'
+                      ? 'w-8 h-2 bg-[var(--btn-primary)] shadow-card'
                       : 'w-2 h-2 bg-slate-300 dark:bg-[var(--border-color)] hover:bg-slate-400 dark:hover:bg-[var(--bg-elevated)]'
                   }`}
                   aria-label={`Ver página ${pageIndex + 1}`}

@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect, useRef, useMemo, useCallback, useContext, Suspense, Component } from 'react';
-import { Mail, Linkedin, Github, Code, Briefcase } from 'lucide-react';
+import { Mail, Linkedin, Github, Briefcase, CheckCircle2 } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useReversibleInView } from '../../hooks/useReversibleInView';
 import { useCountUp } from '../../hooks/useCountUp';
@@ -42,6 +42,10 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
   const { theme } = useContext(AppContext);
   const [typewriterText, setTypewriterText] = useState('');
   const [isSplineReady, setIsSplineReady] = useState(false);
+  const [cvDownloaded, setCvDownloaded] = useState(false);
+  const [isHeroInView, setIsHeroInView] = useState(true);
+  const heroSectionRef = useRef(null);
+  const cvFeedbackTimer = useRef(null);
   const splineRef = useRef(null);
   const splineLoadingRef = useRef(false);
   const themeRef = useRef(theme);
@@ -116,10 +120,34 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
     };
   }, []);
 
-  // Funcion para manejar el movimiento del mouse sobre Spline - optimizada
-  const onSplineMouseMove = useCallback(() => {
-    // Spline maneja automaticamente el movimiento del mouse si esta configurado en la escena
+  // CV download feedback: muestra checkmark por 1.5s tras click
+  const onCvDownload = useCallback(() => {
+    setCvDownloaded(true);
+    if (cvFeedbackTimer.current) clearTimeout(cvFeedbackTimer.current);
+    cvFeedbackTimer.current = setTimeout(() => setCvDownloaded(false), 1500);
   }, []);
+
+  // Cleanup del timer de feedback
+  useEffect(() => () => {
+    if (cvFeedbackTimer.current) clearTimeout(cvFeedbackTimer.current);
+  }, []);
+
+  // Pausar el painting del canvas Spline cuando hero esta fuera del viewport.
+  // Usamos content-visibility: hidden (W3C) via clase CSS toggleada por
+  // IntersectionObserver. El browser pausa style/layout/paint del subtree,
+  // lo cual libera el GPU/CPU mientras el usuario scrollea por otras secciones.
+  // rootMargin negativo para que se pause un poco antes de salir totalmente.
+  useEffect(() => {
+    if (!shouldLoadSpline) return;
+    const section = heroSectionRef.current;
+    if (!section) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsHeroInView(entry.isIntersecting),
+      { threshold: 0, rootMargin: '50px 0px 50px 0px' }
+    );
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, [shouldLoadSpline]);
 
   // Asegurar que el canvas de Spline capture eventos del mouse
   useEffect(() => {
@@ -136,9 +164,9 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
   }, []);
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center relative pt-16 bg-transparent transition-colors duration-300 z-10">
+    <section ref={heroSectionRef} id="home" className="min-h-screen flex items-center justify-center relative pt-4 md:pt-16 bg-transparent transition-colors duration-300 z-10">
       <div className="max-w-7xl mx-auto px-4 w-full relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 items-center">
           {/* Contenido de texto - Izquierda */}
           <div className="text-center lg:text-left">
             <p className="text-2xl md:text-3xl text-slate-700 dark:text-slate-100 mb-2 font-medium transition-colors duration-300">
@@ -147,7 +175,7 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
             <h1 className="hero-title text-display text-black dark:text-white mb-6">
               {t('hero.title')}
             </h1>
-            <p className="text-body-lg text-slate-600 dark:text-slate-100 max-w-2xl mx-auto lg:mx-0 mb-8 min-h-[80px] text-justify transition-colors duration-300">
+            <p className="text-body-lg text-slate-600 dark:text-slate-100 max-w-prose mx-auto lg:mx-0 mb-8 min-h-[80px] text-pretty hyphens-auto transition-colors duration-300">
               {typewriterText}
               <span className="animate-pulse">|</span>
             </p>
@@ -158,6 +186,8 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
                 href="/docs/Mateo_Duenas_CV.pdf"
                 download="Mateo_Dueñas_CV.pdf"
                 className="swap-btn"
+                onClick={onCvDownload}
+                aria-label={cvDownloaded ? 'CV downloaded' : t('hero.downloadCV')}
                 ref={(el) => {
                   if (el) {
                     const text = el.querySelector('.swap-btn-text');
@@ -168,7 +198,11 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
               >
                 <span className="swap-btn-bg" />
                 <span className="swap-btn-icon">
-                  <Briefcase className="w-5 h-5 text-white" />
+                  {cvDownloaded ? (
+                    <CheckCircle2 className="w-5 h-5 text-white" aria-hidden="true" />
+                  ) : (
+                    <Briefcase className="w-5 h-5 text-white" aria-hidden="true" />
+                  )}
                 </span>
                 <span className="swap-btn-text">
                   {t('hero.downloadCV')}
@@ -181,23 +215,26 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
                   href="https://www.linkedin.com/in/mateodue/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 rounded-full border-2 border-black dark:border-white flex items-center justify-center transition-all duration-300 transform hover:scale-105 hover:bg-black dark:hover:bg-white group/icon shadow-[0_4px_4px_rgba(0,0,0,0.25)]"
+                  aria-label="LinkedIn profile"
+                  className="w-12 h-12 rounded-full border-2 border-black dark:border-white flex items-center justify-center transition-all duration-300 transform hover:scale-105 hover:bg-black dark:hover:bg-white group/icon shadow-card"
                 >
-                  <Linkedin className="w-5 h-5 text-black dark:text-white group-hover/icon:text-white dark:group-hover/icon:text-black" />
+                  <Linkedin className="w-5 h-5 text-black dark:text-white group-hover/icon:text-white dark:group-hover/icon:text-black" aria-hidden="true" />
                 </a>
                 <a
                   href="https://github.com/mateo-dueñas"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 rounded-full border-2 border-black dark:border-white flex items-center justify-center transition-all duration-300 transform hover:scale-105 hover:bg-black dark:hover:bg-white group/icon shadow-[0_4px_4px_rgba(0,0,0,0.25)]"
+                  aria-label="GitHub profile"
+                  className="w-12 h-12 rounded-full border-2 border-black dark:border-white flex items-center justify-center transition-all duration-300 transform hover:scale-105 hover:bg-black dark:hover:bg-white group/icon shadow-card"
                 >
-                  <Github className="w-5 h-5 text-black dark:text-white group-hover/icon:text-white dark:group-hover/icon:text-black" />
+                  <Github className="w-5 h-5 text-black dark:text-white group-hover/icon:text-white dark:group-hover/icon:text-black" aria-hidden="true" />
                 </a>
                 <a
                   href="mailto:mateo.duenas@epn.edu.ec"
-                  className="w-12 h-12 rounded-full border-2 border-black dark:border-white flex items-center justify-center transition-all duration-300 transform hover:scale-105 hover:bg-black dark:hover:bg-white group/icon shadow-[0_4px_4px_rgba(0,0,0,0.25)]"
+                  aria-label="Email Mateo"
+                  className="w-12 h-12 rounded-full border-2 border-black dark:border-white flex items-center justify-center transition-all duration-300 transform hover:scale-105 hover:bg-black dark:hover:bg-white group/icon shadow-card"
                 >
-                  <Mail className="w-5 h-5 text-black dark:text-white group-hover/icon:text-white dark:group-hover/icon:text-black" />
+                  <Mail className="w-5 h-5 text-black dark:text-white group-hover/icon:text-white dark:group-hover/icon:text-black" aria-hidden="true" />
                 </a>
               </div>
             </div>
@@ -214,49 +251,32 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
             </div>
           </div>
 
-          {/* Animacion 3D de Spline - Desktop/tablet only, fallback CSS en movil */}
-          <div className="relative h-[25rem] lg:h-[37.5rem] w-full overflow-hidden rounded-2xl mt-8 lg:mt-0">
-            {shouldLoadSpline ? (
-              <SplineErrorBoundary fallback={
-                <div className="relative w-full h-full">
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-pink-500/20 animate-pulse" />
-                  <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-blue-500/30 rounded-full blur-3xl animate-pulse" />
-                  <div className="absolute bottom-1/4 right-1/4 w-24 h-24 bg-purple-500/30 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}} />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Code className="w-16 h-16 text-blue-400/50" />
-                  </div>
-                </div>
-              }>
+          {/* Animacion 3D de Spline - md+ (tablet/desktop).
+              Sin fallback visual: si Spline falla o estamos en mobile, no aparece nada.
+              `hidden md:block`: oculto en mobile (<768) -> sin aire vacio.
+              Sin altura fija: .spline-container interno usa aspect-ratio 1/1. */}
+          {shouldLoadSpline && (
+            <div className={`hidden md:block relative w-full overflow-hidden rounded-2xl${isHeroInView ? '' : ' spline-paused'}`}>
+              <SplineErrorBoundary fallback={null}>
                 <div className="relative spline-container">
                   <div className="w-[120%] h-[120%] -mt-[10%] -ml-[10%] -mb-[10%] -mr-[10%]">
                     <Suspense fallback={
                       <div className="w-full h-full flex items-center justify-center">
-                        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-[var(--accent-from-strong)]"></div>
+                        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-black/40 dark:border-white/40" aria-label="Loading 3D scene" role="status"></div>
                       </div>
                     }>
                       <Spline
                         key="spline-scene"
                         scene="https://prod.spline.design/CTzlK88G4nA0eFUO/scene.splinecode"
                         onLoad={onSplineLoad}
-                        onMouseMove={onSplineMouseMove}
                         className="w-full h-full"
                       />
                     </Suspense>
                   </div>
                 </div>
               </SplineErrorBoundary>
-            ) : (
-              /* Fallback visual CSS puro para movil (0KB JS extra) */
-              <div className="relative w-full h-full">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-pink-500/20 animate-pulse" />
-                <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-blue-500/30 rounded-full blur-3xl animate-pulse" />
-                <div className="absolute bottom-1/4 right-1/4 w-24 h-24 bg-purple-500/30 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}} />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <Code className="w-16 h-16 text-blue-400/50" />
-                </div>
-              </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </section>
