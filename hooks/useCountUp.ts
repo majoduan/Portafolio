@@ -1,12 +1,24 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 
-const ease = (t) => t;
+interface UseCountUpOptions {
+  end: number;
+  duration?: number;
+  enabled?: boolean;
+  start?: number;
+}
 
-export function useCountUp({ end, duration = 1800, enabled = true, start = 0 }) {
-  const [value, setValue] = useState(start);
-  const rafRef = useRef(null);
-  const startTimeRef = useRef(null);
+const ease = (t: number): number => t;
+
+export function useCountUp({
+  end,
+  duration = 1800,
+  enabled = true,
+  start = 0,
+}: UseCountUpOptions): number {
+  const [value, setValue] = useState<number>(start);
+  const rafRef = useRef<number | null>(null);
+  const startTimeRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -21,7 +33,7 @@ export function useCountUp({ end, duration = 1800, enabled = true, start = 0 }) 
     setValue(start);
     startTimeRef.current = null;
 
-    const tick = (ts) => {
+    const tick = (ts: number) => {
       if (startTimeRef.current === null) startTimeRef.current = ts;
       const elapsed = ts - startTimeRef.current;
       const progress = Math.min(elapsed / duration, 1);
