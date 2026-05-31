@@ -421,7 +421,7 @@ export default function WorkTimeline({ items, t }) {
   return (
     <section className="py-10 relative z-10 bg-transparent transition-colors duration-300">
       <div className="max-w-4xl mx-auto px-4">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 pb-2 leading-tight text-black dark:text-white">
+        <h2 className="title-glow text-4xl md:text-5xl font-bold text-center mb-12 pb-2 leading-tight text-black dark:text-white">
           {t('about.experience.title')}
         </h2>
 

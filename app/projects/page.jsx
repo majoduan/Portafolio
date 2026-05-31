@@ -617,7 +617,7 @@ export default function ProjectsPage() {
         {/* Page header */}
         <div className="py-16 relative z-10">
           <div className="max-w-7xl mx-auto px-4">
-            <h1 className="text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight text-black dark:text-white">
+            <h1 className="title-glow text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight text-black dark:text-white">
               {t('projects.pageTitle')}
             </h1>
           </div>

@@ -96,6 +96,15 @@ html {
   --accent-blue-alpha-30: rgba(99, 102, 241, 0.3);
   --accent-blue-alpha-50: rgba(99, 102, 241, 0.5);
   --accent-blue-alpha-70: rgba(99, 102, 241, 0.7);
+
+  /* Galaxy fallback (Spline) — modo oscuro: tonos luminosos que brillan sobre
+     el fondo #171717. Núcleo blanco-dorado, brazos violeta/teal, estrellas
+     blanco-azuladas. Consumidas por components/GalaxyFallback.jsx. */
+  --galaxy-core:  rgba(255, 247, 230, 0.95);   /* núcleo blanco-dorado cálido */
+  --galaxy-arm-1: rgba(168, 85, 247, 0.55);    /* nebulosa violeta */
+  --galaxy-arm-2: rgba(45, 212, 191, 0.45);    /* nebulosa teal */
+  --galaxy-star:  rgba(226, 240, 255, 0.90);   /* estrellas blanco-azul */
+  --galaxy-haze:  rgba(96, 165, 250, 0.18);    /* halo exterior azul */
 }
 
 html:not(.dark) {
@@ -141,6 +150,16 @@ html:not(.dark) {
   --accent-bg-subtle: rgba(239, 68, 68, 0.1);
   --accent-bg-muted: rgba(239, 68, 68, 0.3);
   --tag-glow-color: rgba(220, 5, 0, 0.35);
+
+  /* Galaxy fallback (Spline) — modo claro: el fondo #f8fafc es casi blanco, así
+     que los tonos luminosos desaparecerían. Teoría de color → usamos hues más
+     oscuros y saturados (ámbar profundo, índigo, teal oscuro, estrellas navy)
+     para que la espiral tenga contraste sobre el fondo claro. */
+  --galaxy-core:  rgba(245, 158, 11, 0.95);    /* núcleo ámbar profundo */
+  --galaxy-arm-1: rgba(67, 56, 202, 0.58);     /* índigo profundo #4338ca */
+  --galaxy-arm-2: rgba(244, 63, 94, 0.55);     /* coral/rosa-rojo #f43f5e */
+  --galaxy-star:  rgba(30, 41, 59, 0.85);      /* estrellas navy/slate */
+  --galaxy-haze:  rgba(67, 56, 202, 0.13);     /* halo índigo suave */
 }
 
 /* Fondo con transición */
@@ -334,9 +353,27 @@ html:not(.dark) .spline-container > div {
   100% { color: white; }
 }
 
-/* Hero title — usa la utility text-display de @theme; aquí solo extras visuales */
+/* Drop-shadow (modo claro) + drop-light/glow (modo oscuro) — compartido por
+   TODOS los títulos del sitio (hero, secciones, about, projects) vía .title-glow.
+   En claro: sombra negra direccional sutil. En oscuro: esa sombra es invisible
+   sobre el fondo #171717, así que la sustituimos por un halo de luz blanca
+   (técnica oficial MDN para glow: text-shadow con offset 0 0 + blur, en capas
+   para un falloff suave). Ref: https://developer.mozilla.org/en-US/docs/Web/CSS/text-shadow
+   .hero-title se incluye en los mismos selectores para no tocar su markup. */
+.title-glow,
 .hero-title {
   text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.dark .title-glow,
+.dark .hero-title {
+  text-shadow:
+    0 0 14px rgba(255, 255, 255, 0.35),
+    0 0 36px rgba(255, 255, 255, 0.18);
+}
+
+/* Hero title — layout específico (el glow lo aporta el bloque .title-glow). */
+.hero-title {
   overflow-wrap: break-word;
   max-width: 100%;
 }
@@ -344,6 +381,24 @@ html:not(.dark) .spline-container > div {
 @media (min-width: 1024px) {
   html[lang="es"] .hero-title {
     font-size: clamp(3.5rem, 6.5vw, 8rem);
+  }
+}
+
+/* Galaxy fallback — rotación muy lenta sobre su propio eje (~140s/vuelta).
+   Se desactiva con prefers-reduced-motion. La usa el <g> interno del SVG en
+   components/GalaxyFallback.jsx. */
+@keyframes galaxyRotate {
+  to { transform: rotate(360deg); }
+}
+.galaxy-spin {
+  transform-box: fill-box;       /* rota alrededor de su propia caja, no del viewport */
+  transform-origin: center;
+  animation: galaxyRotate 140s linear infinite;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .galaxy-spin {
+    animation: none;
   }
 }
 

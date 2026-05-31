@@ -171,7 +171,7 @@ const ProjectsSection = React.memo(() => {
     <>
       <section ref={projectsSectionRef} id="projects" className="py-20 md:py-24 relative z-10 bg-transparent transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 mb-12">
-          <h2 className="text-h2 font-bold text-center mb-4 pb-2 text-black dark:text-white">
+          <h2 className="title-glow text-h2 font-bold text-center mb-4 pb-2 text-black dark:text-white">
             {t('projects.title')}
           </h2>
         </div>

@@ -95,7 +95,7 @@ export default function AboutPage() {
       {/* ── SECTION 3: Achievement Cards Education ── */}
       <section className="py-20 relative z-10 bg-transparent transition-colors duration-300">
         <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 pb-2 leading-tight text-black dark:text-white">
+          <h2 className="title-glow text-4xl md:text-5xl font-bold text-center mb-12 pb-2 leading-tight text-black dark:text-white">
             {t('about.education.title')}
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-[11fr_9fr] gap-10 items-stretch">

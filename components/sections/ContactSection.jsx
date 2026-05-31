@@ -15,7 +15,7 @@ const ContactSection = React.memo(() => {
         <div className="max-w-7xl mx-auto px-4">
           {/* Section Title */}
           <div className="text-center mb-8 md:mb-12 lg:mb-16">
-            <h2 className="text-h2 font-bold mb-4 text-black dark:text-white">
+            <h2 className="title-glow text-h2 font-bold mb-4 text-black dark:text-white">
               {t('contact.title')}
             </h2>
             <p className="text-slate-600 dark:text-slate-300 text-base md:text-lg lg:text-xl max-w-2xl mx-auto px-4">

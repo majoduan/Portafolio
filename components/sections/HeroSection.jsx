@@ -5,6 +5,7 @@ import { useTranslation } from '../../hooks/useTranslation';
 import { useReversibleInView } from '../../hooks/useReversibleInView';
 import { useCountUp } from '../../hooks/useCountUp';
 import { AppContext } from '../../contexts/AppContext';
+import GalaxyFallback from '../GalaxyFallback';
 
 // Dynamic import Spline with SSR disabled for Next.js
 import dynamic from 'next/dynamic';
@@ -42,12 +43,14 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
   const { theme } = useContext(AppContext);
   const [typewriterText, setTypewriterText] = useState('');
   const [isSplineReady, setIsSplineReady] = useState(false);
+  const [splineFailed, setSplineFailed] = useState(false);
   const [cvDownloaded, setCvDownloaded] = useState(false);
   const [isHeroInView, setIsHeroInView] = useState(true);
   const heroSectionRef = useRef(null);
   const cvFeedbackTimer = useRef(null);
   const splineRef = useRef(null);
   const splineLoadingRef = useRef(false);
+  const splineTimeoutRef = useRef(null);
   const themeRef = useRef(theme);
 
   // Texto completo para el efecto typewriter - traducido
@@ -95,9 +98,32 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
     splineLoadingRef.current = true;
     splineRef.current = spline;
 
+    // Cargó correctamente: cancelar el timeout de fallback
+    if (splineTimeoutRef.current) {
+      clearTimeout(splineTimeoutRef.current);
+      splineTimeoutRef.current = null;
+    }
+
     // Solo marcar que Spline está listo - el tema se aplica en el useEffect
     setIsSplineReady(true);
   }, []);
+
+  // Detección de fallo de carga: @splinetool/react-spline NO expone onError,
+  // y un fallo de red/CDN no lanza un error de render (el ErrorBoundary no lo
+  // captura). Si onLoad no se dispara en ~10s, asumimos que falló y mostramos
+  // la galaxia de respaldo. Solo aplica en desktop/tablet (shouldLoadSpline).
+  useEffect(() => {
+    if (!shouldLoadSpline || isSplineReady || splineFailed) return;
+    splineTimeoutRef.current = setTimeout(() => {
+      if (!splineLoadingRef.current) setSplineFailed(true);
+    }, 10000);
+    return () => {
+      if (splineTimeoutRef.current) {
+        clearTimeout(splineTimeoutRef.current);
+        splineTimeoutRef.current = null;
+      }
+    };
+  }, [shouldLoadSpline, isSplineReady, splineFailed]);
 
   // Aplicar tema SIEMPRE que Spline esté listo y el tema cambie
   // Esto garantiza que funcione en mount inicial, cambios de tema y re-navegaciones
@@ -252,29 +278,36 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
           </div>
 
           {/* Animacion 3D de Spline - md+ (tablet/desktop).
-              Sin fallback visual: si Spline falla o estamos en mobile, no aparece nada.
-              `hidden md:block`: oculto en mobile (<768) -> sin aire vacio.
+              Fallback: si Spline falla (timeout ~10s o error de render) se muestra
+              una galaxia espiral (GalaxyFallback). En mobile (<768) no aparece nada.
+              `hidden md:block`: oculto en mobile -> sin aire vacio.
               Sin altura fija: .spline-container interno usa aspect-ratio 1/1. */}
           {shouldLoadSpline && (
             <div className={`hidden md:block relative w-full overflow-hidden rounded-2xl${isHeroInView ? '' : ' spline-paused'}`}>
-              <SplineErrorBoundary fallback={null}>
+              {splineFailed ? (
                 <div className="relative spline-container">
-                  <div className="w-[120%] h-[120%] -mt-[10%] -ml-[10%] -mb-[10%] -mr-[10%]">
-                    <Suspense fallback={
-                      <div className="w-full h-full flex items-center justify-center">
-                        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-black/40 dark:border-white/40" aria-label="Loading 3D scene" role="status"></div>
-                      </div>
-                    }>
-                      <Spline
-                        key="spline-scene"
-                        scene="https://prod.spline.design/CTzlK88G4nA0eFUO/scene.splinecode"
-                        onLoad={onSplineLoad}
-                        className="w-full h-full"
-                      />
-                    </Suspense>
-                  </div>
+                  <GalaxyFallback />
                 </div>
-              </SplineErrorBoundary>
+              ) : (
+                <SplineErrorBoundary fallback={<div className="relative spline-container"><GalaxyFallback /></div>}>
+                  <div className="relative spline-container">
+                    <div className="w-[120%] h-[120%] -mt-[10%] -ml-[10%] -mb-[10%] -mr-[10%]">
+                      <Suspense fallback={
+                        <div className="w-full h-full flex items-center justify-center">
+                          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-black/40 dark:border-white/40" aria-label="Loading 3D scene" role="status"></div>
+                        </div>
+                      }>
+                        <Spline
+                          key="spline-scene"
+                          scene="https://prod.spline.design/CTzlK88G4nA0eFUO/scene.splinecode"
+                          onLoad={onSplineLoad}
+                          className="w-full h-full"
+                        />
+                      </Suspense>
+                    </div>
+                  </div>
+                </SplineErrorBoundary>
+              )}
             </div>
           )}
         </div>
