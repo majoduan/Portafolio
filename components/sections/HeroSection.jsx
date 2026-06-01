@@ -6,6 +6,7 @@ import { useReversibleInView } from '../../hooks/useReversibleInView';
 import { useCountUp } from '../../hooks/useCountUp';
 import { AppContext } from '../../contexts/AppContext';
 import GalaxyFallback from '../GalaxyFallback';
+import TypefaceTitle from '../TypefaceTitle';
 
 // Dynamic import Spline with SSR disabled for Next.js
 import dynamic from 'next/dynamic';
@@ -198,9 +199,10 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
             <p className="text-2xl md:text-3xl text-slate-700 dark:text-slate-100 mb-2 font-medium transition-colors duration-300">
               {t('hero.name')}
             </p>
-            <h1 className="hero-title text-display text-black dark:text-white mb-6">
-              {t('hero.title')}
-            </h1>
+            <TypefaceTitle
+              text={t('hero.title')}
+              className="hero-title text-display text-black dark:text-white mb-6"
+            />
             <p className="text-body-lg text-slate-600 dark:text-slate-100 max-w-prose mx-auto lg:mx-0 mb-8 min-h-[80px] text-pretty hyphens-auto transition-colors duration-300">
               {typewriterText}
               <span className="animate-pulse">|</span>
