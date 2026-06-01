@@ -331,6 +331,36 @@ html:not(.dark) .spline-container > div {
   }
 }
 
+/* Education cards (EducationSection) — mismo reveal bidireccional que las
+   timeline-card, vía useReversibleInView + data-revealed (delay inline). */
+.edu-card {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 550ms cubic-bezier(0.4, 0, 0.2, 1),
+              transform 550ms cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 300ms ease,
+              box-shadow 300ms ease;
+  will-change: opacity, transform;
+}
+.edu-card[data-revealed="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Hover on-brand: borde de acento + glow (en CSS, no en utilidades Tailwind,
+   para no chocar con el transform del reveal por el orden de capas). */
+.edu-card:hover {
+  border-color: var(--accent-border);
+  box-shadow: 0 10px 40px var(--accent-glow-strong);
+}
+@media (prefers-reduced-motion: reduce) {
+  .edu-card {
+    opacity: 1;
+    transform: none;
+    transition: border-color 300ms ease, box-shadow 300ms ease;
+    transition-delay: 0ms !important;
+  }
+}
+
 /* Animación para las barras de progreso */
 @keyframes progressBarFill {
   0% {

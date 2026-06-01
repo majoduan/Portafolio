@@ -502,6 +502,8 @@
     },
     "education": {
       "title": "Education",
+      "highlightsLabel": "Highlights",
+      "courseworkLabel": "Coursework",
       "items": {
         "epn": {
           "degree": "Bachelor of Software Engineering",

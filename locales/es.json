@@ -502,6 +502,8 @@
     },
     "education": {
       "title": "Educación",
+      "highlightsLabel": "Logros",
+      "courseworkLabel": "Materias",
       "items": {
         "epn": {
           "degree": "Ingeniería en Software",

@@ -1,10 +1,10 @@
 'use client';
 
-import Image from 'next/image';
 import { useTranslation } from '../../hooks/useTranslation';
-import { Trophy, Briefcase, Linkedin, Github, Mail, Calendar, MapPin } from 'lucide-react';
+import { Briefcase, Linkedin, Github, Mail } from 'lucide-react';
 import RotatingTitle from '../../components/RotatingTitle';
 import WorkTimeline from '../../components/WorkTimeline';
+import EducationSection from '../../components/EducationSection';
 
 const experienceItems = [
   { key: 'bridge',           logos: ['/media/work-education/bridge-staff-120w.avif', '/media/work-education/acr-120w.avif'], present: true },
@@ -92,96 +92,8 @@ export default function AboutPage() {
       {/* ── SECTION 2: Timeline Work Experience ── */}
       <WorkTimeline items={experienceItems} t={t} />
 
-      {/* ── SECTION 3: Achievement Cards Education ── */}
-      <section className="py-20 relative z-10 bg-transparent transition-colors duration-300">
-        <div className="max-w-6xl mx-auto px-4">
-          <h2 className="title-glow text-4xl md:text-5xl font-bold text-center mb-12 pb-2 leading-tight text-black dark:text-white">
-            {t('about.education.title')}
-          </h2>
-          <div className="grid grid-cols-1 lg:grid-cols-[11fr_9fr] gap-10 items-stretch">
-            {educationItems.map((item, index) => {
-              const highlights = t(`about.education.items.${item.key}.highlights`);
-              const coursework = t(`about.education.items.${item.key}.coursework`);
-              const courseworkTags = coursework && !coursework.includes('about.')
-                ? coursework.split(', ')
-                : [];
-
-              return (
-                <div
-                  key={item.key}
-                  className="flex flex-col relative"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <div className="flex flex-col flex-1">
-                    {/* Logo + degree header */}
-                    <div className="flex items-start gap-4">
-                      <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white p-2.5 flex-shrink-0 flex items-center justify-center">
-                        <Image
-                          src={item.logos[0]}
-                          alt=""
-                          width={80}
-                          height={80}
-                          unoptimized
-                          className="w-full h-full object-contain"
-                        />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-lg md:text-xl font-bold text-black dark:text-white">
-                          {t(`about.education.items.${item.key}.degree`)}
-                        </h3>
-                        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 mt-0.5">
-                          {t(`about.education.items.${item.key}.institution`)}
-                        </p>
-                        {/* Period pill */}
-                        <div className="inline-flex items-center gap-1.5 mt-2 px-2.5 py-0.5 rounded-full border border-[var(--accent-border-subtle)] bg-[var(--accent-bg-subtle)]">
-                          <Calendar className="w-3 h-3 text-[var(--accent-solid)]" />
-                          <span className="text-xs font-medium text-[var(--accent-solid)]">
-                            {t(`about.education.items.${item.key}.period`)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Trophy highlight badges */}
-                    {Array.isArray(highlights) && highlights.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mt-4">
-                        {highlights.map((highlight, i) => (
-                          <span
-                            key={i}
-                            className="inline-flex items-center gap-1.5 text-xs md:text-sm font-medium bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 px-3 py-1 rounded-full border border-amber-200 dark:border-amber-800/50"
-                          >
-                            <Trophy className="w-3.5 h-3.5" />
-                            {highlight}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Coursework as pill tags */}
-                    {courseworkTags.length > 0 && (
-                      <div className="mt-6 pt-2">
-                        <p className="text-xs font-semibold text-slate-500 dark:text-slate-500 uppercase tracking-wider mb-2">
-                          Coursework
-                        </p>
-                        <div className="flex flex-wrap gap-1.5">
-                          {courseworkTags.map((tag, i) => (
-                            <span
-                              key={i}
-                              className="text-xs px-2 py-1 rounded-full border border-black dark:border-white text-black dark:text-white bg-transparent flex items-center"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+      {/* ── SECTION 3: Education (spotlight + companion) ── */}
+      <EducationSection items={educationItems} t={t} />
 
     </div>
   );
