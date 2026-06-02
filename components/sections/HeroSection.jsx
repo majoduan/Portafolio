@@ -268,7 +268,7 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
             </div>
 
             {/* Estadisticas */}
-            <div className="grid grid-cols-3 gap-6 pt-8 border-t border-slate-300 dark:border-white/10 transition-colors duration-300">
+            <div className="grid grid-cols-3 gap-6">
               {[
                 { target: 2, suffix: '+', label: t('hero.stats.experience') },
                 { target: 15, suffix: '+', label: t('hero.stats.projects') },
