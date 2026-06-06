@@ -11,10 +11,10 @@ const ContactSection = React.memo(() => {
   return (
     <>
       {/* Contact Section */}
-      <section id="contact" className="py-20 md:py-24 relative z-10 bg-transparent transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-4">
+      <section id="contact" className="section-y relative z-10 bg-transparent transition-colors duration-300">
+        <div className="container-page">
           {/* Section Title */}
-          <div className="text-center mb-8 md:mb-12 lg:mb-16">
+          <div className="text-center section-title-mb">
             <h2 className="title-glow text-h2 font-bold mb-4 text-black dark:text-white">
               {t('contact.title')}
             </h2>
@@ -59,7 +59,7 @@ const ContactSection = React.memo(() => {
                 </div>
 
                 {/* Info Section */}
-                <div className="p-6 md:p-8 flex-1 flex flex-col">
+                <div className="p-[var(--space-md)] md:p-[var(--space-lg)] flex-1 flex flex-col">
                   <h3 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4 text-black dark:text-white">
                     {t('contact.profile.name')}
                   </h3>
@@ -118,7 +118,7 @@ const ContactSection = React.memo(() => {
 
             {/* Right Column - Contact Form */}
             <div className="contact-right-column">
-              <div className="bg-white dark:bg-[var(--bg-secondary)] backdrop-blur-lg rounded-2xl md:rounded-3xl p-6 md:p-8 lg:p-10 border border-slate-200 dark:border-slate-700/50 hover:border-black dark:hover:border-white transition-all duration-500 shadow-lg dark:shadow-2xl h-full">
+              <div className="bg-white dark:bg-[var(--bg-secondary)] backdrop-blur-lg rounded-2xl md:rounded-3xl p-[var(--space-md)] md:p-[var(--space-lg)] lg:p-[var(--space-xl)] border border-slate-200 dark:border-slate-700/50 hover:border-black dark:hover:border-white transition-all duration-500 shadow-lg dark:shadow-2xl h-full">
                 <h3 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4 md:mb-6 text-black dark:text-white">
                   {t('contact.form.title')}
                 </h3>

@@ -419,9 +419,9 @@ export default function WorkTimeline({ items, t }) {
 
   // ── Render ──
   return (
-    <section className="py-10 relative z-10 bg-transparent transition-colors duration-300">
-      <div className="max-w-4xl mx-auto px-4">
-        <h2 className="title-glow text-4xl md:text-5xl font-bold text-center mb-12 pb-2 leading-tight text-black dark:text-white">
+    <section className="section-y-sm relative z-10 bg-transparent transition-colors duration-300">
+      <div className="container-prose">
+        <h2 className="title-glow text-h2 font-bold text-center section-title-mb pb-2 text-black dark:text-white">
           {t('about.experience.title')}
         </h2>
 

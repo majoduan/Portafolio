@@ -169,13 +169,13 @@ const ProjectsSection = React.memo(() => {
 
   return (
     <>
-      <section ref={projectsSectionRef} id="projects" className="py-20 md:py-24 relative z-10 bg-transparent transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-4 mb-12">
-          <h2 className="title-glow text-h2 font-bold text-center mb-4 pb-2 text-black dark:text-white">
+      <section ref={projectsSectionRef} id="projects" className="section-y relative z-10 bg-transparent transition-colors duration-300">
+        <div className="container-page section-title-mb">
+          <h2 className="title-glow text-h2 font-bold text-center pb-2 text-black dark:text-white">
             {t('projects.title')}
           </h2>
         </div>
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="container-page">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {projectsVisible ? (
               projects.map((project, i) => (

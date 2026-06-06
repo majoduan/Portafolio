@@ -523,7 +523,7 @@ const ProjectRow = React.memo(({ project, index, t }) => {
           </h2>
 
           {/* Video — preserves 16:9 aspect ratio */}
-          <div className={`w-full px-3 md:px-4 lg:px-0 ${isEven ? 'lg:pr-[16px]' : 'lg:pl-[16px]'}`}>
+          <div className={`w-full px-3 md:px-4 lg:px-0 ${isEven ? 'lg:pr-[var(--space-sm)]' : 'lg:pl-[var(--space-sm)]'}`}>
             <div className="w-full aspect-video bg-black relative z-10 rounded-lg overflow-hidden">
               <ProjectVideo
                 src={project.video}
@@ -534,19 +534,19 @@ const ProjectRow = React.memo(({ project, index, t }) => {
           </div>
 
           {/* Project Links */}
-          <div className={`px-4 py-3 bg-[var(--bg-primary)] transition-colors duration-300 ${isEven ? 'lg:pl-6 xl:pl-8' : 'lg:pr-6 xl:pr-8'}`}>
+          <div className={`px-4 py-3 bg-[var(--bg-primary)] transition-colors duration-300 ${isEven ? 'lg:pl-[var(--space-md)] xl:pl-[var(--space-lg)]' : 'lg:pr-[var(--space-md)] xl:pr-[var(--space-lg)]'}`}>
             <ProjectLinks links={project.links} t={t} isEven={isEven} />
           </div>
 
           {/* Technologies Used */}
-          <div className={`px-4 py-3 bg-[var(--bg-primary)] transition-colors duration-300 ${isEven ? 'lg:pl-6 xl:pl-8' : 'lg:pr-6 xl:pr-8'}`}>
+          <div className={`px-4 py-3 bg-[var(--bg-primary)] transition-colors duration-300 ${isEven ? 'lg:pl-[var(--space-md)] xl:pl-[var(--space-lg)]' : 'lg:pr-[var(--space-md)] xl:pr-[var(--space-lg)]'}`}>
             <ProjectTech techDescriptions={project.techDescriptions} t={t} isEven={isEven} />
           </div>
 
         </div>
 
         {/* Info side — 50% on desktop */}
-        <div className="w-full lg:w-1/2 flex flex-col p-8 lg:px-12 lg:pt-0 lg:pb-12 xl:px-16 xl:pt-0 xl:pb-16">
+        <div className="w-full lg:w-1/2 flex flex-col p-[var(--space-lg)] lg:px-[var(--space-xl)] lg:pt-0 lg:pb-[var(--space-xl)] xl:px-[var(--space-2xl)] xl:pt-0 xl:pb-[var(--space-2xl)]">
           {/* Title — desktop only (mobile/tablet shows it above the video) */}
           <h2 className="hidden lg:block text-2xl md:text-3xl font-bold text-black dark:text-white mb-5 leading-tight">
             {project.title}
@@ -613,11 +613,11 @@ export default function ProjectsPage() {
   }, []);
 
   return (
-    <div className="pt-4 md:pt-16">
+    <div className="page-top">
         {/* Page header */}
-        <div className="py-16 relative z-10">
-          <div className="max-w-7xl mx-auto px-4">
-            <h1 className="title-glow text-4xl md:text-5xl font-bold text-center mb-4 pb-2 leading-tight text-black dark:text-white">
+        <div className="section-y-sm relative z-10">
+          <div className="container-page">
+            <h1 className="title-glow text-h2 font-bold text-center section-title-mb pb-2 text-black dark:text-white">
               {t('projects.pageTitle')}
             </h1>
           </div>

@@ -90,10 +90,10 @@ const CertificatesSection = React.memo(() => {
   }, [currentCertificateIndex, viewMode]);
 
   return (
-    <section id="certificates" className="py-20 md:py-24 bg-transparent relative z-10 overflow-hidden transition-colors duration-300">
+    <section id="certificates" className="section-y bg-transparent relative z-10 overflow-hidden transition-colors duration-300">
       {/* Title row with pause button (button absolute-positioned right, mirrors TechnologiesSection) */}
-      <div className="max-w-7xl mx-auto px-4 mb-6 relative">
-        <h2 className="title-glow text-h2 font-bold text-center mb-4 pb-2 text-black dark:text-white">
+      <div className="container-page section-title-mb relative">
+        <h2 className="title-glow text-h2 font-bold text-center pb-2 text-black dark:text-white">
           {t('certificates.title')}
         </h2>
         <button
@@ -109,7 +109,7 @@ const CertificatesSection = React.memo(() => {
       </div>
 
       {/* Carousel Container - Responsive Grid */}
-      <div className="relative w-full mx-auto px-4">
+      <div className="relative w-full mx-auto px-[var(--gutter)]">
         {/* Scrollable container - Desktop: 2 cards, Mobile: 1 card */}
         <div
           ref={certificateContainerRef}

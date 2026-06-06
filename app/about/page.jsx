@@ -22,11 +22,11 @@ export default function AboutPage() {
   const { t } = useTranslation();
 
   return (
-    <div className="pt-8 md:pt-20">
+    <div className="page-top">
 
       {/* Intro */}
-      <section className="py-10 relative z-10 bg-transparent transition-colors duration-300">
-        <div className="max-w-4xl mx-auto px-4 text-center">
+      <section className="section-y-sm relative z-10 bg-transparent transition-colors duration-300">
+        <div className="container-prose text-center">
           <p className="text-xl md:text-2xl lg:text-3xl text-slate-700 dark:text-slate-100 mb-2 font-medium transition-colors duration-300">
             {t('hero.name')}
           </p>

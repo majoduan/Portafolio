@@ -9,6 +9,42 @@
   box-shadow: 0 4px 4px rgb(0 0 0 / 0.25);
 }
 
+/* ── Utilidades de espaciado ────────────────────────────────────────
+   Centralizan los patrones repetidos (max-w-7xl mx-auto px-4, py-20 md:py-24,
+   etc.) en clases con comportamiento responsivo fluido (clamp), eliminando
+   la deriva entre secciones. Tokens definidos en @theme arriba. */
+
+/* Contenedor de página: centrado, ancho máximo y gutters fluidos que crecen
+   con el viewport. Reemplaza el repetido `max-w-7xl mx-auto px-4`. */
+@utility container-page {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+@utility container-narrow {
+  width: 100%;
+  max-width: var(--container-max-narrow);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+@utility container-prose {
+  width: 100%;
+  max-width: var(--container-max-prose);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Ritmo vertical de sección. Reemplaza py-20 md:py-24 / py-16 / py-10. */
+@utility section-y    { padding-block: var(--section-py); }
+@utility section-y-sm { padding-block: var(--section-py-sm); }
+
+/* Margen inferior estándar de títulos de sección. */
+@utility section-title-mb { margin-bottom: var(--title-mb); }
+
+/* Padding superior de página (offset del nav fijo). */
+@utility page-top { padding-top: var(--page-pt); }
+
 @theme {
   --default-font-family: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 
@@ -31,6 +67,38 @@
 
   --text-body-lg: clamp(1.125rem, 1.5vw, 1.25rem);
   --text-body-lg--line-height: 1.65;
+
+  /* ── Sistema de espaciado — FUENTE DE VERDAD ÚNICA ──────────────────
+     Escala 4/8pt (tokens crudos) + tokens fluidos clamp() para ritmo de
+     sección, gutters y contenedores. Consumidos por las @utility de abajo
+     (container-page, section-y, etc.) y por valores arbitrarios puntuales
+     (p-[var(--space-md)]). Los clamp() en rem+vw componen con la regla
+     ultra-wide html{font-size:clamp(...)} (línea ~255). */
+  --space-2xs: 0.5rem;   /* 8  */
+  --space-xs:  0.75rem;  /* 12 */
+  --space-sm:  1rem;     /* 16 */
+  --space-md:  1.5rem;   /* 24 */
+  --space-lg:  2rem;     /* 32 */
+  --space-xl:  3rem;     /* 48 */
+  --space-2xl: 4rem;     /* 64 */
+
+  /* Padding vertical fluido de sección — reemplaza py-20 md:py-24 / py-16 / py-10 */
+  --section-py:    clamp(4rem, 7vw, 7rem);     /* ~64px → ~112px */
+  --section-py-sm: clamp(2.5rem, 4vw, 4rem);   /* tier menor: marquee, about intro */
+
+  /* Gutter horizontal fluido — reemplaza el px-4 fijo; CRECE con el ancho */
+  --gutter: clamp(1rem, 4vw, 3rem);            /* 16px → 48px */
+
+  /* Anchos de contenedor consistentes */
+  --container-max:        80rem;  /* = max-w-7xl */
+  --container-max-narrow: 64rem;  /* = max-w-5xl (Education) */
+  --container-max-prose:  56rem;  /* = max-w-4xl (about / timeline) */
+
+  /* Margen inferior estándar de títulos de sección */
+  --title-mb: clamp(1.5rem, 3vw, 3rem);        /* 24 → 48 */
+
+  /* Padding superior de página estándar */
+  --page-pt: clamp(1rem, 6vw, 5rem);
 }
 
 /* Scroll suave para toda la página */

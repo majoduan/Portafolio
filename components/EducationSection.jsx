@@ -34,7 +34,7 @@ function EducationCard({ item, index, t }) {
       ref={ref}
       data-revealed={inView ? 'true' : 'false'}
       style={{ transitionDelay: `${index * 120}ms` }}
-      className="edu-card rounded-2xl border border-[var(--border-color)] bg-[var(--bg-elevated)] shadow-card p-6 md:p-7 flex flex-col"
+      className="edu-card rounded-2xl border border-[var(--border-color)] bg-[var(--bg-elevated)] shadow-card p-[var(--space-md)] md:p-[var(--space-lg)] flex flex-col"
     >
       {/* Logo + título + subtítulo */}
       <div className="flex items-start gap-4">
@@ -99,9 +99,9 @@ function EducationCard({ item, index, t }) {
 
 export default function EducationSection({ items, t }) {
   return (
-    <section className="py-20 relative z-10 bg-transparent transition-colors duration-300">
-      <div className="max-w-5xl mx-auto px-4">
-        <h2 className="title-glow text-4xl md:text-5xl font-bold text-center mb-12 pb-2 leading-tight text-black dark:text-white">
+    <section className="section-y relative z-10 bg-transparent transition-colors duration-300">
+      <div className="container-narrow">
+        <h2 className="title-glow text-h2 font-bold text-center section-title-mb pb-2 text-black dark:text-white">
           {t('about.education.title')}
         </h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">

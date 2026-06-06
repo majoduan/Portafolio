@@ -192,7 +192,7 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
 
   return (
     <section ref={heroSectionRef} id="home" className="min-h-screen flex items-center justify-center relative pt-4 md:pt-16 bg-transparent transition-colors duration-300 z-10">
-      <div className="max-w-7xl mx-auto px-4 w-full relative z-10">
+      <div className="container-page w-full relative z-10">
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 items-center">
           {/* Contenido de texto - Izquierda */}
           <div className="text-center lg:text-left">
