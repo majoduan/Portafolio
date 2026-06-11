@@ -111,4 +111,19 @@ export const TECH_ICON_MAP = {
   'Jupyter':              { icon: JupyterIcon,    color: 'from-orange-300 to-orange-400' },
   'Pygame':               { icon: PygameIcon,     color: 'from-green-400 to-green-600' },
   'N-Layer architecture': { icon: NlayerIcon,     color: 'from-slate-500 to-slate-700' },
+  // New project stacks (Crumb Coach · Connect Invest · The Daily Abide).
+  // iconClass: monochrome logos vanish against the transparent chip in one theme.
+  // Reuse the IntegrationsMarquee technique — `invert(1) hue-rotate(180deg)` flips
+  // black↔white while leaving colored parts intact. Black-fill logos invert only in
+  // dark; white-fill logos (Stripe, React Native) are the inverse case, so they invert only in light.
+  'Next.js':              { icon: NextjsIcon,      color: 'from-slate-100 to-slate-300', iconClass: 'dark:[filter:invert(1)_hue-rotate(180deg)]' },
+  'Tailwind CSS':         { icon: TailwindIcon,    color: 'from-cyan-600 to-cyan-800' },
+  'Figma':                { icon: FigmaIcon,       color: 'from-purple-700 to-pink-800' },
+  'Turborepo':            { icon: TurborepoIcon,   color: 'from-slate-100 to-white' },
+  'Express':              { icon: ExpressIcon,     color: 'from-gray-500 to-gray-700', iconClass: 'dark:[filter:invert(1)_hue-rotate(180deg)]' },
+  'Supabase':             { icon: SupabaseIcon,    color: 'from-emerald-500 to-emerald-700' },
+  'Drizzle ORM':          { icon: DrizzleIcon,     color: 'from-lime-400 to-lime-600' },
+  'Stripe':               { icon: StripeIcon,      color: 'from-indigo-500 to-purple-700', iconClass: '[filter:invert(1)_hue-rotate(180deg)] dark:[filter:none]' },
+  'Expo':                 { icon: ExpoIcon,        color: 'from-slate-700 to-slate-900', iconClass: 'dark:[filter:invert(1)_hue-rotate(180deg)]' },
+  'React Native':         { icon: ReactNativeIcon, color: 'from-cyan-400 to-cyan-600', iconClass: '[filter:invert(1)_hue-rotate(180deg)] dark:[filter:none]' },
 };

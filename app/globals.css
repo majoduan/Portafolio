@@ -541,6 +541,10 @@ html:not(.dark) .spline-container > div {
 .swap-btn {
   --swap-dir: 1;
   --swap-icon-size: 3rem;
+  /* Hover gap fix: how much LESS the text shifts on hover. The hover text↔icon gap
+     equals (text horizontal padding − this value). Bigger pull → tighter hover gap,
+     without touching the base state. Applies to normal + reversed identically. */
+  --swap-text-pull: 0.75rem;
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -626,7 +630,7 @@ html:not(.dark) .spline-container > div {
 
 .swap-btn:hover .swap-btn-text {
   color: white;
-  transform: translateX(calc(var(--swap-icon-size) * var(--swap-dir) * -1));
+  transform: translateX(calc((var(--swap-icon-size) - var(--swap-text-pull)) * var(--swap-dir) * -1));
 }
 
 /* Wide variant — symmetric padding so the icon↔text gap stays consistent
@@ -642,7 +646,7 @@ html:not(.dark) .spline-container > div {
 }
 
 .swap-btn-wide:hover .swap-btn-text {
-  transform: translateX(calc(var(--swap-icon-size) * var(--swap-dir) * -1));
+  transform: translateX(calc((var(--swap-icon-size) - var(--swap-text-pull)) * var(--swap-dir) * -1));
 }
 
 /* Reversed variant — flip direction + layout (desktop only) */
@@ -1264,9 +1268,11 @@ section.integrations-marquee { contain-intrinsic-size: auto 220px; }
   }
 
   .project-modal-video-column {
+    /* The 16:9 aspect-video wrapper sizes the video; the column just hugs it
+       (no min-height that would letterbox the video top/bottom on mobile). */
     height: auto;
-    min-height: 250px;
-    max-height: 40vh;
+    min-height: 0;
+    max-height: none;
     border-bottom: 1px solid var(--accent-blue-alpha-30);
   }
 

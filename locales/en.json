@@ -242,6 +242,7 @@
   "projects": {
     "title": "Featured Projects",
     "pageTitle": "My Projects",
+    "seeAll": "See All",
     "viewDemo": "View Full Demo",
     "modalTitle": "About the Project",
     "techUsed": "Technologies Used",
@@ -249,7 +250,7 @@
     "linksTitle": "LINKS",
     "techTitle": "TECH",
     "loading": "Loading video...",
-    "diveDeeper": "Dive Deeper",
+    "diveDeeper": "Full Details",
     "overview": "Overview",
     "keyFeatures": "Key Features",
     "techImpl": "Technical Implementation",
@@ -261,9 +262,78 @@
       "demoShort": "Live",
       "frontendShort": "Frontend",
       "backendShort": "Backend",
-      "githubShort": "Source"
+      "githubShort": "Source",
+      "website": "Visit Site",
+      "websiteShort": "Site"
     },
     "items": {
+      "crumbCoach": {
+        "title": "Crumb Coach",
+        "description": "Launch-readiness engineering for a SaaS platform that helps artisan bakers run their cottage-food business.",
+        "summary": "A SaaS platform for artisan sourdough bakers, built as a Turborepo + pnpm monorepo on Supabase. Led the web app's launch-readiness: a subscriptions and billing system on Stripe Connect, Supabase-JWT auth with Postgres-backed sessions, a mobile-to-backend bridge, a security-hardening campaign, and a full TypeScript and schema-drift stabilization.",
+        "longDescription": "CrumbCoach is a SaaS platform that helps artisan sourdough and cottage-food bakers run orders, recipes, inventory, and customers. It's a Turborepo + pnpm monorepo with a React web front end, an Express back end, an Expo mobile app, and a shared types package, all on Supabase (Postgres, Auth, Storage, Edge Functions). The work centered on making the web app launch-ready: designing the subscriptions and billing subsystem from scratch on Stripe Connect, rebuilding authentication on Supabase JWT with Postgres-backed sessions, and bridging the mobile app to the web backend through a dedicated API surface. A sustained security campaign added rate limiting, CSRF, schema validation, and audit trails, while a systematic schema-drift audit and a TypeScript stabilization — web and mobile type errors driven to zero — hardened the codebase.",
+        "keyFeatures": {
+          "Subscriptions & Billing": "Tiered Pro/Free gating built on Stripe Connect",
+          "Auth & Sessions": "Supabase-JWT login with Postgres-backed sessions and CSRF",
+          "Mobile-to-Backend Bridge": "Shared API so the mobile app reuses web business logic",
+          "Security Hardening": "Rate limiting, schema validation, audit trails, and CVE remediation",
+          "Schema-Drift Cleanup": "Audited database, types, and ORM to a consistent, verified state"
+        },
+        "techDescriptions": {
+          "React": "Web front-end UI",
+          "TypeScript": "End-to-end type safety, errors driven to zero",
+          "Express": "Node back end and domain route modules",
+          "Supabase": "Postgres, Auth, Storage, and Edge Functions",
+          "Drizzle ORM": "Typed schema and SQL layer",
+          "Stripe": "Subscriptions and Connect payments",
+          "Turborepo": "pnpm monorepo across web, mobile, and shared"
+        },
+        "techImpl": "The web app pairs a React front end with an Express back end, sharing a typed Supabase data layer (Drizzle ORM plus the Supabase HTTP client) so web and mobile see identical data. Billing runs on Stripe Connect with destination charges and idempotent webhook handling; auth uses Supabase JWT with Postgres-backed sessions, and a cached server-state layer keeps the client in sync. A schema-drift audit aligned the live database, generated types, and ORM, and a TypeScript pass drove web and mobile type errors to zero."
+      },
+      "connectInvest": {
+        "title": "Connect Invest",
+        "description": "High-fidelity marketing site for a real-estate investment platform — built pixel-for-pixel from Figma and fully responsive.",
+        "summary": "The public marketing site for Connect Invest, a real-estate investment platform. Implemented almost end-to-end from a high-fidelity Figma design, with fully responsive layouts across mobile, tablet, and desktop, inside a pnpm + Turborepo monorepo — plus expanded home, portfolio, and about sections and rate limiting on sensitive endpoints.",
+        "longDescription": "The public-facing marketing site for Connect Invest, a real-estate investment platform built as a pnpm + Turborepo monorepo. The marketing app was implemented almost entirely from a high-fidelity Figma design, translated pixel-for-pixel into a Next.js build with fully responsive layouts across mobile, tablet, and desktop. The work spanned a strong expansion of the home, portfolio, and about sections — components, content, and assets — alongside mobile UX refinements and app-distribution links. Abuse and risk controls were added through rate limiting on sensitive endpoints, with ongoing dependency maintenance and environment tuning to keep the site fast and reliable.",
+        "keyFeatures": {
+          "Figma-to-Code Fidelity": "Marketing site implemented pixel-for-pixel from a high-fidelity Figma design",
+          "Fully Responsive": "Layouts tuned for mobile, tablet, and desktop",
+          "Home & Portfolio": "Expanded home, portfolio, and about components, content, and assets",
+          "Rate Limiting": "Abuse controls on sensitive endpoints",
+          "Monorepo Architecture": "pnpm + Turborepo workspace shared across apps"
+        },
+        "techDescriptions": {
+          "Next.js": "React framework powering the marketing site",
+          "React": "Component-driven UI",
+          "TypeScript": "Type-safe components and content",
+          "Tailwind CSS": "Utility-first responsive styling",
+          "Figma": "Source design translated at high fidelity",
+          "Turborepo": "Monorepo orchestration across apps"
+        },
+        "techImpl": "The marketing app is a Next.js + React build styled with Tailwind CSS, living in a pnpm + Turborepo monorepo alongside the platform's web and mobile apps. A high-fidelity Figma design was translated to production with responsive breakpoints validated across mobile, tablet, and desktop. Sensitive endpoints are protected with rate limiting, and dependencies are kept current to maintain performance and security."
+      },
+      "dailyAbide": {
+        "title": "The Daily Abide",
+        "description": "Navigation redesign and a full gamification layer for a faith-planner mobile app — taken from prototype to App Store-ready.",
+        "summary": "A daily faith-planner mobile app built with Expo and Supabase. Carried from a migrated prototype to publish-ready: a full navigation redesign (Stack to Tabs with a Home hub), an engagement layer of streaks, XP, and celebrations, security and CI/CD infrastructure from scratch, and iOS App Store compliance.",
+        "longDescription": "The Daily Abide is a daily faith-planner mobile app, built with Expo (SDK 54) on a Turborepo + pnpm monorepo and backed by Supabase (Auth, Postgres, RLS). The app was carried from a migrated prototype to a publish-ready product. That meant a complete navigation redesign — from a stack to a five-tab architecture with a Home hub (daily pulse ring, quick actions, inline scripture) — and an entire engagement layer: streaks with idempotent daily tracking, XP and levels, and particle celebration overlays across the app. It also meant standing up the project's security and CI/CD from scratch (SAST, dependency audit, secret scanning, pre-commit hooks), stabilizing authentication against unresponsive-backend edge cases, and meeting Apple's App Store requirements, including in-app account deletion.",
+        "keyFeatures": {
+          "Tab Navigation & Home Hub": "Redesigned from a stack to 5 tabs with a daily-status Home hub",
+          "Gamification Layer": "Streaks, XP, levels, and idempotent daily tracking",
+          "Celebration Overlays": "Particle celebrations across key screens",
+          "Security & CI/CD": "SAST, dependency audit, secret scanning, and pre-commit hooks from scratch",
+          "App Store Compliance": "In-app account deletion and iOS submission readiness"
+        },
+        "techDescriptions": {
+          "Expo": "SDK 54 runtime and file-based routing",
+          "React Native": "Cross-platform mobile UI",
+          "TypeScript": "Type-safe app and hooks",
+          "Supabase": "Auth, Postgres, and RLS",
+          "PostgreSQL": "Relational data with row-level security",
+          "Turborepo": "pnpm monorepo (mobile + web)"
+        },
+        "techImpl": "The app uses file-based navigation over a provider tree spanning gesture handling, an error boundary, server-state caching, auth, and a celebration provider. Server state is cached with optimistic updates and cascade invalidation, and the UI is fluidly animated across tabs and celebration overlays. Supabase provides Auth, Postgres, and row-level security, with the session persisted locally. A from-scratch CI/CD pipeline adds SAST, dependency auditing, and secret scanning, and an RPC-backed delete-account flow satisfies Apple's requirements."
+      },
       "poa": {
         "title": "POA Management System",
         "description": "Comprehensive platform for planning and budget management with RBAC model",

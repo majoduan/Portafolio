@@ -14,6 +14,7 @@
     "a11y:prepare": "node scripts/copy-axe.mjs",
     "optimize-images": "node scripts/generate-responsive-images.mjs",
     "optimize-posters": "node scripts/optimize-video-posters.mjs",
+    "generate-posters": "node scripts/generate-posters.mjs",
     "build:full": "pnpm optimize-images && pnpm build"
   },
   "dependencies": {

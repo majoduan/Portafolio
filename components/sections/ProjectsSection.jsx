@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useRef, useMemo, useCallback, useEffect, lazy, Suspense } from 'react';
-import { ExternalLink, Github, X, Monitor, Server, Layers } from 'lucide-react';
+import { ExternalLink, Github, X, Monitor, Server, Globe, FileText, ArrowRight } from 'lucide-react';
 import { getProjectsData } from '../../data/projectTranslations';
 import { useTranslation } from '../../hooks/useTranslation';
 import { getOptimalVideoSource, getOptimalPoster } from '../../utils/adaptiveVideo';
@@ -9,13 +9,19 @@ import useFocusTrap from '../../hooks/useFocusTrap';
 import Link from 'next/link';
 import Image from 'next/image';
 
-const ModalVideoPlayer = lazy(() => import('../ModalVideoPlayer'));
+const ProjectVideo = lazy(() => import('../ProjectVideo'));
+
+// Home shows only the most recent projects; the full list lives on /projects.
+const HOME_PROJECTS_COUNT = 6;
 
 // Derive card link buttons — one button per URL
 const getCardLinks = (links) => {
   const result = [];
   if (links.demo) {
     result.push({ type: 'demo', url: links.demo });
+  }
+  if (links.website) {
+    result.push({ type: 'website', url: links.website });
   }
   if (links.github) {
     if (Array.isArray(links.github)) {
@@ -95,11 +101,13 @@ const ProjectCard = React.memo(({ project, onProjectClick }) => {
           {cardLinks.map((link) => {
             const icon =
               link.type === 'demo' ? <ExternalLink className="w-4 h-4" /> :
+              link.type === 'website' ? <Globe className="w-4 h-4" /> :
               link.type === 'github-frontend' ? <Monitor className="w-4 h-4" /> :
               link.type === 'github-backend' ? <Server className="w-4 h-4" /> :
               <Github className="w-4 h-4" />;
             const label =
               link.type === 'demo' ? 'Live Demo' :
+              link.type === 'website' ? 'Visit Site' :
               link.type === 'github-frontend' ? 'Frontend' :
               link.type === 'github-backend' ? 'Backend' :
               'Source';
@@ -133,6 +141,7 @@ const ProjectsSection = React.memo(() => {
   const projectsSectionRef = useRef(null);
 
   const projects = useMemo(() => getProjectsData(t), [t]);
+  const featuredProjects = useMemo(() => projects.slice(0, HOME_PROJECTS_COUNT), [projects]);
   const { hasIntersected: projectsVisible } = useIntersectionObserver(projectsSectionRef);
   const modalRef = useFocusTrap(isModalOpen);
 
@@ -178,7 +187,7 @@ const ProjectsSection = React.memo(() => {
         <div className="container-page">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {projectsVisible ? (
-              projects.map((project, i) => (
+              featuredProjects.map((project, i) => (
                 <ProjectCard
                   key={i}
                   project={project}
@@ -186,13 +195,37 @@ const ProjectsSection = React.memo(() => {
                 />
               ))
             ) : (
-              projects.map((_project, i) => (
+              featuredProjects.map((_project, i) => (
                 <div
                   key={i}
                   className="rounded-2xl overflow-hidden aspect-video bg-[var(--bg-secondary)] animate-pulse"
                 />
               ))
             )}
+          </div>
+
+          {/* See All — swap-btn CTA to the full /projects page */}
+          <div className="flex justify-center mt-10 md:mt-12">
+            <Link
+              href="/projects"
+              className="swap-btn"
+              aria-label={t('projects.seeAll')}
+              ref={(el) => {
+                if (el) {
+                  const text = el.querySelector('.swap-btn-text');
+                  if (text) el.style.setProperty('--swap-text-w', `${text.offsetWidth}px`);
+                  el.style.setProperty('--swap-btn-w', `${el.offsetWidth}px`);
+                }
+              }}
+            >
+              <span className="swap-btn-bg" />
+              <span className="swap-btn-icon">
+                <ArrowRight className="w-5 h-5 text-white" />
+              </span>
+              <span className="swap-btn-text">
+                {t('projects.seeAll')}
+              </span>
+            </Link>
           </div>
         </div>
       </section>
@@ -225,20 +258,25 @@ const ProjectsSection = React.memo(() => {
             </div>
 
             <div className="project-modal-content grid grid-cols-1 lg:grid-cols-[66.666%_33.334%] gap-0 h-[calc(90vh-80px)] overflow-hidden">
-              <div className="project-modal-video-column bg-slate-50 dark:bg-black lg:h-full flex items-center justify-center overflow-y-auto lg:overflow-hidden">
-                <Suspense fallback={
-                  <div className="w-full h-full flex items-center justify-center">
-                    <div className="text-center">
-                      <div className="inline-block w-16 h-16 border-4 border-[var(--accent-from-strong)] border-t-transparent rounded-full animate-spin mb-4"></div>
-                      <p className="text-slate-600 dark:text-slate-300 font-medium">{t('projects.loading')}</p>
+              <div className="project-modal-video-column bg-slate-50 dark:bg-black lg:h-full flex items-center justify-center overflow-hidden">
+                {/* aspect-video keeps the 16:9 video tight (no letterbox) on every viewport;
+                    same player as /projects for consistent controls. */}
+                <div className="relative w-full aspect-video lg:max-h-full rounded-2xl overflow-hidden bg-black">
+                  <Suspense fallback={
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="inline-block w-16 h-16 border-4 border-[var(--accent-from-strong)] border-t-transparent rounded-full animate-spin mb-4"></div>
+                        <p className="text-slate-600 dark:text-slate-300 font-medium">{t('projects.loading')}</p>
+                      </div>
                     </div>
-                  </div>
-                }>
-                  <ModalVideoPlayer
-                    src={selectedProject.video}
-                    alt={selectedProject.title}
-                  />
-                </Suspense>
+                  }>
+                    <ProjectVideo
+                      src={selectedProject.video}
+                      poster={getOptimalPoster(selectedProject.video)}
+                      title={selectedProject.title}
+                    />
+                  </Suspense>
+                </div>
               </div>
 
               <div className="project-modal-info-column bg-white dark:bg-[var(--bg-secondary)] p-5 lg:p-7 overflow-y-auto custom-scrollbar">
@@ -271,20 +309,23 @@ const ProjectsSection = React.memo(() => {
                   <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-3">
                     {t('projects.projectLinks')}
                   </h4>
-                  <div className="grid grid-cols-1 min-[1440px]:grid-cols-2 gap-3 pb-1">
+                  <div className="flex flex-wrap items-center gap-3 pb-1">
                     {Object.entries(selectedProject.links).flatMap(([key, value]) => {
                       const urls = Array.isArray(value) ? value : [value];
                       return urls.map((url, i) => {
                         const isDemo = key === 'demo';
+                        const isWebsite = key === 'website';
                         const isFrontend = urls.length > 1 && i === 0;
                         const isBackend = urls.length > 1 && i === 1;
                         const icon =
                           isDemo ? <ExternalLink className="w-5 h-5 text-white" /> :
+                          isWebsite ? <Globe className="w-5 h-5 text-white" /> :
                           isFrontend ? <Monitor className="w-5 h-5 text-white" /> :
                           isBackend ? <Server className="w-5 h-5 text-white" /> :
                           <Github className="w-5 h-5 text-white" />;
                         const label =
                           isDemo ? t('projects.linkLabels.demo') :
+                          isWebsite ? t('projects.linkLabels.website') :
                           isFrontend ? t('projects.linkLabels.frontend') :
                           isBackend ? t('projects.linkLabels.backend') :
                           t('projects.linkLabels.github');
@@ -333,7 +374,7 @@ const ProjectsSection = React.memo(() => {
                     >
                       <span className="swap-btn-bg" />
                       <span className="swap-btn-icon">
-                        <Layers className="w-5 h-5 text-white" />
+                        <FileText className="w-5 h-5 text-white" />
                       </span>
                       <span className="swap-btn-text">
                         {t('projects.diveDeeper')}

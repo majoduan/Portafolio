@@ -1,6 +1,91 @@
 // Helper function to get translated project data
 export const getProjectsData = (t) => [
   {
+    slug: 'crumb-coach',
+    title: t('projects.items.crumbCoach.title'),
+    description: t('projects.items.crumbCoach.description'),
+    summary: t('projects.items.crumbCoach.summary'),
+    longDescription: t('projects.items.crumbCoach.longDescription'),
+    keyFeatures: {
+      'Subscriptions & Billing': t('projects.items.crumbCoach.keyFeatures.Subscriptions & Billing'),
+      'Auth & Sessions': t('projects.items.crumbCoach.keyFeatures.Auth & Sessions'),
+      'Mobile-to-Backend Bridge': t('projects.items.crumbCoach.keyFeatures.Mobile-to-Backend Bridge'),
+      'Security Hardening': t('projects.items.crumbCoach.keyFeatures.Security Hardening'),
+      'Schema-Drift Cleanup': t('projects.items.crumbCoach.keyFeatures.Schema-Drift Cleanup'),
+    },
+    techDescriptions: {
+      React: t('projects.items.crumbCoach.techDescriptions.React'),
+      TypeScript: t('projects.items.crumbCoach.techDescriptions.TypeScript'),
+      Express: t('projects.items.crumbCoach.techDescriptions.Express'),
+      Supabase: t('projects.items.crumbCoach.techDescriptions.Supabase'),
+      'Drizzle ORM': t('projects.items.crumbCoach.techDescriptions.Drizzle ORM'),
+      Stripe: t('projects.items.crumbCoach.techDescriptions.Stripe'),
+      Turborepo: t('projects.items.crumbCoach.techDescriptions.Turborepo'),
+    },
+    techImpl: t('projects.items.crumbCoach.techImpl'),
+    tech: ["React", "TypeScript", "Express", "Supabase", "Drizzle ORM", "Stripe", "Turborepo"],
+    video: "/media/projects/videos/crumb-coach.mp4",
+    links: {
+      website: "https://crumbcoach.com/calendar-home"
+    }
+  },
+  {
+    slug: 'connect-invest',
+    title: t('projects.items.connectInvest.title'),
+    description: t('projects.items.connectInvest.description'),
+    summary: t('projects.items.connectInvest.summary'),
+    longDescription: t('projects.items.connectInvest.longDescription'),
+    keyFeatures: {
+      'Figma-to-Code Fidelity': t('projects.items.connectInvest.keyFeatures.Figma-to-Code Fidelity'),
+      'Fully Responsive': t('projects.items.connectInvest.keyFeatures.Fully Responsive'),
+      'Home & Portfolio': t('projects.items.connectInvest.keyFeatures.Home & Portfolio'),
+      'Rate Limiting': t('projects.items.connectInvest.keyFeatures.Rate Limiting'),
+      'Monorepo Architecture': t('projects.items.connectInvest.keyFeatures.Monorepo Architecture'),
+    },
+    techDescriptions: {
+      'Next.js': t('projects.items.connectInvest.techDescriptions.Next.js'),
+      React: t('projects.items.connectInvest.techDescriptions.React'),
+      TypeScript: t('projects.items.connectInvest.techDescriptions.TypeScript'),
+      'Tailwind CSS': t('projects.items.connectInvest.techDescriptions.Tailwind CSS'),
+      Figma: t('projects.items.connectInvest.techDescriptions.Figma'),
+      Turborepo: t('projects.items.connectInvest.techDescriptions.Turborepo'),
+    },
+    techImpl: t('projects.items.connectInvest.techImpl'),
+    tech: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Figma", "Turborepo"],
+    video: "/media/projects/videos/connect-invest-marketing.mp4",
+    links: {
+      website: "https://www.connectinvest.com"
+    }
+  },
+  {
+    slug: 'daily-abide',
+    title: t('projects.items.dailyAbide.title'),
+    description: t('projects.items.dailyAbide.description'),
+    summary: t('projects.items.dailyAbide.summary'),
+    longDescription: t('projects.items.dailyAbide.longDescription'),
+    keyFeatures: {
+      'Tab Navigation & Home Hub': t('projects.items.dailyAbide.keyFeatures.Tab Navigation & Home Hub'),
+      'Gamification Layer': t('projects.items.dailyAbide.keyFeatures.Gamification Layer'),
+      'Celebration Overlays': t('projects.items.dailyAbide.keyFeatures.Celebration Overlays'),
+      'Security & CI/CD': t('projects.items.dailyAbide.keyFeatures.Security & CI/CD'),
+      'App Store Compliance': t('projects.items.dailyAbide.keyFeatures.App Store Compliance'),
+    },
+    techDescriptions: {
+      Expo: t('projects.items.dailyAbide.techDescriptions.Expo'),
+      'React Native': t('projects.items.dailyAbide.techDescriptions.React Native'),
+      TypeScript: t('projects.items.dailyAbide.techDescriptions.TypeScript'),
+      Supabase: t('projects.items.dailyAbide.techDescriptions.Supabase'),
+      PostgreSQL: t('projects.items.dailyAbide.techDescriptions.PostgreSQL'),
+      Turborepo: t('projects.items.dailyAbide.techDescriptions.Turborepo'),
+    },
+    techImpl: t('projects.items.dailyAbide.techImpl'),
+    tech: ["Expo", "React Native", "TypeScript", "Supabase", "PostgreSQL", "Turborepo"],
+    video: "/media/projects/videos/daily-abide.mp4",
+    links: {
+      website: "https://thedailyabide.com"
+    }
+  },
+  {
     slug: 'poa',
     title: t('projects.items.poa.title'),
     description: t('projects.items.poa.description'),

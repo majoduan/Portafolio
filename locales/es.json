@@ -242,6 +242,7 @@
   "projects": {
     "title": "Proyectos Destacados",
     "pageTitle": "Mis Proyectos",
+    "seeAll": "Ver Todos",
     "viewDemo": "Ver Demo Completo",
     "modalTitle": "Acerca del Proyecto",
     "techUsed": "Tecnologías Utilizadas",
@@ -249,7 +250,7 @@
     "linksTitle": "ENLACES",
     "techTitle": "TECH",
     "loading": "Cargando video...",
-    "diveDeeper": "Ver en Detalle",
+    "diveDeeper": "Ver Detalles",
     "overview": "Resumen",
     "keyFeatures": "Características Principales",
     "techImpl": "Implementación Técnica",
@@ -261,9 +262,78 @@
       "demoShort": "Live",
       "frontendShort": "Frontend",
       "backendShort": "Backend",
-      "githubShort": "Fuente"
+      "githubShort": "Fuente",
+      "website": "Visitar Sitio",
+      "websiteShort": "Sitio"
     },
     "items": {
+      "crumbCoach": {
+        "title": "Crumb Coach",
+        "description": "Ingeniería de preparación para lanzamiento de una plataforma SaaS que ayuda a panaderos artesanales a gestionar su negocio de cottage food.",
+        "summary": "Una plataforma SaaS para panaderos artesanales de masa madre, construida como monorepo Turborepo + pnpm sobre Supabase. Lideré la preparación para el lanzamiento de la app web: un sistema de suscripciones y facturación sobre Stripe Connect, autenticación Supabase-JWT con sesiones persistidas en Postgres, un puente mobile-a-backend, una campaña de hardening de seguridad y una estabilización completa de TypeScript y schema drift.",
+        "longDescription": "CrumbCoach es una plataforma SaaS que ayuda a panaderos artesanales de masa madre y cottage food a gestionar pedidos, recetas, inventario y clientes. Es un monorepo Turborepo + pnpm con un frontend web en React, un backend en Express, una app móvil en Expo y un paquete de tipos compartidos, todo sobre Supabase (Postgres, Auth, Storage, Edge Functions). El trabajo se centró en dejar la app web lista para lanzar: diseñar desde cero el subsistema de suscripciones y facturación sobre Stripe Connect, reconstruir la autenticación sobre Supabase JWT con sesiones persistidas en Postgres y conectar la app móvil al backend web mediante una API dedicada. Una campaña de seguridad sostenida añadió rate limiting, CSRF, validación de esquemas y registros de auditoría, mientras que una auditoría sistemática de schema drift y una estabilización de TypeScript —errores de tipo en web y mobile llevados a cero— endurecieron el código.",
+        "keyFeatures": {
+          "Subscriptions & Billing": "Gating Pro/Free por niveles construido sobre Stripe Connect",
+          "Auth & Sessions": "Login Supabase-JWT con sesiones en Postgres y CSRF",
+          "Mobile-to-Backend Bridge": "API compartida para que la app móvil reutilice la lógica de negocio web",
+          "Security Hardening": "Rate limiting, validación de esquemas, auditoría y remediación de CVEs",
+          "Schema-Drift Cleanup": "Base de datos, tipos y ORM auditados a un estado consistente y verificado"
+        },
+        "techDescriptions": {
+          "React": "UI del frontend web",
+          "TypeScript": "Seguridad de tipos end-to-end, errores llevados a cero",
+          "Express": "Backend Node y módulos de rutas por dominio",
+          "Supabase": "Postgres, Auth, Storage y Edge Functions",
+          "Drizzle ORM": "Esquema tipado y capa SQL",
+          "Stripe": "Suscripciones y pagos con Connect",
+          "Turborepo": "Monorepo pnpm entre web, mobile y shared"
+        },
+        "techImpl": "La app web combina un frontend React con un backend Express, compartiendo una capa de datos Supabase tipada (Drizzle ORM más el cliente HTTP de Supabase) para que web y mobile vean exactamente los mismos datos. La facturación corre sobre Stripe Connect con destination charges y webhooks idempotentes; la autenticación usa Supabase JWT con sesiones en Postgres, y una capa de estado de servidor cacheada mantiene el cliente sincronizado. Una auditoría de schema drift alineó la base de datos en vivo, los tipos generados y el ORM, y una pasada de TypeScript llevó los errores de tipo de web y mobile a cero."
+      },
+      "connectInvest": {
+        "title": "Connect Invest",
+        "description": "Sitio de marketing de alta fidelidad para una plataforma de inversión inmobiliaria — construido pixel a pixel desde Figma y totalmente responsive.",
+        "summary": "El sitio público de marketing de Connect Invest, una plataforma de inversión inmobiliaria. Implementado casi de extremo a extremo desde un diseño de Figma de alta fidelidad, con layouts totalmente responsive en móvil, tablet y escritorio, dentro de un monorepo pnpm + Turborepo — además de la expansión de las secciones home, portfolio y about y rate limiting en endpoints sensibles.",
+        "longDescription": "El sitio público de marketing de Connect Invest, una plataforma de inversión inmobiliaria construida como monorepo pnpm + Turborepo. La app de marketing se implementó casi por completo a partir de un diseño de Figma de alta fidelidad, traducido pixel a pixel a un build de Next.js con layouts totalmente responsive en móvil, tablet y escritorio. El trabajo abarcó una fuerte expansión de las secciones home, portfolio y about —componentes, contenido y assets—, además de refinamientos de UX móvil y enlaces de distribución de la app. Se añadieron controles de abuso y riesgo mediante rate limiting en endpoints sensibles, con mantenimiento continuo de dependencias y ajuste de entorno para mantener el sitio rápido y confiable.",
+        "keyFeatures": {
+          "Figma-to-Code Fidelity": "Sitio de marketing implementado pixel a pixel desde un diseño de Figma de alta fidelidad",
+          "Fully Responsive": "Layouts afinados para móvil, tablet y escritorio",
+          "Home & Portfolio": "Expansión de componentes, contenido y assets de home, portfolio y about",
+          "Rate Limiting": "Controles de abuso en endpoints sensibles",
+          "Monorepo Architecture": "Workspace pnpm + Turborepo compartido entre apps"
+        },
+        "techDescriptions": {
+          "Next.js": "Framework React que impulsa el sitio de marketing",
+          "React": "UI basada en componentes",
+          "TypeScript": "Componentes y contenido con seguridad de tipos",
+          "Tailwind CSS": "Estilos responsive utility-first",
+          "Figma": "Diseño fuente traducido en alta fidelidad",
+          "Turborepo": "Orquestación de monorepo entre apps"
+        },
+        "techImpl": "La app de marketing es un build de Next.js + React estilizado con Tailwind CSS, dentro de un monorepo pnpm + Turborepo junto a las apps web y móvil de la plataforma. Un diseño de Figma de alta fidelidad se trasladó a producción con breakpoints responsive validados en móvil, tablet y escritorio. Los endpoints sensibles se protegen con rate limiting, y las dependencias se mantienen al día para conservar rendimiento y seguridad."
+      },
+      "dailyAbide": {
+        "title": "The Daily Abide",
+        "description": "Rediseño de navegación y una capa completa de gamificación para una app móvil de planificación de fe — llevada de prototipo a lista para la App Store.",
+        "summary": "Una app móvil de planificación diaria de fe construida con Expo y Supabase. Llevada de un prototipo migrado a lista para publicar: un rediseño completo de navegación (de Stack a Tabs con un hub Home), una capa de engagement de rachas, XP y celebraciones, infraestructura de seguridad y CI/CD desde cero, y cumplimiento con la App Store de iOS.",
+        "longDescription": "The Daily Abide es una app móvil de planificación diaria de fe, construida con Expo (SDK 54) sobre un monorepo Turborepo + pnpm y respaldada por Supabase (Auth, Postgres, RLS). La app se llevó de un prototipo migrado a un producto listo para publicar. Eso implicó un rediseño completo de la navegación —de un stack a una arquitectura de cinco tabs con un hub Home (anillo de pulso diario, acciones rápidas, escritura en línea)— y toda una capa de engagement: rachas con registro idempotente por día, XP y niveles, y overlays de celebración con partículas a lo largo de la app. También implicó levantar desde cero la seguridad y el CI/CD del proyecto (SAST, auditoría de dependencias, escaneo de secretos, hooks de pre-commit), estabilizar la autenticación ante casos límite de backend que no responde, y cumplir los requisitos de la App Store de Apple, incluida la eliminación de cuenta dentro de la app.",
+        "keyFeatures": {
+          "Tab Navigation & Home Hub": "Rediseñado de un stack a 5 tabs con un hub Home de estado diario",
+          "Gamification Layer": "Rachas, XP, niveles y registro idempotente por día",
+          "Celebration Overlays": "Celebraciones con partículas en pantallas clave",
+          "Security & CI/CD": "SAST, auditoría de dependencias, escaneo de secretos y hooks de pre-commit desde cero",
+          "App Store Compliance": "Eliminación de cuenta in-app y preparación para envío a iOS"
+        },
+        "techDescriptions": {
+          "Expo": "Runtime SDK 54 y routing basado en archivos",
+          "React Native": "UI móvil multiplataforma",
+          "TypeScript": "App y hooks con seguridad de tipos",
+          "Supabase": "Auth, Postgres y RLS",
+          "PostgreSQL": "Datos relacionales con seguridad a nivel de fila",
+          "Turborepo": "Monorepo pnpm (mobile + web)"
+        },
+        "techImpl": "La app usa navegación basada en archivos sobre un árbol de providers que abarca gesture handling, un error boundary, caché de estado de servidor, auth y un provider de celebraciones. El estado de servidor se cachea con actualizaciones optimistas e invalidación en cascada, y la UI se anima con fluidez a lo largo de tabs y overlays de celebración. Supabase provee Auth, Postgres y seguridad a nivel de fila, con la sesión persistida localmente. Un pipeline de CI/CD desde cero añade SAST, auditoría de dependencias y escaneo de secretos, y un flujo de eliminación de cuenta respaldado por RPC cumple los requisitos de Apple."
+      },
       "poa": {
         "title": "Sistema de Gestión POA",
         "description": "Plataforma integral para planificación y gestión presupuestaria con modelo RBAC",
