@@ -5,6 +5,7 @@ import { Briefcase, Linkedin, Github, Mail } from 'lucide-react';
 import RotatingTitle from '../../components/RotatingTitle';
 import WorkTimeline from '../../components/WorkTimeline';
 import EducationSection from '../../components/EducationSection';
+import AboutGlobe from '../../components/sections/AboutGlobe';
 
 const experienceItems = [
   { key: 'bridge',           logos: ['/media/work-education/bridge-staff-120w.avif', '/media/work-education/acr-120w.avif'], present: true },
@@ -26,8 +27,9 @@ export default function AboutPage() {
 
       {/* Intro */}
       <section className="section-y-sm relative z-10 bg-transparent transition-colors duration-300">
-        <div className="container-prose text-center">
-          <p className="text-xl md:text-2xl lg:text-3xl text-slate-700 dark:text-slate-100 mb-2 font-medium transition-colors duration-300">
+        <AboutGlobe />
+        <div className="container-prose text-center relative z-10">
+          <p className="text-xl md:text-2xl lg:text-3xl text-black dark:text-slate-100 mb-2 font-medium transition-colors duration-300">
             {t('hero.name')}
           </p>
           <RotatingTitle titles={t('hero.titles')} />

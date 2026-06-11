@@ -500,6 +500,68 @@ html:not(.dark) .spline-container > div {
   }
 }
 
+/* About globe scrim — capa entre el globo y el texto que mejora la legibilidad.
+   Usa var(--bg-primary) (color de fondo del tema): oscurece detrás del texto en
+   modo oscuro, aclara en modo claro, y se funde hacia los bordes donde el globo
+   queda nítido. La posiciona el wrapper de AboutGlobe (absolute inset-0). */
+.globe-scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 62% 58% at 50% 50%,
+    var(--bg-primary) 0%,
+    var(--bg-primary) 26%,
+    transparent 72%
+  );
+  opacity: 0.62;
+}
+
+/* About globe marker (Quito) — punto verde con núcleo blanco + anillo pulsante.
+   Lo posiciona components/sections/AboutGlobe.jsx (left/top/opacity vía JS proyectando
+   Quito cada frame). El anillo se expande y se contrae sin parar (sonar de ida y vuelta). */
+.globe-marker {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  transition: opacity 220ms linear; /* fade suave al rotar al lado oculto */
+  will-change: left, top, opacity;
+}
+.globe-marker-core,
+.globe-marker-ring {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 9999px;
+}
+.globe-marker-core {
+  width: 8px;
+  height: 8px;
+  transform: translate(-50%, -50%);
+  /* núcleo blanco que funde a verde */
+  background: radial-gradient(circle, #ffffff 0 1.6px, #2ee06b 2.4px 100%);
+  box-shadow: 0 0 7px 1.5px rgba(46, 224, 107, 0.85);
+}
+.globe-marker-ring {
+  width: 9px;
+  height: 9px;
+  border: 1.5px solid rgba(46, 224, 107, 0.9);
+  animation: globeMarkerPulse 2.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+@keyframes globeMarkerPulse {
+  0% { transform: translate(-50%, -50%) scale(0.35); opacity: 0.95; }
+  50% { transform: translate(-50%, -50%) scale(3.2); opacity: 0.12; }
+  100% { transform: translate(-50%, -50%) scale(0.35); opacity: 0.95; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .globe-marker-ring {
+    animation: none;
+  }
+}
+
 /* Rotating title slide animations.
    Doble-render: durante 'transitioning' renderizamos leaving + incoming
    superpuestos en grid 1x1 → ambos animan al mismo tiempo, sin dead frames. */

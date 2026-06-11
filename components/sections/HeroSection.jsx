@@ -196,7 +196,7 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 items-center">
           {/* Contenido de texto - Izquierda */}
           <div className="text-center lg:text-left">
-            <p className="text-2xl md:text-3xl text-slate-700 dark:text-slate-100 mb-2 font-medium transition-colors duration-300">
+            <p className="text-2xl md:text-3xl text-black dark:text-slate-100 mb-2 font-medium transition-colors duration-300">
               {t('hero.name')}
             </p>
             <TypefaceTitle
