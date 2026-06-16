@@ -1,8 +1,9 @@
 'use client';
-import React, { useState, useRef, useMemo, useCallback, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useRef, useMemo, useCallback, useEffect, useContext, lazy, Suspense } from 'react';
 import { ExternalLink, Github, X, Monitor, Server, Globe, FileText, ArrowRight } from 'lucide-react';
 import { getProjectsData } from '../../data/projectTranslations';
 import { useTranslation } from '../../hooks/useTranslation';
+import { AppContext } from '../../contexts/AppContext';
 import { getOptimalVideoSource, getOptimalPoster } from '../../utils/adaptiveVideo';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import useFocusTrap from '../../hooks/useFocusTrap';
@@ -136,6 +137,7 @@ ProjectCard.displayName = 'ProjectCard';
 
 const ProjectsSection = React.memo(() => {
   const { t } = useTranslation();
+  const { setModalOpen } = useContext(AppContext);
   const [selectedProject, setSelectedProject] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const projectsSectionRef = useRef(null);
@@ -150,9 +152,10 @@ const ProjectsSection = React.memo(() => {
     setSelectedProject(null);
   }, []);
 
-  // Close modal on Escape key + lock body scroll + inert background
+  // Close modal on Escape key + lock body scroll + inert background + ocultar navbar
   useEffect(() => {
     if (!isModalOpen) return;
+    setModalOpen(true); // señal global: el navbar se oculta mientras el modal está abierto
     document.body.style.overflow = 'hidden';
     const section = projectsSectionRef.current;
     if (section) {
@@ -162,6 +165,7 @@ const ProjectsSection = React.memo(() => {
     const handleEscape = (e) => { if (e.key === 'Escape') handleCloseModal(); };
     document.addEventListener('keydown', handleEscape);
     return () => {
+      setModalOpen(false);
       document.body.style.overflow = '';
       if (section) {
         section.removeAttribute('inert');
@@ -169,7 +173,7 @@ const ProjectsSection = React.memo(() => {
       }
       document.removeEventListener('keydown', handleEscape);
     };
-  }, [isModalOpen, handleCloseModal]);
+  }, [isModalOpen, handleCloseModal, setModalOpen]);
 
   const handleProjectClick = useCallback((proj) => {
     setSelectedProject(proj);
@@ -178,7 +182,7 @@ const ProjectsSection = React.memo(() => {
 
   return (
     <>
-      <section ref={projectsSectionRef} id="projects" className="section-y relative z-10 bg-transparent transition-colors duration-300">
+      <section ref={projectsSectionRef} id="projects" className="section-gap relative z-10 bg-transparent transition-colors duration-300">
         <div className="container-page section-title-mb">
           <h2 className="title-glow text-h2 font-bold text-center pb-2 text-black dark:text-white">
             {t('projects.title')}
@@ -233,7 +237,7 @@ const ProjectsSection = React.memo(() => {
       {/* Modal */}
       {isModalOpen && selectedProject && (
         <div
-          className="fixed inset-0 top-14 bg-black/40 dark:bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fadeIn"
+          className="fixed inset-0 bg-black/40 dark:bg-black/70 backdrop-blur-md z-[60] flex items-center justify-center p-4 animate-fadeIn"
           onClick={handleCloseModal}
         >
           <div

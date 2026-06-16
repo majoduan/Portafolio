@@ -52,7 +52,7 @@ const TechCard = memo(({ tech, index, isMobile, animationState, onMouseEnter, on
               {tech.name}
             </h3>
             <p className="text-xs text-slate-600 dark:text-gray-400 truncate">
-              {tech.experience}
+              {tech.experience} {t('techCard.years')}
             </p>
           </div>
         </div>
@@ -108,8 +108,12 @@ const TechCard = memo(({ tech, index, isMobile, animationState, onMouseEnter, on
               />
               {/* Text content */}
               <span className="relative z-10 text-center">
-                <span className="inline lg:hidden xl:inline">{t('techCard.experience')}</span>
-                <span className="hidden lg:inline xl:hidden">{t('techCard.experienceShort')}</span>: {tech.experience}
+                {/* md (768–1023): palabra completa */}
+                <span className="inline lg:hidden">{t('techCard.experience')}: {tech.experience} {t('techCard.years')}</span>
+                {/* lg (1024–1279): abreviado para el layout más estrecho */}
+                <span className="hidden lg:inline xl:hidden">{t('techCard.experienceShort')}: {tech.experience} {t('techCard.years')}</span>
+                {/* xl+ (desktop): formato nuevo "3+ years of Exp" */}
+                <span className="hidden xl:inline">{tech.experience} {t('techCard.years')} {t('techCard.ofExp')}</span>
               </span>
             </span>
           </div>

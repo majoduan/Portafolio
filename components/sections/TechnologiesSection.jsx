@@ -171,13 +171,13 @@ const TechnologiesSection = React.memo(() => {
   const displayTab = transition.phase === 'transitioning' ? transition.toTab : currentTechTab;
 
   return (
-    <section id="technologies" className="section-y relative z-10 bg-transparent transition-colors duration-300">
+    <section id="technologies" className="pt-[var(--hero-gap)] pb-[var(--section-pad)] relative z-10 bg-transparent transition-colors duration-300">
       <div className="container-page">
         <h2 className="title-glow text-h2 font-bold text-center section-title-mb pb-2 text-black dark:text-white">
           {t('technologies.title')}
         </h2>
         {/* Tab Navigation Bar */}
-        <div className="relative flex justify-center mb-12 border-b border-slate-300 dark:border-slate-700/50 transition-colors duration-300">
+        <div className="relative flex justify-center mb-6 border-b border-slate-300 dark:border-slate-700/50 transition-colors duration-300">
           <div className="flex gap-1 md:gap-2 pr-10">
             {techCategories.map((category, index) => (
               <button

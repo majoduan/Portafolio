@@ -90,7 +90,7 @@ const CertificatesSection = React.memo(() => {
   }, [currentCertificateIndex, viewMode]);
 
   return (
-    <section id="certificates" className="section-y bg-transparent relative z-10 overflow-hidden transition-colors duration-300">
+    <section id="certificates" className="section-gap bg-transparent relative z-10 overflow-hidden transition-colors duration-300">
       {/* Title row with pause button (button absolute-positioned right, mirrors TechnologiesSection) */}
       <div className="container-page section-title-mb relative">
         <h2 className="title-glow text-h2 font-bold text-center pb-2 text-black dark:text-white">

@@ -602,7 +602,9 @@
   },
   "techCard": {
     "experience": "Experience",
-    "experienceShort": "Exp"
+    "experienceShort": "Exp",
+    "years": "years",
+    "ofExp": "of Exp"
   },
   "contact": {
     "title": "Let's Connect",

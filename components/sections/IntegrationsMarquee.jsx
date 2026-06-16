@@ -27,7 +27,7 @@ const IntegrationsMarquee = React.memo(() => {
 
   return (
     <section
-      className="integrations-marquee section-y-sm relative overflow-hidden bg-transparent"
+      className="integrations-marquee section-gap relative overflow-hidden bg-transparent"
       aria-label={t('integrations.title')}
     >
       <h3 className="text-center text-xs md:text-sm font-semibold text-gray-500 dark:text-gray-400 mb-10 uppercase tracking-[0.2em]">

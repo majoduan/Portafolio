@@ -46,48 +46,48 @@ import {
 // Helper function to get translated technology data
 export const getTechnologies = (t) => ({
   backend: [
-    { name: t('technologies.skills.java.name'), description: t('technologies.skills.java.description'), experience: "3+ years", icon: JavaIcon, color: "from-orange-300 to-orange-400" },
-    { name: t('technologies.skills.python.name'), description: t('technologies.skills.python.description'), experience: "3+ years", icon: PythonIcon, color: "from-blue-400 to-blue-500" },
-    { name: t('technologies.skills.csharp.name'), description: t('technologies.skills.csharp.description'), experience: "3+ years", icon: CSharpIcon, color: "from-purple-500 to-purple-700" },
-    { name: t('technologies.skills.cplusplus.name'), description: t('technologies.skills.cplusplus.description'), experience: "3+ years", icon: CplusplusIcon, color: "from-blue-500 to-blue-700" },
-    { name: t('technologies.skills.dotnet.name'), description: t('technologies.skills.dotnet.description'), experience: "2+ years", icon: DotNetIcon, color: "from-indigo-300 to-indigo-400" },
-    { name: t('technologies.skills.nodejs.name'), description: t('technologies.skills.nodejs.description'), experience: "2+ years", icon: NodeIcon, color: "from-green-400 to-green-500" },
-    { name: t('technologies.skills.express.name'), description: t('technologies.skills.express.description'), experience: "2+ years", icon: ExpressIcon, color: "from-gray-500 to-gray-700" },
-    { name: t('technologies.skills.nestjs.name'), description: t('technologies.skills.nestjs.description'), experience: "2+ years", icon: NestIcon, color: "from-red-700 to-red-900" },
-    { name: t('technologies.skills.fastapi.name'), description: t('technologies.skills.fastapi.description'), experience: "2+ years", icon: FastAPIIcon, color: "from-teal-700 to-teal-900" }
+    { name: t('technologies.skills.java.name'), description: t('technologies.skills.java.description'), experience: "3+", icon: JavaIcon, color: "from-orange-300 to-orange-400" },
+    { name: t('technologies.skills.python.name'), description: t('technologies.skills.python.description'), experience: "3+", icon: PythonIcon, color: "from-blue-400 to-blue-500" },
+    { name: t('technologies.skills.csharp.name'), description: t('technologies.skills.csharp.description'), experience: "3+", icon: CSharpIcon, color: "from-purple-500 to-purple-700" },
+    { name: t('technologies.skills.cplusplus.name'), description: t('technologies.skills.cplusplus.description'), experience: "3+", icon: CplusplusIcon, color: "from-blue-500 to-blue-700" },
+    { name: t('technologies.skills.dotnet.name'), description: t('technologies.skills.dotnet.description'), experience: "2+", icon: DotNetIcon, color: "from-indigo-300 to-indigo-400" },
+    { name: t('technologies.skills.nodejs.name'), description: t('technologies.skills.nodejs.description'), experience: "2+", icon: NodeIcon, color: "from-green-400 to-green-500" },
+    { name: t('technologies.skills.express.name'), description: t('technologies.skills.express.description'), experience: "2+", icon: ExpressIcon, color: "from-gray-500 to-gray-700" },
+    { name: t('technologies.skills.nestjs.name'), description: t('technologies.skills.nestjs.description'), experience: "2+", icon: NestIcon, color: "from-red-700 to-red-900" },
+    { name: t('technologies.skills.fastapi.name'), description: t('technologies.skills.fastapi.description'), experience: "2+", icon: FastAPIIcon, color: "from-teal-700 to-teal-900" }
   ],
   frontend: [
-    { name: t('technologies.skills.react.name'), description: t('technologies.skills.react.description'), experience: "2+ years", icon: ReactLogo, color: "from-[#1D253A] to-[#1D253A]", tagColor: "from-[#2A3A5C] to-[#2A3A5C]" },
-    { name: t('technologies.skills.nextjs.name'), description: t('technologies.skills.nextjs.description'), experience: "2+ years", icon: NextjsIcon, color: "from-slate-100 to-slate-200", tagColor: "from-slate-700 to-slate-700", iconColorClass: "text-black" },
-    { name: t('technologies.skills.reactnative.name'), description: t('technologies.skills.reactnative.description'), experience: "1+ years", icon: ReactNativeIcon, color: "from-[#62DAFC] to-[#62DAFC]" },
-    { name: t('technologies.skills.expo.name'), description: t('technologies.skills.expo.description'), experience: "1+ years", icon: ExpoIcon, color: "from-slate-100 to-slate-200", tagColor: "from-slate-700 to-slate-700" },
-    { name: t('technologies.skills.javascript.name'), description: t('technologies.skills.javascript.description'), experience: "3+ years", icon: JSIcon, color: "from-yellow-400 to-yellow-600" },
-    { name: t('technologies.skills.typescript.name'), description: t('technologies.skills.typescript.description'), experience: "2+ years", icon: TSIcon, color: "from-blue-500 to-blue-700" },
-    { name: t('technologies.skills.html5.name'), description: t('technologies.skills.html5.description'), experience: "3+ years", icon: HTMLIcon, color: "from-orange-400 to-orange-500" },
-    { name: t('technologies.skills.css3.name'), description: t('technologies.skills.css3.description'), experience: "3+ years", icon: CSSIcon, color: "from-blue-400 to-blue-500" },
-    { name: t('technologies.skills.tailwind.name'), description: t('technologies.skills.tailwind.description'), experience: "2+ years", icon: TailwindIcon, color: "from-cyan-700 to-cyan-800" }
+    { name: t('technologies.skills.react.name'), description: t('technologies.skills.react.description'), experience: "2+", icon: ReactLogo, color: "from-[#1D253A] to-[#1D253A]", tagColor: "from-[#2A3A5C] to-[#2A3A5C]" },
+    { name: t('technologies.skills.nextjs.name'), description: t('technologies.skills.nextjs.description'), experience: "2+", icon: NextjsIcon, color: "from-slate-100 to-slate-200", tagColor: "from-slate-700 to-slate-700", iconColorClass: "text-black" },
+    { name: t('technologies.skills.reactnative.name'), description: t('technologies.skills.reactnative.description'), experience: "1+", icon: ReactNativeIcon, color: "from-[#62DAFC] to-[#62DAFC]" },
+    { name: t('technologies.skills.expo.name'), description: t('technologies.skills.expo.description'), experience: "1+", icon: ExpoIcon, color: "from-slate-100 to-slate-200", tagColor: "from-slate-700 to-slate-700" },
+    { name: t('technologies.skills.javascript.name'), description: t('technologies.skills.javascript.description'), experience: "3+", icon: JSIcon, color: "from-yellow-400 to-yellow-600" },
+    { name: t('technologies.skills.typescript.name'), description: t('technologies.skills.typescript.description'), experience: "2+", icon: TSIcon, color: "from-blue-500 to-blue-700" },
+    { name: t('technologies.skills.html5.name'), description: t('technologies.skills.html5.description'), experience: "3+", icon: HTMLIcon, color: "from-orange-400 to-orange-500" },
+    { name: t('technologies.skills.css3.name'), description: t('technologies.skills.css3.description'), experience: "3+", icon: CSSIcon, color: "from-blue-400 to-blue-500" },
+    { name: t('technologies.skills.tailwind.name'), description: t('technologies.skills.tailwind.description'), experience: "2+", icon: TailwindIcon, color: "from-cyan-700 to-cyan-800" }
   ],
   databases: [
-    { name: t('technologies.skills.postgresql.name'), description: t('technologies.skills.postgresql.description'), experience: "3+ years", icon: PostgreSQLIcon, color: "from-blue-500 to-blue-700" },
-    { name: t('technologies.skills.mysql.name'), description: t('technologies.skills.mysql.description'), experience: "3+ years", icon: MySQLIcon, color: "from-blue-900 to-blue-1000", tagColor: "from-blue-700 to-blue-700" },
-    { name: t('technologies.skills.sqlserver.name'), description: t('technologies.skills.sqlserver.description'), experience: "3+ years", icon: SQLServerIcon, color: "from-red-500 to-orange-600" },
-    { name: t('technologies.skills.supabase.name'), description: t('technologies.skills.supabase.description'), experience: "1+ years", icon: SupabaseIcon, color: "from-slate-900 to-black", tagColor: "from-emerald-600 to-emerald-600" },
-    { name: t('technologies.skills.drizzle.name'), description: t('technologies.skills.drizzle.description'), experience: "1+ years", icon: DrizzleIcon, color: "from-slate-900 to-black", tagColor: "from-lime-500 to-lime-500" },
-    { name: t('technologies.skills.mongodb.name'), description: t('technologies.skills.mongodb.description'), experience: "1/2 years", icon: MongoDBIcon, color: "from-green-700 to-green-900" },
-    { name: t('technologies.skills.oracle.name'), description: t('technologies.skills.oracle.description'), experience: "1+ years", icon: OracleIcon, color: "from-slate-100 to-slate-300", tagColor: "from-red-600 to-red-600" },
-    { name: t('technologies.skills.sqlite.name'), description: t('technologies.skills.sqlite.description'), experience: "3+ years", icon: SqliteIcon, color: "from-sky-400 to-blue-600" },
-    { name: t('technologies.skills.firebird.name'), description: t('technologies.skills.firebird.description'), experience: "1/2 years", icon: FirebirdIcon, color: "from-orange-500 to-red-600" }
+    { name: t('technologies.skills.postgresql.name'), description: t('technologies.skills.postgresql.description'), experience: "3+", icon: PostgreSQLIcon, color: "from-blue-500 to-blue-700" },
+    { name: t('technologies.skills.mysql.name'), description: t('technologies.skills.mysql.description'), experience: "3+", icon: MySQLIcon, color: "from-blue-900 to-blue-1000", tagColor: "from-blue-700 to-blue-700" },
+    { name: t('technologies.skills.sqlserver.name'), description: t('technologies.skills.sqlserver.description'), experience: "3+", icon: SQLServerIcon, color: "from-red-500 to-orange-600" },
+    { name: t('technologies.skills.supabase.name'), description: t('technologies.skills.supabase.description'), experience: "1+", icon: SupabaseIcon, color: "from-slate-900 to-black", tagColor: "from-emerald-600 to-emerald-600" },
+    { name: t('technologies.skills.drizzle.name'), description: t('technologies.skills.drizzle.description'), experience: "1+", icon: DrizzleIcon, color: "from-slate-900 to-black", tagColor: "from-lime-500 to-lime-500" },
+    { name: t('technologies.skills.mongodb.name'), description: t('technologies.skills.mongodb.description'), experience: "1/2", icon: MongoDBIcon, color: "from-green-700 to-green-900" },
+    { name: t('technologies.skills.oracle.name'), description: t('technologies.skills.oracle.description'), experience: "1+", icon: OracleIcon, color: "from-slate-100 to-slate-300", tagColor: "from-red-600 to-red-600" },
+    { name: t('technologies.skills.sqlite.name'), description: t('technologies.skills.sqlite.description'), experience: "3+", icon: SqliteIcon, color: "from-sky-400 to-blue-600" },
+    { name: t('technologies.skills.firebird.name'), description: t('technologies.skills.firebird.description'), experience: "1/2", icon: FirebirdIcon, color: "from-orange-500 to-red-600" }
   ],
   devops: [
-    { name: t('technologies.skills.docker.name'), description: t('technologies.skills.docker.description'), experience: "2+ years", icon: DockerIcon, color: "from-blue-500 to-blue-700" },
-    { name: t('technologies.skills.git.name'), description: t('technologies.skills.git.description'), experience: "3+ years", icon: GitIcon, color: "from-orange-700 to-orange-900" },
-    { name: t('technologies.skills.githubactions.name'), description: t('technologies.skills.githubactions.description'), experience: "2+ years", icon: GithubActionsIcon, color: "from-slate-700 to-slate-900", tagColor: "from-slate-600 to-slate-600" },
-    { name: t('technologies.skills.vercel.name'), description: t('technologies.skills.vercel.description'), experience: "2+ years", icon: VercelIcon, color: "from-slate-100 to-slate-300", tagColor: "from-gray-700 to-gray-700" },
-    { name: t('technologies.skills.figma.name'), description: t('technologies.skills.figma.description'), experience: "3+ years", icon: FigmaIcon, color: "from-purple-700 to-pink-800" },
-    { name: t('technologies.skills.aws.name'), description: t('technologies.skills.aws.description'), experience: "1/2 years", icon: AWSIcon, color: "from-orange-300 to-yellow-400", tagColor: "from-amber-500 to-amber-500" },
-    { name: t('technologies.skills.turborepo.name'), description: t('technologies.skills.turborepo.description'), experience: "1+ years", icon: TurborepoIcon, color: "from-slate-50 to-white", tagColor: "from-red-600 to-red-600" },
-    { name: t('technologies.skills.pnpm.name'), description: t('technologies.skills.pnpm.description'), experience: "1+ years", icon: PnpmIcon, color: "from-amber-100 to-yellow-200", tagColor: "from-amber-600 to-amber-600" },
-    { name: t('technologies.skills.stripe.name'), description: t('technologies.skills.stripe.description'), experience: "1+ years", icon: StripeIcon, color: "from-indigo-500 to-purple-700" }
+    { name: t('technologies.skills.docker.name'), description: t('technologies.skills.docker.description'), experience: "2+", icon: DockerIcon, color: "from-blue-500 to-blue-700" },
+    { name: t('technologies.skills.git.name'), description: t('technologies.skills.git.description'), experience: "3+", icon: GitIcon, color: "from-orange-700 to-orange-900" },
+    { name: t('technologies.skills.githubactions.name'), description: t('technologies.skills.githubactions.description'), experience: "2+", icon: GithubActionsIcon, color: "from-slate-700 to-slate-900", tagColor: "from-slate-600 to-slate-600" },
+    { name: t('technologies.skills.vercel.name'), description: t('technologies.skills.vercel.description'), experience: "2+", icon: VercelIcon, color: "from-slate-100 to-slate-300", tagColor: "from-gray-700 to-gray-700" },
+    { name: t('technologies.skills.figma.name'), description: t('technologies.skills.figma.description'), experience: "3+", icon: FigmaIcon, color: "from-purple-700 to-pink-800" },
+    { name: t('technologies.skills.aws.name'), description: t('technologies.skills.aws.description'), experience: "1/2", icon: AWSIcon, color: "from-orange-300 to-yellow-400", tagColor: "from-amber-500 to-amber-500" },
+    { name: t('technologies.skills.turborepo.name'), description: t('technologies.skills.turborepo.description'), experience: "1+", icon: TurborepoIcon, color: "from-slate-50 to-white", tagColor: "from-red-600 to-red-600" },
+    { name: t('technologies.skills.pnpm.name'), description: t('technologies.skills.pnpm.description'), experience: "1+", icon: PnpmIcon, color: "from-amber-100 to-yellow-200", tagColor: "from-amber-600 to-amber-600" },
+    { name: t('technologies.skills.stripe.name'), description: t('technologies.skills.stripe.description'), experience: "1+", icon: StripeIcon, color: "from-indigo-500 to-purple-700" }
   ]
 });
 

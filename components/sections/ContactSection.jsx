@@ -11,7 +11,7 @@ const ContactSection = React.memo(() => {
   return (
     <>
       {/* Contact Section */}
-      <section id="contact" className="section-y relative z-10 bg-transparent transition-colors duration-300">
+      <section id="contact" className="section-gap relative z-10 bg-transparent transition-colors duration-300">
         <div className="container-page">
           {/* Section Title */}
           <div className="text-center section-title-mb">

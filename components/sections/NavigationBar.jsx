@@ -6,6 +6,7 @@ import { Home, User, Briefcase, Sun, Moon } from 'lucide-react';
 import LanguageToggle from '../LanguageToggle';
 import ThemeToggle from '../ThemeToggle';
 import { useTranslation } from '../../hooks/useTranslation';
+import { useScrollDirection } from '../../hooks/useScrollDirection';
 import { AppContext } from '../../contexts/AppContext';
 
 const navItems = [
@@ -16,18 +17,21 @@ const navItems = [
 
 const NavigationBar = React.memo(() => {
   const { t } = useTranslation();
-  const { theme, toggleTheme, language, toggleLanguage } = useContext(AppContext);
+  const { theme, toggleTheme, language, toggleLanguage, isModalOpen } = useContext(AppContext);
   const pathname = usePathname();
+  const hidden = useScrollDirection();
 
   return (
     <>
       {/* ─── Desktop Navigation — top fixed ─────────────────────── */}
       <nav
-        className="hidden md:block fixed top-0 w-full bg-white/90 dark:bg-[var(--nav-bg)] backdrop-blur-md border-b border-slate-200 dark:border-white/20 z-50 transition-colors duration-300"
+        className={`hidden md:block fixed top-0 w-full bg-white/90 dark:bg-[var(--nav-bg)] backdrop-blur-md border-b border-slate-200 dark:border-white/20 z-50 transition duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] has-[:focus-visible]:!translate-y-0 ${
+          hidden || isModalOpen ? '-translate-y-full' : 'translate-y-0'
+        }`}
         aria-label="Main navigation"
       >
         <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-[3.5rem]">
             {/* Desktop menu - Centrado */}
             <div className="flex space-x-10 flex-1 justify-center">
               {navItems.map(({ id, href }) => (
@@ -43,8 +47,10 @@ const NavigationBar = React.memo(() => {
                 >
                   {t(`nav.${id}`)}
                   <span
-                    className={`absolute -bottom-1 left-0 h-0.5 bg-gray-400 transition-all duration-300 ${
-                      pathname === href ? '!bg-black dark:!bg-white w-full' : 'w-0 group-hover:w-full'
+                    className={`nav-underline absolute -bottom-1 left-0 right-0 h-0.5 origin-center transition-transform duration-300 ${
+                      pathname === href
+                        ? 'nav-underline-glow scale-x-100'
+                        : 'scale-x-0 group-hover:scale-x-100'
                     }`}
                   />
                 </Link>
@@ -63,7 +69,9 @@ const NavigationBar = React.memo(() => {
 
       {/* ─── Mobile Navigation — bottom fixed, integra Theme + Lang toggles ─── */}
       <nav
-        className="md:hidden fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-[var(--nav-bg)] backdrop-blur-md border-t border-slate-200 dark:border-white/20 z-50 transition-colors duration-300 pb-[env(safe-area-inset-bottom)]"
+        className={`md:hidden fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-[var(--nav-bg)] backdrop-blur-md border-t border-slate-200 dark:border-white/20 z-50 transition duration-300 pb-[env(safe-area-inset-bottom)] ${
+          isModalOpen ? 'translate-y-full' : 'translate-y-0'
+        }`}
         aria-label="Main navigation"
       >
         <div className="flex items-stretch justify-around h-14 px-1">

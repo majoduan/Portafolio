@@ -419,7 +419,7 @@ export default function WorkTimeline({ items, t }) {
 
   // ── Render ──
   return (
-    <section className="section-y-sm relative z-10 bg-transparent transition-colors duration-300">
+    <section className="section-gap relative z-10 bg-transparent transition-colors duration-300">
       <div className="container-prose">
         <h2 className="title-glow text-h2 font-bold text-center section-title-mb pb-2 text-black dark:text-white">
           {t('about.experience.title')}

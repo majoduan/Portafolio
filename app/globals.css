@@ -35,9 +35,17 @@
   padding-inline: var(--gutter);
 }
 
-/* Ritmo vertical de sección. Reemplaza py-20 md:py-24 / py-16 / py-10. */
-@utility section-y    { padding-block: var(--section-py); }
-@utility section-y-sm { padding-block: var(--section-py-sm); }
+/* Ritmo vertical entre secciones — padding SIMÉTRICO (mitad arriba, mitad abajo).
+   La separación entre dos secciones = mitad de una + mitad de la otra = el token
+   "gap" completo, uniforme (todas usan el mismo valor; antes cada sección pagaba
+   un padding ENTERO arriba Y abajo, y el hueco era la suma emergente de dos
+   valores distintos, de 64 a 202px). El reparto simétrico devuelve aire INFERIOR:
+   sin él, el hover-scale de las cards (p. ej. Technologies) se desborda del
+   padding-box y se RECORTA contra el paint-containment de la sección
+   (content-visibility:auto aplica `contain: paint` también on-screen).
+   Ref: regla "internal ≤ external" + escala restringida (Refactoring UI / NN/g). */
+@utility section-gap       { padding-block: var(--section-pad); }
+@utility section-gap-tight { padding-block: var(--section-pad-tight); }
 
 /* Margen inferior estándar de títulos de sección. */
 @utility section-title-mb { margin-bottom: var(--title-mb); }
@@ -71,7 +79,7 @@
   /* ── Sistema de espaciado — FUENTE DE VERDAD ÚNICA ──────────────────
      Escala 4/8pt (tokens crudos) + tokens fluidos clamp() para ritmo de
      sección, gutters y contenedores. Consumidos por las @utility de abajo
-     (container-page, section-y, etc.) y por valores arbitrarios puntuales
+     (container-page, section-gap, etc.) y por valores arbitrarios puntuales
      (p-[var(--space-md)]). Los clamp() en rem+vw componen con la regla
      ultra-wide html{font-size:clamp(...)} (línea ~255). */
   --space-2xs: 0.5rem;   /* 8  */
@@ -82,9 +90,23 @@
   --space-xl:  3rem;     /* 48 */
   --space-2xl: 4rem;     /* 64 */
 
-  /* Padding vertical fluido de sección — reemplaza py-20 md:py-24 / py-16 / py-10 */
-  --section-py:    clamp(4rem, 7vw, 7rem);     /* ~64px → ~112px */
-  --section-py-sm: clamp(2.5rem, 4vw, 4rem);   /* tier menor: marquee, about intro */
+  /* Ritmo vertical entre secciones (8pt, fluido) — padding SIMÉTRICO.
+     --section-gap(-tight): separación TOTAL entre dos secciones (la suma de los
+       dos medios). También se usa como gap directo en listas (flex `gap-[...]`).
+     --section-pad(-tight): padding POR LADO = mitad del gap; lo aplican las
+       @utility section-gap / section-gap-tight a padding-block.
+     -tight = bloques acoplados a propósito (marquee, lista de filas, opener). */
+  --section-gap:       clamp(4rem, 6vw, 6rem);   /* 64 → 96px (secciones hermanas) */
+  --section-gap-tight: clamp(2rem, 3vw, 2.5rem); /* 32 → 40px (acoplados / lista) */
+  --section-pad:       calc(var(--section-gap) / 2);       /* 32 → 48px por lado */
+  --section-pad-tight: calc(var(--section-gap-tight) / 2); /* 16 → 20px por lado */
+
+  /* Spacing generoso para heroes/openers (bespoke, más amplio que el ritmo entre
+     secciones). El home hero (top de #technologies, ya que el hero min-h-screen
+     no aporta padding inferior) y el about intro lo usan para conservar su
+     respiración ORIGINAL (= antiguos section-y / section-y-sm). */
+  --hero-gap:    clamp(4rem, 7vw, 7rem);   /* 64 → 112px (home hero → 1ª sección) */
+  --hero-gap-sm: clamp(2.5rem, 4vw, 4rem); /* 40 → 64px  (padding del about intro) */
 
   /* Gutter horizontal fluido — reemplaza el px-4 fijo; CRECE con el ancho */
   --gutter: clamp(1rem, 4vw, 3rem);            /* 16px → 48px */
@@ -468,6 +490,24 @@ html:not(.dark) .spline-container > div {
   text-shadow:
     0 0 14px rgba(255, 255, 255, 0.35),
     0 0 36px rgba(255, 255, 255, 0.18);
+}
+
+/* Subrayado del navbar — degradado con el centro fuerte que se desvanece hacia
+   los lados. Hereda el color del link vía currentColor (negro/blanco en activo,
+   gris-400 en inactivo), así respeta el contraste más suave de los no
+   seleccionados sin clases extra. El glow "drop light" reutiliza el lenguaje de
+   .title-glow (luz blanca en oscuro, sombra negra en claro) pero como filtro
+   drop-shadow para que el halo siga el alfa del degradado: fuerte al centro,
+   nulo en los bordes (box-shadow daría un halo rectangular). Solo en el activo. */
+.nav-underline {
+  background-image: linear-gradient(90deg, transparent 0%, currentColor 50%, transparent 100%);
+}
+.nav-underline-glow {
+  filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.35));
+}
+.dark .nav-underline-glow {
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.45))
+          drop-shadow(0 0 9px rgba(255, 255, 255, 0.22));
 }
 
 /* Hero title — layout específico (el glow lo aporta el bloque .title-glow). */

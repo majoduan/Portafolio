@@ -21,6 +21,9 @@ export interface AppContextValue {
   theme: Theme;
   setTheme: Dispatch<SetStateAction<Theme>>;
   toggleTheme: () => void;
+  /** True mientras hay un modal a pantalla completa abierto (oculta el navbar). */
+  isModalOpen: boolean;
+  setModalOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 // Default value matches the shape for SSR — el real Provider monta el state
@@ -32,6 +35,8 @@ const defaultContext: AppContextValue = {
   theme: 'dark',
   setTheme: () => {},
   toggleTheme: () => {},
+  isModalOpen: false,
+  setModalOpen: () => {},
 };
 
 // Create context for app-wide state (language and theme)
@@ -69,6 +74,7 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
 
   const [language, setLanguage] = useState<Language>(getInitialLanguage);
   const [theme, setTheme] = useState<Theme>(getInitialTheme);
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
   // Persist language changes to localStorage
   useEffect(() => {
@@ -116,8 +122,10 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
       theme,
       setTheme,
       toggleTheme,
+      isModalOpen,
+      setModalOpen,
     }),
-    [language, theme, toggleLanguage, toggleTheme]
+    [language, theme, toggleLanguage, toggleTheme, isModalOpen]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

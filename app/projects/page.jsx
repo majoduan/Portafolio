@@ -288,8 +288,8 @@ export default function ProjectsPage() {
 
   return (
     <div className="page-top">
-        {/* Page header */}
-        <div className="section-y-sm relative z-10">
+        {/* Page header — opener: gap superior reducido (tight), el page-top da el offset del nav */}
+        <div className="section-gap-tight relative z-10">
           <div className="container-page">
             <h1 className="title-glow text-h2 font-bold text-center section-title-mb pb-2 text-black dark:text-white">
               {t('projects.pageTitle')}
@@ -297,7 +297,8 @@ export default function ProjectsPage() {
           </div>
         </div>
 
-        {/* Projects list */}
+        {/* Projects list — separación entre proyectos = padding interno de cada
+            fila (espaciado original, sin gap extra entre filas). */}
         <div className="relative z-10">
           {projects.map((project, index) => (
             <React.Fragment key={project.slug}>
