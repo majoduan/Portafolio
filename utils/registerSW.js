@@ -5,7 +5,10 @@
 export function registerServiceWorker() {
   // Solo en producción y si el navegador lo soporta
   if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
-    window.addEventListener('load', () => {
+    // Registrar tras `load` para no competir con la carga crítica. Si `load`
+    // ya ocurrió cuando se monta el efecto (hidratación tardía), registrar ya:
+    // antes el listener se añadía después del evento y el SW NUNCA se registraba.
+    const run = () => {
       navigator.serviceWorker
         .register('/sw.js')
         .then((registration) => {
@@ -31,14 +34,13 @@ export function registerServiceWorker() {
         .catch(() => {
           // Error al registrar Service Worker
         });
+    };
 
-      // Escuchar mensajes del SW
-      navigator.serviceWorker.addEventListener('message', (event) => {
-        if (event.data && event.data.type === 'CACHE_UPDATED') {
-          // Cache actualizado
-        }
-      });
-    });
+    if (document.readyState === 'complete') {
+      run();
+    } else {
+      window.addEventListener('load', run, { once: true });
+    }
   }
 }
 

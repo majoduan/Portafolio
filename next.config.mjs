@@ -1,10 +1,29 @@
 import bundleAnalyzer from '@next/bundle-analyzer';
+import withSerwistInit from '@serwist/next';
 
 // Activado con ANALYZE=true env var. Genera 3 HTML treemaps en .next/analyze/
 // (client, edge, nodejs). Reemplaza el legacy scripts/analyze-bundle.mjs que
 // solo sumaba bytes sin distinguir initial vs lazy chunks.
 const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
+});
+
+// Service Worker generado en build (app/sw.ts -> public/sw.js, ignorado en git).
+// Precache acotado: solo el shell (chunks < 700 KB, iconos, manifest, offline).
+// El runtime de Spline (2 MB), fuentes decorativas, imágenes y vídeos se cachean
+// en runtime al primer uso (reglas en app/sw.ts). Registro manual en
+// utils/registerSW.js (toast de "nueva versión") => register: false.
+const withSerwist = withSerwistInit({
+  swSrc: 'app/sw.ts',
+  swDest: 'public/sw.js',
+  register: false,
+  reloadOnOnline: false,
+  disable: process.env.NODE_ENV === 'development',
+  maximumFileSizeToCacheInBytes: 700 * 1024,
+  // Sin globs con `**`: en Windows generan URLs con backslash (/icons\x.svg) y
+  // un 404 en precache impide instalar el SW. El icono se cachea en runtime.
+  globPublicPatterns: ['manifest.json', 'offline.html', 'robots.txt'],
+  exclude: [/\.map$/, /\.woff2$/, /^_next\/static\/media\//],
 });
 
 /** @type {import('next').NextConfig} */
@@ -39,10 +58,13 @@ const nextConfig = {
         headers: [
           {
             key: 'Content-Security-Policy',
-            // CSP Note: 'unsafe-inline' and 'unsafe-eval' are required by @splinetool/runtime
-            // which uses eval() for WebGL shader compilation. This is a known limitation.
+            // CSP Note: 'unsafe-inline' lo exige el script inline de tema/idioma
+            // del <head> (sin nonce: las páginas son estáticas). 'wasm-unsafe-eval'
+            // cubre el WASM del runtime de Spline (physics/compresión) sin abrir
+            // eval() de JS (antes 'unsafe-eval'). Verificado: la escena carga sin
+            // violaciones de CSP con esta política.
             // Risk mitigated by: no user-generated content, no API routes, static deployment.
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://prod.spline.design; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://prod.spline.design; font-src 'self' data:; connect-src 'self' https://prod.spline.design wss://prod.spline.design; media-src 'self' blob:; worker-src 'self' blob:; child-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; frame-ancestors 'none'; upgrade-insecure-requests",
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://prod.spline.design; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://prod.spline.design; font-src 'self' data:; connect-src 'self' https://prod.spline.design wss://prod.spline.design; media-src 'self' blob:; worker-src 'self' blob:; child-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; frame-ancestors 'none'; upgrade-insecure-requests",
           },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'X-Frame-Options', value: 'DENY' },
@@ -98,4 +120,4 @@ const nextConfig = {
   },
 };
 
-export default withBundleAnalyzer(nextConfig);
+export default withSerwist(withBundleAnalyzer(nextConfig));

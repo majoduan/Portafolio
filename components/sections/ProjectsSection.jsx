@@ -4,7 +4,8 @@ import { ExternalLink, Github, X, Monitor, Server, Globe, FileText, ArrowRight }
 import { getProjectsData } from '../../data/projectTranslations';
 import { useTranslation } from '../../hooks/useTranslation';
 import { AppContext } from '../../contexts/AppContext';
-import { getOptimalVideoSource, getOptimalPoster } from '../../utils/adaptiveVideo';
+import { getOptimalPoster } from '../../utils/adaptiveVideo';
+import { getVideoSources } from '../../utils/videoSources';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import useFocusTrap from '../../hooks/useFocusTrap';
 import Link from 'next/link';
@@ -36,13 +37,21 @@ const getCardLinks = (links) => {
 };
 
 const ProjectCard = React.memo(({ project, onProjectClick }) => {
-  const [isHovered, setIsHovered] = useState(false);
+  const [hoverSources, setHoverSources] = useState(null);
   const videoRef = useRef(null);
   const [isDesktop, setIsDesktop] = useState(false);
   useEffect(() => { setIsDesktop(window.innerWidth >= 1024); }, []);
 
+  // Vídeo de hover: fuente por ancho REAL de la card × DPR (una card de ~600 px
+  // en DPR 1 no muestra más que la versión 480p; en DPR 2 se pide la 720p).
+  const handleMouseEnter = useCallback((e) => {
+    const width = e.currentTarget.getBoundingClientRect().width;
+    const dpr = window.devicePixelRatio || 1;
+    setHoverSources(getVideoSources(project.video, { displayWidthPx: width * dpr }));
+  }, [project.video]);
+
   const handleMouseLeave = useCallback(() => {
-    setIsHovered(false);
+    setHoverSources(null);
     if (videoRef.current) videoRef.current.pause();
   }, []);
 
@@ -56,7 +65,7 @@ const ProjectCard = React.memo(({ project, onProjectClick }) => {
   return (
     <div
       onClick={() => onProjectClick(project)}
-      onMouseEnter={() => setIsHovered(true)}
+      onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className="project-card relative rounded-2xl overflow-hidden cursor-pointer group aspect-video"
     >
@@ -70,15 +79,15 @@ const ProjectCard = React.memo(({ project, onProjectClick }) => {
         className="object-cover transition-transform duration-500 group-hover:scale-105"
       />
 
-      {/* Video — desktop hover only */}
-      {isDesktop && isHovered && (
+      {/* Video — desktop hover only (WebM/AV1 primero, MP4 de respaldo) */}
+      {isDesktop && hoverSources && (
         <video
           ref={videoRef}
-          src={getOptimalVideoSource(project.video)}
           autoPlay loop muted playsInline
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ contentVisibility: 'auto' }}
-        />
+        >
+          {hoverSources.map((s) => <source key={s.src} src={s.src} type={s.type} />)}
+        </video>
       )}
 
       {/* Bottom gradient overlay — stronger on hover for text legibility */}
@@ -182,7 +191,7 @@ const ProjectsSection = React.memo(() => {
 
   return (
     <>
-      <section ref={projectsSectionRef} id="projects" className="section-gap relative z-10 bg-transparent transition-colors duration-300">
+      <section ref={projectsSectionRef} id="projects" className="section-gap relative z-10 bg-transparent">
         <div className="container-page section-title-mb">
           <h2 className="title-glow text-h2 font-bold text-center pb-2 text-black dark:text-white">
             {t('projects.title')}

@@ -106,7 +106,6 @@ const ContactForm = memo(() => {
           placeholder={t('contact.form.name.placeholder')}
           aria-invalid={errors.name ? 'true' : 'false'}
           aria-describedby={errors.name ? 'name-error' : undefined}
-          style={{ backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}
           className={`w-full px-4 py-3 bg-white dark:bg-[var(--bg-elevated-50)] border rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-inset transition-all duration-300 ${
             errors.name
               ? 'border-red-500 focus:ring-red-500'

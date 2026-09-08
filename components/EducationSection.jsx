@@ -99,7 +99,7 @@ function EducationCard({ item, index, t }) {
 
 export default function EducationSection({ items, t }) {
   return (
-    <section className="section-gap relative z-10 bg-transparent transition-colors duration-300">
+    <section className="section-gap relative z-10 bg-transparent">
       <div className="container-narrow">
         <h2 className="title-glow text-h2 font-bold text-center section-title-mb pb-2 text-black dark:text-white">
           {t('about.education.title')}

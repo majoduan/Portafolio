@@ -74,24 +74,42 @@ const AboutGlobe = React.memo(() => {
     reducedRef.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
+    // Canvas CUADRADO centrado (lado = alto de la sección) en lugar de ocupar
+    // toda la sección: en el shader de cobe el radio de la esfera depende solo
+    // de la altura del canvas (la x se corrige por aspecto), y la máscara
+    // radial vive en el contenedor (no en el canvas), así que el globo se ve
+    // idéntico pintando ~60 % menos píxeles por frame en pantallas anchas.
+    // En secciones más altas que anchas (móvil) se mantiene el canvas completo.
+    const box = { w: 1, h: 1, left: 0, top: 0 }; // caja CSS del canvas dentro del wrap
     const measure = () => {
       const rect = wrap.getBoundingClientRect();
-      sizeRef.current = { w: Math.max(1, rect.width), h: Math.max(1, rect.height) };
-      aspectRef.current = sizeRef.current.w / sizeRef.current.h;
+      const W = Math.max(1, rect.width);
+      const H = Math.max(1, rect.height);
+      if (W > H) {
+        box.w = H; box.h = H; box.left = (W - H) / 2; box.top = 0;
+      } else {
+        box.w = W; box.h = H; box.left = 0; box.top = 0;
+      }
+      sizeRef.current = { w: box.w, h: box.h };
+      aspectRef.current = box.w / box.h;
     };
     measure();
 
     const applyCssSize = () => {
-      canvas.style.width = `${sizeRef.current.w}px`;
-      canvas.style.height = `${sizeRef.current.h}px`;
+      canvas.style.position = 'absolute';
+      canvas.style.left = `${box.left}px`;
+      canvas.style.top = `${box.top}px`;
+      canvas.style.width = `${box.w}px`;
+      canvas.style.height = `${box.h}px`;
     };
 
     const updateMarker = () => {
       const m = markerRef.current;
       if (!m) return;
       const { x, y, front } = project(QUITO, phiRef.current, THETA, aspectRef.current, SCALE);
-      m.style.left = `${x * 100}%`;
-      m.style.top = `${y * 100}%`;
+      // Proyección relativa al canvas -> píxeles del wrap (offsetParent del marcador)
+      m.style.left = `${box.left + x * box.w}px`;
+      m.style.top = `${box.top + y * box.h}px`;
       m.style.opacity = front ? '1' : '0';
     };
 
@@ -114,8 +132,9 @@ const AboutGlobe = React.memo(() => {
     });
     globeRef.current = globe;
 
-    // cobe envuelve el canvas en un div (100%x100%); el canvas llena ese div y la
-    // sección. La máscara radial va en ese wrapper (no en el marcador, que es hermano).
+    // La máscara radial va en el contenedor del canvas (el wrap absolute inset-0),
+    // no en el marcador (hermano) ni en el canvas: así el fundido a los bordes es
+    // el de la sección, independiente del tamaño del canvas.
     const inner = canvas.parentElement;
     if (inner) {
       inner.style.maskImage = 'radial-gradient(circle at center, black 72%, transparent 96%)';

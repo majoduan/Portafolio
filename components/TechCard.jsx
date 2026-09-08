@@ -104,7 +104,7 @@ const TechCard = memo(({ tech, index, isMobile, animationState, onMouseEnter, on
               {/* Animated fill background */}
               <span
                 className={`absolute top-0 left-0 bottom-0 bg-gradient-to-r ${tech.tagColor || tech.color} rounded-full ${shouldAnimate ? 'exp-tag-fill' : ''}`}
-                style={{ width: shouldAnimate ? '100%' : '0%' }}
+                style={{ width: '100%', clipPath: shouldAnimate ? undefined : 'inset(0 100% 0 0 round 9999px)' }}
               />
               {/* Text content */}
               <span className="relative z-10 text-center">

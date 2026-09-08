@@ -269,6 +269,35 @@ Aceptación de la Fase 1: con CPU 4x y caché fría, cero frames rojos en el ove
 - Fase 3.2: aceptar mantener dos formatos de vídeo por proyecto (22 archivos más en `public/`).
 - Fase 5.3: cuándo abrir la rama Next 16 / React 19.
 
+## 10. Estado de ejecución (2026-09-08)
+
+Commits en `main` (sin push): `a74584e` Fase 0 · `e8054a9` Fase 1 · Fases 3–5 en el commit siguiente. Medición con el build de producción en localhost (Playwright solo para números).
+
+| Métrica | Antes | Después |
+|---|---|---|
+| Frames perdidos del boot (overlay), caliente, CPU 4x | 42 huecos (2,9 s de 5,7 s) | **0** (peor hueco 17 ms) con 3–5 s de tareas largas en el hilo principal |
+| Frames perdidos del boot, frío, CPU 4x | 48 huecos (6,3 s de 9 s) | 4 huecos, peor 250 ms (contención por el parseo de la escena) |
+| Escena lista al levantar el overlay | No: spinner + congelaciones de 2,7 s y 1,7 s tras el boot | Sí: escena a 1,3 s, overlay a 2,8 s (desktop 1x); 8 s máximo con galaxia visible debajo |
+| HTML prerenderizado de `/` | 15,7 KB, solo un `div` negro | 108 KB con h1, hero, proyectos (SEO/LCP reales) |
+| Bytes por visita fría a la home (desktop) | ≈ 11 MB (5,8 MB de vídeo prefetch) | ≈ 5,8 MB (0 vídeo; JS 2,7 · escena 2,08 · img 0,4 · CSS 0,2 · fuentes 0,36 tras el boot) |
+| Vídeos en disco | 107 MB (2 archivos de 43,5 y 39,6 MB, sin faststart en 13) | 35 MB (4,6 y 4,0 MB; faststart en los 22) |
+| `/projects` al entrar (desktop) | 11 vídeos con `preload=metadata`, 720p siempre | Solo el visible se descarga; fuente por ancho real × DPR (480p si ≤ 854 px físicos, nunca reescalado hacia arriba) |
+| CSS total / CSS de fuentes | 214 KB raw / 94 KB (19 KB br) | 112 KB raw / 7 KB (1 KB br) |
+| Fuentes decorativas en el build | 169 woff2, 2,9 MB | 21 woff2, 408 KB (subconjuntos) |
+| Service Worker | Manual, `networkFirst` 3 s (riesgo de HTML de otro build); además **no se registraba** cuando `load` disparaba antes de montar el efecto | Serwist: precache de 48 entradas coherente con el build (sin runtime Spline ni media), reglas para escena/vídeo/imágenes/PDF, `navigationPreload`; carrera de `load` corregida |
+| CSP | `'unsafe-eval'` | `'wasm-unsafe-eval'` (verificado sin violaciones) |
+| Errores de hidratación | — (no había SSR de contenido) | 0 con tema/idioma vía `useSyncExternalStore` |
+
+Decisiones tomadas durante la ejecución:
+- **AV1/WebM (3.2)**: probado con SVT-AV1 CRF 34 preset 6. Los MP4 ya están en el suelo de bitrate (grabaciones de pantalla, CRF 28) y a calidad equivalente el AV1 salió **mayor** en 18 de 22; se conservan los 4 que sí son más pequeños (`data/webm-manifest.json`). Sin pérdida de calidad no hay más margen por codec.
+- **Runtime Spline 2.x (2.7)**: descartado (rompe el build con webpack, exige abrir la CSP a cdn.spline.design/gstatic/…); instalado 1.12.98. La escena está exportada con editor 2.x (aviso inofensivo en consola).
+- **Cap de DPR en la escena (2.3)**: no posible sin API del runtime (lee `window.devicePixelRatio`). Wrapper al 120 % se mantiene hasta ajustar la cámara en el editor.
+- **`backdrop-filter` A/B (4.2)**: no aplicado; requiere decisión visual.
+- **Partículas**: pausadas con el modal abierto y durante el wipe de tema (sin cambio visual).
+- **Globo de `/about`**: canvas cuadrado (lado = alto) centrado; el shader de cobe dimensiona la esfera por la altura y la máscara vive en el wrapper, así que se ve idéntico con ~60 % menos píxeles.
+
+Pendiente que depende de ti: revisión visual (boot con halo aproximado sin `blur()`, fundido galaxia→escena, arranque de typewriter/contadores/typeface al levantar el overlay, cambio de tema con la escena), trabajo en el editor Spline (decimar Ch36, cámara para wrapper 100 %, variable de tema), decisión sobre Next 16 (rama aparte), y `pnpm lhci` para fijar el baseline de Lighthouse CI (`lighthouserc.json`).
+
 ## Apéndice — archivos por fase
 - Fase 0: `app/layout.jsx`, `app/sitemap.js`, `public/robots.txt`, `public/media/projects/videos/*`, `utils/preloadResources.js`, `components/HUDBootScreen.css` (borrar), `components/AnimatedCounter.jsx` (borrar), `public/offline.html`, `public/manifest.json`, `utils/registerSW.js`, `next.config.mjs`, `vercel.json`, `data/social.js` (nuevo).
 - Fase 1: `app/BootScreenWrapper.jsx`, `components/HUDBootScreen.jsx` → `components/boot/BootOverlay.jsx` + `lib/boot/circuits.js` + `workers/boot-renderer.js`, `contexts/AppContext.tsx` (hidratación), `components/sections/HeroSection.jsx`, `app/globals.css` (`.cb`).

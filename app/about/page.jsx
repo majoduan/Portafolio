@@ -27,7 +27,7 @@ export default function AboutPage() {
     <div className="page-top">
 
       {/* Intro — hero del about: spacing ORIGINAL (--hero-gap-sm) + globo SCALE 1.18 */}
-      <section className="py-[var(--hero-gap-sm)] relative z-10 bg-transparent transition-colors duration-300">
+      <section className="py-[var(--hero-gap-sm)] relative z-10 bg-transparent">
         <AboutGlobe />
         <div className="container-prose text-center relative z-10">
           <p className="text-xl md:text-2xl lg:text-3xl text-black dark:text-slate-100 mb-2 font-medium transition-colors duration-300">

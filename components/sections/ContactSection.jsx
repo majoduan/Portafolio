@@ -12,7 +12,7 @@ const ContactSection = React.memo(() => {
   return (
     <>
       {/* Contact Section */}
-      <section id="contact" className="section-gap relative z-10 bg-transparent transition-colors duration-300">
+      <section id="contact" className="section-gap relative z-10 bg-transparent">
         <div className="container-page">
           {/* Section Title */}
           <div className="text-center section-title-mb">
@@ -46,9 +46,8 @@ const ContactSection = React.memo(() => {
                       width="800"
                       height="1000"
                       className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
-                      loading="eager"
+                      loading="lazy"
                       decoding="async"
-                      fetchPriority="high"
                     />
                   {/* Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-transparent to-transparent dark:from-slate-900 dark:via-slate-900/60 dark:to-transparent"></div>

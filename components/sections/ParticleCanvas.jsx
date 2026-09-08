@@ -3,13 +3,33 @@ import React, { useEffect, useRef, useContext } from 'react';
 import { AppContext } from '../../contexts/AppContext';
 
 const ParticleCanvas = React.memo(() => {
-  const { theme } = useContext(AppContext);
+  const { theme, isModalOpen } = useContext(AppContext);
   const canvasRef = useRef(null);
   const particles = useRef([]);
   const themeRef = useRef(theme);
+  // Controles del bucle expuestos al efecto de pausa (modal / view transition)
+  const controlsRef = useRef({ pause: () => {}, resume: () => {} });
 
   // Sincronizar themeRef sin re-ejecutar el effect de particulas
   useEffect(() => { themeRef.current = theme; }, [theme]);
+
+  // Pausar con el modal de proyectos abierto: el IntersectionObserver NO
+  // detecta oclusión, y el modal aplica backdrop-blur sobre este canvas —
+  // re-desenfocar 60 veces/s un fondo que nadie ve era el mayor coste GPU
+  // con el modal abierto. Igual durante el wipe del cambio de tema.
+  useEffect(() => {
+    if (isModalOpen) controlsRef.current.pause('modal');
+    else controlsRef.current.resume('modal');
+  }, [isModalOpen]);
+
+  useEffect(() => {
+    const onThemeTransition = (e) => {
+      if (e.detail && e.detail.active) controlsRef.current.pause('theme');
+      else controlsRef.current.resume('theme');
+    };
+    window.addEventListener('portfolio:theme-transition', onThemeTransition);
+    return () => window.removeEventListener('portfolio:theme-transition', onThemeTransition);
+  }, []);
 
   // Particle system OPTIMIZADO v3.0
   // Fixes: resize bug, batch lines, tab visibility, 30fps mobile, themeRef (no flash on theme change)
@@ -62,6 +82,9 @@ const ParticleCanvas = React.memo(() => {
     let isTabVisible = true;
     let isCanvasVisible = true;
     let cycleFrame = 0;
+    // Motivos externos de pausa (modal abierto, view transition en curso)
+    const pausedBy = new Set();
+    const canRun = () => isTabVisible && isCanvasVisible && pausedBy.size === 0;
 
     const spawnParticle = () => ({
       x: Math.random() * canvasWidth,
@@ -87,19 +110,37 @@ const ParticleCanvas = React.memo(() => {
     // Pausar animacion cuando la pestana no esta activa (ahorra bateria/CPU)
     const handleVisibilityChange = () => {
       isTabVisible = !document.hidden;
-      if (isTabVisible && isCanvasVisible) {
+      if (canRun()) {
         resumeAnimation();
       } else {
         cancelAnimationFrame(animationFrameId);
       }
     };
 
+    // Pausa/reanudación externas (modal, transición de tema). Al reanudar NO se
+    // limpia el canvas: las partículas siguen donde estaban (sin "salto").
+    controlsRef.current = {
+      pause: (reason) => {
+        if (prefersReduced) return;
+        pausedBy.add(reason);
+        cancelAnimationFrame(animationFrameId);
+      },
+      resume: (reason) => {
+        if (prefersReduced) return;
+        if (!pausedBy.delete(reason)) return;
+        if (canRun()) {
+          cancelAnimationFrame(animationFrameId);
+          animationFrameId = requestAnimationFrame(animate);
+        }
+      },
+    };
+
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
     const animate = () => {
-      // No animar si tab no es visible o canvas esta ocluido
-      if (!isTabVisible || !isCanvasVisible) return;
+      // No animar si tab no es visible, canvas ocluido o pausa externa
+      if (!canRun()) return;
 
       frameCount++;
 
@@ -276,7 +317,7 @@ const ParticleCanvas = React.memo(() => {
           const nowVisible = entry.isIntersecting;
           if (nowVisible === isCanvasVisible) return;
           isCanvasVisible = nowVisible;
-          if (isCanvasVisible && isTabVisible) {
+          if (canRun()) {
             resumeAnimation();
           } else {
             cancelAnimationFrame(animationFrameId);
@@ -288,6 +329,7 @@ const ParticleCanvas = React.memo(() => {
     }
 
     return () => {
+      controlsRef.current = { pause: () => {}, resume: () => {} };
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', handleResize);
       document.removeEventListener('visibilitychange', handleVisibilityChange);

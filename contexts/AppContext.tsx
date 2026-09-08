@@ -86,7 +86,14 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
       apply();
       return;
     }
-    document.startViewTransition(apply);
+    // Señal para animaciones de fondo (partículas): pausar mientras dura el
+    // wipe — la View Transition captura snapshots de página completa y un
+    // canvas que cambia 60 veces/s debajo solo añade trabajo al compositor.
+    const signal = (active: boolean) =>
+      window.dispatchEvent(new CustomEvent('portfolio:theme-transition', { detail: { active } }));
+    signal(true);
+    const transition = document.startViewTransition(apply);
+    transition.finished.finally(() => signal(false));
   }, []);
 
   const value = useMemo<AppContextValue>(

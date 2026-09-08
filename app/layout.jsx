@@ -5,6 +5,8 @@ import ClientInit from './client-init';
 import BootScreenWrapper from './BootScreenWrapper';
 import Footer from '../components/Footer';
 import { SITE_URL } from '../lib/site';
+import { SpeedInsights } from '@vercel/speed-insights/next';
+import { Analytics } from '@vercel/analytics/next';
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
@@ -95,6 +97,17 @@ export default function RootLayout({ children }) {
           <ClientInit />
           <BootScreenWrapper footer={<Footer />}>{children}</BootScreenWrapper>
         </Providers>
+        {/* Datos de usuarios reales (LCP/INP/CLS por dispositivo y visitas), gratis
+            en Vercel Hobby. Scripts same-origin (/_vercel/...), compatibles con la
+            CSP. Solo se inyectan en builds de Vercel (process.env.VERCEL): fuera
+            de Vercel esas rutas no existen y darían 404 en consola. Sustituyen a
+            utils/telemetry.js, que observaba métricas sin enviarlas a ningún sitio. */}
+        {process.env.VERCEL ? (
+          <>
+            <SpeedInsights />
+            <Analytics />
+          </>
+        ) : null}
       </body>
     </html>
   );

@@ -12,6 +12,16 @@ Portfolio profesional interactivo construido con Next.js 15 (App Router), React 
 - 🚀 **Performance Optimizado**: 60 FPS, bundle size reducido, lazy loading inteligente
 - 🔒 **Seguridad Reforzada**: CSP headers, HSTS, XSS protection, headers de seguridad HTTP
 
+## 🚀 v3.3 — Optimización integral (Septiembre 2026)
+
+Auditoría + plan por fases en [docs/OPTIMIZATION_PLAN.md](./docs/OPTIMIZATION_PLAN.md) (sección 10: estado y números medidos).
+
+- **Boot screen como preloader real**: la página se renderiza (SSR) debajo del overlay; la animación de circuitos corre en un **Web Worker sobre OffscreenCanvas** (cero frames perdidos aunque el hilo principal compile Spline), el progreso sigue hitos reales (hidratación, runtime, bytes de la escena, `app.start`) y el overlay se levanta con la escena 3D ya lista.
+- **Escena 3D**: precargada por streaming durante el boot y arrancada desde el buffer (`@splinetool/runtime` directo, sin react-spline); galaxia SVG como estado inicial que se funde con la escena; política previa (red/memoria/CPU/WebGL) para equipos débiles; `stop()/play()` fuera de viewport.
+- **Red**: vídeos 107 MB → 35 MB (+faststart en los 22), sin prefetch ciego de vídeo, fuente por ancho real × DPR, fuentes decorativas subconjuntadas (CSS de fuentes 94 KB → 7 KB), Service Worker generado con **Serwist**, CSP con `wasm-unsafe-eval`.
+- **Ejecución**: partículas pausadas con modal/transición de tema, tag de experiencia con `clip-path` (sin layout), globo de `/about` en canvas cuadrado (~60 % menos píxeles), sin capas GPU forzadas.
+- **Medición**: Vercel Speed Insights + Analytics (solo en builds de Vercel), `pnpm lhci` con presupuestos en `lighthouserc.json`.
+
 ## 🎯 Performance Optimizations v2.4 (Diciembre 2025)
 
 ### 🔥 **NUEVO v2.4: Control Agresivo de Videos (YouTube-inspired)**
@@ -55,13 +65,13 @@ Portfolio profesional interactivo construido con Next.js 15 (App Router), React 
 
 - **Framework**: Next.js 15 (App Router) + React 18
 - **Styling**: Tailwind CSS v4 (`@theme` en CSS, sin `tailwind.config.js`)
-- **3D Graphics**: Spline (`@splinetool/react-spline`)
-- **Tipografía**: Geist Sans (variable, `next/font`)
+- **3D Graphics**: Spline (`@splinetool/runtime` directo; escena precargada durante el boot)
+- **Tipografía**: Geist Sans (variable, `next/font`) + 20 fuentes decorativas subconjuntadas (`next/font/local`, `assets/fonts/hero/`)
 - **Icons**: Lucide React + 40+ icons SVG custom (`components/icons/tech/`)
-- **Animations**: CSS keyframes + View Transitions API + RAF (canvas)
+- **Animations**: CSS keyframes + View Transitions API + RAF (canvas) + Web Worker/OffscreenCanvas (boot)
 - **Package Manager**: pnpm
-- **Image pipeline**: Sharp + SVGO + AVIF/WebP responsive variants
-- **PWA**: Service Worker (`public/sw.js`) con estrategias multimodal
+- **Image pipeline**: Sharp + SVGO + AVIF/WebP responsive variants; vídeo con ffmpeg (`pnpm videos:*`)
+- **PWA**: Service Worker generado con Serwist (`app/sw.ts` → `public/sw.js` en build)
 
 ## 📦 Instalación
 
@@ -125,16 +135,25 @@ pnpm start
 ```
 mateo-portfolio/
 ├── app/                         # 🧭 Next.js App Router
-│   ├── layout.jsx               # Root layout + Providers + BootScreenWrapper
+│   ├── layout.jsx               # Root layout + Providers + BootScreenWrapper + Speed Insights
 │   ├── page.jsx                 # Home (/)
 │   ├── about/page.jsx           # About (/about)
 │   ├── projects/page.jsx        # Projects (/projects)
-│   ├── BootScreenWrapper.jsx    # Orquesta HUDBootScreen y preload de Spline
-│   ├── ClientInit.jsx           # Hidratación cliente
+│   ├── BootScreenWrapper.jsx    # Overlay de boot sobre la página real + orquestador
+│   ├── sw.ts                    # Service Worker (Serwist) → public/sw.js en build
+│   ├── client-init.jsx          # Registro del SW
 │   ├── globals.css              # Tailwind v4 @theme + tokens + animations
 │   └── sitemap.js               # /sitemap.xml
+├── lib/
+│   ├── boot/                    # circuits (generación pura), renderer canvas, store, orquestador
+│   ├── spline/sceneSource.js    # Descarga por streaming de la escena + progreso real
+│   ├── scenePolicy.js           # Escena 3D vs galaxia según red/memoria/CPU/WebGL
+│   ├── prefsStore.ts            # Tema/idioma (useSyncExternalStore, sin mismatch SSR)
+│   └── heroFonts.js             # 20 fuentes decorativas (next/font/local)
+├── workers/boot-renderer.worker.js  # Dibuja el boot en OffscreenCanvas
 ├── components/
-│   ├── HUDBootScreen.jsx        # Pantalla de inicio con circuit traces SVG
+│   ├── boot/BootOverlay.jsx     # Overlay + worker (fallback en hilo principal)
+│   ├── sections/SplineScene.jsx # @splinetool/runtime directo (start desde buffer)
 │   ├── NavigationBar.jsx        # Nav fijo con LanguageToggle + ThemeToggle
 │   ├── WorkTimeline.jsx         # Timeline con scroll-paint SVG
 │   ├── RotatingTitle.jsx        # Hero rotating title
@@ -169,8 +188,8 @@ mateo-portfolio/
 ## 🔧 Configuración Next.js
 
 Optimizaciones incluidas en `next.config.mjs`:
-- Webpack alias `@splinetool/react-spline → dist/react-spline.js` (workaround ESM)
-- Headers HTTP estrictos (CSP, HSTS preload, Permissions-Policy, X-Frame-Options, Referrer-Policy)
+- Serwist (`withSerwistInit`): SW desde `app/sw.ts`, precache acotado (< 700 KB, sin media)
+- Headers HTTP estrictos (CSP con `wasm-unsafe-eval`, HSTS preload, Permissions-Policy, X-Frame-Options, Referrer-Policy)
 - Cache `immutable` 1 año para `/media/*` y `/icons/*`
 - Cache `must-revalidate` para `/sw.js`
 - `Content-Disposition: inline` forzado en CV PDF

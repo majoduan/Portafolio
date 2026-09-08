@@ -47,13 +47,16 @@ export const shouldUseMobileVideo = () => {
  * @param {string} videoPath - Ruta original del video (ej: '/media/projects/videos/project.mp4')
  * @param {object} [opts]
  * @param {number} [opts.displayWidthPx] - Ancho renderizado del reproductor × devicePixelRatio.
- *   Si el elemento no puede mostrar más de ~960 px físicos, la versión 480p es
- *   visualmente equivalente y pesa la mitad (Fase 3.1 del plan).
+ *   La versión -mobile es 854×480: si el elemento no puede mostrar más de 854 px
+ *   físicos, esa versión se ve idéntica (se reduce, nunca se amplía) y pesa la
+ *   mitad (Fase 3.1 del plan). Por encima se sirve la 720p.
  * @returns {string} Ruta optimizada del video
  */
+const MOBILE_VARIANT_WIDTH = 854;
+
 export const getOptimalVideoSource = (videoPath, opts = {}) => {
   const byDevice = shouldUseMobileVideo();
-  const byDisplay = typeof opts.displayWidthPx === 'number' && opts.displayWidthPx > 0 && opts.displayWidthPx <= 960;
+  const byDisplay = typeof opts.displayWidthPx === 'number' && opts.displayWidthPx > 0 && opts.displayWidthPx <= MOBILE_VARIANT_WIDTH;
   if (byDevice || byDisplay) {
     return videoPath.replace('.mp4', '-mobile.mp4');
   }

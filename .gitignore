@@ -41,3 +41,7 @@ out/
 
 # axe-core self-hosted para CSP — regenerado via 'pnpm a11y:prepare'
 public/dev/axe.min.js
+
+# Serwist: service worker generado en `next build` desde app/sw.ts
+public/sw*
+public/swe-worker*

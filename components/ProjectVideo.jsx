@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Maximize, Minimize, Play, Pause, ChevronsLeft, ChevronsRight, Volume2, VolumeX } from 'lucide-react';
-import { getOptimalVideoSource } from '../utils/adaptiveVideo';
+import { getVideoSources } from '../utils/videoSources';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 const formatTime = (s) => {
@@ -30,9 +30,10 @@ const ProjectVideo = React.memo(({ src, poster, title }) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showControls, setShowControls] = useState(false);
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
-  // Fuente elegida en cliente (device + ancho real del reproductor). En SSR el
-  // <video> solo lleva poster: sin src no hay mismatch de hidratación ni descarga.
-  const [videoSrc, setVideoSrc] = useState(null);
+  // Fuentes elegidas en cliente (device + ancho real del reproductor; WebM/AV1
+  // primero, MP4 de respaldo). En SSR el <video> solo lleva poster: sin fuentes
+  // no hay mismatch de hidratación ni descarga anticipada.
+  const [sources, setSources] = useState(null);
   const [inView, setInView] = useState(false);
 
   const pct = duration > 0 ? (currentTime / duration) * 100 : 0;
@@ -44,13 +45,14 @@ const ProjectVideo = React.memo(({ src, poster, title }) => {
     controlsTimeoutRef.current = setTimeout(() => setShowControls(false), 3000);
   }, []);
 
-  // ── Elegir fuente por dispositivo y por ancho renderizado × DPR ──
+  // ── Elegir fuentes por dispositivo y por ancho renderizado × DPR ──
   useEffect(() => {
     const el = containerRef.current;
     const pick = () => {
       const width = el ? el.getBoundingClientRect().width : 0;
       const dpr = window.devicePixelRatio || 1;
-      setVideoSrc(getOptimalVideoSource(src, { displayWidthPx: width * dpr }));
+      const next = getVideoSources(src, { displayWidthPx: width * dpr });
+      setSources((prev) => (prev && prev[0].src === next[0].src ? prev : next));
     };
     pick();
     let timer;
@@ -58,6 +60,15 @@ const ProjectVideo = React.memo(({ src, poster, title }) => {
     window.addEventListener('resize', onResize, { passive: true });
     return () => { clearTimeout(timer); window.removeEventListener('resize', onResize); };
   }, [src]);
+
+  // Cambiar de <source> en caliente exige load() (el navegador no re-evalúa
+  // los <source> hijos por sí solo).
+  const sourcesKey = sources ? sources[0].src : '';
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !sourcesKey) return;
+    video.load();
+  }, [sourcesKey]);
 
   // ── IntersectionObserver — auto-play/pause on scroll ──
   useEffect(() => {
@@ -73,10 +84,10 @@ const ProjectVideo = React.memo(({ src, poster, title }) => {
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || !videoSrc) return;
+    if (!video || !sourcesKey) return;
     if (inView) video.play().catch(() => {});
     else video.pause();
-  }, [inView, videoSrc]);
+  }, [inView, sourcesKey]);
 
   // ── Fullscreen change listener ──
   useEffect(() => {
@@ -261,7 +272,6 @@ const ProjectVideo = React.memo(({ src, poster, title }) => {
     >
       <video
         ref={videoRef}
-        src={videoSrc || undefined}
         poster={poster}
         muted
         loop
@@ -283,7 +293,9 @@ const ProjectVideo = React.memo(({ src, poster, title }) => {
         }}
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
-      />
+      >
+        {sources && sources.map((s) => <source key={s.src} src={s.src} type={s.type} />)}
+      </video>
 
       {/* Click overlay — captures clicks on video area */}
       <div className="absolute inset-0 z-10" onClick={handleVideoClick} />

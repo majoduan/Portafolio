@@ -451,16 +451,18 @@ html:not(.dark) .spline-container > div {
   }
 }
 
-/* Animación para las barras de progreso */
-@keyframes progressBarFill {
-  0% {
-    width: 0%;
-  }
+/* Experience tag fill animation.
+   Antes animaba `width` 0→100 % (layout + paint en 9 cards por cada cambio de
+   tab). Ahora el span ocupa siempre el 100 % y se REVELA con clip-path inset
+   redondeado (mismo borde delantero curvo que tenía la píldora al crecer):
+   solo paint, sin layout. */
+@keyframes expTagReveal {
+  0%   { clip-path: inset(0 100% 0 0 round 9999px); }
+  100% { clip-path: inset(0 0 0 0 round 9999px); }
 }
 
-/* Experience tag fill animation */
 .exp-tag-fill {
-  animation: progressBarFill 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: expTagReveal 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .exp-tag-fill ~ .z-10 {
@@ -910,18 +912,8 @@ html:not(.dark) .spline-container > div {
   }
 }
 
-/* Optimización de videos en las cards de proyectos */
-.project-card video {
-  /* Mejorar rendimiento del video */
-  backface-visibility: hidden;
-  transform: translateZ(0);
-  image-rendering: auto;
-  content-visibility: auto;
-}
-
 /* Smooth transition para el hover del video */
 .project-card:hover video {
-  will-change: opacity;
   transition: opacity 0.3s ease-in-out;
 }
 
@@ -1148,61 +1140,17 @@ section.integrations-marquee { contain-intrinsic-size: auto 220px; }
   content-visibility: visible;
 }
 
-/* Optimized hover effects - only apply will-change on hover */
-.contact-left-column .group:hover,
-.contact-right-column > div:hover {
-  will-change: transform, border-color, box-shadow;
-}
-
-/* Remove will-change when not hovering to save memory */
-.contact-left-column .group,
-.contact-right-column > div {
-  will-change: auto;
-}
-
-/* Smooth transitions for form inputs */
-.contact-form input,
-.contact-form textarea {
-  backface-visibility: hidden;
-  transform: translateZ(0);
-}
-
-/* Optimize image rendering in contact section */
-.contact-left-column img {
-  image-rendering: auto;
-  content-visibility: auto;
-  will-change: auto;
-}
-
-.contact-left-column img:hover {
-  will-change: transform, opacity;
-}
-
-/* Optimize social link cards */
-.contact-left-column .group\/link {
-  backface-visibility: hidden;
-  transform: translateZ(0);
-}
-
-.contact-left-column .group\/link:hover {
-  will-change: transform, background-color, border-color;
-}
+/* Nota de limpieza (plan §4.6): se retiraron los `transform: translateZ(0)`,
+   `backface-visibility: hidden` y `will-change` fijos de inputs, enlaces,
+   botón e imagen del contacto. Creaban capas compositadas PERMANENTES (memoria
+   GPU + repintados) sin ningún efecto visual: las transiciones de hover ya
+   son de transform/opacity y el navegador las promueve solo mientras animan. */
 
 /* Smooth focus states for accessibility */
 .contact-form input:focus,
 .contact-form textarea:focus {
   outline: none;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Button optimization */
-.contact-form button[type="submit"] {
-  backface-visibility: hidden;
-  transform: translateZ(0);
-}
-
-.contact-form button[type="submit"]:hover {
-  will-change: transform, box-shadow;
 }
 
 /* Error message animation */
@@ -1241,18 +1189,11 @@ section.integrations-marquee { contain-intrinsic-size: auto 220px; }
 
 /* ==================== TYPING QUOTES OPTIMIZATIONS ==================== */
 
-/* Optimize typing quotes component for performance */
+/* Typing quotes: sin capas GPU forzadas (el texto cambia por contenido,
+   `will-change: contents` solo forzaba repintados). */
 .typing-quotes-container {
   content-visibility: auto;
   contain: layout style paint;
-  will-change: auto;
-}
-
-/* Hardware acceleration for typing animation */
-.typing-quotes-text {
-  backface-visibility: hidden;
-  transform: translateZ(0);
-  will-change: contents;
 }
 
 /* Optimize cursor blink animation */
@@ -1268,17 +1209,12 @@ section.integrations-marquee { contain-intrinsic-size: auto 220px; }
 /* ==================== PROJECT MODAL TWO-COLUMN LAYOUT ==================== */
 /* Layout: Video 2/3 (66.666%) | Info 1/3 (33.334%) */
 
-/* Modal container optimizations */
+/* Modal container. (content-visibility:auto no aporta en un elemento fixed
+   siempre visible; translateZ/backface en el grid y el vídeo solo creaban
+   capas permanentes.) */
 .project-modal {
   max-width: 87.5rem;
-  content-visibility: auto;
   contain: layout style paint;
-}
-
-/* Modal content grid - optimized for performance */
-.project-modal-content {
-  backface-visibility: hidden;
-  transform: translateZ(0);
 }
 
 /* Video column - fijo en desktop */
@@ -1289,9 +1225,6 @@ section.integrations-marquee { contain-intrinsic-size: auto 220px; }
 
 /* Optimización del video en el modal */
 .project-modal-video-column video {
-  backface-visibility: hidden;
-  transform: translateZ(0);
-  will-change: auto;
   max-width: 100%;
   object-fit: contain;
 }
@@ -1335,22 +1268,6 @@ section.integrations-marquee { contain-intrinsic-size: auto 220px; }
 .project-modal-info-column {
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
-}
-
-/* Hardware acceleration para elementos del modal */
-.project-modal h4,
-.project-modal p {
-  backface-visibility: hidden;
-  transform: translateZ(0);
-}
-
-/* Optimización de hover en enlaces del modal */
-.project-modal-info-column a:hover {
-  will-change: transform, box-shadow;
-}
-
-.project-modal-info-column a:not(:hover) {
-  will-change: auto;
 }
 
 /* Disable scale on swap-btn inside modal to prevent clipping */
@@ -1434,7 +1351,6 @@ section.integrations-marquee { contain-intrinsic-size: auto 220px; }
 
   .project-modal-info-column a:hover {
     transform: none;
-    will-change: auto;
   }
 
   .project-modal-info-column > div {
