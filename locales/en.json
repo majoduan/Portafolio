@@ -10,8 +10,8 @@
   "hero": {
     "name": "Mateo Dueñas",
     "title": "Full-Stack Developer",
-    "titles": ["Full-Stack\nDeveloper", "Software\nEngineer", "Web\nDeveloper", "Mobile\nDeveloper", "Data\nAnalyst"],
-    "description": "Turning complex problems into elegant, full-stack solutions. I design, build, and ship from pixel to database.",
+    "titles": ["Full-Stack\nDeveloper", "Software\nEngineer", "AI Training\nEngineer", "Web\nDeveloper", "Mobile\nDeveloper", "Data\nAnalyst"],
+    "description": "I build web and mobile products that make it to production: Stripe billing, auth and security hardening, CI/CD, App Store releases. Full-stack, from the schema to the pixel.",
     "downloadCV": "Download my CV",
     "galaxyAlt": "Illustration of a slowly rotating spiral galaxy",
     "stats": {
@@ -21,7 +21,7 @@
     }
   },
   "technologies": {
-    "title": "Technologies and Tools",
+    "title": "Technologies & Tools",
     "categories": {
       "backend": {
         "title": "Backend Development",
@@ -271,7 +271,7 @@
         "title": "Crumb Coach",
         "description": "Launch-readiness engineering for a SaaS platform that helps artisan bakers run their cottage-food business.",
         "summary": "A SaaS platform for artisan sourdough bakers, built as a Turborepo + pnpm monorepo on Supabase. Led the web app's launch-readiness: a subscriptions and billing system on Stripe Connect, Supabase-JWT auth with Postgres-backed sessions, a mobile-to-backend bridge, a security-hardening campaign, and a full TypeScript and schema-drift stabilization.",
-        "longDescription": "CrumbCoach is a SaaS platform that helps artisan sourdough and cottage-food bakers run orders, recipes, inventory, and customers. It's a Turborepo + pnpm monorepo with a React web front end, an Express back end, an Expo mobile app, and a shared types package, all on Supabase (Postgres, Auth, Storage, Edge Functions). The work centered on making the web app launch-ready: designing the subscriptions and billing subsystem from scratch on Stripe Connect, rebuilding authentication on Supabase JWT with Postgres-backed sessions, and bridging the mobile app to the web backend through a dedicated API surface. A sustained security campaign added rate limiting, CSRF, schema validation, and audit trails, while a systematic schema-drift audit and a TypeScript stabilization, web and mobile type errors driven to zero, hardening the codebase.",
+        "longDescription": "CrumbCoach is a SaaS platform that helps artisan sourdough and cottage-food bakers run orders, recipes, inventory, and customers. It's a Turborepo + pnpm monorepo with a React web front end, an Express back end, an Expo mobile app, and a shared types package, all on Supabase (Postgres, Auth, Storage, Edge Functions). The work centered on making the web app launch-ready: designing the subscriptions and billing subsystem from scratch on Stripe Connect, rebuilding authentication on Supabase JWT with Postgres-backed sessions, and bridging the mobile app to the web backend through a dedicated API surface. A sustained security campaign added rate limiting, CSRF, schema validation and audit trails; a systematic schema-drift audit and a TypeScript stabilization (web and mobile type errors driven to zero) hardened the codebase.",
         "keyFeatures": {
           "Subscriptions & Billing": "Tiered Pro/Free gating built on Stripe Connect",
           "Auth & Sessions": "Supabase-JWT login with Postgres-backed sessions and CSRF",
@@ -293,8 +293,8 @@
       "connectInvest": {
         "title": "Connect Invest",
         "description": "High-fidelity marketing site for a real-estate investment platform, built pixel-for-pixel from Figma and fully responsive.",
-        "summary": "The public marketing site for Connect Invest, a real-estate investment platform. Implemented almost end-to-end from a high-fidelity Figma design, with fully responsive layouts across mobile, tablet, and desktop, inside a pnpm + Turborepo monorepo. Plus expanded home, portfolio, and about sections and rate limiting on sensitive endpoints.",
-        "longDescription": "The public-facing marketing site for Connect Invest, a real-estate investment platform built as a pnpm + Turborepo monorepo. The marketing app was implemented almost entirely from a high-fidelity Figma design, translated pixel-for-pixel into a Next.js build with fully responsive layouts across mobile, tablet, and desktop. The work spanned a strong expansion of the home, portfolio, and about sections, components, content, and assets — alongside mobile UX refinements and app-distribution links. Abuse and risk controls were added through rate limiting on sensitive endpoints, with ongoing dependency maintenance and environment tuning to keep the site fast and reliable.",
+        "summary": "The public marketing site for Connect Invest, a real-estate investment platform. I implemented it almost end-to-end from a high-fidelity Figma design, responsive across mobile, tablet and desktop, inside a pnpm + Turborepo monorepo, and expanded the home, portfolio and about sections. Sensitive endpoints got rate limiting.",
+        "longDescription": "The public-facing marketing site for Connect Invest, a real-estate investment platform built as a pnpm + Turborepo monorepo. The marketing app was implemented almost entirely from a high-fidelity Figma design, translated pixel-for-pixel into a Next.js build with fully responsive layouts across mobile, tablet, and desktop. The work spanned a strong expansion of the home, portfolio, and about sections (components, content, and assets), alongside mobile UX refinements and app-distribution links. Abuse and risk controls were added through rate limiting on sensitive endpoints, with ongoing dependency maintenance and environment tuning to keep the site fast and reliable.",
         "keyFeatures": {
           "Figma-to-Code Fidelity": "Marketing site implemented pixel-for-pixel from a high-fidelity Figma design",
           "Fully Responsive": "Layouts tuned for mobile, tablet, and desktop",
@@ -316,7 +316,7 @@
         "title": "The Daily Abide",
         "description": "Navigation redesign and a full gamification layer for a faith-planner mobile app, taken from prototype to App Store-ready.",
         "summary": "A daily faith-planner mobile app built with Expo and Supabase. Carried from a migrated prototype to publish-ready: a full navigation redesign (Stack to Tabs with a Home hub), an engagement layer of streaks, XP, and celebrations, security and CI/CD infrastructure from scratch, and iOS App Store compliance.",
-        "longDescription": "The Daily Abide is a daily faith-planner mobile app, built with Expo (SDK 54) on a Turborepo + pnpm monorepo and backed by Supabase (Auth, Postgres, RLS). The app was carried from a migrated prototype to a publish-ready product. That meant a complete navigation redesign. From a stack to a five-tab architecture with a Home hub (daily pulse ring, quick actions, inline scripture) and an entire engagement layer: streaks with idempotent daily tracking, XP and levels, and particle celebration overlays across the app. It also meant standing up the project's security and CI/CD from scratch (SAST, dependency audit, secret scanning, pre-commit hooks), stabilizing authentication against unresponsive-backend edge cases, and meeting Apple's App Store requirements, including in-app account deletion.",
+        "longDescription": "The Daily Abide is a daily faith-planner mobile app, built with Expo (SDK 54) on a Turborepo + pnpm monorepo and backed by Supabase (Auth, Postgres, RLS). The app was carried from a migrated prototype to a publish-ready product. That meant a complete navigation redesign, from a stack to a five-tab architecture with a Home hub (daily pulse ring, quick actions, inline scripture), and an entire engagement layer: streaks with idempotent daily tracking, XP and levels, and particle celebration overlays across the app. It also meant standing up the project's security and CI/CD from scratch (SAST, dependency audit, secret scanning, pre-commit hooks), stabilizing authentication against unresponsive-backend edge cases, and meeting Apple's App Store requirements, including in-app account deletion.",
         "keyFeatures": {
           "Tab Navigation & Home Hub": "Redesigned from a stack to 5 tabs with a daily-status Home hub",
           "Gamification Layer": "Streaks, XP, levels, and idempotent daily tracking",
@@ -336,9 +336,9 @@
       },
       "poa": {
         "title": "POA Management System",
-        "description": "Comprehensive platform for planning and budget management with RBAC model",
-        "summary": "A full-stack enterprise app for institutional planning and budget management. Implements RBAC with JWT auth, bcrypt password hashing, and SQL injection prevention. Features real-time budget tracking, collaborative planning, reporting dashboards, and audit logging.",
-        "longDescription": "A full-stack enterprise application designed for institutional planning and budget management. The system implements a robust Role-Based Access Control (RBAC) model with multiple user hierarchies. Built with modern security practices including JWT authentication, password hashing with bcrypt, and SQL injection prevention. Features include real-time budget tracking, collaborative planning tools, comprehensive reporting dashboards, and audit logging for compliance. The frontend uses React with TypeScript for type safety, while the backend leverages FastAPI's async capabilities for optimal performance. PostgreSQL handles complex relational data, and Docker ensures consistent deployment across environments.",
+        "description": "Planning and budget platform for EPN's Research Directorate: 500+ annual operating plans (POAs) under role-based access.",
+        "summary": "The Research Directorate tracked its annual operating plans by hand and closed a reporting cycle every three months. I built the platform that replaced that process: a FastAPI + React app managing 500+ POAs and thousands of related records for several director-level roles, with automated ETL and validation pipelines that turned the quarterly report into near real-time data. It was also my thesis project.",
+        "longDescription": "Role-based access control with JWT and bcrypt separates directors, planners and reviewers, each with their own budget-tracking and reporting views. The REST API runs on FastAPI with SQLAlchemy and Alembic migrations over PostgreSQL, every write is audit-logged for compliance, and the React + TypeScript front end keeps collaborative planning in sync in real time. Docker keeps development and deployment identical, and CI checks guard data integrity on every change.",
         "keyFeatures": {
           "RBAC": "Role-based access control with multiple user hierarchies",
           "Budget Tracking": "Real-time monitoring and collaborative planning tools",
@@ -362,9 +362,9 @@
       },
       "certificates": {
         "title": "EPN Certificates Automation",
-        "description": "Python tool for automated certificate generation with web scraping and data processing",
-        "summary": "An intelligent automation tool that streamlines certificate generation for educational institutions. Uses Selenium for web scraping, Pandas for data processing, and automated template filling. Reduced generation time from 3 hours to 15 minutes.",
-        "longDescription": "An intelligent automation tool developed to streamline the certificate generation process for educational institutions. The system uses Selenium for web scraping to extract student data, Pandas for efficient data processing and validation, and automated template filling for certificate generation. Features include batch processing of hundreds of certificates, data validation and error handling, duplicate detection, and export to multiple formats (PDF, Excel). The Jupyter notebook environment provides an interactive interface for monitoring the process and debugging. This tool reduced certificate generation time from 3 hours to 15 minutes, significantly improving administrative efficiency.",
+        "description": "Python pipeline that scrapes project data and generates multi-page academic certificates at scale.",
+        "summary": "Producing the Research Directorate's certificates took a week of copy-paste every cycle. I automated the whole workflow: Selenium pulls the project records from the institutional system, Pandas validates and deduplicates them, and a template engine fills the multi-page certificates in batch, driven by a structured Excel input. Production dropped from one week to 30 minutes, for 200–300 certificates a year, with no manual intervention.",
+        "longDescription": "Built for the Research Directorate's certificate process. Selenium extracts the project and student records from the institutional system, Pandas validates them and catches duplicates and errors, and a template engine fills the multi-page certificates in batch, with export to PDF and Excel. A Jupyter notebook drives and monitors each run, so the whole cycle happens from a structured Excel input with no manual intervention. What used to take a week now takes 30 minutes, for the 200–300 certificates issued every year.",
         "keyFeatures": {
           "Batch Processing": "Handles hundreds of certificates in a single run",
           "Web Scraping": "Automated student data extraction from institutional systems",
@@ -378,16 +378,16 @@
           "Selenium": "Web scraping and browser automation",
           "Jupyter": "Interactive monitoring and debugging interface"
         },
-        "techImpl": "Selenium drives browser automation to extract student records from institutional systems. Pandas pipelines clean, validate, and deduplicate data before processing. Template engine fills certificate templates in batch mode, reducing manual processing from 3 hours to 15 minutes.",
+        "techImpl": "Selenium drives browser automation to extract student records from institutional systems. Pandas pipelines clean, validate, and deduplicate data before processing. Template engine fills certificate templates in batch mode, cutting production from one week to 30 minutes.",
         "links": {
           "github": "github"
         }
       },
       "travel": {
         "title": "Travel Allowance Calculator",
-        "description": "Budget estimation system with intelligent suggestions and export capabilities",
-        "summary": "A sophisticated budget planning application for business travel and institutional expenses. Provides intelligent cost estimation with real-time calculations, multi-currency support, and PDF export. Built with React hooks and Context API.",
-        "longDescription": "A sophisticated budget planning application for business travel and institutional expenses. The system provides intelligent cost estimation based on destination, duration, and travel category, with real-time calculations and dynamic form validation. Features include multi-currency support, historical data tracking for better estimates, PDF export with detailed breakdown, and integration with institutional budget systems. The interface is designed for ease of use with step-by-step wizards, auto-save functionality, and responsive design for mobile approval workflows. Built with modern React practices including hooks and context API for state management.",
+        "description": "Travel-allowance estimator for institutional trips: per-diem rules, live totals, multi-currency and a PDF breakdown.",
+        "summary": "A React app that estimates travel allowances from destination, duration and travel category, validates the form as you type, converts between currencies in real time and exports a detailed PDF breakdown for approval. Past trips feed better estimates, and the layout works on a phone so approvals can happen in the field.",
+        "longDescription": "A budget-planning application for business travel and institutional expenses. The system provides intelligent cost estimation based on destination, duration, and travel category, with real-time calculations and dynamic form validation. Features include multi-currency support, historical data tracking for better estimates, PDF export with detailed breakdown, and integration with institutional budget systems. The interface is designed for ease of use with step-by-step wizards, auto-save functionality, and responsive design for mobile approval workflows. Built with modern React practices including hooks and context API for state management.",
         "keyFeatures": {
           "Cost Estimation": "Intelligent calculations by destination, duration, and category",
           "Multi-currency": "Real-time currency conversion and calculations",
@@ -407,9 +407,9 @@
       },
       "storycraft": {
         "title": "StoryCraft Platform",
-        "description": "Collaborative storytelling with monolithic and microservices architectures",
-        "summary": "An innovative collaborative writing platform demonstrating both monolithic and microservices architectures. Features real-time co-authoring via WebSocket, NestJS microservices, React+Redux state management, and Docker Compose containerization.",
-        "longDescription": "An innovative platform for collaborative creative writing that demonstrates both monolithic and microservices architectural patterns. Users can create, share, and co-author stories in real-time with version control and branching narratives. The platform implements WebSocket for real-time collaboration, NestJS microservices for scalability (auth service, story service, notification service), React with Redux for complex state management, and SQL Server for transactional data integrity. Features include character and plot management tools, AI-powered writing suggestions, publishing workflows, and community features like comments and ratings. The project showcases modern software architecture principles including API Gateway pattern, event-driven communication, and containerization with Docker Compose.",
+        "description": "Collaborative writing platform built twice: as a monolith and as NestJS microservices.",
+        "summary": "A university project that compares two architectures for the same product. The microservices version splits auth, stories and notifications into NestJS services behind an API gateway that talk through events; the front end is React + Redux, SQL Server keeps story data transactional, and Docker Compose brings the whole stack up with one command. Writers co-author in real time over WebSocket, branch their narratives with version history and get AI writing suggestions.",
+        "longDescription": "A platform for collaborative creative writing that demonstrates both monolithic and microservices architectural patterns. Users can create, share, and co-author stories in real-time with version control and branching narratives. The platform implements WebSocket for real-time collaboration, NestJS microservices for scalability (auth service, story service, notification service), React with Redux for complex state management, and SQL Server for transactional data integrity. Features include character and plot management tools, AI-powered writing suggestions, publishing workflows, and community features like comments and ratings. The project showcases modern software architecture principles including API Gateway pattern, event-driven communication, and containerization with Docker Compose.",
         "keyFeatures": {
           "Real-time Co-authoring": "Collaborative story writing via WebSocket",
           "Version Control": "Branching narratives with history tracking",
@@ -431,9 +431,9 @@
       },
       "fitness": {
         "title": "Fitness Tracker",
-        "description": "A web application built for managing workout routines and tracking fitness progress.",
-        "summary": "A comprehensive fitness management app built with ASP.NET Web Forms using strict N-Layer architecture. Features workout routine creation, progress tracking with charts, calorie logging, and social sharing. Implements stored procedures and Entity Framework ORM.",
-        "longDescription": "A comprehensive fitness management application built with ASP.NET Web Forms demonstrating enterprise-level architecture patterns. The application uses a strict N-Layer architecture separating Presentation, Business Logic, and Data Access layers for maintainability and testability. Features include personalized workout routine creation with exercise libraries, progress tracking with charts and statistics, calorie and nutrition logging, goal setting and achievement tracking, and social features for sharing progress. The backend implements stored procedures for data operations, Entity Framework for ORM, and includes proper exception handling and logging. Security features include input validation, SQL injection prevention, and session management.",
+        "description": "Workout and nutrition tracker in ASP.NET Web Forms with a strict N-layer architecture.",
+        "summary": "Built to practice enterprise .NET the strict way: Presentation, Business Logic and Data Access in separate projects, every database operation behind a parameterized stored procedure, Entity Framework for the ORM, and session management plus input validation on the web layer. Users create routines from an exercise library, log calories, follow their progress in charts and share achievements with others.",
+        "longDescription": "A fitness management application built with ASP.NET Web Forms demonstrating enterprise-level architecture patterns. The application uses a strict N-Layer architecture separating Presentation, Business Logic, and Data Access layers for maintainability and testability. Features include personalized workout routine creation with exercise libraries, progress tracking with charts and statistics, calorie and nutrition logging, goal setting and achievement tracking, and social features for sharing progress. The backend implements stored procedures for data operations, Entity Framework for ORM, and includes proper exception handling and logging. Security features include input validation, SQL injection prevention, and session management.",
         "keyFeatures": {
           "Workout Routines": "Personalized creation with exercise library",
           "Progress Tracking": "Charts and statistics for performance monitoring",
@@ -453,8 +453,8 @@
       },
       "spaceInvaders": {
         "title": "Space Invaders",
-        "description": "Classic Space Invaders game.",
-        "summary": "A faithful Python recreation of the classic Space Invaders arcade game using Pygame. Features smooth 60 FPS gameplay, sprite-based graphics, progressive difficulty, power-ups, high score persistence, and sound effects.",
+        "description": "The arcade classic rebuilt in Python and Pygame.",
+        "summary": "A faithful Space Invaders in Pygame: sprite groups for aliens, bullets and player, collision detection, delta-time movement at 60 FPS, alien speed that climbs with each wave, power-ups and a persistent high score, all driven by a menu → game → game-over state machine. Small, but it's where I learned game loops and frame-independent movement.",
         "longDescription": "A faithful recreation of the iconic Space Invaders arcade game using Python and Pygame, demonstrating game development fundamentals and object-oriented programming. The game features smooth 60 FPS gameplay, sprite-based graphics with custom assets, collision detection systems, progressive difficulty with increasing alien speed, power-up mechanics, high score persistence, and sound effects. Technical highlights include game state management, entity component system for game objects, optimized rendering with sprite groups, and input handling with configurable controls. The project showcases understanding of game loops, frame-independent movement, and classic arcade game design patterns.",
         "keyFeatures": {
           "60 FPS Gameplay": "Smooth frame-independent movement system",
@@ -474,8 +474,8 @@
       },
       "godot2d": {
         "title": "Godot Game 2D",
-        "description": "Game with traps, fruits that give points and a final trophy that congratulates the player.",
-        "summary": "A 2D platformer in Godot Engine showcasing physics-based character movement, collectible scoring, hazard mechanics, checkpoints, and particle effects. Built with GDScript, tilemap level design, and animation state machines.",
+        "description": "2D platformer in Godot: traps, fruit for points and a trophy at the end.",
+        "summary": "A small platformer built to learn Godot's way of doing things: tilemap levels, a physics-based character with an animation state machine (idle, run, jump, hurt), traps that need timing, checkpoints, collectible fruit and a trophy that congratulates you at the end. Everything talks through Godot's signal system.",
         "longDescription": "A 2D platformer game developed in Godot Engine showcasing fundamental game mechanics and level design principles. The game features physics-based character movement with jump mechanics, collectible system with scoring, hazard and trap mechanics requiring timing and skill, checkpoint system for player progression, and particle effects for visual feedback. Built using Godot's node-based scene system, GDScript for game logic, tilemap system for level design, and animation state machines for character states. The project demonstrates understanding of 2D game physics, collision layers, signal system for event handling, and game feel through careful tuning of movement parameters.",
         "keyFeatures": {
           "Physics Movement": "Character controller with jump mechanics",
@@ -494,8 +494,8 @@
       },
       "godot3d": {
         "title": "Godot Game 3D",
-        "description": "Game where you control a cube, climb a mountain and collect coins at the top.",
-        "summary": "A 3D mountain climbing experience in Godot Engine with physics-based movement, 3D collectibles, dynamic lighting, and a victory reward system. Explores 3D character control, camera algorithms, and vector mathematics.",
+        "description": "First 3D project in Godot: a cube climbs a mountain and collects the coins at the top.",
+        "summary": "My first step into 3D: a cube with a physics-based controller climbs a generated mountain terrain while a camera follows with lerp smoothing. It covers 3D collisions, spatial transforms, lighting and shadows, and a win condition with feedback when you reach the coins.",
         "longDescription": "An exploration of 3D game development using Godot Engine, featuring a challenging mountain climbing experience with physics-based movement. The game implements 3D character controller with camera follow system, terrain generation and environmental design, collectible system with 3D spatial awareness, lighting and shadow effects for atmosphere, and victory condition with reward feedback. Technical aspects include Godot's 3D physics engine, spatial nodes and transforms, camera positioning algorithms, mesh and material systems, and 3D collision detection. The project explores fundamental concepts of 3D game development including vector mathematics, quaternion rotations, and level design in three dimensions.",
         "keyFeatures": {
           "3D Controller": "Character movement with camera follow system",
@@ -516,7 +516,7 @@
   },
   "about": {
     "intro": {
-      "bio": "I design and build full-stack systems that are secure, scalable, and ready for production. From SaaS platforms and mobile apps to institutional tools and corporate websites. My work bridges frontend craft with backend robustness, delivering solutions that perform under real-world pressure."
+      "bio": "I'm a software engineer from Quito, Ecuador. In the last two years I've built and hardened real products: a bakers' SaaS with Stripe Connect billing, the security campaign of a live fintech platform, a faith-planner app shipped to the App Store, and institutional tools that cut a three-month reporting cycle to minutes. Today I also build benchmark datasets and evaluate code-generation models. What I care about is what happens after launch: typed schemas, CI that fails early, and interfaces that match the design to the pixel."
     },
     "companies": {
       "title": "Companies I've Worked With"
@@ -544,9 +544,9 @@
           "location": "Hybrid",
           "period": "Jan 2026",
           "bullets": [
-            "Built and stabilized a full-stack SaaS monorepo (React, Node.js/Express, React Native/Expo, Supabase, Drizzle ORM, Stripe, Turborepo) achieving full production readiness across web, mobile, and backend.",
-            "Executed phased security hardening on a fintech investment platform: IDOR, CSRF, CORS, Zod validation, audit trails. Directly reducing operational risk in live financial operations.",
-            "Delivered a corporate marketing website using Next.js, TypeScript, Bootstrap 5, and a full CI/CD pipeline with security scanning via GitHub Actions."
+            "Took CrumbCoach, a bakers' SaaS monorepo (React, Node.js/Express, React Native/Expo, Supabase, Drizzle ORM, Stripe, Turborepo), from feature-rich but fragile to production-ready: subscriptions and billing on Stripe Connect, a rebuilt auth layer, the mobile-to-backend bridge, and the calendar, orders and storefront gaps closed across web, mobile and backend.",
+            "Led phased security hardening on Connect Invest, a live fintech investment platform: closed IDOR, CSRF and CORS gaps, added Zod validation, server-side pricing controls and audit trails, and shipped KYC/MFA flows and webhook security while keeping CI green through dependency drift.",
+            "Shipped a corporate marketing website on Next.js App Router with TypeScript and Bootstrap 5, plus a CI/CD pipeline that runs CodeQL and Semgrep on every push, deployed on Vercel."
           ]
         },
         "epnIntern": {
@@ -555,19 +555,19 @@
           "location": "Quito, Ecuador",
           "period": "Jan 2025 – Jul 2025",
           "bullets": [
-            "Designed and operated backend services, frontend modules, and data pipelines (Python, FastAPI, SQLAlchemy, React) supporting institutional planning workflows.",
+            "Designed and operated backend services, frontend modules, and data pipelines (Python, FastAPI, SQLAlchemy, React) supporting institutional planning workflows with hundreds of active records.",
             "Implemented role-based access control and data validation rules, improving data consistency and reducing rework during reporting cycles.",
             "Consolidated bug fixes, dependency upgrades, and input sanitization, restoring 100% platform availability."
           ]
         },
         "digitalInclusion": {
-          "role": "Digital Inclusion Program Instructor",
+          "role": "Digital Inclusion Instructor & Academic Supervisor",
           "company": "EPN Ludolab",
           "location": "Quito, Ecuador",
           "period": "Feb 2024 – Aug 2024",
           "bullets": [
             "Delivered hands-on training in digital productivity tools to rural educators and senior adults, contributing to an 85% completion rate across 200+ participants.",
-            "Supervised 70+ instructors and validated weekly deliverables for 120+ learners, ensuring curriculum compliance and instructional quality."
+            "Supervised 70+ instructors and validated weekly deliverables for 120+ learners, with structured feedback every week to 20 educators and 40–50 learners to keep the curriculum on track and the teaching quality high."
           ]
         },
         "ieee": {
@@ -577,7 +577,8 @@
           "period": "Jan 2025 – Jan 2026",
           "bullets": [
             "Led the IEEE Computer Society chapter, organizing 30+ technical events (workshops, coding sessions, competitions), significantly increasing student engagement.",
-            "Coordinated collaboration between universities, international and local speakers, and sponsors across events."
+            "Coordinated collaboration between universities, international and local speakers, and sponsors across events.",
+            "Ran the chapter's budget, event pricing and promotion (social media and event pages), and kept the relationship with collaborators and sponsors going between events."
           ]
         }
       }
@@ -620,10 +621,10 @@
   },
   "contact": {
     "title": "Let's Connect",
-    "subtitle": "Have a project in mind or want to collaborate? I'd love to hear from you!",
+    "subtitle": "Have a product to build, fix, or ship? Tell me about it.",
     "profile": {
       "name": "Mateo Dueñas",
-      "bio": "Software Engineer passionate about building scalable solutions. Open to new opportunities and collaborations.",
+      "bio": "Full-stack engineer in Quito (UTC−5). I work remotely with teams in the US and Latin America and I'm open to full-time and contract roles.",
       "emailLabel": "Email",
       "linkedinLabel": "LinkedIn",
       "githubLabel": "GitHub"
@@ -643,12 +644,12 @@
       },
       "subject": {
         "label": "Subject",
-        "placeholder": "Project Collaboration",
+        "placeholder": "A project I'd like to discuss",
         "error": "Subject is required"
       },
       "message": {
         "label": "Message",
-        "placeholder": "Tell me about your project or inquiry...",
+        "placeholder": "What are you building, what's the timeline, and where do you need help?",
         "error": "Message is required"
       },
       "submit": "Send Message",
