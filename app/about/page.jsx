@@ -9,6 +9,7 @@ import AboutGlobe from '../../components/sections/AboutGlobe';
 import { SOCIAL, CV } from '../../data/social';
 
 const experienceItems = [
+  { key: 'greenlight',       logos: ['/media/work-education/greenlight-120w.avif', '/media/work-education/anyoneai-120w.avif'], present: true },
   { key: 'bridge',           logos: ['/media/work-education/bridge-staff-120w.avif', '/media/work-education/acr-120w.avif'], present: true },
   { key: 'epnIntern',        logos: ['/media/work-education/direc-investigacion-120w.avif'] },
   { key: 'digitalInclusion', logos: ['/media/work-education/ludolab-120w.avif'] },
