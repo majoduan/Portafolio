@@ -2,17 +2,24 @@
 import {
   createContext,
   useState,
-  useEffect,
   useMemo,
   useCallback,
+  useSyncExternalStore,
   type Dispatch,
   type SetStateAction,
   type ReactNode,
 } from 'react';
 import { flushSync } from 'react-dom';
+import {
+  subscribe,
+  getSnapshot,
+  getServerSnapshot,
+  setPrefs,
+  type Language,
+  type Theme,
+} from '../lib/prefsStore';
 
-export type Language = 'en' | 'es';
-export type Theme = 'dark' | 'light';
+export type { Language, Theme };
 
 export interface AppContextValue {
   language: Language;
@@ -39,93 +46,61 @@ const defaultContext: AppContextValue = {
   setModalOpen: () => {},
 };
 
-// Create context for app-wide state (language and theme)
 export const AppContext = createContext<AppContextValue>(defaultContext);
 
 interface AppContextProviderProps {
   children: ReactNode;
 }
 
-// AppContext Provider Component
+// Tema e idioma viven en lib/prefsStore (useSyncExternalStore): la página se
+// hidrata con los valores del servidor ('en'/'dark') y se re-renderiza con los
+// reales al terminar la hidratación, sin mismatch. El script inline del <head>
+// ya aplicó `lang` y `.dark` al <html> antes del primer paint, así que no hay
+// flash visual; la conmutación del texto ocurre debajo del boot overlay.
 export const AppContextProvider = ({ children }: AppContextProviderProps) => {
-  // Initialize language from localStorage or browser preference
-  const getInitialLanguage = (): Language => {
-    if (typeof window === 'undefined') return 'en';
-    const savedLanguage = localStorage.getItem('portfolio-language');
-    if (savedLanguage === 'en' || savedLanguage === 'es') {
-      return savedLanguage;
-    }
-    const browserLang = navigator.language.toLowerCase();
-    if (browserLang.startsWith('es')) {
-      return 'es';
-    }
-    return 'en';
-  };
-
-  // Initialize theme from localStorage or default to dark
-  const getInitialTheme = (): Theme => {
-    if (typeof window === 'undefined') return 'dark';
-    const savedTheme = localStorage.getItem('portfolio-theme');
-    if (savedTheme === 'dark' || savedTheme === 'light') {
-      return savedTheme;
-    }
-    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-  };
-
-  const [language, setLanguage] = useState<Language>(getInitialLanguage);
-  const [theme, setTheme] = useState<Theme>(getInitialTheme);
+  const prefs = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
-  // Persist language changes to localStorage
-  useEffect(() => {
-    localStorage.setItem('portfolio-language', language);
-    // Update HTML lang attribute for accessibility
-    document.documentElement.lang = language;
-  }, [language]);
+  const setLanguage = useCallback((value: SetStateAction<Language>) => {
+    const prev = getSnapshot().language;
+    setPrefs({ language: typeof value === 'function' ? value(prev) : value });
+  }, []);
 
-  // Persist theme changes to localStorage (DOM class is handled imperatively in toggleTheme)
-  useEffect(() => {
-    localStorage.setItem('portfolio-theme', theme);
-    document.documentElement.classList.toggle('dark', theme === 'dark');
-  }, [theme]);
+  const setTheme = useCallback((value: SetStateAction<Theme>) => {
+    const prev = getSnapshot().theme;
+    setPrefs({ theme: typeof value === 'function' ? value(prev) : value });
+  }, []);
 
-  // Toggle between English and Spanish
   const toggleLanguage = useCallback(() => {
-    setLanguage((prev) => (prev === 'en' ? 'es' : 'en'));
+    setPrefs({ language: getSnapshot().language === 'en' ? 'es' : 'en' });
   }, []);
 
-  // Apply theme synchronously so the View Transitions snapshot captures the new state
-  const applyTheme = useCallback((next: Theme) => {
-    flushSync(() => setTheme(next));
-    document.documentElement.classList.toggle('dark', next === 'dark');
-  }, []);
-
-  // Toggle between dark and light theme with polygon view-transition
+  // Toggle con polygon view-transition. flushSync garantiza que el snapshot
+  // "new" de la View Transition capture el DOM ya conmutado.
   const toggleTheme = useCallback(() => {
-    const next: Theme = theme === 'dark' ? 'light' : 'dark';
-    const reduced =
-      typeof window !== 'undefined' &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const next: Theme = getSnapshot().theme === 'dark' ? 'light' : 'dark';
+    let reduced = false;
+    try { reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch { /* ignore */ }
+    const apply = () => { flushSync(() => setPrefs({ theme: next })); };
     if (typeof document === 'undefined' || !document.startViewTransition || reduced) {
-      applyTheme(next);
+      apply();
       return;
     }
-    document.startViewTransition(() => applyTheme(next));
-  }, [theme, applyTheme]);
+    document.startViewTransition(apply);
+  }, []);
 
-  // Memoize context value to prevent unnecessary re-renders
   const value = useMemo<AppContextValue>(
     () => ({
-      language,
+      language: prefs.language,
       setLanguage,
       toggleLanguage,
-      theme,
+      theme: prefs.theme,
       setTheme,
       toggleTheme,
       isModalOpen,
       setModalOpen,
     }),
-    [language, theme, toggleLanguage, toggleTheme, isModalOpen]
+    [prefs.language, prefs.theme, setLanguage, setTheme, toggleLanguage, toggleTheme, isModalOpen]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

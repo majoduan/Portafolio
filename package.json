@@ -18,8 +18,7 @@
     "build:full": "pnpm optimize-images && pnpm build"
   },
   "dependencies": {
-    "@splinetool/react-spline": "^4.1.0",
-    "@splinetool/runtime": "^1.12.70",
+    "@splinetool/runtime": "^1.12.98",
     "cobe": "^2.0.1",
     "geist": "^1.7.0",
     "lucide-react": "^0.552.0",

@@ -11,19 +11,22 @@ const STAGGER_DESKTOP = 100;        // ms between each card (desktop)
 const STAGGER_MOBILE = 70;          // ms between each card (mobile)
 const ANIM_BUFFER = 80;             // small buffer after last card finishes
 
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+
 const TechnologiesSection = React.memo(() => {
   const { t } = useTranslation();
 
-  // Mobile detection — single source of truth for all TechCards
-  // useLayoutEffect runs BEFORE browser paint, preventing mobile→desktop flash
+  // Mobile detection — single source of truth for all TechCards.
+  // Layout effect en cliente (corre ANTES del primer paint => sin flash
+  // mobile→desktop); en SSR se usa useEffect para evitar el warning.
+  // matchMedia en lugar de resize: solo dispara al cruzar el breakpoint.
   const [isMobile, setIsMobile] = useState(true);
-  useLayoutEffect(() => {
-    setIsMobile(window.innerWidth < 768);
-  }, []);
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener('resize', handleResize, { passive: true });
-    return () => window.removeEventListener('resize', handleResize);
+  useIsomorphicLayoutEffect(() => {
+    const mql = window.matchMedia('(max-width: 767px)');
+    setIsMobile(mql.matches);
+    const handler = (e) => setIsMobile(e.matches);
+    mql.addEventListener('change', handler);
+    return () => mql.removeEventListener('change', handler);
   }, []);
 
   // Tab state

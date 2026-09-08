@@ -1546,8 +1546,10 @@ section.integrations-marquee { contain-intrinsic-size: auto 220px; }
 }
 
 /* ==================== CIRCUIT BOOT SCREEN ==================== */
-
-/* Container — black background, full viewport */
+/* Overlay fijo sobre la página real. El contenido (circuitos, orbe, barra y
+   etiqueta) se dibuja en un <canvas> controlado por un Web Worker
+   (lib/boot/renderer.js) — sin React ni SVG por frame. El contenedor negro
+   se renderiza en SSR para que nunca se vea la página antes del boot. */
 .cb {
   position: fixed;
   inset: 0;
@@ -1564,114 +1566,27 @@ section.integrations-marquee { contain-intrinsic-size: auto 220px; }
   to { opacity: 0; }
 }
 
-/* SVG circuit layer */
-.cb__svg {
+.cb__canvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 2;
+  display: block;
   pointer-events: none;
 }
 
-/* Glow layer on traces (wider, blurred) */
-.cb__trace-glow {
-  filter: blur(3px);
+/* ==================== HERO: GALAXIA → ESCENA 3D ==================== */
+/* La galaxia es el estado inicial del hueco 3D y se funde cuando la escena
+   Spline está lista (opacity + visibility diferida para que deje de pintarse). */
+.hero-galaxy {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.7s ease-out, visibility 0s linear 0s;
 }
-
-/* Central Orb — intensity driven by JS via --orb-intensity (0→1) */
-.cb__orb {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100px;
-  height: 100px;
-  z-index: 10;
-  --orb-intensity: 0;
-}
-
-.cb__orb-core {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, var(--orb-g0, 0)) 0%,
-    rgba(255, 255, 255, var(--orb-g1, 0)) 40%,
-    rgba(255, 255, 255, var(--orb-g2, 0)) 70%,
-    rgba(255, 255, 255, var(--orb-g3, 0)) 100%
-  );
-  border: 1px solid rgba(255, 255, 255, calc(var(--orb-intensity) * (1 - var(--orb-intensity)) * 1.2));
-  box-shadow:
-    0 0 var(--orb-glow, 0px) rgba(255, 255, 255, calc(var(--orb-intensity) * 0.7)),
-    0 0 var(--orb-glow2, 0px) rgba(255, 255, 255, calc(var(--orb-intensity) * 0.3)),
-    0 0 var(--orb-glow3, 0px) rgba(255, 255, 255, calc(var(--orb-intensity) * 0.1));
-}
-
-/* Typewriter text — appears below orb after activation */
-.cb__text {
-  position: absolute;
-  top: calc(50% + 45px);
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: 'Courier New', monospace;
-  font-size: 13px;
-  letter-spacing: 3px;
-  color: rgba(255, 255, 255, 0.75);
-  white-space: nowrap;
-  z-index: 10;
-  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.3));
-}
-
-/* Progress bar */
-.cb__progress {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(400px, calc(100% - 40px));
-  text-align: center;
-  z-index: 20;
-}
-
-.cb__progress-track {
-  width: 100%;
-  height: 2px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 1px;
-  overflow: hidden;
-}
-
-.cb__progress-fill {
-  height: 100%;
-  background: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
-  transition: width 0.1s linear;
-}
-
-.cb__progress-label {
-  display: block;
-  font-family: 'Courier New', monospace;
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.3);
-  margin-top: 8px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .cb__orb {
-    width: 72px;
-    height: 72px;
-  }
-
-  .cb__text {
-    font-size: 10px;
-    letter-spacing: 2px;
-    top: calc(50% + 32px);
-  }
+.hero-galaxy--hidden {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.7s ease-out, visibility 0s linear 0.7s;
 }
 
 /* ───── Integrations marquee ─────

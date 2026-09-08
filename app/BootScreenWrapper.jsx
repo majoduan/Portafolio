@@ -1,78 +1,80 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import dynamic from 'next/dynamic';
+import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
-import { preloadCriticalResources } from '../utils/preloadResources';
+import { bootStore } from '../lib/boot/bootStore';
+import { runBootSequence } from '../lib/boot/orchestrator';
+import { schedulePreload } from '../utils/preloadResources';
+import BootOverlay from '../components/boot/BootOverlay';
 import NavigationBar from '../components/sections/NavigationBar';
 import ParticleCanvas from '../components/sections/ParticleCanvas';
 
-const HUDBootScreen = dynamic(() => import('../components/HUDBootScreen'), {
-  ssr: false,
-  loading: () => <div className="fixed inset-0" style={{ backgroundColor: '#000000' }} />,
-});
-
-// Survives client-side (SPA) navigations, resets on full page reload
-let introShown = false;
-
+/**
+ * BootScreenWrapper — el boot screen es un OVERLAY sobre la página real.
+ *
+ * Antes: mientras `loading`, se renderizaba SOLO el boot (el HTML prerenderizado
+ * era un div negro; la página entera se montaba al terminar y la escena 3D
+ * empezaba a descargarse recién entonces, con spinner a la vista).
+ *
+ * Ahora: la página se renderiza (SSR incluido) debajo del overlay desde el
+ * primer instante — el h1 y el hero existen en el HTML (SEO/LCP), la escena
+ * Spline se descarga y parsea DURANTE el boot, y el overlay se levanta cuando
+ * está lista (o al agotar el presupuesto; la galaxia ya está visible debajo).
+ * `inert` + `aria-busy` bloquean foco/lectores mientras el overlay está.
+ *
+ * El progreso y la animación viven fuera de React (bootStore + Web Worker).
+ */
 export default function BootScreenWrapper({ children, footer }) {
   const pathname = usePathname();
-  const isHome = pathname === '/';
-
-  const [loading, setLoading] = useState(!introShown);
+  const [booting, setBooting] = useState(() => !bootStore.get().done);
+  const [fading, setFading] = useState(false);
+  const [revealed, setRevealed] = useState(() => bootStore.get().done);
   const [justBooted, setJustBooted] = useState(false);
-  const [splineReady, setSplineReady] = useState(!isHome);
-  const [shouldLoadSpline, setShouldLoadSpline] = useState(false);
+  const startedRef = useRef(false);
+  const pathRef = useRef(pathname);
+  const shellRef = useRef(null);
 
-  // SSR-safe: detect tablet+ viewport + reactivo a resize (rotacion mobile,
-  // resize ventana). matchMedia evita disparos por cada pixel del resize event.
+  // `inert` bloquea foco/clicks/lectores de pantalla en la página mientras el
+  // overlay está. React 18 no serializa `inert=""`, así que se aplica por ref.
   useEffect(() => {
-    if (!isHome) return;
-    const mql = window.matchMedia('(min-width: 768px)');
-    setShouldLoadSpline(mql.matches);
-    const handler = (e) => setShouldLoadSpline(e.matches);
-    mql.addEventListener('change', handler);
-    return () => mql.removeEventListener('change', handler);
-  }, [isHome]);
+    const el = shellRef.current;
+    if (!el) return;
+    if (booting) el.setAttribute('inert', '');
+    else el.removeAttribute('inert');
+  }, [booting]);
 
-  // Pre-load Spline JS module during boot screen (home + desktop/tablet only)
   useEffect(() => {
-    if (!isHome) return;
-    if (!shouldLoadSpline) {
-      setSplineReady(true);
-      return;
-    }
-    import('@splinetool/react-spline')
-      .then(() => setSplineReady(true))
-      .catch(() => setSplineReady(true));
-  }, [isHome, shouldLoadSpline]);
-
-  // Preload critical resources during boot screen idle time
-  useEffect(() => {
-    if (!loading) return;
-    const timer = setTimeout(() => preloadCriticalResources(), 3000);
-    return () => clearTimeout(timer);
-  }, [loading]);
-
-  if (loading) {
-    return (
-      <HUDBootScreen
-        onComplete={() => {
-          introShown = true;
-          setJustBooted(true);
-          setLoading(false);
-        }}
-        splineReady={splineReady}
-      />
-    );
-  }
+    if (!booting || startedRef.current) return;
+    startedRef.current = true;
+    runBootSequence({
+      pathname: pathRef.current,
+      onFadeStart: () => {
+        // El overlay empieza su fade-out: la página hace su fade-in a la vez
+        // (mismo solape que antes) y arrancan las partículas.
+        setJustBooted(true);
+        setRevealed(true);
+        setFading(true);
+      },
+      onDone: () => {
+        setBooting(false);
+        schedulePreload();
+      },
+    });
+  }, [booting]);
 
   return (
-    <div className={`min-h-screen bg-[var(--bg-primary)] text-slate-900 dark:text-white relative overflow-x-hidden transition-colors duration-300${justBooted ? ' portfolio-fade-in' : ''}`}>
-      <ParticleCanvas />
-      <NavigationBar />
-      <main id="main">{children}</main>
-      {footer}
-    </div>
+    <>
+      {booting && <BootOverlay fading={fading} />}
+      <div
+        ref={shellRef}
+        className={`min-h-screen bg-[var(--bg-primary)] text-slate-900 dark:text-white relative overflow-x-hidden${justBooted ? ' portfolio-fade-in' : ''}`}
+        aria-busy={booting ? 'true' : undefined}
+      >
+        {revealed && <ParticleCanvas />}
+        <NavigationBar />
+        <main id="main">{children}</main>
+        {footer}
+      </div>
+    </>
   );
 }

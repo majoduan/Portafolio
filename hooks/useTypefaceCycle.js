@@ -36,6 +36,7 @@ import { useEffect } from 'react';
 export function useTypefaceCycle(titleRef, fonts, options = {}) {
   const {
     text = '',
+    enabled = true,        // false mientras el boot overlay tapa el hero (no cargar fuentes ni animar)
     initialDelay = 3000,   // estado normal inicial antes de la 1ª ráfaga
     deadTimeMin = 10000,   // tiempo muerto mínimo entre ráfagas
     deadTimeMax = 15000,   // tiempo muerto máximo
@@ -45,6 +46,7 @@ export function useTypefaceCycle(titleRef, fonts, options = {}) {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    if (!enabled) return;
     const el = titleRef.current;
     if (!el || !fonts || fonts.length === 0) return;
 
@@ -242,5 +244,5 @@ export function useTypefaceCycle(titleRef, fonts, options = {}) {
       applyFont(-1);
       clearBox();
     };
-  }, [titleRef, fonts, text, initialDelay, deadTimeMin, deadTimeMax, swapMs, maxSweep]);
+  }, [titleRef, fonts, text, enabled, initialDelay, deadTimeMin, deadTimeMax, swapMs, maxSweep]);
 }

@@ -1,8 +1,4 @@
-import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
 import bundleAnalyzer from '@next/bundle-analyzer';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // Activado con ANALYZE=true env var. Genera 3 HTML treemaps en .next/analyze/
 // (client, edge, nodejs). Reemplaza el legacy scripts/analyze-bundle.mjs que
@@ -27,15 +23,12 @@ const nextConfig = {
       preventFullImport: true,
     },
   },
-  // @splinetool/react-spline exports only ESM "import" condition
-  // which Next.js webpack can't resolve. Point directly to the file.
-  webpack: (config) => {
-    config.resolve.alias['@splinetool/react-spline'] = resolve(
-      __dirname,
-      'node_modules/@splinetool/react-spline/dist/react-spline.js'
-    );
-    return config;
-  },
+  // NOTA @splinetool/runtime: se queda en 1.12.x. La 2.x (probada 2.0.41,
+  // 2026-09-08) rompe el build con webpack — construye URLs de WASM/Draco con
+  // `new URL('x.wasm', import.meta.url)` hacia archivos que no existen en el
+  // paquete (los sirve cdn.spline.design / gstatic en runtime) — y además exige
+  // abrir la CSP a esos hosts. Reintentar solo con Turbopack (Next 16) y CSP
+  // revisada (plan §2.7 / §5.3).
 
   // Única fuente de cabeceras HTTP. (vercel.json duplicaba este bloque y Vercel
   // enviaba cada cabecera dos veces; se eliminó.)

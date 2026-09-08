@@ -1,32 +1,23 @@
 'use client';
-import React, { useState, useEffect, useRef, useMemo, useCallback, useContext, Suspense, Component } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback, useContext } from 'react';
 import { Mail, Linkedin, Github, Briefcase, CheckCircle2 } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useReversibleInView } from '../../hooks/useReversibleInView';
 import { useCountUp } from '../../hooks/useCountUp';
+import { useBootDone } from '../../hooks/useBootDone';
 import { AppContext } from '../../contexts/AppContext';
 import GalaxyFallback from '../GalaxyFallback';
 import TypefaceTitle from '../TypefaceTitle';
+import SplineScene from './SplineScene';
 import { SOCIAL, CV } from '../../data/social';
+import { getScenePolicy } from '../../lib/scenePolicy';
 
-// Dynamic import Spline with SSR disabled for Next.js
-import dynamic from 'next/dynamic';
-const Spline = dynamic(() => import('@splinetool/react-spline'), { ssr: false });
+const TYPING_MS = 30;
 
-// Error boundary local para Spline - si falla, muestra fallback CSS sin romper la página
-class SplineErrorBoundary extends Component {
-  state = { hasError: false };
-  static getDerivedStateFromError() { return { hasError: true }; }
-  render() {
-    if (this.state.hasError) return this.props.fallback;
-    return this.props.children;
-  }
-}
-
-function StatNumber({ target, suffix, label }) {
+function StatNumber({ target, suffix, label, enabled }) {
   const ref = useRef(null);
   const inView = useReversibleInView(ref, { threshold: 0.4, rootMargin: '0px' });
-  const value = useCountUp({ end: target, duration: 1800, enabled: inView });
+  const value = useCountUp({ end: target, duration: 1800, enabled: inView && enabled });
 
   return (
     <div ref={ref} className="text-center">
@@ -40,50 +31,64 @@ function StatNumber({ target, suffix, label }) {
   );
 }
 
+// Typewriter sin estado React: escribe directamente en el nodo de texto.
+// Antes: setState cada 30 ms durante ~4 s => ~130 re-renders del hero justo
+// cuando la escena 3D se parseaba. El SSR incluye el texto completo (SEO);
+// `active` (boot terminado) dispara la escritura.
+function Typewriter({ text, active }) {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || !active) return;
+    let reduced = false;
+    try { reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch { /* ignore */ }
+    if (reduced) { el.textContent = text; return; }
+
+    el.textContent = '';
+    let i = 0;
+    let last = 0;
+    let raf = 0;
+    const step = (now) => {
+      if (!last) last = now;
+      while (now - last >= TYPING_MS && i < text.length) {
+        last += TYPING_MS;
+        i++;
+        el.textContent = text.slice(0, i);
+      }
+      if (i < text.length) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [text, active]);
+
+  return <span ref={ref}>{text}</span>;
+}
+
 const HeroSection = React.memo(({ shouldLoadSpline }) => {
   const { t } = useTranslation();
   const { theme } = useContext(AppContext);
-  const [typewriterText, setTypewriterText] = useState('');
-  const [isSplineReady, setIsSplineReady] = useState(false);
-  const [splineFailed, setSplineFailed] = useState(false);
+  const bootDone = useBootDone();
   const [cvDownloaded, setCvDownloaded] = useState(false);
   const [isHeroInView, setIsHeroInView] = useState(true);
+  const [tabHidden, setTabHidden] = useState(false);
+  const [sceneMode, setSceneMode] = useState('galaxy'); // 'galaxy' | 'spline' (decidido en cliente)
+  const [sceneReady, setSceneReady] = useState(false);
+  const [sceneFailed, setSceneFailed] = useState(false);
   const heroSectionRef = useRef(null);
   const cvFeedbackTimer = useRef(null);
   const splineRef = useRef(null);
-  const splineLoadingRef = useRef(false);
-  const splineTimeoutRef = useRef(null);
-  const themeRef = useRef(theme);
 
-  // Texto completo para el efecto typewriter - traducido
   const fullText = useMemo(() => t('hero.description'), [t]);
 
-  // Typewriter effect for hero description
+  // Política de escena (red, memoria, CPU, WebGL, historial) — solo cliente
   useEffect(() => {
-    // Reset text cuando cambia el idioma
-    setTypewriterText('');
+    if (!shouldLoadSpline) return;
+    setSceneMode(getScenePolicy());
+  }, [shouldLoadSpline]);
 
-    let currentIndex = 0;
-    const typingSpeed = 30; // Velocidad de escritura en ms
-
-    const typeInterval = setInterval(() => {
-      if (currentIndex <= fullText.length) {
-        setTypewriterText(fullText.substring(0, currentIndex));
-        currentIndex++;
-      } else {
-        clearInterval(typeInterval);
-      }
-    }, typingSpeed);
-
-    return () => clearInterval(typeInterval);
-  }, [fullText]);
-
-  // Mantener themeRef sincronizado
-  useEffect(() => {
-    themeRef.current = theme;
-  }, [theme]);
-
-  // Helper: emitir eventos de teclado reales para Spline
+  // Helper: emitir eventos de teclado reales para Spline (la escena cambia de
+  // tema con la tecla 0; keydown = claro, keyup = oscuro)
   const dispatchKeyboardEvent = useCallback((eventType, key = '0') => {
     const event = new KeyboardEvent(eventType, {
       key,
@@ -94,59 +99,22 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
     document.dispatchEvent(event);
   }, []);
 
-  // Funcion para manejar el evento de carga de Spline
-  const onSplineLoad = useCallback((spline) => {
-    if (splineLoadingRef.current) return;
-    splineLoadingRef.current = true;
-    splineRef.current = spline;
-
-    // Cargó correctamente: cancelar el timeout de fallback
-    if (splineTimeoutRef.current) {
-      clearTimeout(splineTimeoutRef.current);
-      splineTimeoutRef.current = null;
-    }
-
-    // Solo marcar que Spline está listo - el tema se aplica en el useEffect
-    setIsSplineReady(true);
+  const onSplineLoad = useCallback((app) => {
+    splineRef.current = app;
+    setSceneReady(true);
   }, []);
 
-  // Detección de fallo de carga: @splinetool/react-spline NO expone onError,
-  // y un fallo de red/CDN no lanza un error de render (el ErrorBoundary no lo
-  // captura). Si onLoad no se dispara en ~10s, asumimos que falló y mostramos
-  // la galaxia de respaldo. Solo aplica en desktop/tablet (shouldLoadSpline).
-  useEffect(() => {
-    if (!shouldLoadSpline || isSplineReady || splineFailed) return;
-    splineTimeoutRef.current = setTimeout(() => {
-      if (!splineLoadingRef.current) setSplineFailed(true);
-    }, 10000);
-    return () => {
-      if (splineTimeoutRef.current) {
-        clearTimeout(splineTimeoutRef.current);
-        splineTimeoutRef.current = null;
-      }
-    };
-  }, [shouldLoadSpline, isSplineReady, splineFailed]);
-
-  // Aplicar tema SIEMPRE que Spline esté listo y el tema cambie
-  // Esto garantiza que funcione en mount inicial, cambios de tema y re-navegaciones
-  useEffect(() => {
-    if (!isSplineReady || !splineRef.current) return;
-
-    if (theme === 'light') {
-      dispatchKeyboardEvent('keydown', '0');
-    } else {
-      dispatchKeyboardEvent('keyup', '0');
-    }
-  }, [theme, isSplineReady, dispatchKeyboardEvent]);
-
-  // Limpiar cuando el componente se desmonta
-  useEffect(() => {
-    return () => {
-      splineLoadingRef.current = false;
-      splineRef.current = null;
-      setIsSplineReady(false);
-    };
+  const onSplineError = useCallback(() => {
+    splineRef.current = null;
+    setSceneFailed(true);
   }, []);
+
+  // Aplicar tema siempre que la escena esté lista y el tema cambie
+  useEffect(() => {
+    if (!sceneReady || !splineRef.current) return;
+    if (theme === 'light') dispatchKeyboardEvent('keydown', '0');
+    else dispatchKeyboardEvent('keyup', '0');
+  }, [theme, sceneReady, dispatchKeyboardEvent]);
 
   // CV download feedback: muestra checkmark por 1.5s tras click
   const onCvDownload = useCallback(() => {
@@ -155,16 +123,12 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
     cvFeedbackTimer.current = setTimeout(() => setCvDownloaded(false), 1500);
   }, []);
 
-  // Cleanup del timer de feedback
   useEffect(() => () => {
     if (cvFeedbackTimer.current) clearTimeout(cvFeedbackTimer.current);
   }, []);
 
-  // Pausar el painting del canvas Spline cuando hero esta fuera del viewport.
-  // Usamos content-visibility: hidden (W3C) via clase CSS toggleada por
-  // IntersectionObserver. El browser pausa style/layout/paint del subtree,
-  // lo cual libera el GPU/CPU mientras el usuario scrollea por otras secciones.
-  // rootMargin negativo para que se pause un poco antes de salir totalmente.
+  // Pausar la escena (paint vía content-visibility + bucle del runtime vía
+  // stop()/play()) cuando el hero sale del viewport o la pestaña se oculta.
   useEffect(() => {
     if (!shouldLoadSpline) return;
     const section = heroSectionRef.current;
@@ -174,25 +138,18 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
       { threshold: 0, rootMargin: '50px 0px 50px 0px' }
     );
     observer.observe(section);
-    return () => observer.disconnect();
+    const onVisibility = () => setTabHidden(document.hidden);
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
   }, [shouldLoadSpline]);
 
-  // Asegurar que el canvas de Spline capture eventos del mouse
-  useEffect(() => {
-    const handleSplineInteraction = () => {
-      const splineCanvas = document.querySelector('.spline-container canvas');
-      if (splineCanvas) {
-        splineCanvas.style.pointerEvents = 'auto';
-      }
-    };
-
-    // Ejecutar despues de que Spline se haya cargado
-    const timer = setTimeout(handleSplineInteraction, 2000);
-    return () => clearTimeout(timer);
-  }, []);
+  const showSpline = sceneMode === 'spline' && !sceneFailed;
 
   return (
-    <section ref={heroSectionRef} id="home" className="min-h-screen flex items-center justify-center relative pt-4 md:pt-16 bg-transparent transition-colors duration-300 z-10">
+    <section ref={heroSectionRef} id="home" className="min-h-screen flex items-center justify-center relative pt-4 md:pt-16 bg-transparent z-10">
       <div className="container-page w-full relative z-10">
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 items-center">
           {/* Contenido de texto - Izquierda */}
@@ -203,9 +160,10 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
             <TypefaceTitle
               text={t('hero.title')}
               className="hero-title text-display text-black dark:text-white mb-6"
+              enabled={bootDone}
             />
             <p className="text-body-lg text-slate-600 dark:text-slate-100 max-w-prose mx-auto lg:mx-0 mb-8 min-h-[80px] text-pretty hyphens-auto transition-colors duration-300">
-              {typewriterText}
+              <Typewriter text={fullText} active={bootDone} />
               <span className="animate-pulse">|</span>
             </p>
 
@@ -275,42 +233,38 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
                 { target: 15, suffix: '+', label: t('hero.stats.projects') },
                 { target: 30, suffix: '+', label: t('hero.stats.technologies') }
               ].map((stat, i) => (
-                <StatNumber key={i} target={stat.target} suffix={stat.suffix} label={stat.label} />
+                <StatNumber key={i} target={stat.target} suffix={stat.suffix} label={stat.label} enabled={bootDone} />
               ))}
             </div>
           </div>
 
-          {/* Animacion 3D de Spline - md+ (tablet/desktop).
-              Fallback: si Spline falla (timeout ~10s o error de render) se muestra
-              una galaxia espiral (GalaxyFallback). En mobile (<768) no aparece nada.
-              `hidden md:block`: oculto en mobile -> sin aire vacio.
-              Sin altura fija: .spline-container interno usa aspect-ratio 1/1. */}
+          {/* Animación 3D — md+ (tablet/desktop).
+              La galaxia SVG es el estado INICIAL visible (sin spinner); la escena
+              Spline se monta encima con opacidad 0 y se funde al estar lista.
+              Si la política decide 'galaxy' (red lenta, saveData, equipo débil)
+              o la escena falla, la galaxia se queda. En mobile (<768) no hay nada.
+              Sin altura fija: .spline-container usa aspect-ratio 1/1. */}
           {shouldLoadSpline && (
             <div className={`hidden md:block relative w-full overflow-hidden rounded-2xl${isHeroInView ? '' : ' spline-paused'}`}>
-              {splineFailed ? (
-                <div className="relative spline-container">
+              <div className="relative spline-container">
+                <div
+                  className={`hero-galaxy absolute inset-0${sceneReady ? ' hero-galaxy--hidden' : ''}`}
+                  aria-hidden={sceneReady ? 'true' : undefined}
+                >
                   <GalaxyFallback />
                 </div>
-              ) : (
-                <SplineErrorBoundary fallback={<div className="relative spline-container"><GalaxyFallback /></div>}>
-                  <div className="relative spline-container">
+                {showSpline && (
+                  <div className={`absolute inset-0 transition-opacity duration-700 ease-out ${sceneReady ? 'opacity-100' : 'opacity-0'}`}>
                     <div className="w-[120%] h-[120%] -mt-[10%] -ml-[10%] -mb-[10%] -mr-[10%]">
-                      <Suspense fallback={
-                        <div className="w-full h-full flex items-center justify-center">
-                          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-black/40 dark:border-white/40" aria-label="Loading 3D scene" role="status"></div>
-                        </div>
-                      }>
-                        <Spline
-                          key="spline-scene"
-                          scene="https://prod.spline.design/CTzlK88G4nA0eFUO/scene.splinecode"
-                          onLoad={onSplineLoad}
-                          className="w-full h-full"
-                        />
-                      </Suspense>
+                      <SplineScene
+                        onLoad={onSplineLoad}
+                        onError={onSplineError}
+                        paused={!isHeroInView || tabHidden}
+                      />
                     </div>
                   </div>
-                </SplineErrorBoundary>
-              )}
+                )}
+              </div>
             </div>
           )}
         </div>

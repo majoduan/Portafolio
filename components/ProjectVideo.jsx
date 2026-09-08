@@ -30,6 +30,10 @@ const ProjectVideo = React.memo(({ src, poster, title }) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showControls, setShowControls] = useState(false);
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
+  // Fuente elegida en cliente (device + ancho real del reproductor). En SSR el
+  // <video> solo lleva poster: sin src no hay mismatch de hidratación ni descarga.
+  const [videoSrc, setVideoSrc] = useState(null);
+  const [inView, setInView] = useState(false);
 
   const pct = duration > 0 ? (currentTime / duration) * 100 : 0;
 
@@ -40,20 +44,39 @@ const ProjectVideo = React.memo(({ src, poster, title }) => {
     controlsTimeoutRef.current = setTimeout(() => setShowControls(false), 3000);
   }, []);
 
+  // ── Elegir fuente por dispositivo y por ancho renderizado × DPR ──
+  useEffect(() => {
+    const el = containerRef.current;
+    const pick = () => {
+      const width = el ? el.getBoundingClientRect().width : 0;
+      const dpr = window.devicePixelRatio || 1;
+      setVideoSrc(getOptimalVideoSource(src, { displayWidthPx: width * dpr }));
+    };
+    pick();
+    let timer;
+    const onResize = () => { clearTimeout(timer); timer = setTimeout(pick, 200); };
+    window.addEventListener('resize', onResize, { passive: true });
+    return () => { clearTimeout(timer); window.removeEventListener('resize', onResize); };
+  }, [src]);
+
   // ── IntersectionObserver — auto-play/pause on scroll ──
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) video.play().catch(() => {});
-        else video.pause();
-      },
+      ([entry]) => setInView(entry.isIntersecting),
       { threshold: 0.25 }
     );
     observer.observe(video);
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !videoSrc) return;
+    if (inView) video.play().catch(() => {});
+    else video.pause();
+  }, [inView, videoSrc]);
 
   // ── Fullscreen change listener ──
   useEffect(() => {
@@ -238,12 +261,12 @@ const ProjectVideo = React.memo(({ src, poster, title }) => {
     >
       <video
         ref={videoRef}
-        src={getOptimalVideoSource(src)}
+        src={videoSrc || undefined}
         poster={poster}
         muted
         loop
         playsInline
-        preload="metadata"
+        preload={inView ? 'metadata' : 'none'}
         className="w-full h-full object-contain"
         aria-label={title}
         onTimeUpdate={() => {

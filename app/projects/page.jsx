@@ -8,6 +8,11 @@ import { getOptimalPoster } from '../../utils/adaptiveVideo';
 import { TECH_ICON_MAP } from '../../data/technologies';
 import ProjectVideo from '../../components/ProjectVideo';
 
+// useLayoutEffect en SSR emite un warning y no hace nada; en el servidor usamos
+// useEffect (el HTML lleva las etiquetas completas) y en cliente el layout effect
+// mide antes del primer paint, como antes.
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+
 // ─── ProjectLinks ─────────────────────────────────────────────────────────────
 // Auto-shortens labels when buttons don't fit in a single row.
 const ProjectLinks = React.memo(({ links, t, isEven }) => {
@@ -48,7 +53,7 @@ const ProjectLinks = React.memo(({ links, t, isEven }) => {
   );
 
   // Detect wrapping → shorten labels; re-measure CSS vars for hover animation
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const langChanged = tRef.current !== t;
     tRef.current = t;
     const row = rowRef.current;
