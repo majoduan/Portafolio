@@ -350,6 +350,7 @@ const ProjectVideo = React.memo(({ src, poster, title }) => {
                   onChange={handleVolumeChange}
                   onClick={(e) => e.stopPropagation()}
                   className="video-player-range"
+                  aria-label="Volume"
                 />
               </div>
             </div>

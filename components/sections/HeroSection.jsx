@@ -45,6 +45,13 @@ function Typewriter({ text, active }) {
     try { reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch { /* ignore */ }
     if (reduced) { el.textContent = text; return; }
 
+    // Reservar la altura del párrafo completo antes de vaciarlo: escribir letra
+    // a letra hacía crecer el <p> línea a línea y empujaba estadísticas y
+    // botones (CLS 0,10 medido solo por esto). Con la altura fijada, nada se mueve.
+    const parent = el.parentElement;
+    el.textContent = text;
+    if (parent) parent.style.minHeight = `${parent.offsetHeight}px`;
+
     el.textContent = '';
     let i = 0;
     let last = 0;

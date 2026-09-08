@@ -10,7 +10,8 @@
       ],
       "numberOfRuns": 2,
       "settings": {
-        "preset": "desktop"
+        "preset": "desktop",
+        "pauseAfterLoadMs": 6000
       }
     },
     "assert": {

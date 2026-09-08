@@ -292,11 +292,37 @@ Decisiones tomadas durante la ejecución:
 - **AV1/WebM (3.2)**: probado con SVT-AV1 CRF 34 preset 6. Los MP4 ya están en el suelo de bitrate (grabaciones de pantalla, CRF 28) y a calidad equivalente el AV1 salió **mayor** en 18 de 22; se conservan los 4 que sí son más pequeños (`data/webm-manifest.json`). Sin pérdida de calidad no hay más margen por codec.
 - **Runtime Spline 2.x (2.7)**: descartado (rompe el build con webpack, exige abrir la CSP a cdn.spline.design/gstatic/…); instalado 1.12.98. La escena está exportada con editor 2.x (aviso inofensivo en consola).
 - **Cap de DPR en la escena (2.3)**: no posible sin API del runtime (lee `window.devicePixelRatio`). Wrapper al 120 % se mantiene hasta ajustar la cámara en el editor.
-- **`backdrop-filter` A/B (4.2)**: no aplicado; requiere decisión visual.
-- **Partículas**: pausadas con el modal abierto y durante el wipe de tema (sin cambio visual).
+- **`backdrop-filter` A/B (4.2)**: medido el 2026-09-08 con la GPU real (Intel Iris Xe, 1440×900, trazas CDP de 3 s por sección, 2 repeticiones de cada estado). Ningún frame perdido en ningún caso (p95 = 17 ms con y sin blur), pero el desenfoque costaba entre 70 y 120 ms de `GPUTask` extra por cada 3 s (≈ +25 % de trabajo de GPU) y 50–70 ms de `RasterTask` que sin blur son 0. Decisión: **quitar el blur donde no se ve** (tarjetas de contacto: fondo opaco en ambos temas; certificados: opaco en oscuro, `bg-white/95` en claro) y **mantenerlo donde forma parte del look** (nav `blur-md` sobre fondo al 85–90 %, tarjetas de tecnologías `blur-sm` sobre fondo al 50–80 %, modal). Cero cambio visual salvo la tarjeta de certificados en tema claro (95 % en lugar de 90 %).
+- **Partículas**: pausadas con el modal abierto y durante el wipe de tema. Corrección posterior: al pausar durante el wipe, el canvas quedaba congelado con las partículas del tema anterior (blancas sobre fondo claro = invisibles) y "reaparecían" al reanudar. Ahora `ParticleCanvas` repinta un frame estático con los colores nuevos en un layout effect dentro del mismo commit que conmuta el tema, antes de que la View Transition capture el snapshot; verificado leyendo el canvas a los 80 ms del clic (partículas ya del color nuevo) y a 1,1 s (animación reanudada). Esto también arregla que en `prefers-reduced-motion` las partículas nunca cambiaban de color.
 - **Globo de `/about`**: canvas cuadrado (lado = alto) centrado; el shader de cobe dimensiona la esfera por la altura y la máscara vive en el wrapper, así que se ve idéntico con ~60 % menos píxeles.
 
-Pendiente que depende de ti: revisión visual (boot con halo aproximado sin `blur()`, fundido galaxia→escena, arranque de typewriter/contadores/typeface al levantar el overlay, cambio de tema con la escena), trabajo en el editor Spline (decimar Ch36, cámara para wrapper 100 %, variable de tema), decisión sobre Next 16 (rama aparte), y `pnpm lhci` para fijar el baseline de Lighthouse CI (`lighthouserc.json`).
+Revisión visual hecha por Mateo el 2026-09-08 ("se ve muy bien"), push a Vercel, Speed Insights Real Experience Score **97**. Decisiones de Mateo: el wrapper de la escena al 120 % **no se toca** (saca la marca de agua de Spline del viewport); AV1 aceptado; Next 16 más adelante; en el A/B de `backdrop-filter` prima el rendimiento.
+
+### 10.1 Lighthouse CI: baseline y lecciones (2026-09-08)
+
+`pnpm lhci` ejecuta `scripts/lhci.mjs`: en Windows, chrome-launcher (el lanzador de Lighthouse) muere con `EPERM` al borrar el perfil temporal de Chrome tras cada run, así que el wrapper arranca un Chrome headless propio (perfil nuevo en `%TEMP%\lhci-chrome-profile-*`, flags anti-throttling, `--lang=en-US`) y Lighthouse se conecta a él por `--collect.settings.port`. Verificado que ese Chrome usa la GPU real (ANGLE D3D11). `lighthouserc.json` lleva `pauseAfterLoadMs: 6000` para que axe corra después del intro. Reportes en `.lighthouseci/` y `.benchmarks/lhci/` (ignorados).
+
+Lo que la medición enseñó (y lo que se corrigió):
+
+- **CLS 0,145 en la home** con navegador en español: el SSR es inglés y la hidratación reescribe el hero bajo el intro (el bloque crece 86 px y, al estar centrado, se desplaza 41 px). Invisible para el usuario, pero Lighthouse y Chrome lo cuentan. Auditamos con `--lang=en-US`; el arreglo real sería servir el hero en los dos idiomas y elegir por CSS (`html[lang]`), pendiente de decidir.
+- **CLS 0,10 por el typewriter**: al vaciar el párrafo y escribirlo letra a letra, el `<p>` crecía línea a línea y empujaba estadísticas y botones. Corregido reservando la altura del texto completo antes de vaciarlo (`HeroSection.jsx`). Medido con Playwright: 0,122 → 0,029 (lo que queda es el propio cursor del typewriter).
+- **Accesibilidad de la home (91 → 96)**: los "fallos de contraste" eran texto a opacidad parcial capturado durante el fundido del intro; con `pauseAfterLoadMs` desaparecen casi todos. Reales y corregidos: puntos del carrusel de certificados de 8 px (ahora área táctil de 24 px con `p-2 -m-2` y separación `gap-4`, único cambio visible) y el slider de volumen del reproductor sin `aria-label`.
+- **TBT y Speed Index de la home no son representativos**: con la traza de Lighthouse activa, compilar el runtime de Spline (2 MB) y parsear la escena tarda 5–10× más que sin ella (5,4 s + 2,8 s en la traza frente a ~1 s medido con Playwright), el intro llega a su tope de 8 s y el Speed Index se dispara. La referencia de experiencia real es Speed Insights (RES 97). Para `/about` y `/projects` los números sí sirven como guardia de regresión.
+- Las aserciones de `lighthouserc.json` se mantienen: accesibilidad ≥ 0,95 y CLS ≤ 0,05 como error (pasan), rendimiento/LCP/TBT como aviso.
+
+Baseline (desktop, localhost, `next start`, 2 runs por URL, Chrome 152, 2026-09-08). Las aserciones de error (accesibilidad ≥ 95, CLS ≤ 0,05) pasan en las tres URLs; rendimiento/TBT quedan como aviso.
+
+| URL | Rendimiento | Accesibilidad | Buenas prácticas | SEO | FCP | LCP | TBT | CLS | Speed Index |
+|---|---|---|---|---|---|---|---|---|---|
+| `/` | 55 / 70 | 100 | 96 | 100 | 0,55 s | 1,5 s | 2233 / 351 ms | 0,024 | 7,5 / 5,4 s |
+| `/about` | 89 / 90 | 100 | 100 | 100 | 0,50 s | 1,5 s | 20 / 0 ms | 0,005 | 2,4 / 2,3 s |
+| `/projects` | 87 / 87 | 96 | 100 | 100 | 0,66 s | 1,6 s | 0 / 0 ms | 0,000 | 2,7 / 2,6 s |
+
+La home varía mucho entre runs (TBT de 215 ms a más de 9 s en la misma tarde) según cuánto tarde el parseo de la escena bajo el profiler; el Speed Index de ~5 s es el intro (2,5 s mínimo + fundido) y no baja sin quitarlo.
+
+Un hallazgo real gracias a axe: al quitar `backdrop-blur-lg` de las tarjetas de contacto, la edición dejó pegada la clase siguiente (`dark:bg-[…]rounded-2xl`), así que en tema oscuro las tarjetas quedaban blancas con texto claro y sin bordes redondeados. Corregido y verificado en ambos temas antes del commit; la fila de la home en la tabla corresponde a la medición posterior a la corrección. Los 22 avisos de contraste de `/projects` son un solo elemento repetido: las etiquetas "TECH"/"LINKS" (`text-slate-500` en negrita, 3,8:1 sobre `#171717`); es una decisión de diseño y basta con `dark:text-slate-400` si quieres cerrarlo.
+
+Pendiente que depende de ti: trabajo en el editor Spline (decimar Ch36, variable de tema), decisión sobre Next 16 (rama aparte), hero bilingüe en el SSR si quieres cerrar el CLS en navegadores en español, y la propuesta de textos de `docs/COPY_PROPOSAL.md`.
 
 ## Apéndice — archivos por fase
 - Fase 0: `app/layout.jsx`, `app/sitemap.js`, `public/robots.txt`, `public/media/projects/videos/*`, `utils/preloadResources.js`, `components/HUDBootScreen.css` (borrar), `components/AnimatedCounter.jsx` (borrar), `public/offline.html`, `public/manifest.json`, `utils/registerSW.js`, `next.config.mjs`, `vercel.json`, `data/social.js` (nuevo).

@@ -38,6 +38,9 @@ out/
 # conservar resumenes .md y build.log como documentacion comparativa
 .benchmarks/**/*.report.html
 .benchmarks/**/*.report.json
+# Lighthouse CI (`pnpm lhci`): directorio de trabajo y reportes por run
+.lighthouseci/
+.benchmarks/lhci/
 
 # axe-core self-hosted para CSP — regenerado via 'pnpm a11y:prepare'
 public/dev/axe.min.js

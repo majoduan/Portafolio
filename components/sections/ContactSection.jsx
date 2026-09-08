@@ -29,7 +29,7 @@ const ContactSection = React.memo(() => {
             {/* Left Column - Profile Image & Info */}
             <div className="contact-left-column">
               {/* Profile Image Card */}
-              <div className="bg-white dark:bg-[var(--bg-secondary)] backdrop-blur-lg rounded-2xl md:rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-700/50 hover:border-black dark:hover:border-white transition-all duration-500 shadow-lg dark:shadow-2xl group h-full flex flex-col">
+              <div className="bg-white dark:bg-[var(--bg-secondary)] rounded-2xl md:rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-700/50 hover:border-black dark:hover:border-white transition-all duration-500 shadow-lg dark:shadow-2xl group h-full flex flex-col">
                 {/* Image Container with Gradient Overlay */}
                 <div className="relative h-64 sm:h-80 md:h-96 lg:h-[25rem] overflow-hidden bg-slate-100 dark:bg-slate-900">
                   {/* Profile Image — srcset AVIF manual, next/image unoptimized perderia srcset */}
@@ -118,7 +118,7 @@ const ContactSection = React.memo(() => {
 
             {/* Right Column - Contact Form */}
             <div className="contact-right-column">
-              <div className="bg-white dark:bg-[var(--bg-secondary)] backdrop-blur-lg rounded-2xl md:rounded-3xl p-[var(--space-md)] md:p-[var(--space-lg)] lg:p-[var(--space-xl)] border border-slate-200 dark:border-slate-700/50 hover:border-black dark:hover:border-white transition-all duration-500 shadow-lg dark:shadow-2xl h-full">
+              <div className="bg-white dark:bg-[var(--bg-secondary)] rounded-2xl md:rounded-3xl p-[var(--space-md)] md:p-[var(--space-lg)] lg:p-[var(--space-xl)] border border-slate-200 dark:border-slate-700/50 hover:border-black dark:hover:border-white transition-all duration-500 shadow-lg dark:shadow-2xl h-full">
                 <h3 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4 md:mb-6 text-black dark:text-white">
                   {t('contact.form.title')}
                 </h3>

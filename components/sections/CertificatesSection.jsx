@@ -132,7 +132,7 @@ const CertificatesSection = React.memo(() => {
               return (
               <div
                 key={i}
-                className="certificate-card flex-shrink-0 w-full md:w-[calc((100%-24px)/2)] lg:w-[calc((100%-48px)/3)] bg-white/90 dark:bg-[var(--bg-secondary)] backdrop-blur-lg rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50 hover:border-[var(--btn-primary)] transition-all duration-300 transform hover:scale-105 shadow-card hover:shadow-xl dark:hover:shadow-2xl group cursor-pointer"
+                className="certificate-card flex-shrink-0 w-full md:w-[calc((100%-24px)/2)] lg:w-[calc((100%-48px)/3)] bg-white/95 dark:bg-[var(--bg-secondary)] rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50 hover:border-[var(--btn-primary)] transition-all duration-300 transform hover:scale-105 shadow-card hover:shadow-xl dark:hover:shadow-2xl group cursor-pointer"
                 onClick={() => {
                   setCurrentCertificateIndex(i);
                   setIsCertificateCarouselPaused(true);
@@ -192,7 +192,9 @@ const CertificatesSection = React.memo(() => {
         </div>
 
         {/* Navigation dots */}
-        <div className="flex justify-center items-center gap-2 mt-8 mb-4">
+        {/* gap-4: con puntos de 8 px, los centros quedan a 24 px, el mínimo de
+            área táctil (WCAG 2.5.8); el botón extiende el área con p-2 -m-2 */}
+        <div className="flex justify-center items-center gap-4 mt-8 mb-4">
           {(() => {
             // Dots map 1:1 to pageStops so dots and auto-advance stay in sync.
             // Active dot = the one matching currentCertificateIndex.
@@ -208,13 +210,18 @@ const CertificatesSection = React.memo(() => {
                     setIsCertificateCarouselPaused(true);
                     setTimeout(() => setIsCertificateCarouselPaused(false), 4000);
                   }}
-                  className={`transition-all duration-300 rounded-full ${
-                    isActive
-                      ? 'w-8 h-2 bg-[var(--btn-primary)] shadow-card'
-                      : 'w-2 h-2 bg-slate-300 dark:bg-[var(--border-color)] hover:bg-slate-400 dark:hover:bg-[var(--bg-elevated)]'
-                  }`}
+                  className="group/dot p-2 -m-2 rounded-full"
                   aria-label={`Ver página ${pageIndex + 1}`}
-                />
+                  aria-current={isActive ? 'true' : undefined}
+                >
+                  <span
+                    className={`block transition-all duration-300 rounded-full ${
+                      isActive
+                        ? 'w-8 h-2 bg-[var(--btn-primary)] shadow-card'
+                        : 'w-2 h-2 bg-slate-300 dark:bg-[var(--border-color)] group-hover/dot:bg-slate-400 dark:group-hover/dot:bg-[var(--bg-elevated)]'
+                    }`}
+                  />
+                </button>
               );
             });
           })()}

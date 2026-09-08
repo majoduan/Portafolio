@@ -1,17 +1,32 @@
 'use client';
-import React, { useEffect, useRef, useContext } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useContext } from 'react';
 import { AppContext } from '../../contexts/AppContext';
+
+// El canvas solo se monta en cliente (tras el boot), pero evitamos el aviso
+// de useLayoutEffect en SSR por si algún día cambia el punto de montaje.
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+
+const NOOP_CONTROLS = { pause: () => {}, resume: () => {}, repaint: () => {} };
 
 const ParticleCanvas = React.memo(() => {
   const { theme, isModalOpen } = useContext(AppContext);
   const canvasRef = useRef(null);
   const particles = useRef([]);
   const themeRef = useRef(theme);
-  // Controles del bucle expuestos al efecto de pausa (modal / view transition)
-  const controlsRef = useRef({ pause: () => {}, resume: () => {} });
+  // Controles del bucle expuestos a los efectos de pausa / repintado
+  const controlsRef = useRef(NOOP_CONTROLS);
 
-  // Sincronizar themeRef sin re-ejecutar el effect de particulas
-  useEffect(() => { themeRef.current = theme; }, [theme]);
+  // Sincronizar themeRef sin re-ejecutar el effect de particulas.
+  // Layout effect: corre dentro del mismo commit síncrono (flushSync) que
+  // conmuta el tema, es decir ANTES de que la View Transition capture el
+  // snapshot "new". Si el bucle está pausado por el wipe (o en modo
+  // reduced-motion, donde nunca corre) repintamos un frame con los colores
+  // del tema nuevo; si no, las partículas del tema anterior quedaban
+  // congeladas, invisibles sobre el fondo nuevo, y "reaparecían" al reanudar.
+  useIsomorphicLayoutEffect(() => {
+    themeRef.current = theme;
+    controlsRef.current.repaint();
+  }, [theme]);
 
   // Pausar con el modal de proyectos abierto: el IntersectionObserver NO
   // detecta oclusión, y el modal aplica backdrop-blur sobre este canvas —
@@ -100,87 +115,29 @@ const ParticleCanvas = React.memo(() => {
       mouseY = e.clientY;
     };
 
-    const resumeAnimation = () => {
-      cancelAnimationFrame(animationFrameId);
-      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-      cycleFrame = 0;
-      animationFrameId = requestAnimationFrame(animate);
-    };
-
-    // Pausar animacion cuando la pestana no esta activa (ahorra bateria/CPU)
-    const handleVisibilityChange = () => {
-      isTabVisible = !document.hidden;
-      if (canRun()) {
-        resumeAnimation();
-      } else {
-        cancelAnimationFrame(animationFrameId);
-      }
-    };
-
-    // Pausa/reanudación externas (modal, transición de tema). Al reanudar NO se
-    // limpia el canvas: las partículas siguen donde estaban (sin "salto").
-    controlsRef.current = {
-      pause: (reason) => {
-        if (prefersReduced) return;
-        pausedBy.add(reason);
-        cancelAnimationFrame(animationFrameId);
-      },
-      resume: (reason) => {
-        if (prefersReduced) return;
-        if (!pausedBy.delete(reason)) return;
-        if (canRun()) {
-          cancelAnimationFrame(animationFrameId);
-          animationFrameId = requestAnimationFrame(animate);
-        }
-      },
-    };
-
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-
-    const animate = () => {
-      // No animar si tab no es visible, canvas ocluido o pausa externa
-      if (!canRun()) return;
-
-      frameCount++;
-
-      // 30fps en movil (skip frames alternos) - efecto identico con 8 particulas
-      if (isMobile && frameCount % 2 !== 0) {
-        animationFrameId = requestAnimationFrame(animate);
-        return;
-      }
-
-      // Leer tema actual desde ref (sin dependency en theme -> no destruye particulas)
+    // Colores segun tema (dark: blanco brillante, light: negro puro)
+    const palette = () => {
       const isDark = themeRef.current === 'dark';
+      return {
+        particleColor: isDark ? 'rgba(255, 255, 255, ' : 'rgba(0, 0, 0, ',
+        lineColor: isDark ? 'rgba(255, 255, 255, ' : 'rgba(0, 0, 0, ',
+        lineAlpha: isDark ? 0.12 : 0.18,
+        opacityMultiplier: isDark ? 1 : 0.9,
+      };
+    };
 
-      // Trail effect con ciclo de fade periodico (~3s) para evitar acumulacion indefinida
-      cycleFrame++;
-      if (cycleFrame >= CYCLE_FRAMES) cycleFrame = 0;
-
-      let effectiveAlpha = TRAIL_ALPHA;
-      if (cycleFrame >= FADE_START_FRAME) {
-        const fadeProgress = (cycleFrame - FADE_START_FRAME) / FADE_FRAMES;
-        effectiveAlpha = TRAIL_ALPHA - (TRAIL_ALPHA - FADE_MIN_ALPHA) * fadeProgress;
-      }
-
-      ctx.globalCompositeOperation = 'destination-in';
-      ctx.fillStyle = `rgba(0, 0, 0, ${effectiveAlpha})`;
-      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-      ctx.globalCompositeOperation = 'source-over';
-
+    // Avanza la física un paso (interacción con el mouse cada 3 frames,
+    // fricción adaptativa, velocidad mínima/máxima, rebote en bordes).
+    const stepPhysics = () => {
       const particlesArray = particles.current;
       const len = particlesArray.length;
-
-      // Colores segun tema (dark: blanco brillante, light: negro puro)
-      const particleColor = isDark ? 'rgba(255, 255, 255, ' : 'rgba(0, 0, 0, ';
-      const lineColor = isDark ? 'rgba(255, 255, 255, ' : 'rgba(0, 0, 0, ';
-      const opacityMultiplier = isDark ? 1 : 0.9;
+      const mouseTick = frameCount % 3 === 0;
 
       for (let i = 0; i < len; i++) {
         const p = particlesArray[i];
 
         // Mouse interaction solo cada 3 frames
-        if (frameCount % 3 === 0) {
+        if (mouseTick) {
           const dx = mouseX - p.x;
           const dy = mouseY - p.y;
           const distSq = dx * dx + dy * dy;
@@ -231,48 +188,132 @@ const ParticleCanvas = React.memo(() => {
         else if (p.x >= canvasWidth) { p.x = canvasWidth; p.vx = -Math.abs(p.vx); }
         if (p.y <= 0) { p.y = 0; p.vy = Math.abs(p.vy); }
         else if (p.y >= canvasHeight) { p.y = canvasHeight; p.vy = -Math.abs(p.vy); }
+      }
+    };
 
+    const paintParticles = ({ particleColor, opacityMultiplier }) => {
+      const particlesArray = particles.current;
+      const len = particlesArray.length;
+      for (let i = 0; i < len; i++) {
+        const p = particlesArray[i];
         ctx.fillStyle = `${particleColor}${p.opacity * opacityMultiplier})`;
         ctx.fillRect(p.x - p.radius, p.y - p.radius, p.radius * 2, p.radius * 2);
       }
+    };
 
-      // Conectar particulas cada 2 frames - BATCHED en un solo path por opacidad
-      if (frameCount % 2 === 0) {
-        ctx.lineWidth = 0.5;
-        ctx.strokeStyle = `${lineColor}${isDark ? 0.12 : 0.18})`;
-        ctx.beginPath();
-        for (let i = 0; i < len; i++) {
-          const p1 = particlesArray[i];
-          for (let j = i + 1; j < len; j++) {
-            const p2 = particlesArray[j];
-            const dx = p1.x - p2.x;
-            const dy = p1.y - p2.y;
-            const distSq = dx * dx + dy * dy;
+    // Conexiones entre particulas cercanas - BATCHED en un solo path
+    const paintLinks = ({ lineColor, lineAlpha }) => {
+      const particlesArray = particles.current;
+      const len = particlesArray.length;
+      ctx.lineWidth = 0.5;
+      ctx.strokeStyle = `${lineColor}${lineAlpha})`;
+      ctx.beginPath();
+      for (let i = 0; i < len; i++) {
+        const p1 = particlesArray[i];
+        for (let j = i + 1; j < len; j++) {
+          const p2 = particlesArray[j];
+          const dx = p1.x - p2.x;
+          const dy = p1.y - p2.y;
+          const distSq = dx * dx + dy * dy;
 
-            if (distSq < maxDistanceSq) {
-              ctx.moveTo(p1.x, p1.y);
-              ctx.lineTo(p2.x, p2.y);
-            }
+          if (distSq < maxDistanceSq) {
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
           }
         }
-        ctx.stroke();
       }
+      ctx.stroke();
+    };
 
+    const resumeAnimation = () => {
+      cancelAnimationFrame(animationFrameId);
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+      cycleFrame = 0;
       animationFrameId = requestAnimationFrame(animate);
     };
 
-    // Render estatico para prefers-reduced-motion (a11y): particulas visibles, sin animacion
+    // Pausar animacion cuando la pestana no esta activa (ahorra bateria/CPU)
+    const handleVisibilityChange = () => {
+      isTabVisible = !document.hidden;
+      if (canRun()) {
+        resumeAnimation();
+      } else {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
+
+    // Render estatico (sin avanzar la física): particulas + conexiones con los
+    // colores del tema actual. Se usa en prefers-reduced-motion y como
+    // repintado cuando cambia el tema con el bucle pausado.
     const drawStaticFrame = () => {
       ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-      const isDark = themeRef.current === 'dark';
-      const particleColor = isDark ? 'rgba(255, 255, 255, ' : 'rgba(0, 0, 0, ';
-      const opacityMultiplier = isDark ? 1 : 0.9;
-      const arr = particles.current;
-      for (let i = 0; i < arr.length; i++) {
-        const p = arr[i];
-        ctx.fillStyle = `${particleColor}${p.opacity * opacityMultiplier})`;
-        ctx.fillRect(p.x - p.radius, p.y - p.radius, p.radius * 2, p.radius * 2);
+      const colors = palette();
+      paintParticles(colors);
+      paintLinks(colors);
+    };
+
+    // Pausa/reanudación externas (modal, transición de tema). Al reanudar NO se
+    // limpia el canvas: las partículas siguen donde estaban (sin "salto").
+    controlsRef.current = {
+      pause: (reason) => {
+        if (prefersReduced) return;
+        pausedBy.add(reason);
+        cancelAnimationFrame(animationFrameId);
+      },
+      resume: (reason) => {
+        if (prefersReduced) return;
+        if (!pausedBy.delete(reason)) return;
+        if (canRun()) {
+          cancelAnimationFrame(animationFrameId);
+          animationFrameId = requestAnimationFrame(animate);
+        }
+      },
+      // Solo cuando el bucle no va a pintar por sí mismo el siguiente frame
+      repaint: () => {
+        if (prefersReduced || !canRun()) drawStaticFrame();
+      },
+    };
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    const animate = () => {
+      // No animar si tab no es visible, canvas ocluido o pausa externa
+      if (!canRun()) return;
+
+      frameCount++;
+
+      // 30fps en movil (skip frames alternos) - efecto identico con 8 particulas
+      if (isMobile && frameCount % 2 !== 0) {
+        animationFrameId = requestAnimationFrame(animate);
+        return;
       }
+
+      // Trail effect con ciclo de fade periodico (~3s) para evitar acumulacion indefinida
+      cycleFrame++;
+      if (cycleFrame >= CYCLE_FRAMES) cycleFrame = 0;
+
+      let effectiveAlpha = TRAIL_ALPHA;
+      if (cycleFrame >= FADE_START_FRAME) {
+        const fadeProgress = (cycleFrame - FADE_START_FRAME) / FADE_FRAMES;
+        effectiveAlpha = TRAIL_ALPHA - (TRAIL_ALPHA - FADE_MIN_ALPHA) * fadeProgress;
+      }
+
+      ctx.globalCompositeOperation = 'destination-in';
+      ctx.fillStyle = `rgba(0, 0, 0, ${effectiveAlpha})`;
+      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+      ctx.globalCompositeOperation = 'source-over';
+
+      // Leer tema actual desde ref (sin dependency en theme -> no destruye particulas)
+      const colors = palette();
+
+      stepPhysics();
+      paintParticles(colors);
+
+      // Conectar particulas cada 2 frames
+      if (frameCount % 2 === 0) paintLinks(colors);
+
+      animationFrameId = requestAnimationFrame(animate);
     };
 
     if (prefersReduced) {
@@ -329,7 +370,7 @@ const ParticleCanvas = React.memo(() => {
     }
 
     return () => {
-      controlsRef.current = { pause: () => {}, resume: () => {} };
+      controlsRef.current = NOOP_CONTROLS;
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', handleResize);
       document.removeEventListener('visibilitychange', handleVisibilityChange);

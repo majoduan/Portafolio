@@ -19,7 +19,7 @@
     "videos:faststart": "node scripts/remux-faststart.mjs",
     "videos:webm": "node scripts/generate-webm-av1.mjs",
     "fonts:subset": "node scripts/subset-hero-fonts.mjs",
-    "lhci": "pnpm dlx @lhci/cli@0.15 autorun",
+    "lhci": "node scripts/lhci.mjs",
     "build:full": "pnpm optimize-images && pnpm build"
   },
   "dependencies": {
