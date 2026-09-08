@@ -1,101 +1,63 @@
 'use client';
 /**
- * Precarga inteligente de recursos críticos
- * Se ejecuta DURANTE el boot screen (3s delay) para aprovechar el tiempo muerto
- * OPTIMIZADO: Adaptativo según dispositivo y velocidad de conexión
+ * Precarga de recursos below-the-fold.
+ *
+ * Se ejecuta cuando el boot screen ha terminado y el hilo principal está
+ * ocioso (requestIdleCallback), NUNCA durante el boot: antes corría a los 3 s
+ * del arranque y sus `import()` + prefetch competían con la compilación del
+ * runtime de Spline y con la descarga de la escena.
+ *
+ * Ya no precarga vídeos: 6 prefetch de mp4 completos costaban 5,8 MB por visita
+ * a la home sin interacción del usuario y competían con la escena 3D por ancho
+ * de banda. El Service Worker cachea cada vídeo bajo demanda en su primer play.
  */
+const POSTERS = [
+  '/media/projects/posters/crumb-coach-poster.avif',
+  '/media/projects/posters/connect-invest-marketing-poster.avif',
+  '/media/projects/posters/daily-abide-poster.avif',
+  '/media/projects/posters/poa-management-poster.avif',
+  '/media/projects/posters/epn-certificates-poster.avif',
+  '/media/projects/posters/travel-allowance-poster.avif',
+];
+
+const CERTIFICATES = [
+  '/media/certificates/epn-award-800w.avif',
+  '/media/certificates/cisco-networking-800w.avif',
+  '/media/certificates/digital-transformation-800w.avif',
+  '/media/certificates/scrum-foundation-800w.avif',
+];
+
+const prefetchImage = (href) => {
+  const link = document.createElement('link');
+  link.rel = 'prefetch';
+  link.as = 'image';
+  link.href = href;
+  document.head.appendChild(link);
+};
+
 export const preloadCriticalResources = () => {
-  // Prefetch below-fold component chunks (download without executing)
+  // Chunks de las secciones lazy (descarga + compilación en idle)
   import('../components/sections/ProjectsSection').catch(() => {});
   import('../components/sections/ContactSection').catch(() => {});
-  // Debug mode - cambiar a true para ver logs detallados
-  const DEBUG = false;
-  
-  // Detectar móvil y conexión
-  const isMobile = window.innerWidth < 768;
+
   const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-  const isSlow = connection && (
-    connection.effectiveType === 'slow-2g' || 
-    connection.effectiveType === '2g' || 
-    connection.effectiveType === '3g' ||
-    connection.saveData === true  // Usuario activó "ahorro de datos"
-  );
+  const saveData = !!(connection && connection.saveData);
+  if (saveData) return; // respetar "ahorro de datos": sin prefetch de imágenes
 
-  // NIVEL 1: CRÍTICO - Imágenes de certificados optimizadas AVIF (siempre precargar, son ligeras)
-  const certificateImages = [
-    '/media/certificates/epn-award-800w.avif',
-    '/media/certificates/cisco-networking-800w.avif',
-    '/media/certificates/digital-transformation-800w.avif',
-    '/media/certificates/scrum-foundation-800w.avif'
-  ];
+  CERTIFICATES.forEach(prefetchImage);
+  POSTERS.forEach(prefetchImage);
+};
 
-  certificateImages.forEach(src => {
-    const link = document.createElement('link');
-    link.rel = 'prefetch';
-    link.as = 'image';
-    link.href = src;
-    document.head.appendChild(link);
-  });
-
-  // NIVEL 2: Posters de videos (ligeros, útiles para móvil)
-  const posters = [
-    '/media/projects/posters/poa-management-poster.avif',
-    '/media/projects/posters/epn-certificates-poster.avif',
-    '/media/projects/posters/travel-allowance-poster.avif',
-    '/media/projects/posters/storycraft-poster.avif',
-    '/media/projects/posters/fitness-tracker-poster.avif',
-    '/media/projects/posters/space-invaders-poster.avif',
-    '/media/projects/posters/godot-game-2d-poster.avif',
-    '/media/projects/posters/godot-game-3d-poster.avif'
-  ];
-
-  posters.forEach(posterSrc => {
-    const link = document.createElement('link');
-    link.rel = 'prefetch';
-    link.as = 'image';
-    link.href = posterSrc;
-    document.head.appendChild(link);
-  });
-
-  // NIVEL 3: Videos - SOLO en desktop con conexión rápida
-  if (!isMobile && !isSlow) {
-    if (DEBUG) console.log('[Preload] 🎬 Preloading videos (desktop + fast connection)');
-    
-    // 2A. Videos prioritarios - metadata only
-    const priorityVideos = [
-      '/media/projects/videos/poa-management.mp4',
-      '/media/projects/videos/epn-certificates.mp4'
-    ];
-
-    priorityVideos.forEach(videoSrc => {
-      const video = document.createElement('video');
-      video.preload = 'metadata';  // Solo metadata, no todo el video
-      video.src = videoSrc;
-      video.muted = true;
-    });
-
-    // 2B. Resto de videos - prefetch después de 5s (no 3s)
-    setTimeout(() => {
-      const remainingVideos = [
-        '/media/projects/videos/travel-allowance.mp4',
-        '/media/projects/videos/storycraft.mp4',
-        '/media/projects/videos/fitness-tracker.mp4',
-        '/media/projects/videos/space-invaders.mp4',
-        '/media/projects/videos/godot-game-2d.mp4',
-        '/media/projects/videos/godot-game-3d.mp4'
-      ];
-
-      if (DEBUG && remainingVideos.length > 0) {
-        console.log(`[Preload] ⏳ Prefetching ${remainingVideos.length} remaining videos...`);
-      }
-
-      remainingVideos.forEach(videoSrc => {
-        const link = document.createElement('link');
-        link.rel = 'prefetch';
-        link.as = 'video';
-        link.href = videoSrc;
-        document.head.appendChild(link);
-      });
-    }, 5000);
+/**
+ * Programa la precarga para cuando el navegador esté ocioso. Devuelve una
+ * función de cancelación.
+ */
+export const schedulePreload = () => {
+  if (typeof window === 'undefined') return () => {};
+  if ('requestIdleCallback' in window) {
+    const id = window.requestIdleCallback(() => preloadCriticalResources(), { timeout: 4000 });
+    return () => window.cancelIdleCallback(id);
   }
+  const id = setTimeout(preloadCriticalResources, 1500);
+  return () => clearTimeout(id);
 };

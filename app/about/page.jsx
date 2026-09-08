@@ -6,6 +6,7 @@ import RotatingTitle from '../../components/RotatingTitle';
 import WorkTimeline from '../../components/WorkTimeline';
 import EducationSection from '../../components/EducationSection';
 import AboutGlobe from '../../components/sections/AboutGlobe';
+import { SOCIAL, CV } from '../../data/social';
 
 const experienceItems = [
   { key: 'bridge',           logos: ['/media/work-education/bridge-staff-120w.avif', '/media/work-education/acr-120w.avif'], present: true },
@@ -40,8 +41,8 @@ export default function AboutPage() {
           {/* CV Button + Social Links */}
           <div className="flex flex-wrap items-center justify-center gap-4 max-[424px]:flex-col">
             <a
-              href="/docs/Mateo_Duenas_CV.pdf"
-              download="Mateo_Dueñas_CV.pdf"
+              href={CV.href}
+              download={CV.downloadName}
               className="swap-btn"
               ref={(el) => {
                 if (el) {
@@ -62,7 +63,7 @@ export default function AboutPage() {
 
             <div className="flex gap-3">
               <a
-                href="https://www.linkedin.com/in/mateodue/"
+                href={SOCIAL.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn profile"
@@ -71,7 +72,7 @@ export default function AboutPage() {
                 <Linkedin className="w-5 h-5 text-black dark:text-white group-hover/icon:text-white dark:group-hover/icon:text-black" aria-hidden="true" />
               </a>
               <a
-                href="https://github.com/mateo-dueñas"
+                href={SOCIAL.github}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="GitHub profile"
@@ -80,7 +81,7 @@ export default function AboutPage() {
                 <Github className="w-5 h-5 text-black dark:text-white group-hover/icon:text-white dark:group-hover/icon:text-black" aria-hidden="true" />
               </a>
               <a
-                href="mailto:mateo.duenas@epn.edu.ec"
+                href={`mailto:${SOCIAL.email}`}
                 aria-label="Email Mateo"
                 className="w-12 h-12 rounded-full border-2 border-black dark:border-white flex items-center justify-center transition-all duration-300 transform hover:scale-105 hover:bg-black dark:hover:bg-white group/icon shadow-card"
               >

@@ -37,6 +37,8 @@ const nextConfig = {
     return config;
   },
 
+  // Única fuente de cabeceras HTTP. (vercel.json duplicaba este bloque y Vercel
+  // enviaba cada cabecera dos veces; se eliminó.)
   async headers() {
     return [
       {
@@ -51,7 +53,9 @@ const nextConfig = {
           },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'X-Frame-Options', value: 'DENY' },
-          { key: 'X-XSS-Protection', value: '1; mode=block' },
+          // X-XSS-Protection eliminado: obsoleto (ningún navegador moderno lo
+          // usa) y en navegadores antiguos el filtro introducía vulnerabilidades.
+          // La protección real es la CSP.
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()' },
           { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains; preload' },

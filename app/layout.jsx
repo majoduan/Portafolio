@@ -4,16 +4,17 @@ import Providers from './providers';
 import ClientInit from './client-init';
 import BootScreenWrapper from './BootScreenWrapper';
 import Footer from '../components/Footer';
+import { SITE_URL } from '../lib/site';
 
 export const metadata = {
-  metadataBase: new URL('https://mateoduenas.vercel.app'),
+  metadataBase: new URL(SITE_URL),
   title: 'Mateo Dueñas | Full Stack Developer Portfolio',
   description: 'Portfolio de Mateo Dueñas - Full Stack Software Engineer especializado en React, Node.js, Python y tecnologías web modernas. Más de 2 años de experiencia en desarrollo web.',
   keywords: ['Mateo Dueñas', 'Full Stack Developer', 'Software Engineer', 'React', 'Node.js', 'Python', 'Portfolio', 'Web Development'],
   authors: [{ name: 'Mateo Dueñas' }],
   openGraph: {
     type: 'website',
-    url: 'https://mateoduenas.vercel.app/',
+    url: `${SITE_URL}/`,
     title: 'Mateo Dueñas | Full Stack Developer Portfolio',
     description: 'Portfolio profesional de Mateo Dueñas, Full Stack Software Engineer especializado en React, Node.js y tecnologías web modernas',
     images: [{ url: '/media/profile/foto-perfil-1200w.avif', width: 800, height: 1000 }],
@@ -36,7 +37,7 @@ export const metadata = {
     'mobile-web-app-capable': 'yes',
   },
   alternates: {
-    canonical: 'https://mateoduenas.vercel.app/',
+    canonical: `${SITE_URL}/`,
   },
   icons: {
     icon: '/icons/bow-and-arrow.svg',
@@ -57,12 +58,16 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={GeistSans.variable} suppressHydrationWarning>
       <head>
-        {/* Detect saved language/theme BEFORE React hydrates to prevent flash */}
+        {/* Detect saved language/theme BEFORE React hydrates to prevent flash.
+            try/catch: localStorage lanza SecurityError en Safari privado o con
+            almacenamiento bloqueado; sin el guard el script aborta y el tema
+            no se aplica (flash claro/oscuro). */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              document.documentElement.lang = localStorage.getItem('portfolio-language') || (navigator.language.startsWith('es') ? 'es' : 'en');
-              if (localStorage.getItem('portfolio-theme') === 'light' || (!localStorage.getItem('portfolio-theme') && window.matchMedia('(prefers-color-scheme: light)').matches)) { document.documentElement.classList.remove('dark'); } else { document.documentElement.classList.add('dark'); }
+              (function(){try{var l=localStorage.getItem('portfolio-language');var t=localStorage.getItem('portfolio-theme');}catch(e){var l=null,t=null;}
+              document.documentElement.lang = l || (navigator.language.indexOf('es')===0 ? 'es' : 'en');
+              if (t === 'light' || (!t && window.matchMedia('(prefers-color-scheme: light)').matches)) { document.documentElement.classList.remove('dark'); } else { document.documentElement.classList.add('dark'); }})();
             `,
           }}
         />

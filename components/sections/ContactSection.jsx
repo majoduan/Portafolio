@@ -2,6 +2,7 @@
 import React, { lazy, Suspense } from 'react';
 import { Mail, Linkedin, Github } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
+import { SOCIAL } from '../../data/social';
 
 const ContactForm = lazy(() => import('../ContactForm'));
 
@@ -70,7 +71,7 @@ const ContactSection = React.memo(() => {
                   {/* Social Links */}
                   <div className="space-y-3 md:space-y-4">
                     <a
-                      href="mailto:mate.due02@gmail.com"
+                      href={`mailto:${SOCIAL.email}`}
                       className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-[var(--bg-elevated-50)] hover:bg-slate-100 dark:hover:bg-[var(--bg-elevated)] rounded-xl transition-all duration-300 group/link border border-slate-200 dark:border-slate-700/50 hover:border-black dark:hover:border-white"
                     >
                       <div className="w-12 h-12 rounded-full border-2 border-black dark:border-white flex items-center justify-center group-hover/link:scale-110 transition-all duration-300 group-hover/link:bg-black dark:group-hover/link:bg-white">
@@ -78,12 +79,12 @@ const ContactSection = React.memo(() => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm text-slate-600 dark:text-slate-400">{t('contact.profile.emailLabel')}</p>
-                        <p className="text-slate-900 dark:text-white font-medium truncate">mate.due02@gmail.com</p>
+                        <p className="text-slate-900 dark:text-white font-medium truncate">{SOCIAL.email}</p>
                       </div>
                     </a>
 
                     <a
-                      href="https://www.linkedin.com/in/mateodue/"
+                      href={SOCIAL.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-[var(--bg-elevated-50)] hover:bg-slate-100 dark:hover:bg-[var(--bg-elevated)] rounded-xl transition-all duration-300 group/link border border-slate-200 dark:border-slate-700/50 hover:border-black dark:hover:border-white"
@@ -93,12 +94,12 @@ const ContactSection = React.memo(() => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm text-slate-600 dark:text-slate-400">{t('contact.profile.linkedinLabel')}</p>
-                        <p className="text-slate-900 dark:text-white font-medium truncate">mateodue</p>
+                        <p className="text-slate-900 dark:text-white font-medium truncate">{SOCIAL.linkedinHandle}</p>
                       </div>
                     </a>
 
                     <a
-                      href="https://github.com/majoduan"
+                      href={SOCIAL.github}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-[var(--bg-elevated-50)] hover:bg-slate-100 dark:hover:bg-[var(--bg-elevated)] rounded-xl transition-all duration-300 group/link border border-slate-200 dark:border-slate-700/50 hover:border-black dark:hover:border-white"
@@ -108,7 +109,7 @@ const ContactSection = React.memo(() => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm text-slate-600 dark:text-slate-400">{t('contact.profile.githubLabel')}</p>
-                        <p className="text-slate-900 dark:text-white font-medium truncate">majoduan</p>
+                        <p className="text-slate-900 dark:text-white font-medium truncate">{SOCIAL.githubHandle}</p>
                       </div>
                     </a>
                   </div>

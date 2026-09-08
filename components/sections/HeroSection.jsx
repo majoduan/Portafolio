@@ -7,6 +7,7 @@ import { useCountUp } from '../../hooks/useCountUp';
 import { AppContext } from '../../contexts/AppContext';
 import GalaxyFallback from '../GalaxyFallback';
 import TypefaceTitle from '../TypefaceTitle';
+import { SOCIAL, CV } from '../../data/social';
 
 // Dynamic import Spline with SSR disabled for Next.js
 import dynamic from 'next/dynamic';
@@ -211,8 +212,8 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
             {/* Boton CV y Redes Sociales */}
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-8 max-[424px]:flex-col">
               <a
-                href="/docs/Mateo_Duenas_CV.pdf"
-                download="Mateo_Dueñas_CV.pdf"
+                href={CV.href}
+                download={CV.downloadName}
                 className="swap-btn"
                 onClick={onCvDownload}
                 aria-label={cvDownloaded ? 'CV downloaded' : t('hero.downloadCV')}
@@ -240,7 +241,7 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
               {/* Iconos sociales — ocultos en mobile (los hay en el footer) */}
               <div className="hidden md:flex gap-3">
                 <a
-                  href="https://www.linkedin.com/in/mateodue/"
+                  href={SOCIAL.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="LinkedIn profile"
@@ -249,7 +250,7 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
                   <Linkedin className="w-5 h-5 text-black dark:text-white group-hover/icon:text-white dark:group-hover/icon:text-black" aria-hidden="true" />
                 </a>
                 <a
-                  href="https://github.com/mateo-dueñas"
+                  href={SOCIAL.github}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="GitHub profile"
@@ -258,7 +259,7 @@ const HeroSection = React.memo(({ shouldLoadSpline }) => {
                   <Github className="w-5 h-5 text-black dark:text-white group-hover/icon:text-white dark:group-hover/icon:text-black" aria-hidden="true" />
                 </a>
                 <a
-                  href="mailto:mateo.duenas@epn.edu.ec"
+                  href={`mailto:${SOCIAL.email}`}
                   aria-label="Email Mateo"
                   className="w-12 h-12 rounded-full border-2 border-black dark:border-white flex items-center justify-center transition-all duration-300 transform hover:scale-105 hover:bg-black dark:hover:bg-white group/icon shadow-card"
                 >

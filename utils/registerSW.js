@@ -51,14 +51,15 @@ function showUpdateNotification(_newWorker) {
       position: fixed;
       bottom: 20px;
       right: 20px;
-      background: linear-gradient(135deg, #6366f1, #a855f7);
-      color: white;
+      background: var(--bg-elevated, #272727);
+      color: var(--text-primary, #fff);
+      border: 1px solid var(--border-color, #333);
       padding: 16px 24px;
       border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
-      font-family: system-ui, -apple-system, sans-serif;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+      font-family: var(--font-geist-sans, system-ui), -apple-system, sans-serif;
       z-index: 10000;
-      animation: slideIn 0.3s ease-out;
+      animation: fadeIn 0.3s ease-out;
     ">
       <div style="display: flex; align-items: center; gap: 12px;">
         <span style="font-size: 24px;">🔄</span>
@@ -67,8 +68,8 @@ function showUpdateNotification(_newWorker) {
           <button 
             onclick="location.reload()" 
             style="
-              background: white;
-              color: #6366f1;
+              background: var(--btn-primary, #253247);
+              color: #fff;
               border: none;
               padding: 6px 16px;
               border-radius: 6px;
@@ -85,7 +86,7 @@ function showUpdateNotification(_newWorker) {
           style="
             background: transparent;
             border: none;
-            color: white;
+            color: inherit;
             font-size: 20px;
             cursor: pointer;
             margin-left: 8px;

@@ -4,8 +4,8 @@
   "description": "Portfolio profesional de Mateo Dueñas, Full Stack Software Engineer especializado en React, Node.js y tecnologías web modernas",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#3b82f6",
+  "background_color": "#171717",
+  "theme_color": "#171717",
   "orientation": "portrait-primary",
   "scope": "/",
   "lang": "es",
@@ -24,7 +24,7 @@
       "name": "Proyectos",
       "short_name": "Proyectos",
       "description": "Ver mis proyectos destacados",
-      "url": "/#projects",
+      "url": "/projects",
       "icons": [
         {
           "src": "/icons/bow-and-arrow.svg",
