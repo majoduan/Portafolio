@@ -10,8 +10,8 @@
   "hero": {
     "name": "Mateo Dueñas",
     "title": "Desarrollador Full-Stack",
-    "titles": ["Desarrollador\nFull-Stack", "Ingeniero de\nSoftware", "AI Training\nEngineer", "Desarrollador\nWeb", "Desarrollador\nMóvil", "Analista de\nDatos"],
-    "description": "Construyo productos web y móviles que llegan a producción: cobros con Stripe, autenticación y hardening de seguridad, CI/CD, publicación en la App Store. Full-stack, del esquema al píxel.",
+    "titles": ["Desarrollador\nFull-Stack", "Ingeniero de\nSoftware", "Ingeniero de\nIA", "Desarrollador\nWeb", "Desarrollador\nMóvil", "Analista de\nDatos"],
+    "description": "Construyo productos web y móviles que llegan a producción: cobros con Stripe, autenticación y endurecimiento de seguridad, CI/CD, publicación en la App/Play Store. Full-stack, del esquema al píxel.",
     "downloadCV": "Descargar mi CV",
     "galaxyAlt": "Ilustración de una galaxia espiral rotando lentamente",
     "stats": {
@@ -516,7 +516,7 @@
   },
   "about": {
     "intro": {
-      "bio": "Soy ingeniero de software de Quito, Ecuador. En los últimos dos años he construido y endurecido productos reales: un SaaS para panaderos con cobros en Stripe Connect, la campaña de seguridad de una plataforma fintech en producción, una app de planificación de fe publicada en la App Store y herramientas institucionales que redujeron un ciclo de reportes de tres meses a minutos. Hoy además construyo datasets de benchmark y evalúo modelos de generación de código. Lo que me importa es lo que pasa después del lanzamiento: esquemas tipados, CI que falla temprano e interfaces que respetan el diseño al píxel."
+      "bio": "Soy ingeniero de software de Quito, Ecuador. En los últimos años he construido y endurecido productos reales en fintech, SaaS y móvil, y hoy además armo datasets de benchmark y evalúo modelos de generación de código. Lo que me importa es lo que pasa después del lanzamiento: esquemas tipados, CI que falla temprano e interfaces que respetan el diseño al píxel."
     },
     "companies": {
       "title": "Empresas con las que he Trabajado"

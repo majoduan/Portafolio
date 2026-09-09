@@ -11,7 +11,7 @@
     "name": "Mateo Dueñas",
     "title": "Full-Stack Developer",
     "titles": ["Full-Stack\nDeveloper", "Software\nEngineer", "AI Training\nEngineer", "Web\nDeveloper", "Mobile\nDeveloper", "Data\nAnalyst"],
-    "description": "I build web and mobile products that make it to production: Stripe billing, auth and security hardening, CI/CD, App Store releases. Full-stack, from the schema to the pixel.",
+    "description": "I build web and mobile products that make it to production: Stripe billing, auth and security hardening, CI/CD, App/Play Store releases. Full-stack, from the schema to the pixel.",
     "downloadCV": "Download my CV",
     "galaxyAlt": "Illustration of a slowly rotating spiral galaxy",
     "stats": {
@@ -516,7 +516,7 @@
   },
   "about": {
     "intro": {
-      "bio": "I'm a software engineer from Quito, Ecuador. In the last two years I've built and hardened real products: a bakers' SaaS with Stripe Connect billing, the security campaign of a live fintech platform, a faith-planner app shipped to the App Store, and institutional tools that cut a three-month reporting cycle to minutes. Today I also build benchmark datasets and evaluate code-generation models. What I care about is what happens after launch: typed schemas, CI that fails early, and interfaces that match the design to the pixel."
+      "bio": "I'm a software engineer from Quito, Ecuador. Over the last years I've built and hardened real products across fintech, SaaS and mobile, and these days I also build benchmark datasets and evaluate code-generation models. What I care about is what happens after launch: typed schemas, CI that fails early, and interfaces that match the design to the pixel."
     },
     "companies": {
       "title": "Companies I've Worked With"
